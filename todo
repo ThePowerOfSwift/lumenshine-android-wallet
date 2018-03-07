@@ -1,0 +1,8 @@
+
+1. menu
+2. sus scrie account (daca are) daca nu are account atunci un buton "create account"
+3. menu items: Home, Accounts, Transactions, Promotions, Settings, Help
+4. la Home este in main view partea de sus unde scrie Luno, acolo vom pune nishte informati mai tarziu
+5. la scroll sa mearga in sus
+6. in "content area" avem "cards". aceste "cards" pot fi de mai multe feluri, de exemplu news card, account card, info card
+7. vezi de exemplu acolo este un "chart card"
