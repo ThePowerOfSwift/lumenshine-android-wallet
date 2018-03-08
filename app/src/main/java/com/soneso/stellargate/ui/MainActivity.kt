@@ -1,4 +1,4 @@
-package com.soneso.stellargate
+package com.soneso.stellargate.ui
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -7,6 +7,8 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import com.soneso.stellargate.R
+import com.soneso.stellargate.ui.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -18,7 +20,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Not yet implemented!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
@@ -28,6 +30,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        val homeItem = nav_view.menu.getItem(0)
+        homeItem.isChecked = true
+        onNavigationItemSelected(homeItem)
     }
 
     override fun onBackPressed() {
@@ -41,27 +47,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+            R.id.nav_home -> {
+                replaceFragment(HomeFragment.newInstance(), HomeFragment.TAG)
             }
-            R.id.nav_gallery -> {
+            R.id.nav_accounts -> {
 
             }
-            R.id.nav_slideshow -> {
+            R.id.nav_transactions -> {
 
             }
-            R.id.nav_manage -> {
+            R.id.nav_promotions -> {
 
             }
-            R.id.nav_share -> {
+            R.id.nav_settings -> {
 
             }
-            R.id.nav_send -> {
+            R.id.nav_help -> {
 
             }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun replaceFragment(fragment: SgFragment, tag: String) {
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment, tag)
+                .commit()
     }
 }

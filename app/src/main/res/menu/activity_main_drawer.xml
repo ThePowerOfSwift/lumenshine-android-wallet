@@ -5,19 +5,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_home"
             android:icon="@drawable/ic_action_home"
             android:title="@string/menu_item_home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_accounts"
             android:icon="@drawable/ic_action_account_balance_wallet"
             android:title="@string/menu_item_accounts" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_transactions"
             android:icon="@drawable/ic_action_list"
             android:title="@string/menu_item_transactions" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_promotions"
             android:icon="@drawable/ic_action_local_offer"
             android:title="@string/menu_item_promotions" />
     </group>
@@ -26,11 +26,11 @@
         android:id="@+id/other_group"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_share"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_action_settings"
             android:title="@string/menu_item_settings" />
         <item
-            android:id="@+id/nav_send"
+            android:id="@+id/nav_help"
             android:icon="@drawable/ic_action_help"
             android:title="@string/menu_item_help" />
     </group>
