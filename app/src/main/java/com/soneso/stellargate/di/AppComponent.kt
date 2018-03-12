@@ -1,5 +1,7 @@
 package com.soneso.stellargate.di
 
+import com.soneso.stellargate.ui.home.HomeFragment
+import dagger.Component
 import javax.inject.Singleton
 
 /**
@@ -7,7 +9,8 @@ import javax.inject.Singleton
  * Created by cristi.paval on 3/9/18.
  */
 @Singleton
-//@Component(modules = [(AppModule::class)])
+@Component(modules = [(AppModule::class)])
 interface AppComponent {
 
+    fun inject(fragment: HomeFragment)
 }
