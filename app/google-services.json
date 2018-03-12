@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "84963567289",
+    "firebase_url": "https://stellargate-d2ca9.firebaseio.com",
+    "project_id": "stellargate-d2ca9",
+    "storage_bucket": "stellargate-d2ca9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84963567289:android:2de72f657119ebfe",
+        "android_client_info": {
+          "package_name": "com.soneso.stellargate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84963567289-n4ufjcvmll1grguje12q1o7odcrdcbsi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soneso.stellargate",
+            "certificate_hash": "a9d4b2cf6887fcbde1495dcedaa4a25617b71a20"
+          }
+        },
+        {
+          "client_id": "84963567289-nbrv321spa20qv9fcf3vsb7kn94loc8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSCpgmgQhn45Fr6d1a59SOY3mVZxj0szQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84963567289-nbrv321spa20qv9fcf3vsb7kn94loc8u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
