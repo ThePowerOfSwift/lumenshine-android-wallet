@@ -13,5 +13,6 @@
 
     <string name="menu_header_profile">Profile</string>
     <string name="menu_header_email_placeholder">username@email.com</string>
+    <string name="home_web_card_button">READ MORE</string>
 
 </resources>

@@ -16,6 +16,8 @@ import kotlinx.android.synthetic.main.item_home_web_link.view.*
  */
 class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    var onBlogLinkClickListener: ((BlogPostPreview) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_WEB -> {
@@ -57,6 +59,7 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val titleView = view.blog_title
         private val subtitleView = view.blog_subtitle
         private val paragraphView = view.blog_paragraph
+        private val readMoreButton = view.blog_button
 
         fun fillData(blog: BlogPostPreview) {
             Glide.with(itemView.context)
@@ -65,6 +68,9 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             titleView.text = blog.title
             subtitleView.text = blog.subtitle
             paragraphView.text = blog.paragraph
+            readMoreButton.setOnClickListener {
+                onBlogLinkClickListener?.invoke(blog)
+            }
         }
     }
 
