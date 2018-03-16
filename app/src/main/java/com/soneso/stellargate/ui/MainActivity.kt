@@ -2,6 +2,7 @@ package com.soneso.stellargate.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.google.firebase.iid.FirebaseInstanceId
 import com.soneso.stellargate.R
+import com.soneso.stellargate.ui.accounts.AccountsFragment
 import com.soneso.stellargate.ui.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -26,6 +28,8 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
 
             copyFcmIdToClipboard()
 
+            shareFcmId()
+
             Snackbar.make(view, "Your FCM device id was copied to clipboard!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
@@ -40,6 +44,14 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         val homeItem = nav_view.menu.getItem(0)
         homeItem.isChecked = true
         onNavigationItemSelected(homeItem)
+    }
+
+    private fun shareFcmId() {
+        val shareBody = FirebaseInstanceId.getInstance().token
+        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain"
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
+        startActivity(Intent.createChooser(sharingIntent, null))
     }
 
     private fun copyFcmIdToClipboard() {
@@ -63,7 +75,7 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 replaceFragment(HomeFragment.newInstance(), HomeFragment.TAG)
             }
             R.id.nav_accounts -> {
-
+                replaceFragment(AccountsFragment.newInstance(), AccountsFragment.TAG)
             }
             R.id.nav_transactions -> {
 

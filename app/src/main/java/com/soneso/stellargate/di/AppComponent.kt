@@ -1,5 +1,6 @@
 package com.soneso.stellargate.di
 
+import com.soneso.stellargate.ui.accounts.AccountsFragment
 import com.soneso.stellargate.ui.home.HomeFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -13,4 +14,6 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun inject(fragment: HomeFragment)
+
+    fun inject(fragment: AccountsFragment)
 }

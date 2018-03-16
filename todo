@@ -1,8 +1,15 @@
+1. web card (arata o imagine, titlu, text  si link )
 
-1. menu
-2. sus scrie account (daca are) daca nu are account atunci un buton "create account"
-3. menu items: Home, Accounts, Transactions, Promotions, Settings, Help
-4. la Home este in main view partea de sus unde scrie Luno, acolo vom pune nishte informati mai tarziu
-5. la scroll sa mearga in sus
-6. in "content area" avem "cards". aceste "cards" pot fi de mai multe feluri, de exemplu news card, account card, info card
-7. vezi de exemplu acolo este un "chart card"
+2. chart card (arata chart)
+
+3. internal card (arata un icon, un title un text si un internal link) - de exemplu help & feedback
+
+4. wallet card (arata datele unui stellar account, balance la toate assets care sant in acel stellar account)
+
+astea poti sa le pregatesti deja cu mocks, la 4 poti folosi stellar sdk cu niste testing public keys
+
+o alta chestie care trebuie integrata este un qr code viewer
+
+ca sa putem citi adresse de stellar dintr-un qr code mai tarziu
+
+iar alta chestie, ar fi top sa analizezi wallet pe care la facut Staraj ca sa inveti putin din el: https://github.com/Block-Equity/stellar-ios-sample-wallet

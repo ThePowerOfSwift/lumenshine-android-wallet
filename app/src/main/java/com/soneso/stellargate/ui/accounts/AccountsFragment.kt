@@ -1,21 +1,25 @@
-package com.soneso.stellargate.ui.home
+package com.soneso.stellargate.ui.accounts
 
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
 import com.soneso.stellargate.ui.SgFragment
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_accounts.*
+import javax.inject.Inject
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class HomeFragment : SgFragment() {
+class AccountsFragment : SgFragment() {
+
+    @Inject
+    lateinit var accountsViewModel: AccountsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,22 +28,20 @@ class HomeFragment : SgFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_home, container, false)
+            inflater.inflate(R.layout.fragment_accounts, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupFeedRecyclerView()
-    }
-
-    private fun setupFeedRecyclerView() {
-        rv_feed.layoutManager = LinearLayoutManager(context)
-        rv_feed.adapter = HomeFeedAdapter()
+        accountsViewModel.liveAccountDetails.observe(this, Observer {
+            val details = it ?: return@Observer
+            account_view.text = details
+        })
     }
 
     companion object {
-        const val TAG = "HomeFragment"
+        const val TAG = "AccountsFragment"
 
-        fun newInstance() = HomeFragment()
+        fun newInstance() = AccountsFragment()
     }
 }
