@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.soneso.stellargate.R
 import com.soneso.stellargate.model.BlogPostPreview
+import com.soneso.stellargate.model.InternalLink
 import com.soneso.stellargate.model.Mock
+import kotlinx.android.synthetic.main.item_home_internal_link.view.*
 import kotlinx.android.synthetic.main.item_home_web_link.view.*
 
 /**
@@ -24,6 +26,14 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_web_link, parent, false)
                 BlogPostHolder(view)
             }
+            TYPE_INTERNAL_LINK -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_internal_link, parent, false)
+                InternalLinkHolder(view)
+            }
+            TYPE_LOAD_MORE -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_load_more, parent, false)
+                LoadMoreHolder(view)
+            }
             else -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_feed, parent, false)
                 CardViewHolder(view)
@@ -34,6 +44,8 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemViewType(position: Int): Int {
         return when (position) {
             1 -> TYPE_WEB
+            3 -> TYPE_INTERNAL_LINK
+            itemCount - 1 -> TYPE_LOAD_MORE
             else -> TYPE_DEFAULT
         }
     }
@@ -45,6 +57,9 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             TYPE_WEB -> {
                 (holder as BlogPostHolder).fillData(Mock.mockBlogPost())
             }
+            TYPE_INTERNAL_LINK -> {
+                (holder as InternalLinkHolder).fillData(Mock.mockInternalLink())
+            }
             else -> {
 
             }
@@ -52,6 +67,8 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     inner class CardViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    inner class LoadMoreHolder(view: View) : RecyclerView.ViewHolder(view)
 
     inner class BlogPostHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -74,8 +91,27 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    inner class InternalLinkHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        private val imageView = view.card_image
+        private val titleView = view.card_title
+        private val paragraphView = view.card_paragraph
+//        private val readMoreButton = view.help_button
+
+        fun fillData(link: InternalLink) {
+            imageView.setImageResource(link.iconResId)
+            titleView.text = link.title
+            paragraphView.text = link.description
+//            readMoreButton.setOnClickListener {
+//                onBlogLinkClickListener?.invoke(blog)
+//            }
+        }
+    }
+
     companion object {
         private const val TYPE_DEFAULT = 0
         private const val TYPE_WEB = 1
+        private const val TYPE_INTERNAL_LINK = 2
+        private const val TYPE_LOAD_MORE = 3
     }
 }

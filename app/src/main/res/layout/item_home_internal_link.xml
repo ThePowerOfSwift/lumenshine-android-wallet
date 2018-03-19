@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/HomeFeedCardView"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size_300"
+    android:layout_marginEnd="@dimen/size_5"
+    android:layout_marginStart="@dimen/size_5">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/card_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/size_25"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_image"
+            android:gravity="center"
+            android:textColor="@color/grey_800"
+            android:textSize="@dimen/text_size_20" />
+
+        <TextView
+            android:id="@+id/card_paragraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/faq_button"
+            android:layout_below="@id/card_title"
+            android:padding="@dimen/size_10"
+            android:textColor="@color/grey_600"
+            android:textSize="@dimen/text_size_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_05"
+            android:layout_alignTop="@+id/faq_button"
+            android:background="@color/grey_300" />
+
+        <TextView
+            android:id="@+id/faq_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_45"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/size_10"
+            android:layout_marginStart="@dimen/size_10"
+            android:gravity="center"
+            android:text="@string/home_internal_card_faq_button"
+            android:textColor="@color/cyan_800"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/feedback_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_45"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="@dimen/size_10"
+            android:layout_marginStart="@dimen/size_10"
+            android:layout_toStartOf="@id/faq_button"
+            android:gravity="center"
+            android:text="@string/home_internal_card_feedback_button"
+            android:textColor="@color/grey_600"
+            android:textSize="@dimen/text_size_14" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
