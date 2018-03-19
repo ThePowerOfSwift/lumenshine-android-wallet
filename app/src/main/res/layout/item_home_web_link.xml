@@ -63,7 +63,7 @@
             android:gravity="center"
             android:text="@string/home_web_card_button"
             android:textColor="@color/cyan_800"
-            android:textSize="@dimen/text_size_16" />
+            android:textSize="@dimen/text_size_14" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

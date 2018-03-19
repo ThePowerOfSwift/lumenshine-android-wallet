@@ -36,28 +36,28 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_internal_link, parent, false)
                 InternalLinkHolder(view)
             }
-            TYPE_LOAD_MORE -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_load_more, parent, false)
-                LoadMoreHolder(view)
+            TYPE_ACCOUNT -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_account, parent, false)
+                AccountHolder(view)
             }
             TYPE_CHART -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_chart, parent, false)
                 ChartHolder(view)
             }
             else -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_feed, parent, false)
-                CardViewHolder(view)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_load_more, parent, false)
+                LoadMoreHolder(view)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            0 -> TYPE_CHART
-            1 -> TYPE_WEB
+            0 -> TYPE_ACCOUNT
+            1 -> TYPE_CHART
+            2 -> TYPE_WEB
             3 -> TYPE_INTERNAL_LINK
-            itemCount - 1 -> TYPE_LOAD_MORE
-            else -> TYPE_DEFAULT
+            else -> TYPE_LOAD_MORE
         }
     }
 
@@ -80,7 +80,7 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    inner class CardViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class AccountHolder(view: View) : RecyclerView.ViewHolder(view)
 
     inner class LoadMoreHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -150,7 +150,7 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     companion object {
-        private const val TYPE_DEFAULT = 0
+        private const val TYPE_ACCOUNT = 0
         private const val TYPE_WEB = 1
         private const val TYPE_INTERNAL_LINK = 2
         private const val TYPE_LOAD_MORE = 3

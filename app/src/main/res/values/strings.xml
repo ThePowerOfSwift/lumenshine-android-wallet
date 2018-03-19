@@ -19,5 +19,6 @@
     <string name="home_chart_card_buy_button">BUY LUMENS</string>
     <string name="home_chart_card_sell_button">SELL LUMENS</string>
     <string name="home_chart_title">Lumen price</string>
+    <string name="home_account_title">Your account</string>
 
 </resources>

@@ -72,9 +72,11 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_home -> {
+                app_bar_layout.setExpanded(true)
                 replaceFragment(HomeFragment.newInstance(), HomeFragment.TAG)
             }
             R.id.nav_accounts -> {
+                app_bar_layout.setExpanded(false)
                 replaceFragment(AccountsFragment.newInstance(), AccountsFragment.TAG)
             }
             R.id.nav_transactions -> {
