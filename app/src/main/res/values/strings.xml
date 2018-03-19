@@ -16,5 +16,8 @@
     <string name="home_web_card_button">READ MORE</string>
     <string name="home_internal_card_faq_button">VIEW FAQ</string>
     <string name="home_internal_card_feedback_button">SEND FEEDBACK</string>
+    <string name="home_chart_card_buy_button">BUY LUMENS</string>
+    <string name="home_chart_card_sell_button">SELL LUMENS</string>
+    <string name="home_chart_title">Lumen price</string>
 
 </resources>

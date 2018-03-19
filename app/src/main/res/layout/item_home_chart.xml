@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/HomeFeedCardView"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size_300"
+    android:layout_marginEnd="@dimen/size_5"
+    android:layout_marginStart="@dimen/size_5">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/side_nav_bar">
+
+        <TextView
+            android:id="@+id/chart_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/size_10"
+            android:layout_marginTop="@dimen/size_10"
+            android:text="@string/home_chart_title"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_20" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/line_chart"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_150"
+            android:layout_above="@+id/buttons_layout"
+            android:layout_below="@id/chart_title" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_05"
+            android:layout_alignTop="@+id/buttons_layout"
+            android:background="@color/grey_300" />
+
+        <LinearLayout
+            android:id="@+id/buttons_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_45"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sell_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/size_10"
+                android:layout_marginStart="@dimen/size_10"
+                android:gravity="center"
+                android:text="@string/home_chart_card_sell_button"
+                android:textColor="@color/cyan_800"
+                android:textSize="@dimen/text_size_14" />
+
+            <TextView
+                android:id="@+id/buy_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/size_10"
+                android:layout_marginStart="@dimen/size_10"
+                android:gravity="center"
+                android:text="@string/home_chart_card_buy_button"
+                android:textColor="@color/cyan_800"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

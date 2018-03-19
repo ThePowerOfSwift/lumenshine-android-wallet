@@ -1,14 +1,20 @@
 package com.soneso.stellargate.ui.home
 
+import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.soneso.stellargate.R
 import com.soneso.stellargate.model.BlogPostPreview
 import com.soneso.stellargate.model.InternalLink
 import com.soneso.stellargate.model.Mock
+import kotlinx.android.synthetic.main.item_home_chart.view.*
 import kotlinx.android.synthetic.main.item_home_internal_link.view.*
 import kotlinx.android.synthetic.main.item_home_web_link.view.*
 
@@ -34,6 +40,10 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_load_more, parent, false)
                 LoadMoreHolder(view)
             }
+            TYPE_CHART -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_chart, parent, false)
+                ChartHolder(view)
+            }
             else -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_feed, parent, false)
                 CardViewHolder(view)
@@ -43,6 +53,7 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
+            0 -> TYPE_CHART
             1 -> TYPE_WEB
             3 -> TYPE_INTERNAL_LINK
             itemCount - 1 -> TYPE_LOAD_MORE
@@ -60,6 +71,9 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             TYPE_INTERNAL_LINK -> {
                 (holder as InternalLinkHolder).fillData(Mock.mockInternalLink())
             }
+            TYPE_CHART -> {
+                (holder as ChartHolder).fillData()
+            }
             else -> {
 
             }
@@ -69,6 +83,37 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class CardViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     inner class LoadMoreHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    inner class ChartHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        private val chartView = view.line_chart
+
+        fun fillData() {
+            chartView.legend.isEnabled = false
+            chartView.description.isEnabled = false
+            chartView.axisLeft.setDrawLabels(false)
+            chartView.axisLeft.gridColor = ContextCompat.getColor(chartView.context, R.color.cyan_300)
+            chartView.axisLeft.axisLineColor = Color.TRANSPARENT
+            chartView.axisRight.isEnabled = false
+            chartView.xAxis.setDrawLabels(false)
+            chartView.xAxis.setDrawGridLines(false)
+            chartView.xAxis.axisLineColor = Color.TRANSPARENT
+            val dataSet = LineDataSet(listOf(
+                    Entry(0f, 0.5f),
+                    Entry(1f, 0.5f),
+                    Entry(2f, 0.55f),
+                    Entry(3f, 0.6f),
+                    Entry(4f, 0.625f)
+            ), null)
+            dataSet.color = Color.WHITE
+            dataSet.lineWidth = chartView.resources.getDimension(R.dimen.size_05)
+            dataSet.circleRadius = chartView.resources.getDimension(R.dimen.size_1_5)
+            dataSet.valueTextSize = 8f
+            val data = LineData(dataSet)
+            data.setValueTextColor(Color.WHITE)
+            chartView.data = data
+        }
+    }
 
     inner class BlogPostHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -96,15 +141,11 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val imageView = view.card_image
         private val titleView = view.card_title
         private val paragraphView = view.card_paragraph
-//        private val readMoreButton = view.help_button
 
         fun fillData(link: InternalLink) {
             imageView.setImageResource(link.iconResId)
             titleView.text = link.title
             paragraphView.text = link.description
-//            readMoreButton.setOnClickListener {
-//                onBlogLinkClickListener?.invoke(blog)
-//            }
         }
     }
 
@@ -113,5 +154,6 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private const val TYPE_WEB = 1
         private const val TYPE_INTERNAL_LINK = 2
         private const val TYPE_LOAD_MORE = 3
+        private const val TYPE_CHART = 4
     }
 }

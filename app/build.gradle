@@ -64,6 +64,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     kapt 'com.github.bumptech.glide:compiler:4.6.1'
     compile 'com.github.bumptech.glide:annotations:4.6.1'
+
+    // cristi.paval, 3/19/18 - library used to draw charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 }
 
 
