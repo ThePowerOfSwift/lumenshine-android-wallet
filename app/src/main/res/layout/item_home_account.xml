@@ -13,11 +13,9 @@
 
         <ImageView
             android:id="@+id/account_image"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/size_75"
             android:layout_height="@dimen/size_75"
             android:layout_centerHorizontal="true"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
             android:src="@drawable/mock_account_card"
             tools:ignore="ContentDescription" />
 

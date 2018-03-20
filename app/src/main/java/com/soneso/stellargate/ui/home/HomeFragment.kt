@@ -1,6 +1,7 @@
 package com.soneso.stellargate.ui.home
 
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -11,12 +12,18 @@ import com.soneso.stellargate.R
 import com.soneso.stellargate.ui.SgFragment
 import com.soneso.stellargate.ui.util.forwardToBrowser
 import kotlinx.android.synthetic.main.fragment_home.*
+import javax.inject.Inject
 
 
 /**
  * A simple [Fragment] subclass.
  */
 class HomeFragment : SgFragment() {
+
+    @Inject
+    lateinit var homeViewModel: HomeViewModel
+
+    lateinit var adapter: HomeFeedAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +38,15 @@ class HomeFragment : SgFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupFeedRecyclerView()
+
+        homeViewModel.liveAccountDetails.observe(this, Observer {
+            adapter.setAccount(it)
+        })
     }
 
     private fun setupFeedRecyclerView() {
         rv_feed.layoutManager = LinearLayoutManager(context)
-        val adapter = HomeFeedAdapter()
+        adapter = HomeFeedAdapter()
         rv_feed.adapter = adapter
         adapter.onBlogLinkClickListener = {
             context?.forwardToBrowser(it.postUrl)

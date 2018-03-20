@@ -14,6 +14,9 @@ import com.soneso.stellargate.R
 import com.soneso.stellargate.model.BlogPostPreview
 import com.soneso.stellargate.model.InternalLink
 import com.soneso.stellargate.model.Mock
+import com.soneso.stellargate.model.StellarAccount
+import com.soneso.stellargate.ui.util.displayQrCode
+import kotlinx.android.synthetic.main.item_home_account.view.*
 import kotlinx.android.synthetic.main.item_home_chart.view.*
 import kotlinx.android.synthetic.main.item_home_internal_link.view.*
 import kotlinx.android.synthetic.main.item_home_web_link.view.*
@@ -25,6 +28,13 @@ import kotlinx.android.synthetic.main.item_home_web_link.view.*
 class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var onBlogLinkClickListener: ((BlogPostPreview) -> Unit)? = null
+
+    private var account: StellarAccount? = null
+
+    fun setAccount(account: StellarAccount?) {
+        this.account = account
+        notifyItemChanged(ACCOUNT_POSITION)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -53,7 +63,7 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            0 -> TYPE_ACCOUNT
+            ACCOUNT_POSITION -> TYPE_ACCOUNT
             1 -> TYPE_CHART
             2 -> TYPE_WEB
             3 -> TYPE_INTERNAL_LINK
@@ -74,13 +84,24 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             TYPE_CHART -> {
                 (holder as ChartHolder).fillData()
             }
+            TYPE_ACCOUNT -> {
+                (holder as AccountHolder).fillData(account ?: return)
+            }
             else -> {
 
             }
         }
     }
 
-    inner class AccountHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class AccountHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        private val imageView = view.account_image
+
+        fun fillData(account: StellarAccount) {
+            imageView.displayQrCode(account.accountId)
+
+        }
+    }
 
     inner class LoadMoreHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -155,5 +176,6 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private const val TYPE_INTERNAL_LINK = 2
         private const val TYPE_LOAD_MORE = 3
         private const val TYPE_CHART = 4
+        private const val ACCOUNT_POSITION = 0
     }
 }

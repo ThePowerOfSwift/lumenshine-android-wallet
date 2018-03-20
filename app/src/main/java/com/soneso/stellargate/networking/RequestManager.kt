@@ -43,6 +43,7 @@ class RequestManager(private val sgPrefs: SgPrefs) {
                 .fromCallable {
                     val server = Server("https://horizon-testnet.stellar.org")
                     val account = server.accounts().account(KeyPair.fromAccountId(accountId))
+                    Log.d(TAG, "Account details retrieved successfully!")
                     return@fromCallable account
                 }
                 .subscribeOn(Schedulers.newThread())
