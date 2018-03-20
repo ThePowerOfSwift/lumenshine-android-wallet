@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context="com.soneso.stellargate.ui.accounts.AccountsFragment">
 
+    <ImageView
+        android:id="@+id/qr_code_view"
+        android:layout_width="@dimen/size_150"
+        android:layout_height="@dimen/size_150"
+        tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/account_view"
         android:layout_width="wrap_content"

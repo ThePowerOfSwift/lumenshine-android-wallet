@@ -2,6 +2,7 @@ package com.soneso.stellargate.networking
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import com.soneso.stellargate.model.StellarAccount
 import com.soneso.stellargate.persistence.SgPrefs
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,7 +36,7 @@ class RequestManager(private val sgPrefs: SgPrefs) {
                 .subscribe()
     }
 
-    fun getAccountDetails(liveData: MutableLiveData<String>) {
+    fun getAccountDetails(liveData: MutableLiveData<StellarAccount>) {
         val accountId = sgPrefs.accountId()
 
         Observable
@@ -46,20 +47,13 @@ class RequestManager(private val sgPrefs: SgPrefs) {
                 }
                 .subscribeOn(Schedulers.newThread())
                 .map { account: AccountResponse ->
-                    val sb = StringBuffer("Balances for account $accountId").append("\n\n")
-                    for (balance in account.balances) {
-                        sb.append(String.format(
-                                "Type: %s, Code: %s, Balance: %s",
-                                balance.assetType,
-                                balance.assetCode,
-                                balance.balance))
-                        sb.append("\n")
-                    }
-                    return@map sb.toString()
+                    val sa = StellarAccount()
+                    sa.accountId = accountId
+                    sa.balance = account.balances[0].balance
+                    return@map sa
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Log.d(TAG, it)
                     liveData.value = it
                 }
     }

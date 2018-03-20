@@ -2,6 +2,7 @@ package com.soneso.stellargate.ui.accounts
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.soneso.stellargate.model.StellarAccount
 import com.soneso.stellargate.networking.RequestManager
 
 /**
@@ -10,7 +11,7 @@ import com.soneso.stellargate.networking.RequestManager
  */
 class AccountsViewModel(private val requestManager: RequestManager) : ViewModel() {
 
-    val liveAccountDetails = MutableLiveData<String>()
+    val liveAccountDetails = MutableLiveData<StellarAccount>()
 
     init {
         requestManager.getAccountDetails(liveAccountDetails)

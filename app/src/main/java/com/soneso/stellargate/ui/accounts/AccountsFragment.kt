@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
 import com.soneso.stellargate.ui.SgFragment
+import com.soneso.stellargate.ui.util.displayQrCode
 import kotlinx.android.synthetic.main.fragment_accounts.*
 import javax.inject.Inject
 
@@ -35,9 +36,11 @@ class AccountsFragment : SgFragment() {
 
         accountsViewModel.liveAccountDetails.observe(this, Observer {
             val details = it ?: return@Observer
-            account_view.text = details
+            qr_code_view.displayQrCode(details.accountId)
+            account_view.text = details.balance
         })
     }
+
 
     companion object {
         const val TAG = "AccountsFragment"
