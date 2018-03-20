@@ -1,4 +1,4 @@
-package com.soneso.stellargate.ui
+package com.soneso.stellargate.presentation
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -11,8 +11,8 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.google.firebase.iid.FirebaseInstanceId
 import com.soneso.stellargate.R
-import com.soneso.stellargate.ui.accounts.AccountsFragment
-import com.soneso.stellargate.ui.home.HomeFragment
+import com.soneso.stellargate.presentation.accounts.AccountsFragment
+import com.soneso.stellargate.presentation.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 

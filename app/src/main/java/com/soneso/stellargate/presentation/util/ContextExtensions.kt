@@ -1,4 +1,4 @@
-package com.soneso.stellargate.ui.util
+package com.soneso.stellargate.presentation.util
 
 import android.content.Context
 import android.content.Intent

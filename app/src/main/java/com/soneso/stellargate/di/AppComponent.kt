@@ -1,7 +1,7 @@
 package com.soneso.stellargate.di
 
-import com.soneso.stellargate.ui.accounts.AccountsFragment
-import com.soneso.stellargate.ui.home.HomeFragment
+import com.soneso.stellargate.presentation.accounts.AccountsFragment
+import com.soneso.stellargate.presentation.home.HomeFragment
 import dagger.Component
 import javax.inject.Singleton
 

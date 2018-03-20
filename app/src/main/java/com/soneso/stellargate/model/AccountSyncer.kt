@@ -1,8 +1,8 @@
-package com.soneso.stellargate.networking
+package com.soneso.stellargate.model
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
-import com.soneso.stellargate.model.StellarAccount
+import com.soneso.stellargate.domain.StellarAccount
 import com.soneso.stellargate.persistence.SgPrefs
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,9 +18,9 @@ import java.util.*
  * Class used to perform requests.
  * Created by cristi.paval on 3/9/18.
  */
-class RequestManager(private val sgPrefs: SgPrefs) {
+class AccountSyncer(private val sgPrefs: SgPrefs) : AccountRepository {
 
-    fun createAccount(accountId: String) {
+    override fun createAccount(accountId: String) {
 
         Observable
                 .fromCallable {
@@ -48,10 +48,7 @@ class RequestManager(private val sgPrefs: SgPrefs) {
                 }
                 .subscribeOn(Schedulers.newThread())
                 .map { account: AccountResponse ->
-                    val sa = StellarAccount()
-                    sa.accountId = accountId
-                    sa.balance = account.balances[0].balance
-                    return@map sa
+                    return@map StellarAccount(accountId, account.balances[0].balance)
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -60,6 +57,6 @@ class RequestManager(private val sgPrefs: SgPrefs) {
     }
 
     companion object {
-        const val TAG = "RequestManager"
+        const val TAG = "AccountSyncer"
     }
 }

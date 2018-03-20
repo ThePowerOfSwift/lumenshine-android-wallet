@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".presentation.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".networking.push.SgFirebaseInstanceIdService"
+            android:name=".model.push.SgFirebaseInstanceIdService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -32,7 +32,7 @@
         </service>
 
         <service
-            android:name=".networking.push.SgFirebaseMessagingService"
+            android:name=".model.push.SgFirebaseMessagingService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -1,4 +1,4 @@
-package com.soneso.stellargate.networking.push
+package com.soneso.stellargate.model.push
 
 import com.google.firebase.iid.FirebaseInstanceIdService
 

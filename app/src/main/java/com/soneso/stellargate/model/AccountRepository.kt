@@ -1,11 +1,10 @@
 package com.soneso.stellargate.model
 
 /**
- * Account model.
+ * Repository.
  * Created by cristi.paval on 3/20/18.
  */
-class StellarAccount {
+interface AccountRepository {
 
-    var accountId = ""
-    var balance = ""
+    fun createAccount(accountId: String)
 }

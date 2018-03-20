@@ -1,4 +1,4 @@
-package com.soneso.stellargate.ui.home
+package com.soneso.stellargate.presentation.home
 
 
 import android.arch.lifecycle.Observer
@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
-import com.soneso.stellargate.ui.SgFragment
-import com.soneso.stellargate.ui.util.forwardToBrowser
+import com.soneso.stellargate.presentation.SgFragment
+import com.soneso.stellargate.presentation.util.forwardToBrowser
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 

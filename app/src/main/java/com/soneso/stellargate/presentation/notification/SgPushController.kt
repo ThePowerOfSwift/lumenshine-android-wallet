@@ -1,4 +1,4 @@
-package com.soneso.stellargate.ui.notification
+package com.soneso.stellargate.presentation.notification
 
 import android.content.Context
 import android.support.v4.app.NotificationCompat

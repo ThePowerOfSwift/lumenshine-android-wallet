@@ -1,8 +1,8 @@
-package com.soneso.stellargate.networking.push
+package com.soneso.stellargate.model.push
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.soneso.stellargate.ui.notification.SgPushController
+import com.soneso.stellargate.presentation.notification.SgPushController
 import org.json.JSONObject
 
 /**

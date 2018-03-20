@@ -1,4 +1,4 @@
-package com.soneso.stellargate.ui.util
+package com.soneso.stellargate.presentation.util
 
 import android.util.Log
 import android.widget.ImageView
@@ -7,7 +7,7 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.soneso.stellargate.ui.accounts.AccountsFragment
+import com.soneso.stellargate.presentation.accounts.AccountsFragment
 import java.util.*
 import kotlin.math.min
 

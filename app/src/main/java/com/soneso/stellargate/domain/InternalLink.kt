@@ -1,4 +1,4 @@
-package com.soneso.stellargate.model
+package com.soneso.stellargate.domain
 
 /**
  * Model.

@@ -1,4 +1,4 @@
-package com.soneso.stellargate.ui.home
+package com.soneso.stellargate.presentation.home
 
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
@@ -11,11 +11,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.soneso.stellargate.R
-import com.soneso.stellargate.model.BlogPostPreview
-import com.soneso.stellargate.model.InternalLink
-import com.soneso.stellargate.model.Mock
-import com.soneso.stellargate.model.StellarAccount
-import com.soneso.stellargate.ui.util.displayQrCode
+import com.soneso.stellargate.domain.BlogPostPreview
+import com.soneso.stellargate.domain.InternalLink
+import com.soneso.stellargate.domain.Mock
+import com.soneso.stellargate.domain.StellarAccount
+import com.soneso.stellargate.presentation.util.displayQrCode
 import kotlinx.android.synthetic.main.item_home_account.view.*
 import kotlinx.android.synthetic.main.item_home_chart.view.*
 import kotlinx.android.synthetic.main.item_home_internal_link.view.*

@@ -1,4 +1,4 @@
-package com.soneso.stellargate.ui
+package com.soneso.stellargate.presentation
 
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
