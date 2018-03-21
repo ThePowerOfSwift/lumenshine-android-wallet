@@ -13,3 +13,13 @@ o alta chestie care trebuie integrata este un qr code viewer
 ca sa putem citi adresse de stellar dintr-un qr code mai tarziu
 
 iar alta chestie, ar fi top sa analizezi wallet pe care la facut Staraj ca sa inveti putin din el: https://github.com/Block-Equity/stellar-ios-sample-wallet
+
+
+
+03/21/2018
+
+- key derivation from account password , ajunge la 256 biti
+- master key encryption
+- pag 252 si 253
+- astral wallet io
+- password minim 1 lower case, min 1 upper case and one number, min 9 char lentgth
