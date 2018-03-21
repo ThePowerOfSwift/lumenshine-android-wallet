@@ -20,5 +20,19 @@
     <string name="home_chart_card_sell_button">SELL LUMENS</string>
     <string name="home_chart_title">Lumen price</string>
     <string name="home_account_title">Your account</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_two_factor">Two Factor Code</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="create_account"><u>Create one!</u></string>
+    <string name="sign_in_underlined"><u>Sign in</u></string>
 
 </resources>
