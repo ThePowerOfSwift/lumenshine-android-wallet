@@ -9,12 +9,22 @@ import android.view.ViewGroup
 
 import com.soneso.stellargate.R
 import kotlinx.android.synthetic.main.fragment_registration.*
+import javax.inject.Inject
 
 
 /**
  * A simple [Fragment] subclass.
  */
 class RegistrationFragment : AuthFragment() {
+
+    @Inject
+    lateinit var regViewModel: RegistrationViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        appComponent.inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_registration, container, false)

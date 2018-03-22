@@ -5,7 +5,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="@dimen/size_15"
-    tools:context="com.soneso.stellargate.presentation.auth.AuthActivity">
+    tools:context="com.soneso.stellargate.presentation.auth.LoginFragment">
 
     <!-- Login progress -->
     <ProgressBar

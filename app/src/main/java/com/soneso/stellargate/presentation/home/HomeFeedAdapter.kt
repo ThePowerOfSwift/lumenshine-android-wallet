@@ -13,8 +13,8 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.BlogPostPreview
 import com.soneso.stellargate.domain.InternalLink
-import com.soneso.stellargate.domain.Mock
 import com.soneso.stellargate.domain.StellarAccount
+import com.soneso.stellargate.domain.util.Mock
 import com.soneso.stellargate.presentation.util.displayQrCode
 import kotlinx.android.synthetic.main.item_home_account.view.*
 import kotlinx.android.synthetic.main.item_home_chart.view.*
