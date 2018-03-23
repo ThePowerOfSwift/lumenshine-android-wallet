@@ -33,6 +33,14 @@ class RegistrationFragment : AuthFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sign_in_button.setOnClickListener { replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG) }
+
+        email_registration_button.setOnClickListener {
+            attemptRegistration()
+        }
+    }
+
+    private fun attemptRegistration() {
+        regViewModel.createAccount(email.text, password.text)
     }
 
     companion object {
