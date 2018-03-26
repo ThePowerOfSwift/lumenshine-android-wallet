@@ -6,5 +6,5 @@ package com.soneso.stellargate.model
  */
 interface AccountRepository {
 
-    fun createAccount(accountId: String)
+    fun createUserAccount(accountId: String)
 }

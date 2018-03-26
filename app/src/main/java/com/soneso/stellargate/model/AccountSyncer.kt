@@ -20,7 +20,7 @@ import java.util.*
  */
 class AccountSyncer(private val sgPrefs: SgPrefs) : AccountRepository {
 
-    override fun createAccount(accountId: String) {
+    override fun createUserAccount(accountId: String) {
 
         Observable
                 .fromCallable {

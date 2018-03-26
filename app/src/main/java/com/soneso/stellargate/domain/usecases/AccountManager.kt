@@ -9,6 +9,6 @@ import com.soneso.stellargate.model.AccountRepository
 class AccountManager(private val repo: AccountRepository) : AccountUseCases {
 
     override fun createAccount(accountId: String) {
-        repo.createAccount(accountId)
+        repo.createUserAccount(accountId)
     }
 }

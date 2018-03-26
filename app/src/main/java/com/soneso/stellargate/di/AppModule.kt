@@ -7,6 +7,8 @@ import com.soneso.stellargate.domain.usecases.AuthManager
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.model.AccountRepository
 import com.soneso.stellargate.model.AccountSyncer
+import com.soneso.stellargate.model.UserRepository
+import com.soneso.stellargate.model.UserSyncer
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.accounts.AccountsViewModel
 import com.soneso.stellargate.presentation.auth.RegistrationViewModel
@@ -42,7 +44,11 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideAuthUseCases(): AuthUseCases = AuthManager()
+    fun provideUserRepository(): UserRepository = UserSyncer()
+
+    @Provides
+    @Singleton
+    fun provideAuthUseCases(ur: UserRepository): AuthUseCases = AuthManager(ur)
 
     @Provides
     fun provideRegistrationViewModel(useCases: AuthUseCases) = RegistrationViewModel(useCases)
