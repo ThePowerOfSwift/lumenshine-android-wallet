@@ -9,7 +9,6 @@ import com.soneso.stellargate.domain.usecases.AuthUseCases
  */
 class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
-    fun createAccount(email: CharSequence, password: CharSequence) {
-        authUseCases.createAccount(email, password)
-    }
+    fun createAccount(email: CharSequence, password: CharSequence) =
+            authUseCases.createAccount(email, password)
 }

@@ -1,13 +1,17 @@
 package com.soneso.stellargate.presentation.auth
 
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import com.soneso.stellargate.R
+import com.soneso.stellargate.model.DataStatus
 import kotlinx.android.synthetic.main.fragment_registration.*
 import javax.inject.Inject
 
@@ -40,7 +44,21 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun attemptRegistration() {
-        regViewModel.createAccount(email.text, password.text)
+        val data = regViewModel.createAccount(email.text, password.text)
+        data.liveStatus.observe(this, Observer {
+            val status = it ?: return@Observer
+            when (status) {
+                DataStatus.ERROR -> {
+                    Toast.makeText(context, data.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+                DataStatus.LOADING -> {
+                    Log.d(TAG, "Loading registration.")
+                }
+                DataStatus.SUCCESS -> {
+                    Log.d(TAG, "Success at registration step.")
+                }
+            }
+        })
     }
 
     companion object {

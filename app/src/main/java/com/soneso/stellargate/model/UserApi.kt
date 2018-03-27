@@ -1,5 +1,9 @@
 package com.soneso.stellargate.model
 
+import io.reactivex.Observable
+import retrofit2.http.Body
+import retrofit2.http.POST
+
 
 /**
  * Service used to retrofit.
@@ -7,6 +11,6 @@ package com.soneso.stellargate.model
  */
 interface UserApi {
 
-//    @POST("/registration")
-//    fun registerUser(@Body body: RegistrationRequest)
+    @POST("/registration")
+    fun registerUser(@Body body: RegistrationRequest): Observable<Void>
 }

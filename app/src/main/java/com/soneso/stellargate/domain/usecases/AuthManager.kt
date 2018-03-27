@@ -3,6 +3,7 @@ package com.soneso.stellargate.domain.usecases
 import com.soneso.stellargate.domain.User
 import com.soneso.stellargate.domain.UserSecurityData
 import com.soneso.stellargate.domain.util.CryptoUtil
+import com.soneso.stellargate.model.DataProvider
 import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.util.PrimitiveUtil
@@ -13,7 +14,7 @@ import com.soneso.stellarmnemonics.util.PrimitiveUtil
  */
 class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
 
-    override fun createAccount(email: CharSequence, password: CharSequence) {
+    override fun createAccount(email: CharSequence, password: CharSequence): DataProvider<User> {
 
         val emailAsString = email.toString()
         val pass = CharArray(password.length)
@@ -27,7 +28,7 @@ class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
                 createUseSecurityData(pass)
         )
 
-        userRepo.createUserAccount(user)
+        return userRepo.createUserAccount(user)
     }
 
     private fun createUseSecurityData(pass: CharArray): UserSecurityData {

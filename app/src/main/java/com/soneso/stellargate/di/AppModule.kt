@@ -5,16 +5,14 @@ import com.soneso.stellargate.domain.usecases.AccountManager
 import com.soneso.stellargate.domain.usecases.AccountUseCases
 import com.soneso.stellargate.domain.usecases.AuthManager
 import com.soneso.stellargate.domain.usecases.AuthUseCases
-import com.soneso.stellargate.model.AccountRepository
-import com.soneso.stellargate.model.AccountSyncer
-import com.soneso.stellargate.model.UserRepository
-import com.soneso.stellargate.model.UserSyncer
+import com.soneso.stellargate.model.*
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.accounts.AccountsViewModel
 import com.soneso.stellargate.presentation.auth.RegistrationViewModel
 import com.soneso.stellargate.presentation.home.HomeViewModel
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 /**
@@ -44,7 +42,7 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideUserRepository(): UserRepository = UserSyncer()
+    fun provideUserRepository(userApi: UserApi): UserRepository = UserSyncer(userApi)
 
     @Provides
     @Singleton
@@ -53,12 +51,12 @@ class AppModule(private val context: Context) {
     @Provides
     fun provideRegistrationViewModel(useCases: AuthUseCases) = RegistrationViewModel(useCases)
 
-//    @Provides
-//    @Singleton
-//    fun provideRetrofit() = Retrofit.Builder()
-//            .baseUrl("http://horizon-testnet.stellargate.net/")
-//            .build()!!
-//
-//    @Provides
-//    fun provideUserApi(r: Retrofit): UserApi = r.create(UserApi::class.java)
+    @Provides
+    @Singleton
+    fun provideRetrofit() = Retrofit.Builder()
+            .baseUrl("http://horizon-testnet.stellargate.net/")
+            .build()!!
+
+    @Provides
+    fun provideUserApi(r: Retrofit): UserApi = r.create(UserApi::class.java)
 }

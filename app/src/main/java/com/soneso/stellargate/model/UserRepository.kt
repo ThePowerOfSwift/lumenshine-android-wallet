@@ -8,5 +8,5 @@ import com.soneso.stellargate.domain.User
  */
 interface UserRepository {
 
-    fun createUserAccount(user: User)
+    fun createUserAccount(user: User): DataProvider<User>
 }
