@@ -53,8 +53,8 @@ class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
         val encryptedMnemonic = CryptoUtil.encryptValue(PrimitiveUtil.toBytes(mnemonic16bytes), masterKey, mnemonicIV)
 
         // cristi.paval, 3/23/18 - generate public keys
-        val publicKeyIndex0 = Wallet.createKeyPair(mnemonic, null, 0).publicKey
-        val publicKeyIndex188 = Wallet.createKeyPair(mnemonic, null, 188).publicKey
+        val publicKeyIndex0 = Wallet.createKeyPair(mnemonic, null, 0).accountId
+        val publicKeyIndex188 = Wallet.createKeyPair(mnemonic, null, 188).accountId
 
         return UserSecurityData(
                 publicKeyIndex0,

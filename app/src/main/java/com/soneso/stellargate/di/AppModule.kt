@@ -52,4 +52,13 @@ class AppModule(private val context: Context) {
 
     @Provides
     fun provideRegistrationViewModel(useCases: AuthUseCases) = RegistrationViewModel(useCases)
+
+//    @Provides
+//    @Singleton
+//    fun provideRetrofit() = Retrofit.Builder()
+//            .baseUrl("http://horizon-testnet.stellargate.net/")
+//            .build()!!
+//
+//    @Provides
+//    fun provideUserApi(r: Retrofit): UserApi = r.create(UserApi::class.java)
 }
