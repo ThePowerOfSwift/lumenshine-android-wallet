@@ -1,6 +1,7 @@
-package com.soneso.stellargate.model
+package com.soneso.stellargate.model.user
 
-import com.soneso.stellargate.domain.User
+import com.soneso.stellargate.domain.data.User
+import com.soneso.stellargate.model.dto.DataProvider
 
 /**
  * User.

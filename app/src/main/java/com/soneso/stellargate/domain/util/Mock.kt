@@ -1,8 +1,8 @@
 package com.soneso.stellargate.domain.util
 
 import com.soneso.stellargate.R
-import com.soneso.stellargate.domain.BlogPostPreview
-import com.soneso.stellargate.domain.InternalLink
+import com.soneso.stellargate.domain.data.BlogPostPreview
+import com.soneso.stellargate.domain.data.InternalLink
 
 /**
  * Mocker class.

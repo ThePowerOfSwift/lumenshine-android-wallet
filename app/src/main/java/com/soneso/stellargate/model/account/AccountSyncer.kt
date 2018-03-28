@@ -1,8 +1,8 @@
-package com.soneso.stellargate.model
+package com.soneso.stellargate.model.account
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
-import com.soneso.stellargate.domain.StellarAccount
+import com.soneso.stellargate.domain.data.StellarAccount
 import com.soneso.stellargate.persistence.SgPrefs
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,7 +18,7 @@ import java.util.*
  * Class used to perform requests.
  * Created by cristi.paval on 3/9/18.
  */
-class AccountSyncer(private val sgPrefs: SgPrefs) : AccountRepository {
+class AccountSyncer(private val sgPrefs: SgPrefs) : com.soneso.stellargate.model.account.AccountRepository {
 
     override fun createUserAccount(accountId: String) {
 
@@ -29,7 +29,7 @@ class AccountSyncer(private val sgPrefs: SgPrefs) : AccountRepository {
                             accountId)
                     val response = URL(friendbotUrl).openStream()
                     val body = Scanner(response, "UTF-8").useDelimiter("\\A").next()
-                    Log.d(TAG, "SUCCESS! You have a new account :)\n$body")
+                    Log.d(com.soneso.stellargate.model.account.AccountSyncer.Companion.TAG, "SUCCESS! You have a new account :)\n$body")
                 }
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -43,7 +43,7 @@ class AccountSyncer(private val sgPrefs: SgPrefs) : AccountRepository {
                 .fromCallable {
                     val server = Server("https://horizon-testnet.stellar.org")
                     val account = server.accounts().account(KeyPair.fromAccountId(accountId))
-                    Log.d(TAG, "Account details retrieved successfully!")
+                    Log.d(com.soneso.stellargate.model.account.AccountSyncer.Companion.TAG, "Account details retrieved successfully!")
                     return@fromCallable account
                 }
                 .subscribeOn(Schedulers.newThread())

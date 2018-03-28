@@ -1,10 +1,9 @@
 package com.soneso.stellargate.domain.usecases
 
-import com.soneso.stellargate.domain.User
-import com.soneso.stellargate.domain.UserSecurityData
+import com.soneso.stellargate.domain.data.User
+import com.soneso.stellargate.domain.data.UserSecurityData
 import com.soneso.stellargate.domain.util.CryptoUtil
-import com.soneso.stellargate.model.DataProvider
-import com.soneso.stellargate.model.UserRepository
+import com.soneso.stellargate.model.dto.DataProvider
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.util.PrimitiveUtil
 
@@ -12,7 +11,7 @@ import com.soneso.stellarmnemonics.util.PrimitiveUtil
  * Manager.
  * Created by cristi.paval on 3/22/18.
  */
-class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
+class AuthManager(private val userRepo: com.soneso.stellargate.model.user.UserRepository) : AuthUseCases {
 
     override fun createAccount(email: CharSequence, password: CharSequence): DataProvider<User> {
 

@@ -1,5 +1,6 @@
-package com.soneso.stellargate.model
+package com.soneso.stellargate.model.user
 
+import com.soneso.stellargate.model.dto.RegistrationRequest
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST

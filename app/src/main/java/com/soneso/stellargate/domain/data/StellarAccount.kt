@@ -1,4 +1,4 @@
-package com.soneso.stellargate.domain
+package com.soneso.stellargate.domain.data
 
 /**
  * Account model.

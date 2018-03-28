@@ -2,7 +2,7 @@ package com.soneso.stellargate.presentation.accounts
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.soneso.stellargate.domain.StellarAccount
+import com.soneso.stellargate.domain.data.StellarAccount
 import com.soneso.stellargate.domain.usecases.AccountUseCases
 import org.stellar.sdk.KeyPair
 

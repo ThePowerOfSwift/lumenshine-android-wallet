@@ -2,8 +2,8 @@ package com.soneso.stellargate.presentation.home
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.soneso.stellargate.domain.StellarAccount
-import com.soneso.stellargate.model.AccountRepository
+import com.soneso.stellargate.domain.data.StellarAccount
+import com.soneso.stellargate.model.account.AccountRepository
 
 /**
  * View model.

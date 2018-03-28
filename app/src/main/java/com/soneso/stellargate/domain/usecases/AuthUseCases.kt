@@ -1,7 +1,7 @@
 package com.soneso.stellargate.domain.usecases
 
-import com.soneso.stellargate.domain.User
-import com.soneso.stellargate.model.DataProvider
+import com.soneso.stellargate.domain.data.User
+import com.soneso.stellargate.model.dto.DataProvider
 
 /**
  * Class which provides data to ui in a convenient manner. Gets objects from repository and wraps them here for presentation layer.
