@@ -1,6 +1,5 @@
 package com.soneso.stellargate.persistence.secureprefs
 
-import java.nio.charset.Charset
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -25,13 +24,16 @@ internal class DeCryptor {
         keyStore.load(null)
     }
 
-    fun decryptData(alias: String, encryptedData: ByteArray, encryptionIv: ByteArray): String {
+    fun decryptData(alias: String, encryptionIv: ByteArray, encryptedData: String): String {
 
         val cipher = Cipher.getInstance(TRANSFORMATION)
         val spec = GCMParameterSpec(128, encryptionIv)
         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(alias), spec)
 
-        return String(cipher.doFinal(encryptedData), Charset.forName("UTF-8"))
+        return String(
+                cipher.doFinal(encryptedData.toByteArray(charset("UTF-8"))),
+                charset("UTF-8")
+        )
     }
 
     private fun getSecretKey(alias: String): SecretKey {

@@ -1,7 +1,10 @@
 package com.soneso.stellargate.di
 
+import android.arch.persistence.room.Room
 import android.content.Context
+import android.text.SpannableStringBuilder
 import android.text.TextUtils
+import com.commonsware.cwac.saferoom.SafeHelperFactory
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -10,6 +13,12 @@ import com.soneso.stellargate.domain.usecases.AccountManager
 import com.soneso.stellargate.domain.usecases.AccountUseCases
 import com.soneso.stellargate.domain.usecases.AuthManager
 import com.soneso.stellargate.domain.usecases.AuthUseCases
+import com.soneso.stellargate.model.account.AccountRepository
+import com.soneso.stellargate.model.account.AccountSyncer
+import com.soneso.stellargate.model.user.UserApi
+import com.soneso.stellargate.model.user.UserRepository
+import com.soneso.stellargate.model.user.UserSyncer
+import com.soneso.stellargate.persistence.SgDatabase
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.accounts.AccountsViewModel
 import com.soneso.stellargate.presentation.auth.RegistrationViewModel
@@ -33,11 +42,11 @@ class AppModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideAppPrefs() = SgPrefs(context)
+    fun provideAppPrefs() = SgPrefs(context, "bla", ByteArray(23))
 
     @Singleton
     @Provides
-    fun provideAccountRepository(prefs: SgPrefs): com.soneso.stellargate.model.account.AccountRepository = com.soneso.stellargate.model.account.AccountSyncer(prefs)
+    fun provideAccountRepository(prefs: SgPrefs): AccountRepository = AccountSyncer(prefs)
 
     @Singleton
     @Provides
@@ -47,15 +56,15 @@ class AppModule(private val context: Context) {
     fun provideAccountsViewModel(useCases: AccountUseCases) = AccountsViewModel(useCases)
 
     @Provides
-    fun provideHomeViewModel(rm: com.soneso.stellargate.model.account.AccountRepository) = HomeViewModel(rm)
+    fun provideHomeViewModel(rm: AccountRepository) = HomeViewModel(rm)
 
     @Provides
     @Singleton
-    fun provideUserRepository(r: Retrofit): com.soneso.stellargate.model.user.UserRepository = com.soneso.stellargate.model.user.UserSyncer(r.create(com.soneso.stellargate.model.user.UserApi::class.java))
+    fun provideUserRepository(r: Retrofit, d: SgDatabase): UserRepository = UserSyncer(r.create(UserApi::class.java), d.userDao())
 
     @Provides
     @Singleton
-    fun provideAuthUseCases(ur: com.soneso.stellargate.model.user.UserRepository): AuthUseCases = AuthManager(ur)
+    fun provideAuthUseCases(ur: UserRepository): AuthUseCases = AuthManager(ur)
 
     @Provides
     fun provideRegistrationViewModel(useCases: AuthUseCases) = RegistrationViewModel(useCases)
@@ -98,5 +107,16 @@ class AppModule(private val context: Context) {
                 .addConverterFactory(JacksonConverterFactory.create(mapper))
                 .client(okHttpBuilder.build())
                 .build()!!
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(): SgDatabase {
+        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder("blabla"))
+
+        return Room.databaseBuilder(context, SgDatabase::class.java, SgDatabase.DB_NAME)
+                .openHelperFactory(factory)
+                .allowMainThreadQueries()
+                .build()
     }
 }

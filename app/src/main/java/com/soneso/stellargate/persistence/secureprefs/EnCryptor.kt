@@ -1,3 +1,5 @@
+package com.soneso.stellargate.persistence.secureprefs
+
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -19,7 +21,7 @@ import javax.crypto.spec.IvParameterSpec
 
 internal class EnCryptor {
 
-    fun encryptText(alias: String, textToEncrypt: String, iv: ByteArray): ByteArray {
+    fun encryptText(alias: String, iv: ByteArray, textToEncrypt: String): ByteArray {
 
         val cipher = Cipher.getInstance(TRANSFORMATION)
         val ivParams = IvParameterSpec(iv)
@@ -28,18 +30,20 @@ internal class EnCryptor {
     }
 
     private fun getSecretKey(alias: String): SecretKey {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
-            val spec = KeyGenParameterSpec.Builder(alias,
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+
+        val keyGenerator: KeyGenerator
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+            val spec = KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .build()
             keyGenerator.init(spec)
-            return keyGenerator.generateKey()
         } else {
-            TODO("VERSION.SDK_INT < M")
+            keyGenerator = KeyGenerator.getInstance(ANDROID_KEY_STORE)
+            keyGenerator.init(256)
         }
+        return keyGenerator.generateKey()
     }
 
     companion object {
