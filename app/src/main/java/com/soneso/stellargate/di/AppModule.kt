@@ -17,7 +17,6 @@ import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
 import com.soneso.stellargate.model.user.UserApi
 import com.soneso.stellargate.model.user.UserRepository
-import com.soneso.stellargate.model.user.UserSyncer
 import com.soneso.stellargate.persistence.SgDatabase
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.accounts.AccountsViewModel
@@ -42,7 +41,7 @@ class AppModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideAppPrefs() = SgPrefs(context, "bla", ByteArray(23))
+    fun provideAppPrefs() = SgPrefs(context)
 
     @Singleton
     @Provides
@@ -60,7 +59,7 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideUserRepository(r: Retrofit, d: SgDatabase): UserRepository = UserSyncer(r.create(UserApi::class.java), d.userDao())
+    fun provideUserRepository(r: Retrofit, d: SgDatabase): UserRepository = UserRepository(r.create(UserApi::class.java), d.userDao())
 
     @Provides
     @Singleton
@@ -111,8 +110,9 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideDatabase(): SgDatabase {
-        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder("blabla"))
+    fun provideDatabase(prefs: SgPrefs): SgDatabase {
+
+        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(prefs.appId()))
 
         return Room.databaseBuilder(context, SgDatabase::class.java, SgDatabase.DB_NAME)
                 .openHelperFactory(factory)

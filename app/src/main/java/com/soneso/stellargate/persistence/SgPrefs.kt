@@ -2,26 +2,25 @@ package com.soneso.stellargate.persistence
 
 import android.content.Context
 import android.util.Log
-import com.soneso.stellargate.persistence.secureprefs.DeCryptor
-import com.soneso.stellargate.persistence.secureprefs.EnCryptor
-import org.stellar.sdk.KeyPair
+import java.util.*
 
 /**
  * Shared Prefs.
  * Created by cristi.paval on 3/12/18.
  */
-class SgPrefs(context: Context, private val alias: String, private val iv: ByteArray) {
+class SgPrefs(context: Context) {
 
     private val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-    private val enCryptor = EnCryptor()
-    private val deCryptor = DeCryptor()
+    private val cipher = SgCipher(context, PREF_NAME)
 
-    init {
-        if (accountId().isEmpty()) {
-            Log.i(TAG, "Generating account...")
-            val pair = KeyPair.random()
-            saveAccount(pair.accountId, String(pair.secretSeed))
-            Log.i(TAG, "Account saved: ${accountId()}  ---  ${secretSeed()}")
+    fun appId(): String {
+        return if (!prefs.contains(KEY_APP_ID)) {
+            val appId = UUID.randomUUID().toString()
+            Log.d(TAG, "Generated appId: $appId")
+            saveString(KEY_APP_ID, appId)
+            appId
+        } else {
+            getString(KEY_APP_ID)
         }
     }
 
@@ -31,17 +30,15 @@ class SgPrefs(context: Context, private val alias: String, private val iv: ByteA
     }
 
     private fun saveString(key: String, value: String) {
-        val encryptedKey = enCryptor.encryptText(alias, iv, key).toString(charset("UTF-8"))
-        val encryptedValue = enCryptor.encryptText(alias, iv, value).toString(charset("UTF-8"))
+        val encryptedValue = cipher.encryptText(value) ?: value
         prefs.edit()
-                .putString(encryptedKey, encryptedValue)
+                .putString(key, encryptedValue)
                 .apply()
     }
 
     private fun getString(key: String): String {
-        val encryptedKey = enCryptor.encryptText(alias, iv, key).toString(charset("UTF-8"))
-        val encrytedValue = prefs.getString(encryptedKey, "")
-        return deCryptor.decryptData(alias, iv, encrytedValue)
+        val encrytedValue = prefs.getString(key, "")
+        return cipher.decryptText(encrytedValue) ?: ""
     }
 
     fun accountId() = getString(KEY_ACCOUNT_ID)
@@ -50,7 +47,8 @@ class SgPrefs(context: Context, private val alias: String, private val iv: ByteA
 
     companion object {
         const val TAG = "SgPrefs"
-        private const val PREF_NAME = "app-prefs"
+        private const val PREF_NAME = "secured-app-prefs"
+        private const val KEY_APP_ID = "app-id"
         private const val KEY_ACCOUNT_ID = "account-id"
         private const val KEY_SECRET_SEED = "secret-seed"
     }
