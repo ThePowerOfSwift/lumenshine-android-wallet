@@ -1,5 +1,6 @@
 package com.soneso.stellargate.presentation.auth
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 
@@ -9,6 +10,10 @@ import com.soneso.stellargate.domain.usecases.AuthUseCases
  */
 class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
-    fun createAccount(email: CharSequence, password: CharSequence) =
-            authUseCases.createAccount(email, password)
+    val liveMnemonic: MutableLiveData<String> = MutableLiveData()
+
+    fun startAccountCreation(email: CharSequence, password: CharSequence) {
+        val account = authUseCases.generateAccount(email, password)
+        liveMnemonic.value = String(account.mnemonic)
+    }
 }

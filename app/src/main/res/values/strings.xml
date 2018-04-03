@@ -30,12 +30,15 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_password">Password must contain at least one digit, one lower case and one upper case letter and has to be at least 9 characters long!</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_account">Don\'t have an account?</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="create_account"><u>Create one!</u></string>
     <string name="sign_in_underlined"><u>Sign in</u></string>
+
+    <string name="mnemonic_description">Please write down the following phrase:</string>
+    <string name="mnemonic_next_button">Done</string>
 
 </resources>

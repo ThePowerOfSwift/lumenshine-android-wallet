@@ -1,20 +1,3 @@
-1. web card (arata o imagine, titlu, text  si link )
-
-2. chart card (arata chart)
-
-3. internal card (arata un icon, un title un text si un internal link) - de exemplu help & feedback
-
-4. wallet card (arata datele unui stellar account, balance la toate assets care sant in acel stellar account)
-
-astea poti sa le pregatesti deja cu mocks, la 4 poti folosi stellar sdk cu niste testing public keys
-
-o alta chestie care trebuie integrata este un qr code viewer
-
-ca sa putem citi adresse de stellar dintr-un qr code mai tarziu
-
-iar alta chestie, ar fi top sa analizezi wallet pe care la facut Staraj ca sa inveti putin din el: https://github.com/Block-Equity/stellar-ios-sample-wallet
-
-
 
 03/21/2018
 
@@ -23,3 +6,10 @@ iar alta chestie, ar fi top sa analizezi wallet pe care la facut Staraj ca sa in
 - pag 252 si 253
 - astral wallet io
 - password minim 1 lower case, min 1 upper case and one number, min 9 char lentgth
+
+03/29/2018
+
+- password has to contain: lower case, upper case, number, and 9 chars length
+- metrics about iteration count
+- blocking push notifications
+- read if iOS can open App when click on link

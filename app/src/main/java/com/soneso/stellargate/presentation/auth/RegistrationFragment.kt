@@ -4,13 +4,10 @@ package com.soneso.stellargate.presentation.auth
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.soneso.stellargate.R
-import com.soneso.stellargate.model.dto.DataStatus
 import kotlinx.android.synthetic.main.fragment_registration.*
 import javax.inject.Inject
 
@@ -40,24 +37,38 @@ class RegistrationFragment : AuthFragment() {
         email_registration_button.setOnClickListener {
             attemptRegistration()
         }
+        regViewModel.liveMnemonic.observe(this, Observer {
+            val mnemonic = it ?: return@Observer
+            replaceFragment(MnemonicFragment.newInstance(mnemonic), MnemonicFragment.TAG)
+        })
     }
 
     private fun attemptRegistration() {
-        val data = regViewModel.createAccount(email.text, password.text)
-        data.liveStatus.observe(this, Observer {
-            val status = it ?: return@Observer
-            when (status) {
-                DataStatus.ERROR -> {
-                    Toast.makeText(context, data.errorMessage, Toast.LENGTH_SHORT).show()
-                }
-                DataStatus.LOADING -> {
-                    Log.d(TAG, "Loading registration.")
-                }
-                DataStatus.SUCCESS -> {
-                    Log.d(TAG, "Success at registration step.")
-                }
-            }
-        })
+        val textEmail = email.text
+        val validEmail = validEmail(textEmail)
+        if (!validEmail) {
+            email.error = getText(R.string.error_invalid_email)
+        }
+
+        val pass = password.text
+        val validPass = validPassword(pass)
+        if (!validPass) {
+            password.error = getText(R.string.error_invalid_password)
+        }
+
+        if (!validEmail || !validPass) {
+            return
+        }
+
+        regViewModel.startAccountCreation(textEmail, pass)
+    }
+
+    private fun validPassword(password: CharSequence): Boolean {
+        return password.length >= 9 && password.matches(Regex("^([a-zA-Z0-9+]+)\$"))
+    }
+
+    private fun validEmail(email: CharSequence): Boolean {
+        return email.matches(Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"))
     }
 
     companion object {

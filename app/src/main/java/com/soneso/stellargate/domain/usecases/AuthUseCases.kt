@@ -1,7 +1,6 @@
 package com.soneso.stellargate.domain.usecases
 
-import com.soneso.stellargate.domain.data.User
-import com.soneso.stellargate.model.dto.DataProvider
+import com.soneso.stellargate.domain.data.Account
 
 /**
  * Class which provides data to ui in a convenient manner. Gets objects from repository and wraps them here for presentation layer.
@@ -9,5 +8,5 @@ import com.soneso.stellargate.model.dto.DataProvider
  */
 interface AuthUseCases {
 
-    fun createAccount(email: CharSequence, password: CharSequence): DataProvider<User>
+    fun generateAccount(email: CharSequence, password: CharSequence): Account
 }

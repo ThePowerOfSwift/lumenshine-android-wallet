@@ -54,7 +54,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // cristi.paval, 3/12/18 - Firebase dependency for cloud messaging
-    implementation 'com.google.firebase:firebase-messaging:12.0.0'
+    implementation 'com.google.firebase:firebase-messaging:12.0.1'
 
     // cristi.paval, 3/9/18 - Dagger library for dependency injection
     implementation('com.google.dagger:dagger:2.15') {
