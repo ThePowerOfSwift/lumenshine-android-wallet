@@ -2,6 +2,7 @@ package com.soneso.stellargate.presentation
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -102,5 +103,12 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, tag)
                 .commit()
+    }
+
+    companion object {
+
+        fun startInstance(context: Context) {
+            context.startActivity(Intent(context, MainActivity::class.java))
+        }
     }
 }
