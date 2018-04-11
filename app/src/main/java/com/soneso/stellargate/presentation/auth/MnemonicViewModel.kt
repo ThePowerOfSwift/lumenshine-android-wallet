@@ -6,14 +6,12 @@ import java.util.*
 
 class MnemonicViewModel : ViewModel() {
 
-    private var questionToAskCount = 0
     private val mnemonic = ArrayList<String>()
-    var liveCurrentQuestion = MutableLiveData<Int>()
+    val liveCurrentQuestion = MutableLiveData<Int>()
     var currentWordIndex = 0
         private set
 
-    fun init(mnemonic: String, questionCount: Int) {
-        questionToAskCount = questionCount
+    fun init(mnemonic: String) {
         this.mnemonic.addAll(mnemonic.split(" "))
     }
 
@@ -26,5 +24,9 @@ class MnemonicViewModel : ViewModel() {
         liveCurrentQuestion.value = current + 1
     }
 
-    fun isAnswerCorrect(answer: CharSequence) = /*answer == mnemonic[currentWordIndex]*/ true
+    fun resetQuiz() {
+        liveCurrentQuestion.value = null
+    }
+
+    fun isAnswerCorrect(answer: CharSequence) = answer.toString() == mnemonic[currentWordIndex]
 }
