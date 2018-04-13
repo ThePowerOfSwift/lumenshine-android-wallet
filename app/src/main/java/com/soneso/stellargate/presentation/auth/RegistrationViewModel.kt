@@ -12,8 +12,5 @@ class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel(
 
     val liveMnemonic: MutableLiveData<String> = MutableLiveData()
 
-    fun startAccountCreation(email: CharSequence, password: CharSequence) {
-        val account = authUseCases.generateAccount(email, password)
-        liveMnemonic.value = String(account.mnemonic)
-    }
+    fun createAccount(email: CharSequence, password: CharSequence) = authUseCases.generateAccount(email, password)
 }

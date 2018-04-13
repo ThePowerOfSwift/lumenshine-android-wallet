@@ -6,7 +6,7 @@ class DataProvider<DataType> {
 
     var errorMessage = ""
     var data: DataType? = null
-    var liveStatus: MutableLiveData<DataStatus> = MutableLiveData()
+    val liveStatus: MutableLiveData<DataStatus> = MutableLiveData()
 }
 
 enum class DataStatus {

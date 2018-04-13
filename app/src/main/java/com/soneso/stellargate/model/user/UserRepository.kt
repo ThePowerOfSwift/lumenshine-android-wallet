@@ -1,12 +1,12 @@
 package com.soneso.stellargate.model.user
 
-import com.soneso.stellargate.domain.data.User
+import com.soneso.stellargate.domain.data.Account
 import com.soneso.stellargate.domain.data.UserLogin
 import com.soneso.stellargate.model.dto.DataProvider
 import com.soneso.stellargate.model.dto.DataStatus
-import com.soneso.stellargate.model.dto.RegistrationRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.bouncycastle.util.encoders.Base64
 
 /**
  * Class used to user operations to server.
@@ -14,30 +14,29 @@ import io.reactivex.schedulers.Schedulers
  */
 class UserRepository(private val userApi: UserApi, private val userDao: UserDao) : UserDao by userDao {
 
-    fun createUserAccount(user: User): DataProvider<User> {
-        val registrationRequest = RegistrationRequest(
-                user.email,
-                user.securityData.publicKeyIndex0,
-                user.securityData.publicKeyIndex188,
-                user.securityData.derivedPassword,
-                user.securityData.encryptedMasterKey,
-                user.securityData.masterKeyIV,
-                user.securityData.encryptedMnemonic,
-                user.securityData.mnemonicIV
+    fun createUserAccount(account: Account): DataProvider<Account> {
+        val dataProvider = DataProvider<Account>()
+        userApi.registerUser(
+                account.email,
+                Base64.toBase64String(account.passwordSalt),
+                Base64.toBase64String(account.encryptedMasterKey),
+                Base64.toBase64String(account.masterKeyIV),
+                Base64.toBase64String(account.encryptedMnemonic),
+                Base64.toBase64String(account.mnemonicIV),
+                account.publicKeyIndex0,
+                account.publicKeyIndex188
         )
-        val dataProvider = DataProvider<User>()
-        userApi.registerUser(registrationRequest)
                 .subscribeOn(Schedulers.newThread())
                 .doOnSubscribe { dataProvider.liveStatus.value = DataStatus.LOADING }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    dataProvider.data = user
+                    dataProvider.data = account
                     dataProvider.liveStatus.value = DataStatus.SUCCESS
                 }, {
                     dataProvider.errorMessage = "Error at registration!"
                     dataProvider.liveStatus.value = DataStatus.ERROR
                 })
-        userDao.saveUserLogin(UserLogin(user.email, String(user.password), String(user.securityData.derivedPassword)))
+        userDao.saveUserLogin(UserLogin(account.email, "", ""))
         return dataProvider
     }
 }

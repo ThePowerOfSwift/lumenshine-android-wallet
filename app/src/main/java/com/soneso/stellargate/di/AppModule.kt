@@ -101,7 +101,8 @@ class AppModule(private val context: Context) {
 
         // cristi.paval, 3/28/18 - retrofit builder
         return Retrofit.Builder()
-                .baseUrl("http://horizon-testnet.stellargate.net/")
+//                .baseUrl("http://horizon-testnet.stellargate.net/")
+                .baseUrl("https://7a61f89a-cb12-4613-b7d8-dfd5553f3210.mock.pstmn.io/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(mapper))
                 .client(okHttpBuilder.build())

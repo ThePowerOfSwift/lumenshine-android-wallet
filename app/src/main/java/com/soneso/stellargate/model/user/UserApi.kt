@@ -1,8 +1,8 @@
 package com.soneso.stellargate.model.user
 
-import com.soneso.stellargate.model.dto.RegistrationRequest
 import io.reactivex.Observable
-import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 
@@ -12,6 +12,16 @@ import retrofit2.http.POST
  */
 interface UserApi {
 
-    @POST("/registration")
-    fun registerUser(@Body body: RegistrationRequest): Observable<Void>
+    @FormUrlEncoded
+    @POST("/ico/register_user")
+    fun registerUser(
+            @Field("email") email: String,
+            @Field("kdf_salt") passwordSalt: String,
+            @Field("master_key") encryptedMasterKey: String,
+            @Field("master_iv") masterKeyIv: String,
+            @Field("mnemonic") encryptedMnemonic: String,
+            @Field("mnemonic_iv") mnemonicIv: String,
+            @Field("public_key_0") publicKey0: String,
+            @Field("public_key_188") publicKey188: String
+    ): Observable<Void>
 }

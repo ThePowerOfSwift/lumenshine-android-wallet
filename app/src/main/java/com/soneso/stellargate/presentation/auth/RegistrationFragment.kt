@@ -60,7 +60,7 @@ class RegistrationFragment : AuthFragment() {
             return
         }
 
-        regViewModel.startAccountCreation(textEmail, pass)
+        regViewModel.createAccount(textEmail, pass)
     }
 
     private fun validPassword(password: CharSequence): Boolean {

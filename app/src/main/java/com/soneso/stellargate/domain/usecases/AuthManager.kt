@@ -1,8 +1,9 @@
 package com.soneso.stellargate.domain.usecases
 
 import com.soneso.stellargate.domain.data.Account
-import com.soneso.stellargate.domain.data.UserSecurityData
 import com.soneso.stellargate.domain.util.CryptoUtil
+import com.soneso.stellargate.model.dto.DataProvider
+import com.soneso.stellargate.model.user.UserRepository
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.util.PrimitiveUtil
 
@@ -10,20 +11,20 @@ import com.soneso.stellarmnemonics.util.PrimitiveUtil
  * Manager.
  * Created by cristi.paval on 3/22/18.
  */
-class AuthManager(private val userRepo: com.soneso.stellargate.model.user.UserRepository) : AuthUseCases {
+class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
 
-    override fun generateAccount(email: CharSequence, password: CharSequence): Account {
+    override fun generateAccount(email: CharSequence, password: CharSequence): DataProvider<Account> {
 
-        val emailAsString = email.toString()
         val pass = CharArray(password.length)
         password.asSequence().forEachIndexed { index, c ->
             pass[index] = c
         }
-
-        return Account(Wallet.generate24WordMnemonic())
+        val account = createAccountForPass(pass)
+        account.email = email.toString()
+        return userRepo.createUserAccount(account)
     }
 
-    private fun createUseSecurityData(pass: CharArray): UserSecurityData {
+    private fun createAccountForPass(pass: CharArray): Account {
 
         // cristi.paval, 3/23/18 - generate 256 bit password and salt
         val passwordSalt = CryptoUtil.generateSalt()
@@ -49,10 +50,10 @@ class AuthManager(private val userRepo: com.soneso.stellargate.model.user.UserRe
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonic, null, 0).accountId
         val publicKeyIndex188 = Wallet.createKeyPair(mnemonic, null, 188).accountId
 
-        return UserSecurityData(
+        return Account(
                 publicKeyIndex0,
                 publicKeyIndex188,
-                derivedPassword,
+                passwordSalt,
                 encryptedMasterKey,
                 masterKeyIV,
                 encryptedMnemonic,
