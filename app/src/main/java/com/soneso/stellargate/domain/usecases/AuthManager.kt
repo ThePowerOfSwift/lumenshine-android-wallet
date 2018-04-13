@@ -1,8 +1,10 @@
 package com.soneso.stellargate.domain.usecases
 
+import android.arch.lifecycle.Transformations
 import com.soneso.stellargate.domain.data.Account
 import com.soneso.stellargate.domain.util.CryptoUtil
 import com.soneso.stellargate.model.dto.DataProvider
+import com.soneso.stellargate.model.dto.DataStatus
 import com.soneso.stellargate.model.user.UserRepository
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.util.PrimitiveUtil
@@ -21,7 +23,25 @@ class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
         }
         val account = createAccountForPass(pass)
         account.email = email.toString()
-        return userRepo.createUserAccount(account)
+
+        val response = userRepo.createUserAccount(account)
+
+        val dataProvider = DataProvider<Account>()
+        dataProvider.liveStatus = Transformations.map(response.liveStatus, {
+            when (it) {
+                DataStatus.ERROR -> {
+                    dataProvider.errorMessage = response.errorMessage
+                }
+                DataStatus.SUCCESS -> {
+                    dataProvider.data = account
+                }
+                else -> {
+                }
+            }
+            it
+        })
+
+        return dataProvider
     }
 
     private fun createAccountForPass(pass: CharArray): Account {

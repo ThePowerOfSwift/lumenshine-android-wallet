@@ -1,5 +1,6 @@
 package com.soneso.stellargate.model.user
 
+import com.soneso.stellargate.model.dto.auth.RegistrationResponse
 import io.reactivex.Observable
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -23,5 +24,5 @@ interface UserApi {
             @Field("mnemonic_iv") mnemonicIv: String,
             @Field("public_key_0") publicKey0: String,
             @Field("public_key_188") publicKey188: String
-    ): Observable<Void>
+    ): Observable<RegistrationResponse>
 }

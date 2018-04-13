@@ -13,3 +13,9 @@
 - metrics about iteration count
 - blocking push notifications
 - read if iOS can open App when click on link
+
+04/13/2018
+
+- finish registration flow: show generated qr code
+- implement login flow
+- implement mnemonic quiz flow in dashboard

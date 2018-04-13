@@ -1,7 +1,6 @@
 package com.soneso.stellargate.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -37,10 +36,6 @@ class RegistrationFragment : AuthFragment() {
         email_registration_button.setOnClickListener {
             attemptRegistration()
         }
-        regViewModel.liveMnemonic.observe(this, Observer {
-            val mnemonic = it ?: return@Observer
-            replaceFragment(MnemonicFragment.newInstance(mnemonic), MnemonicFragment.TAG)
-        })
     }
 
     private fun attemptRegistration() {
