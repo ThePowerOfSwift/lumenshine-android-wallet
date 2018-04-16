@@ -2,7 +2,7 @@ package com.soneso.stellargate.domain.usecases
 
 import android.arch.lifecycle.Transformations
 import com.soneso.stellargate.domain.data.Account
-import com.soneso.stellargate.domain.util.CryptoUtil
+import com.soneso.stellargate.domain.util.Cryptor
 import com.soneso.stellargate.model.dto.DataProvider
 import com.soneso.stellargate.model.dto.DataStatus
 import com.soneso.stellargate.model.user.UserRepository
@@ -47,24 +47,22 @@ class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
     private fun createAccountForPass(pass: CharArray): Account {
 
         // cristi.paval, 3/23/18 - generate 256 bit password and salt
-        val passwordSalt = CryptoUtil.generateSalt()
-        val derivedPassword = CryptoUtil.deriveKeyPbkdf2(pass, passwordSalt)
+        val passwordSalt = Cryptor.generateSalt()
+        val derivedPassword = Cryptor.deriveKeyPbkdf2(passwordSalt, pass)
 
         // cristi.paval, 3/23/18 - generate master key
-        val masterKey = CryptoUtil.generateMasterKey()
+        val masterKey = Cryptor.generateMasterKey()
 
         // cristi.paval, 3/23/18 - encrypt master key
-        val masterKeyIV = CryptoUtil.generateIv()
-        val encryptedMasterKey = CryptoUtil.encryptValue(masterKey, derivedPassword, masterKeyIV)
+        val (encryptedMasterKey, masterKeyIv) = Cryptor.encryptValue(masterKey, derivedPassword)
 
 
         // cristi.paval, 3/23/18 - generate mnemonic
         val mnemonic = Wallet.generate24WordMnemonic()
 
         // cristi.paval, 3/23/18 - encrypt the mnemonic
-        val mnemonicIV = CryptoUtil.generateIv()
-        val mnemonic16bytes = CryptoUtil.padCharsTo16BytesFormat(mnemonic)
-        val encryptedMnemonic = CryptoUtil.encryptValue(PrimitiveUtil.toBytes(mnemonic16bytes), masterKey, mnemonicIV)
+        val adjustedMnemonic = Cryptor.padCharsTo16BytesFormat(mnemonic)
+        val (encryptedMnemonic, mnemonicIv) = Cryptor.encryptValue(PrimitiveUtil.toBytes(adjustedMnemonic), masterKey)
 
         // cristi.paval, 3/23/18 - generate public keys
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonic, null, 0).accountId
@@ -75,9 +73,9 @@ class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
                 publicKeyIndex188,
                 passwordSalt,
                 encryptedMasterKey,
-                masterKeyIV,
+                masterKeyIv,
                 encryptedMnemonic,
-                mnemonicIV
+                mnemonicIv
         )
     }
 

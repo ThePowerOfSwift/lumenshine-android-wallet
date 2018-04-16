@@ -19,3 +19,4 @@
 - finish registration flow: show generated qr code
 - implement login flow
 - implement mnemonic quiz flow in dashboard
+- check the crypto algorithms from Jira issue https://jira-armada.atlassian.net/projects/SW/issues/SW-2?filter=allopenissues
