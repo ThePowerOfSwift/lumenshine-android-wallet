@@ -1,12 +1,15 @@
 package com.soneso.stellargate.presentation.auth
 
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.soneso.stellargate.R
 import com.soneso.stellargate.presentation.util.displayQrCode
 import kotlinx.android.synthetic.main.fragment_qr_code.*
@@ -36,7 +39,15 @@ class QrCodeFragment : AuthFragment() {
     }
 
     private fun setupToken() {
+        token_view.keyListener = null
         token_view.setText(token)
+        copy_button.setOnClickListener {
+            val clipboard = context?.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("", token)
+            clipboard.primaryClip = clip
+            Snackbar.make(it, "Token was copied to clipboard!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
     }
 
     private fun setupQrCode() {
