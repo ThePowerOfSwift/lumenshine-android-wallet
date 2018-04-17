@@ -17,22 +17,24 @@ import kotlin.math.min
  */
 
 fun ImageView.displayQrCode(text: String) {
-    val sizeAsPixels = min(layoutParams.height, layoutParams.width)
-    scaleType = ImageView.ScaleType.CENTER_INSIDE
+    post {
+        val sizeAsPixels = min(height, width)
+        scaleType = ImageView.ScaleType.CENTER_INSIDE
 
-    val multiFormatWriter = MultiFormatWriter()
-    try {
-        val hints = EnumMap<EncodeHintType, Any>(EncodeHintType::class.java)
-        hints[EncodeHintType.CHARACTER_SET] = "UTF-8"
-        hints[EncodeHintType.MARGIN] = 1
+        val multiFormatWriter = MultiFormatWriter()
+        try {
+            val hints = EnumMap<EncodeHintType, Any>(EncodeHintType::class.java)
+            hints[EncodeHintType.CHARACTER_SET] = "UTF-8"
+            hints[EncodeHintType.MARGIN] = 1
 
-        val bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, sizeAsPixels, sizeAsPixels, hints)
-        val barcodeEncoder = BarcodeEncoder()
-        val bitmap = barcodeEncoder.createBitmap(bitMatrix)
+            val bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, sizeAsPixels, sizeAsPixels, hints)
+            val barcodeEncoder = BarcodeEncoder()
+            val bitmap = barcodeEncoder.createBitmap(bitMatrix)
 
-        setImageBitmap(bitmap)
+            setImageBitmap(bitmap)
 
-    } catch (e: WriterException) {
-        Log.e(AccountsFragment.TAG, e.javaClass.simpleName, e)
+        } catch (e: WriterException) {
+            Log.e(AccountsFragment.TAG, e.javaClass.simpleName, e)
+        }
     }
 }

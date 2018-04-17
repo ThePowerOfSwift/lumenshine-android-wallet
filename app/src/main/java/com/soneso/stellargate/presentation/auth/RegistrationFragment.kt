@@ -1,12 +1,14 @@
 package com.soneso.stellargate.presentation.auth
 
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
+import com.soneso.stellargate.model.dto.DataStatus
 import kotlinx.android.synthetic.main.fragment_registration.*
 import javax.inject.Inject
 
@@ -55,7 +57,16 @@ class RegistrationFragment : AuthFragment() {
             return
         }
 
-        regViewModel.createAccount(textEmail, pass)
+        val dataProvider = regViewModel.createAccount(textEmail, pass)
+        dataProvider.liveStatus.observe(this, Observer {
+            val status = it ?: return@Observer
+
+            when (status) {
+                DataStatus.SUCCESS -> {
+                    replaceFragment(QrCodeFragment.newInstance("This is a test!"), QrCodeFragment.TAG)
+                }
+            }
+        })
     }
 
     private fun validPassword(password: CharSequence): Boolean {
