@@ -3,15 +3,18 @@ package com.soneso.stellargate.model.dto
 import io.reactivex.observers.DisposableObserver
 
 
-class ResponseObserver<T>(private val dataProvider: DataProvider<T>) : DisposableObserver<T>() {
+abstract class ResponseObserver<T> : DisposableObserver<T>() {
+
+    abstract fun onResponse(data: T)
+
+    abstract fun onException(e: Throwable)
 
     override fun onNext(t: T) {
-        dataProvider.data = t
-        dataProvider.status = DataStatus.SUCCESS
+        onResponse(t)
     }
 
     override fun onError(e: Throwable) {
-        dataProvider.status = DataStatus.ERROR
+        onException(e)
     }
 
     override fun onComplete() {

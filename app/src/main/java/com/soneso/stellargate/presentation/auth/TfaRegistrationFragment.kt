@@ -1,8 +1,10 @@
 package com.soneso.stellargate.presentation.auth
 
 
+import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -11,31 +13,63 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
+import com.soneso.stellargate.model.dto.DataStatus
 import com.soneso.stellargate.presentation.util.displayQrCode
-import kotlinx.android.synthetic.main.fragment_qr_code.*
+import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class QrCodeFragment : AuthFragment() {
+class TfaRegistrationFragment : AuthFragment() {
+
+    //    @Inject
+//    lateinit var viewModelFactory: SgViewModelFactory
+    private lateinit var regViewModel: RegistrationViewModel
 
     private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+//        appComponent.inject(this)
+
         token = arguments?.getString(ARG_TOKEN) ?: ""
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+//        regViewModel = ViewModelProviders.of(activity!!, viewModelFactory)[RegistrationViewModel::class.java]
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_qr_code, container, false)
+            inflater.inflate(R.layout.fragment_tfa_registration, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupQrCode()
         setupToken()
+        setupTfaCode()
+    }
+
+    private fun setupTfaCode() {
+        send_button.setOnClickListener {
+            val dataProvider = regViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
+            dataProvider.liveStatus.observe(this, Observer {
+                val status = it ?: return@Observer
+
+                when (status) {
+                    DataStatus.SUCCESS -> {
+
+                    }
+                    else -> {
+
+                    }
+                }
+            })
+        }
     }
 
     private fun setupToken() {
@@ -60,11 +94,11 @@ class QrCodeFragment : AuthFragment() {
     }
 
     companion object {
-        const val TAG = "QrCodeFragment"
+        const val TAG = "TfaRegistrationFragment"
         private const val ARG_TOKEN = "$TAG.ARG_TOKEN"
 
-        fun newInstance(token: String): QrCodeFragment {
-            val instance = QrCodeFragment()
+        fun newInstance(token: String): TfaRegistrationFragment {
+            val instance = TfaRegistrationFragment()
             val args = Bundle()
             args.putString(ARG_TOKEN, token)
             instance.arguments = args

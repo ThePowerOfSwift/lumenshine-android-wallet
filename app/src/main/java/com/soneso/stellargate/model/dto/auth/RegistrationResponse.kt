@@ -10,9 +10,12 @@ class RegistrationResponse {
     @JsonProperty("validation_errors")
     var errors = emptyList<ValidationError>()
 
-    @JsonProperty("2FA_secret")
+    @JsonProperty("tfa_secret")
     var token2fa = ""
 
-    @JsonProperty("2FA_qr_image")
+    @JsonProperty("tfa_qr_image")
     var qrCode = ""
+
+    @JsonProperty("jwt_token")
+    var jwtToken = ""
 }

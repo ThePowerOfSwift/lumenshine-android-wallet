@@ -1,17 +1,32 @@
 package com.soneso.stellargate.persistence
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
+import com.soneso.stellargate.SgApp
 import java.util.*
 
 /**
  * Shared Prefs.
  * Created by cristi.paval on 3/12/18.
  */
-class SgPrefs(context: Context) {
+object SgPrefs {
 
-    private val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-    private val cipher = SgCipher(context, PREF_NAME)
+    const val TAG = "SgPrefs"
+    private const val PREF_NAME = "secured-app-prefs"
+    private const val KEY_APP_ID = "app-id"
+    private const val KEY_ACCOUNT_ID = "account-id"
+    private const val KEY_SECRET_SEED = "secret-seed"
+    private const val KEY_USERNAME = "username"
+
+    private val prefs: SharedPreferences
+    private val cipher: SgCipher
+
+    init {
+        val context = SgApp.sAppContext
+        prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        cipher = SgCipher(context, PREF_NAME)
+    }
 
     fun appId(): String {
         return if (!prefs.contains(KEY_APP_ID)) {
@@ -23,6 +38,8 @@ class SgPrefs(context: Context) {
             getString(KEY_APP_ID)
         }
     }
+
+    fun username() = getString(KEY_USERNAME)
 
     fun saveAccount(accountId: String, secretSeed: String) {
         saveString(KEY_ACCOUNT_ID, accountId)
@@ -44,12 +61,4 @@ class SgPrefs(context: Context) {
     fun accountId() = getString(KEY_ACCOUNT_ID)
 
     fun secretSeed() = getString(KEY_SECRET_SEED)
-
-    companion object {
-        const val TAG = "SgPrefs"
-        private const val PREF_NAME = "secured-app-prefs"
-        private const val KEY_APP_ID = "app-id"
-        private const val KEY_ACCOUNT_ID = "account-id"
-        private const val KEY_SECRET_SEED = "secret-seed"
-    }
 }

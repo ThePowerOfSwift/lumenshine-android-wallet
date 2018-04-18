@@ -11,7 +11,7 @@ class UserLogin(
         @ColumnInfo(name = COLUMN_EMAIL)
         val email: String,
 
-        val pass: String,
+        val jwtToken: String,
 
         val token2fa: String
 ) {

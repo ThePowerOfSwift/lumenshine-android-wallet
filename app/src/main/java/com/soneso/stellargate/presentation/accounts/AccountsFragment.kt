@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
-import com.soneso.stellargate.presentation.SgFragment
+import com.soneso.stellargate.presentation.general.SgFragment
 import com.soneso.stellargate.presentation.util.displayQrCode
 import kotlinx.android.synthetic.main.fragment_accounts.*
 import javax.inject.Inject

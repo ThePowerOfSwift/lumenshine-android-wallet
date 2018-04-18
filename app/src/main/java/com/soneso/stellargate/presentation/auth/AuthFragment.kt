@@ -1,6 +1,6 @@
 package com.soneso.stellargate.presentation.auth
 
-import com.soneso.stellargate.presentation.SgFragment
+import com.soneso.stellargate.presentation.general.SgFragment
 
 /**
  * Fragment.

@@ -1,5 +1,6 @@
 package com.soneso.stellargate
 
+import android.content.Context
 import android.support.multidex.MultiDexApplication
 import com.soneso.stellargate.di.AppModule
 import com.soneso.stellargate.di.DaggerAppComponent
@@ -20,7 +21,14 @@ class SgApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
+        sAppContext = applicationContext
+
         Security.removeProvider("BC")
         Security.insertProviderAt(BouncyCastleProvider(), 1)
+    }
+
+    companion object {
+        lateinit var sAppContext: Context
+            private set
     }
 }

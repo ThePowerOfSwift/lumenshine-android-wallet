@@ -10,4 +10,6 @@ import com.soneso.stellargate.domain.usecases.AuthUseCases
 class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
     fun createAccount(email: CharSequence, password: CharSequence) = authUseCases.generateAccount(email, password)
+
+    fun confirmTfaRegistration(tfaCode: String) = authUseCases.confirmTfaRegistration(tfaCode)
 }

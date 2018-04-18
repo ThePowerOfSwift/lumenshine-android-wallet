@@ -18,7 +18,7 @@ import java.util.*
  * Class used to perform requests.
  * Created by cristi.paval on 3/9/18.
  */
-class AccountSyncer(private val sgPrefs: SgPrefs) : com.soneso.stellargate.model.account.AccountRepository {
+class AccountSyncer() : com.soneso.stellargate.model.account.AccountRepository {
 
     override fun createUserAccount(accountId: String) {
 
@@ -37,7 +37,7 @@ class AccountSyncer(private val sgPrefs: SgPrefs) : com.soneso.stellargate.model
     }
 
     fun getAccountDetails(liveData: MutableLiveData<StellarAccount>) {
-        val accountId = sgPrefs.accountId()
+        val accountId = SgPrefs.accountId()
 
         Observable
                 .fromCallable {

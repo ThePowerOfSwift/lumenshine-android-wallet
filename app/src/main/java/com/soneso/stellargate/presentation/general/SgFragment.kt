@@ -1,4 +1,4 @@
-package com.soneso.stellargate.presentation
+package com.soneso.stellargate.presentation.general
 
 import android.support.v4.app.Fragment
 import com.soneso.stellargate.di.AppComponent

@@ -2,7 +2,7 @@ package com.soneso.stellargate.presentation.auth
 
 import android.os.Bundle
 import com.soneso.stellargate.R
-import com.soneso.stellargate.presentation.SgActivity
+import com.soneso.stellargate.presentation.general.SgActivity
 
 /**
  * A login screen that offers login via email/password.

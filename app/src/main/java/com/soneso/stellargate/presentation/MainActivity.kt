@@ -13,6 +13,8 @@ import android.view.MenuItem
 import com.google.firebase.iid.FirebaseInstanceId
 import com.soneso.stellargate.R
 import com.soneso.stellargate.presentation.accounts.AccountsFragment
+import com.soneso.stellargate.presentation.general.SgActivity
+import com.soneso.stellargate.presentation.general.SgFragment
 import com.soneso.stellargate.presentation.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*

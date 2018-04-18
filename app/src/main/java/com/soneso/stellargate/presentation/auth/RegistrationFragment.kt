@@ -2,6 +2,7 @@ package com.soneso.stellargate.presentation.auth
 
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -10,7 +11,6 @@ import android.view.ViewGroup
 import com.soneso.stellargate.R
 import com.soneso.stellargate.model.dto.DataStatus
 import kotlinx.android.synthetic.main.fragment_registration.*
-import javax.inject.Inject
 
 
 /**
@@ -18,13 +18,20 @@ import javax.inject.Inject
  */
 class RegistrationFragment : AuthFragment() {
 
-    @Inject
-    lateinit var regViewModel: RegistrationViewModel
+    //    @Inject
+//    lateinit var viewModelFactory: SgViewModelFactory
+    private lateinit var regViewModel: RegistrationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appComponent.inject(this)
+//        appComponent.inject(this)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+//        regViewModel = ViewModelProviders.of(activity!!, viewModelFactory)[RegistrationViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -63,7 +70,10 @@ class RegistrationFragment : AuthFragment() {
 
             when (status) {
                 DataStatus.SUCCESS -> {
-                    replaceFragment(QrCodeFragment.newInstance("This is a test!"), QrCodeFragment.TAG)
+                    replaceFragment(TfaRegistrationFragment.newInstance("This is a test!"), TfaRegistrationFragment.TAG)
+                }
+                else -> {
+
                 }
             }
         })

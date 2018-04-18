@@ -11,16 +11,16 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.domain.usecases.AccountManager
 import com.soneso.stellargate.domain.usecases.AccountUseCases
-import com.soneso.stellargate.domain.usecases.AuthManager
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
 import com.soneso.stellargate.model.user.UserApi
 import com.soneso.stellargate.model.user.UserRepository
+import com.soneso.stellargate.networking.UserRequester
 import com.soneso.stellargate.persistence.SgDatabase
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.accounts.AccountsViewModel
-import com.soneso.stellargate.presentation.auth.RegistrationViewModel
+import com.soneso.stellargate.presentation.general.SgViewModelFactory
 import com.soneso.stellargate.presentation.home.HomeViewModel
 import dagger.Module
 import dagger.Provides
@@ -41,11 +41,7 @@ class AppModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideAppPrefs() = SgPrefs(context)
-
-    @Singleton
-    @Provides
-    fun provideAccountRepository(prefs: SgPrefs): AccountRepository = AccountSyncer(prefs)
+    fun provideAccountRepository(): AccountRepository = AccountSyncer()
 
     @Singleton
     @Provides
@@ -58,15 +54,19 @@ class AppModule(private val context: Context) {
     fun provideHomeViewModel(rm: AccountRepository) = HomeViewModel(rm)
 
     @Provides
-    @Singleton
-    fun provideUserRepository(r: Retrofit, d: SgDatabase): UserRepository = UserRepository(r.create(UserApi::class.java), d.userDao())
+    fun provideUserRequester(r: Retrofit) = UserRequester(r.create(UserApi::class.java))
 
     @Provides
     @Singleton
-    fun provideAuthUseCases(ur: UserRepository): AuthUseCases = AuthManager(ur)
+    fun provideUserRepository(r: UserRequester, d: SgDatabase): UserRepository = UserRepository(r, d.userDao())
 
     @Provides
-    fun provideRegistrationViewModel(useCases: AuthUseCases) = RegistrationViewModel(useCases)
+    @Singleton
+    fun provideAuthUseCases(ur: UserRepository) = AuthUseCases(ur)
+
+    @Provides
+    @Singleton
+    fun provideSgViewModelFactory(useCases: AuthUseCases) = SgViewModelFactory(useCases)
 
     @Provides
     @Singleton
@@ -111,9 +111,9 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideDatabase(prefs: SgPrefs): SgDatabase {
+    fun provideDatabase(): SgDatabase {
 
-        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(prefs.appId()))
+        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appId()))
 
         return Room.databaseBuilder(context, SgDatabase::class.java, SgDatabase.DB_NAME)
                 .openHelperFactory(factory)
