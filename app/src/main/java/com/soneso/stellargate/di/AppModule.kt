@@ -45,7 +45,7 @@ class AppModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideAccountUseCases(repo: com.soneso.stellargate.model.account.AccountRepository): AccountUseCases = AccountManager(repo)
+    fun provideAccountUseCases(repo: AccountRepository): AccountUseCases = AccountManager(repo)
 
     @Provides
     fun provideAccountsViewModel(useCases: AccountUseCases) = AccountsViewModel(useCases)
@@ -58,7 +58,7 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideUserRepository(r: UserRequester, d: SgDatabase): UserRepository = UserRepository(r, d.userDao())
+    fun provideUserRepository(r: UserRequester, d: SgDatabase) = UserRepository(r, d.userDao())
 
     @Provides
     @Singleton
