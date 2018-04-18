@@ -61,8 +61,8 @@ class AuthManager(private val userRepo: UserRepository) : AuthUseCases {
         val mnemonic = Wallet.generate24WordMnemonic()
 
         // cristi.paval, 3/23/18 - encrypt the mnemonic
-        val adjustedMnemonic = Cryptor.padCharsTo16BytesFormat(mnemonic)
-        val (encryptedMnemonic, mnemonicIv) = Cryptor.encryptValue(PrimitiveUtil.toBytes(adjustedMnemonic), masterKey)
+        val adjustedMnemonic = Cryptor.applyPadding(16, PrimitiveUtil.toBytes(mnemonic))
+        val (encryptedMnemonic, mnemonicIv) = Cryptor.encryptValue(adjustedMnemonic, masterKey)
 
         // cristi.paval, 3/23/18 - generate public keys
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonic, null, 0).accountId

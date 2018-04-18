@@ -92,6 +92,45 @@ object Cryptor {
         return result
     }
 
+    fun applyPadding(blockSize: Int, data: ByteArray): ByteArray {
+
+        var resultSize = data.size + 1
+
+        if (resultSize % blockSize != 0) {
+            val blockCount = resultSize / blockSize + 1
+            resultSize = blockSize * blockCount
+        }
+
+        val paddedData = ByteArray(resultSize)
+        paddedData.forEachIndexed { index, _ ->
+            when {
+                index < data.size -> {
+                    paddedData[index] = data[index]
+                }
+                index == data.size -> {
+                    paddedData[index] = 0x80.toByte()
+                }
+                else -> {
+                    paddedData[index] = 0x00.toByte()
+                }
+            }
+        }
+
+        return paddedData
+    }
+
+    fun removePadding(paddedData: ByteArray): ByteArray {
+
+        // cristi.paval, 4/18/18 - remove 0x00 bytes
+        paddedData.dropLastWhile {
+            it == 0x00.toByte()
+        }
+        // cristi.paval, 4/18/18 - remove delimiter byte 0x80
+        paddedData.dropLast(1)
+
+        return paddedData
+    }
+
     // generates a new IV.
     private fun generateIv(pLength: Int): ByteArray {
         val b = ByteArray(pLength)
