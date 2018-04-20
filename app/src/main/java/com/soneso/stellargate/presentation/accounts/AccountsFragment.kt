@@ -11,7 +11,6 @@ import com.soneso.stellargate.R
 import com.soneso.stellargate.presentation.general.SgFragment
 import com.soneso.stellargate.presentation.util.displayQrCode
 import kotlinx.android.synthetic.main.fragment_accounts.*
-import javax.inject.Inject
 
 
 /**
@@ -19,13 +18,13 @@ import javax.inject.Inject
  */
 class AccountsFragment : SgFragment() {
 
-    @Inject
+    //    @Inject
     lateinit var accountsViewModel: AccountsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appComponent.inject(this)
+//        appComponent.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =

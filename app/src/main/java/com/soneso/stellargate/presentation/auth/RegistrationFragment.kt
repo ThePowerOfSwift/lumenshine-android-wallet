@@ -2,7 +2,7 @@ package com.soneso.stellargate.presentation.auth
 
 
 import android.arch.lifecycle.Observer
-import android.content.Context
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -18,21 +18,13 @@ import kotlinx.android.synthetic.main.fragment_registration.*
  */
 class RegistrationFragment : AuthFragment() {
 
-    //    @Inject
-//    lateinit var viewModelFactory: SgViewModelFactory
-    private lateinit var regViewModel: RegistrationViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        appComponent.inject(this)
+        regViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[RegistrationViewModel::class.java]
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-//        regViewModel = ViewModelProviders.of(activity!!, viewModelFactory)[RegistrationViewModel::class.java]
-    }
+    private lateinit var regViewModel: RegistrationViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_registration, container, false)

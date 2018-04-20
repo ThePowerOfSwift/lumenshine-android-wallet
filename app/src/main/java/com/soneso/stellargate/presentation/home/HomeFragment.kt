@@ -12,7 +12,6 @@ import com.soneso.stellargate.R
 import com.soneso.stellargate.presentation.general.SgFragment
 import com.soneso.stellargate.presentation.util.forwardToBrowser
 import kotlinx.android.synthetic.main.fragment_home.*
-import javax.inject.Inject
 
 
 /**
@@ -20,7 +19,7 @@ import javax.inject.Inject
  */
 class HomeFragment : SgFragment() {
 
-    @Inject
+    //    @Inject
     lateinit var homeViewModel: HomeViewModel
 
     lateinit var adapter: HomeFeedAdapter
@@ -28,7 +27,7 @@ class HomeFragment : SgFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appComponent.inject(this)
+//        appComponent.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
