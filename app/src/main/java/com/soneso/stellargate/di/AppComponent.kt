@@ -13,10 +13,4 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun inject(fragment: SgFragment)
-
-//    fun inject(fragment: RegistrationFragment)
-//
-//    fun inject(fragment: AccountsFragment)
-//
-//    fun inject(fragment: HomeFragment)
 }

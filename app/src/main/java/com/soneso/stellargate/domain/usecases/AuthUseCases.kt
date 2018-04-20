@@ -1,11 +1,14 @@
 package com.soneso.stellargate.domain.usecases
 
+import android.util.Log
+import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.domain.data.Account
 import com.soneso.stellargate.domain.util.Cryptor
 import com.soneso.stellargate.model.dto.DataProvider
 import com.soneso.stellargate.model.user.UserRepository
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.util.PrimitiveUtil
+import org.bouncycastle.util.encoders.Base64
 
 /**
  * Manager.
@@ -25,6 +28,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
         return userRepo.createUserAccount(account)
     }
 
+    //password, kdf salt, kdf password, master key, master key iv, encrypted master key, nmemonic, mnemonic iv, encrypted mnemonic
     private fun createAccountForPass(pass: CharArray): Account {
 
         // cristi.paval, 3/23/18 - generate 256 bit password and salt
@@ -48,6 +52,18 @@ class AuthUseCases(private val userRepo: UserRepository) {
         // cristi.paval, 3/23/18 - generate public keys
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonic, null, 0).accountId
         val publicKeyIndex188 = Wallet.createKeyPair(mnemonic, null, 188).accountId
+
+        if (BuildConfig.DEBUG) {
+            Log.d("REGISTRATION", "password: ${String(pass)}")
+            Log.d("REGISTRATION", "kdf salt: ${Base64.toBase64String(passwordSalt)}")
+            Log.d("REGISTRATION", "kdf password: ${Base64.toBase64String(derivedPassword)}")
+            Log.d("REGISTRATION", "master key: ${Base64.toBase64String(masterKey)}")
+            Log.d("REGISTRATION", "master key iv: ${Base64.toBase64String(masterKeyIv)}")
+            Log.d("REGISTRATION", "encrypted master key: ${Base64.toBase64String(encryptedMasterKey)}")
+            Log.d("REGISTRATION", "mnemonic: ${String(mnemonic)}")
+            Log.d("REGISTRATION", "mnemonic iv: ${Base64.toBase64String(mnemonicIv)}")
+            Log.d("REGISTRATION", "encrypted mnemonic: ${Base64.toBase64String(encryptedMnemonic)}")
+        }
 
         return Account(
                 publicKeyIndex0,
