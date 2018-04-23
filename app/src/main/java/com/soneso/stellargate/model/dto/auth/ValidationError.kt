@@ -7,9 +7,13 @@ class ValidationError {
     @JsonProperty("error_code")
     var code = 0
 
-    @JsonProperty("invalid_argument")
+    @JsonProperty("parameter_name")
     var invalidAttr = ""
 
-    @JsonProperty("message")
+    @JsonProperty("user_error_message_key")
+    var msgResName = ""
+        get() = msgResName.replace(".", "_")
+
+    @JsonProperty("error_message")
     var message = ""
 }

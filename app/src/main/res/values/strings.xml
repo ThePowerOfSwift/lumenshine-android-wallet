@@ -43,5 +43,7 @@
     <string name="mnemonic_question">What\'s the word at the position %d in your mnemonic?</string>
 
     <string name="ok">OK</string>
+    <string name="unknown_error">Unexpected error!</string>
+    <string name="no_internet_error">No Internet! Please check phone connection.</string>
 
 </resources>

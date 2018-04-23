@@ -55,8 +55,11 @@ class TfaRegistrationFragment : AuthFragment() {
                     DataStatus.SUCCESS -> {
                         showSnackbar("Successful confirmation!")
                     }
+                    DataStatus.ERROR -> {
+                        showErrorSnackbar(dataProvider.error)
+                    }
                     else -> {
-
+                        showSnackbar("Loading...")
                     }
                 }
             })

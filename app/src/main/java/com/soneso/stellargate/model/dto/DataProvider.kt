@@ -2,6 +2,7 @@ package com.soneso.stellargate.model.dto
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.soneso.stellargate.domain.data.SgError
 
 class DataProvider<DataType> {
 
@@ -11,8 +12,10 @@ class DataProvider<DataType> {
             (liveStatus as MutableLiveData).value = value
         }
 
-    var errorMessage = ""
+    var error: SgError? = null
+
     var data: DataType? = null
+
     var liveStatus: LiveData<DataStatus> = MutableLiveData()
 }
 

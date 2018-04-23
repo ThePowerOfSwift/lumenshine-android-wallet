@@ -1,10 +1,13 @@
 package com.soneso.stellargate.model.user
 
 import com.soneso.stellargate.domain.data.Account
+import com.soneso.stellargate.domain.data.SgError
 import com.soneso.stellargate.domain.data.UserLogin
+import com.soneso.stellargate.domain.data.fromNetworkError
 import com.soneso.stellargate.model.dto.DataProvider
 import com.soneso.stellargate.model.dto.DataStatus
 import com.soneso.stellargate.model.dto.ResponseObserver
+import com.soneso.stellargate.model.dto.SgNetworkError
 import com.soneso.stellargate.model.dto.auth.RegistrationResponse
 import com.soneso.stellargate.model.dto.auth.TfaRegistrationResponse
 import com.soneso.stellargate.networking.UserRequester
@@ -35,7 +38,8 @@ class UserRepository(private val userRequester: UserRequester, private val userD
                 dataProvider.status = DataStatus.SUCCESS
             }
 
-            override fun onException(e: Throwable?) {
+            override fun onError(error: SgNetworkError) {
+                dataProvider.error = SgError.fromNetworkError(error)
                 dataProvider.status = DataStatus.ERROR
             }
         }
@@ -55,7 +59,8 @@ class UserRepository(private val userRequester: UserRequester, private val userD
                 dataProvider.status = DataStatus.SUCCESS
             }
 
-            override fun onException(e: Throwable?) {
+            override fun onError(error: SgNetworkError) {
+                dataProvider.error = SgError.fromNetworkError(error)
                 dataProvider.status = DataStatus.ERROR
             }
 

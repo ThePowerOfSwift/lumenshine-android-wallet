@@ -65,8 +65,11 @@ class RegistrationFragment : AuthFragment() {
                     val userLogin = dataProvider.data!!
                     replaceFragment(TfaRegistrationFragment.newInstance(userLogin.token2fa), TfaRegistrationFragment.TAG)
                 }
+                DataStatus.ERROR -> {
+                    showErrorSnackbar(dataProvider.error)
+                }
                 else -> {
-
+                    showSnackbar("Loading...")
                 }
             }
         })
