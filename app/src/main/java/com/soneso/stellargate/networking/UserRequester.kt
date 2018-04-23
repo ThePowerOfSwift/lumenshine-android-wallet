@@ -4,7 +4,6 @@ import com.soneso.stellargate.domain.data.Account
 import com.soneso.stellargate.model.dto.ResponseObserver
 import com.soneso.stellargate.model.dto.auth.RegistrationResponse
 import com.soneso.stellargate.model.dto.auth.TfaRegistrationResponse
-import com.soneso.stellargate.model.user.UserApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.bouncycastle.util.encoders.Base64

@@ -1,4 +1,4 @@
-package com.soneso.stellargate.model.user
+package com.soneso.stellargate.networking
 
 import com.soneso.stellargate.model.dto.auth.RegistrationResponse
 import com.soneso.stellargate.model.dto.auth.TfaRegistrationResponse
@@ -30,9 +30,9 @@ interface UserApi {
     ): Observable<Result<RegistrationResponse>>
 
     @FormUrlEncoded
-    @POST("/ico/confirm_tfa_registration")
+    @POST("/ico/auth/confirm_tfa_registration")
     fun confirmTfaRegistration(
-            @Header("") jwtToken: String,
+            @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String,
             @Field("tfa_code") tfaCode: String
     ): Observable<Result<TfaRegistrationResponse>>
 

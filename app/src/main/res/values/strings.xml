@@ -42,4 +42,6 @@
     <string name="mnemonic_next_button">Done</string>
     <string name="mnemonic_question">What\'s the word at the position %d in your mnemonic?</string>
 
+    <string name="ok">OK</string>
+
 </resources>

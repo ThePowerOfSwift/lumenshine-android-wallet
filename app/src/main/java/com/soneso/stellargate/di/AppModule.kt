@@ -14,8 +14,9 @@ import com.soneso.stellargate.domain.usecases.AccountUseCases
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
-import com.soneso.stellargate.model.user.UserApi
 import com.soneso.stellargate.model.user.UserRepository
+import com.soneso.stellargate.networking.SgApi
+import com.soneso.stellargate.networking.UserApi
 import com.soneso.stellargate.networking.UserRequester
 import com.soneso.stellargate.persistence.SgDatabase
 import com.soneso.stellargate.persistence.SgPrefs
@@ -85,8 +86,8 @@ class AppModule(private val context: Context) {
         okHttpBuilder.addInterceptor { chain ->
             val request = chain.request()
             val requestBuilder = request.newBuilder()
-            if (TextUtils.isEmpty(request.header("Content-Type"))) {
-                requestBuilder.addHeader("Content-Type", "application/json")
+            if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_CONTENT_TYPE))) {
+                requestBuilder.addHeader(SgApi.HEADER_NAME_CONTENT_TYPE, SgApi.HEADER_VALUE_CONTENT_TYPE)
             }
             chain.proceed(requestBuilder.build())
         }
@@ -101,8 +102,7 @@ class AppModule(private val context: Context) {
 
         // cristi.paval, 3/28/18 - retrofit builder
         return Retrofit.Builder()
-//                .baseUrl("http://horizon-testnet.stellargate.net/")
-                .baseUrl("http://192.168.43.230:8000/")
+                .baseUrl(SgApi.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(mapper))
                 .client(okHttpBuilder.build())
@@ -113,7 +113,7 @@ class AppModule(private val context: Context) {
     @Singleton
     fun provideDatabase(): SgDatabase {
 
-        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appId()))
+        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appId))
 
         return Room.databaseBuilder(context, SgDatabase::class.java, SgDatabase.DB_NAME)
                 .openHelperFactory(factory)

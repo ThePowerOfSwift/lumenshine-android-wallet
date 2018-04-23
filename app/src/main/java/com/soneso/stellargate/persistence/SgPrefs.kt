@@ -28,18 +28,23 @@ object SgPrefs {
         cipher = SgCipher(context, PREF_NAME)
     }
 
-    fun appId(): String {
-        return if (!prefs.contains(KEY_APP_ID)) {
-            val appId = UUID.randomUUID().toString()
-            Log.d(TAG, "Generated appId: $appId")
-            saveString(KEY_APP_ID, appId)
-            appId
-        } else {
-            getString(KEY_APP_ID)
+    var username: String
+        get() = getString(KEY_USERNAME)
+        set(value) {
+            saveString(KEY_USERNAME, value)
         }
-    }
 
-    fun username() = getString(KEY_USERNAME)
+    val appId: String
+        get() {
+            return if (!prefs.contains(KEY_APP_ID)) {
+                val appId = UUID.randomUUID().toString()
+                Log.d(TAG, "Generated appId: $appId")
+                saveString(KEY_APP_ID, appId)
+                appId
+            } else {
+                getString(KEY_APP_ID)
+            }
+        }
 
     fun saveAccount(accountId: String, secretSeed: String) {
         saveString(KEY_ACCOUNT_ID, accountId)

@@ -25,7 +25,10 @@ class UserRepository(private val userRequester: UserRequester, private val userD
 
             override fun onSuccess(headers: Headers, body: RegistrationResponse?) {
                 val data = body ?: return
+
+                SgPrefs.username = account.email
                 val jwtToken = headers.get("Authorization")!!
+
                 val userLogin = UserLogin(account.email, jwtToken, data.token2fa)
                 userDao.saveUserLogin(userLogin)
                 dataProvider.data = userLogin
@@ -58,7 +61,7 @@ class UserRepository(private val userRequester: UserRequester, private val userD
 
         }
 
-        val currentUserLogin = userDao.loadUserLogin(SgPrefs.username())
+        val currentUserLogin = userDao.loadUserLogin(SgPrefs.username)
         dataProvider.status = DataStatus.LOADING
         userRequester.confirmTfaRegistration(currentUserLogin.jwtToken, tfaCode, responseObserver)
 

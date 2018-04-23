@@ -2,11 +2,10 @@ package com.soneso.stellargate.presentation.auth
 
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -23,8 +22,6 @@ import kotlinx.android.synthetic.main.fragment_tfa_registration.*
  */
 class TfaRegistrationFragment : AuthFragment() {
 
-    //    @Inject
-//    lateinit var viewModelFactory: SgViewModelFactory
     private lateinit var regViewModel: RegistrationViewModel
 
     private lateinit var token: String
@@ -32,15 +29,9 @@ class TfaRegistrationFragment : AuthFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        appComponent.inject(this)
-
         token = arguments?.getString(ARG_TOKEN) ?: ""
-    }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-//        regViewModel = ViewModelProviders.of(activity!!, viewModelFactory)[RegistrationViewModel::class.java]
+        regViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[RegistrationViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -62,7 +53,7 @@ class TfaRegistrationFragment : AuthFragment() {
 
                 when (status) {
                     DataStatus.SUCCESS -> {
-
+                        showSnackbar("Successful confirmation!")
                     }
                     else -> {
 
@@ -79,8 +70,7 @@ class TfaRegistrationFragment : AuthFragment() {
             val clipboard = context?.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("", token)
             clipboard.primaryClip = clip
-            Snackbar.make(it, "Token was copied to clipboard!", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            showSnackbar("Token copied in clipboard!")
         }
     }
 

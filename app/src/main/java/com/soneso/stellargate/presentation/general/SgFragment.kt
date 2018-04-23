@@ -1,7 +1,9 @@
 package com.soneso.stellargate.presentation.general
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import com.soneso.stellargate.R
 import com.soneso.stellargate.di.AppComponent
 import javax.inject.Inject
 
@@ -25,5 +27,12 @@ open class SgFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         appComponent.inject(this)
+    }
+
+    fun showSnackbar(text: CharSequence) {
+        val view = view ?: return
+        Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+                .setAction(R.string.ok, null)
+                .show()
     }
 }
