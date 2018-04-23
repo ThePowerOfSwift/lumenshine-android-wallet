@@ -9,6 +9,7 @@ import com.soneso.stellargate.model.dto.auth.RegistrationResponse
 import com.soneso.stellargate.model.dto.auth.TfaRegistrationResponse
 import com.soneso.stellargate.networking.UserRequester
 import com.soneso.stellargate.persistence.SgPrefs
+import okhttp3.Headers
 
 /**
  * Class used to user operations to server.
@@ -16,21 +17,22 @@ import com.soneso.stellargate.persistence.SgPrefs
  */
 class UserRepository(private val userRequester: UserRequester, private val userDao: UserDao) {
 
-    fun createUserAccount(account: Account): DataProvider<Account> {
+    fun createUserAccount(account: Account): DataProvider<UserLogin> {
 
-        val dataProvider = DataProvider<Account>()
+        val dataProvider = DataProvider<UserLogin>()
 
         val responseObserver = object : ResponseObserver<RegistrationResponse>() {
 
-            override fun onResponse(data: RegistrationResponse) {
-
-                userDao.saveUserLogin(UserLogin(account.email, data.jwtToken, data.token2fa))
-                dataProvider.data = account
+            override fun onSuccess(headers: Headers, body: RegistrationResponse?) {
+                val data = body ?: return
+                val jwtToken = headers.get("Authorization")!!
+                val userLogin = UserLogin(account.email, jwtToken, data.token2fa)
+                userDao.saveUserLogin(userLogin)
+                dataProvider.data = userLogin
                 dataProvider.status = DataStatus.SUCCESS
             }
 
-            override fun onException(e: Throwable) {
-
+            override fun onException(e: Throwable?) {
                 dataProvider.status = DataStatus.ERROR
             }
         }
@@ -45,11 +47,12 @@ class UserRepository(private val userRequester: UserRequester, private val userD
         val dataProvider = DataProvider<Void>()
 
         val responseObserver = object : ResponseObserver<TfaRegistrationResponse>() {
-            override fun onResponse(data: TfaRegistrationResponse) {
+
+            override fun onSuccess(headers: Headers, body: TfaRegistrationResponse?) {
                 dataProvider.status = DataStatus.SUCCESS
             }
 
-            override fun onException(e: Throwable) {
+            override fun onException(e: Throwable?) {
                 dataProvider.status = DataStatus.ERROR
             }
 

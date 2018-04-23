@@ -15,7 +15,4 @@ class RegistrationResponse {
 
     @JsonProperty("tfa_qr_image")
     var qrCode = ""
-
-    @JsonProperty("jwt_token")
-    var jwtToken = ""
 }

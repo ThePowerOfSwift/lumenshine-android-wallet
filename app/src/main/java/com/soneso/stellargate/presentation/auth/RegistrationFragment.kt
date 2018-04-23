@@ -62,7 +62,8 @@ class RegistrationFragment : AuthFragment() {
 
             when (status) {
                 DataStatus.SUCCESS -> {
-                    replaceFragment(TfaRegistrationFragment.newInstance("This is a test!"), TfaRegistrationFragment.TAG)
+                    val userLogin = dataProvider.data!!
+                    replaceFragment(TfaRegistrationFragment.newInstance(userLogin.token2fa), TfaRegistrationFragment.TAG)
                 }
                 else -> {
 
