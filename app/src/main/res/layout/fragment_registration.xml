@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,74 +8,57 @@
     android:padding="@dimen/size_15"
     tools:context="com.soneso.stellargate.presentation.auth.RegistrationFragment">
 
-    <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/registration_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/email_registration_form"
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress"
+        android:text="test@test.test"
+        app:error_text="@string/error_invalid_email"
+        app:input_level="@integer/email_input_level"
+        app:regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$" />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <AutoCompleteTextView
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_email"
-                android:text="test@test.test"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:singleLine="true" />
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:text="t3stPassword"
+        app:error_text="@string/error_invalid_password"
+        app:input_level="@integer/password_input_level"
+        app:regex="^([a-zA-Z0-9+]+)\$" />
 
-        </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/password_confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_password_confirmation"
+        android:inputType="textPassword"
+        app:input_level="@integer/password_confirmation_input_level" />
 
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                android:text="t3stPassword"
-                android:imeActionId="6"
-                android:imeActionLabel="@string/action_sign_in"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/first_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_first_name"
+        android:inputType="textPersonName"
+        app:input_level="@integer/first_name_input_level" />
 
-        </android.support.design.widget.TextInputLayout>
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/last_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_last_name"
+        android:inputType="textPersonName"
+        app:input_level="@integer/last_name_input_level" />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/password_confirmation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password_confirmation"
-                android:imeActionId="6"
-                android:imeActionLabel="@string/action_sign_in"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
-
-        </android.support.design.widget.TextInputLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/email_registration_button"
@@ -85,19 +69,27 @@
             android:text="@string/action_register"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_25"
-            android:gravity="center"
-            android:text="@string/already_have_account" />
-
-        <TextView
-            android:id="@+id/sign_in_button"
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sign_in_underlined"
-            android:textColor="@color/cyan_500" />
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+    </FrameLayout>
 
-    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_25"
+        android:gravity="center"
+        android:text="@string/already_have_account" />
+
+    <TextView
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_in_underlined"
+        android:textColor="@color/cyan_500" />
+
 </LinearLayout>

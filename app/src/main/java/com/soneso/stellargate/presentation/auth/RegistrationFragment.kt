@@ -40,48 +40,37 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun attemptRegistration() {
-        val textEmail = email.text
-        val validEmail = validEmail(textEmail)
-        if (!validEmail) {
-            email.error = getText(R.string.error_invalid_email)
-        }
 
-        val pass = password.text
-        val validPass = validPassword(pass)
-        if (!validPass) {
-            password.error = getText(R.string.error_invalid_password)
-        }
-
-        if (!validEmail || !validPass) {
+        if (!isValidForm()) {
             return
         }
 
-        val dataProvider = regViewModel.createAccount(textEmail, pass)
+        val dataProvider = regViewModel.createAccount(email.trimmedText, password.trimmedText)
         dataProvider.liveStatus.observe(this, Observer {
             val status = it ?: return@Observer
 
             when (status) {
                 DataStatus.SUCCESS -> {
+                    progress_bar.visibility = View.GONE
                     val userLogin = dataProvider.data!!
                     replaceFragment(TfaRegistrationFragment.newInstance(userLogin.token2fa), TfaRegistrationFragment.TAG)
                 }
                 DataStatus.ERROR -> {
+                    progress_bar.visibility = View.GONE
+                    email_registration_button.visibility = View.VISIBLE
                     showErrorSnackbar(dataProvider.error)
                 }
-                else -> {
-                    showSnackbar("Loading...")
+                DataStatus.LOADING -> {
+                    email_registration_button.visibility = View.INVISIBLE
+                    progress_bar.visibility = View.VISIBLE
                 }
             }
         })
     }
 
-    private fun validPassword(password: CharSequence): Boolean {
-        return password.length >= 9 && password.matches(Regex("^([a-zA-Z0-9+]+)\$"))
-    }
-
-    private fun validEmail(email: CharSequence): Boolean {
-        return email.matches(Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"))
-    }
+    private fun isValidForm() =
+            email.hasValidInput()
+                    && password.hasValidInput()
 
     companion object {
         const val TAG = "RegistrationFragment"

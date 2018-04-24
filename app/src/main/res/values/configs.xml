@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="mnemonic_question_count">3</integer>
+    <integer name="input_mandatory">0</integer>
+    <integer name="input_optional">1</integer>
+    <integer name="input_undesired">2</integer>
+
+    <integer name="email_input_level">@integer/input_mandatory</integer>
+    <integer name="password_input_level">@integer/input_mandatory</integer>
+    <integer name="password_confirmation_input_level">@integer/input_mandatory</integer>
+    <integer name="first_name_input_level">@integer/input_optional</integer>
+    <integer name="last_name_input_level">@integer/input_optional</integer>
+    <integer name="company_input_level">@integer/input_undesired</integer>
+    <integer name="salutation_input_level">@integer/input_mandatory</integer>
+    <integer name="title_input_level">@integer/input_undesired</integer>
+    <integer name="street_name_input_level">@integer/input_optional</integer>
+    <integer name="street_number_input_level">@integer/input_optional</integer>
+    <integer name="zip_code_input_level">@integer/input_optional</integer>
+    <integer name="city_input_level">@integer/input_optional</integer>
+    <integer name="state_input_level">@integer/input_optional</integer>
+    <integer name="country_input_level">@integer/input_optional</integer>
+    <integer name="nationality_level">@integer/input_optional</integer>
+    <integer name="mobile_phone_level">@integer/input_optional</integer>
+    <integer name="birthday_level">@integer/input_optional</integer>
+    <integer name="birthplace_level">@integer/input_optional</integer>
+
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FormInputView">
+        <attr name="input_level" format="integer" />
+        <attr name="regex" format="string" />
+        <attr name="error_text" format="string" />
+    </declare-styleable>
+</resources>

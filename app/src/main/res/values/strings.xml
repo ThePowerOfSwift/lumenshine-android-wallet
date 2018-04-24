@@ -1,5 +1,11 @@
 <resources>
+
+    <!-- General strings -->
     <string name="app_name">Stellargate</string>
+    <string name="ok">OK</string>
+    <string name="unknown_error">Unexpected error!</string>
+    <string name="no_internet_error">No Internet! Please check phone connection.</string>
+    <string name="invalid">Invalid!</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -22,11 +28,13 @@
     <string name="home_account_title">Your account</string>
     <string name="title_activity_login">Sign in</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="prompt_two_factor">Two Factor Code</string>
-    <string name="prompt_password_confirmation">Password confirmation</string>
+    <!-- Strings related to authentication -->
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_two_factor">Two Factor Code</string>
+    <string name="hint_password_confirmation">Password confirmation</string>
+    <string name="hint_first_name">First name</string>
+    <string name="hint_last_name">Last name</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -38,12 +46,9 @@
     <string name="create_account"><u>Create one!</u></string>
     <string name="sign_in_underlined"><u>Sign in</u></string>
 
+
     <string name="mnemonic_description">Please write down the following phrase:</string>
     <string name="mnemonic_next_button">Done</string>
     <string name="mnemonic_question">What\'s the word at the position %d in your mnemonic?</string>
-
-    <string name="ok">OK</string>
-    <string name="unknown_error">Unexpected error!</string>
-    <string name="no_internet_error">No Internet! Please check phone connection.</string>
 
 </resources>
