@@ -4,6 +4,7 @@ import android.util.Log
 import com.soneso.stellargate.networking.NetworkUtil
 import io.reactivex.observers.DisposableObserver
 import okhttp3.Headers
+import okhttp3.ResponseBody
 import retrofit2.adapter.rxjava2.Result
 
 
@@ -21,9 +22,18 @@ abstract class ResponseObserver<T> : DisposableObserver<Result<T>>() {
             if (response.isSuccessful) {
                 onSuccess(response.headers(), response.body())
             } else {
-                Log.e(TAG, "Error!" + response.message())
+                handleErrorResponse(response.errorBody())
             }
         }
+    }
+
+    private fun handleErrorResponse(errorBody: ResponseBody?) {
+        if (errorBody == null) {
+            handleException(null)
+            return
+        }
+        val networkError = OBJECT_MAPPER.readValue(errorBody.string(), SgNetworkError::class.java)
+        onError(networkError)
     }
 
     override fun onError(e: Throwable) {
@@ -34,18 +44,14 @@ abstract class ResponseObserver<T> : DisposableObserver<Result<T>>() {
         if (e != null) {
             Log.e(TAG, "Exception", e)
         }
-        val code = when {
+        val networkError = when {
             !NetworkUtil.isNetworkAvailable() -> {
-                SgErrorStatus.NO_INTERNET
+                SgNetworkError(LocalErrorType.NO_INTERNET)
             }
             else -> {
-                SgErrorStatus.UNKNOWN
+                SgNetworkError(LocalErrorType.UNKNOWN)
             }
         }
-        val networkError = SgNetworkError()
-        val errorStatus = SgErrorStatus()
-        errorStatus.code = code
-        networkError.errorStatus = errorStatus
 
         onError(networkError)
     }
@@ -55,5 +61,6 @@ abstract class ResponseObserver<T> : DisposableObserver<Result<T>>() {
 
     companion object {
         const val TAG = "ResponseObserver"
+        val OBJECT_MAPPER = Parse.createMapper()
     }
 }

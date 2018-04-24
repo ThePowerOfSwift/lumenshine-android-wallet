@@ -1,31 +1,17 @@
 package com.soneso.stellargate.model.dto
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.soneso.stellargate.model.dto.auth.ValidationError
+import java.util.*
 
-class SgNetworkError {
+class SgNetworkError(localType: LocalErrorType = LocalErrorType.NONE) : LinkedList<ValidationError>() {
 
-    @JsonProperty("error_status")
-    var errorStatus: SgErrorStatus = SgErrorStatus()
+    private val localErrorType = localType
 
-    @JsonProperty("errors")
-    val validationErrors: List<ValidationError>? = null
+    fun isNoInternetError() = localErrorType == LocalErrorType.NO_INTERNET
+
+    fun isUnknownError() = localErrorType == LocalErrorType.UNKNOWN
 }
 
-class SgErrorStatus {
-
-    @JsonProperty("code")
-    var code = UNKNOWN
-
-    @JsonProperty("message")
-    var message = ""
-
-    fun isNoInternetError() = code == NO_INTERNET
-
-    fun isUnknownError() = code == UNKNOWN
-
-    companion object {
-        const val UNKNOWN = -1
-        const val NO_INTERNET = -2
-    }
+enum class LocalErrorType {
+    NONE, UNKNOWN, NO_INTERNET
 }

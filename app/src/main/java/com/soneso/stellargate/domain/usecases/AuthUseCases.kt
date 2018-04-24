@@ -55,15 +55,17 @@ class AuthUseCases(private val userRepo: UserRepository) {
         val publicKeyIndex188 = Wallet.createKeyPair(mnemonic, null, 188).accountId
 
         if (BuildConfig.DEBUG) {
-            Log.d("REGISTRATION", "password: ${String(pass)}")
-            Log.d("REGISTRATION", "kdf salt: ${Base64.toBase64String(passwordSalt)}")
-            Log.d("REGISTRATION", "kdf password: ${Base64.toBase64String(derivedPassword)}")
-            Log.d("REGISTRATION", "master key: ${Base64.toBase64String(masterKey)}")
-            Log.d("REGISTRATION", "master key iv: ${Base64.toBase64String(masterKeyIv)}")
-            Log.d("REGISTRATION", "encrypted master key: ${Base64.toBase64String(encryptedMasterKey)}")
-            Log.d("REGISTRATION", "mnemonic: ${String(mnemonic)}")
-            Log.d("REGISTRATION", "mnemonic iv: ${Base64.toBase64String(mnemonicIv)}")
-            Log.d("REGISTRATION", "encrypted mnemonic: ${Base64.toBase64String(encryptedMnemonic)}")
+            logSecurityData(
+                    pass,
+                    passwordSalt,
+                    derivedPassword,
+                    masterKey,
+                    masterKeyIv,
+                    encryptedMasterKey,
+                    mnemonic,
+                    mnemonicIv,
+                    encryptedMnemonic
+            )
         }
 
         return Account(
@@ -75,6 +77,33 @@ class AuthUseCases(private val userRepo: UserRepository) {
                 encryptedMnemonic,
                 mnemonicIv
         )
+    }
+
+    private fun logSecurityData(
+            pass: CharArray,
+            passwordSalt: ByteArray,
+            derivedPassword: ByteArray,
+            masterKey: ByteArray,
+            masterKeyIv: ByteArray,
+            encryptedMasterKey: ByteArray,
+            mnemonic: CharArray,
+            mnemonicIv: ByteArray,
+            encryptedMnemonic: ByteArray
+    ) {
+        Log.d("REGISTRATION", "password: ${String(pass)}")
+        val encodedPassSalt = Base64.toBase64String(passwordSalt)
+        Log.d("REGISTRATION", "kdf salt: $encodedPassSalt length: ${encodedPassSalt.length}")
+        Log.d("REGISTRATION", "kdf password: ${Base64.toBase64String(derivedPassword)}")
+        Log.d("REGISTRATION", "master key: ${Base64.toBase64String(masterKey)}")
+        val encryptedMasterKeyEncoded = Base64.toBase64String(encryptedMasterKey)
+        Log.d("REGISTRATION", "encrypted master key: $encryptedMasterKeyEncoded length: ${encryptedMasterKeyEncoded.length}")
+        val masterKeyIvEncoded = Base64.toBase64String(masterKeyIv)
+        Log.d("REGISTRATION", "master key iv: $masterKeyIvEncoded length: ${masterKeyIvEncoded.length}")
+        Log.d("REGISTRATION", "mnemonic: ${String(mnemonic)}")
+        val encryptedMnemonicEncoded = Base64.toBase64String(encryptedMnemonic)
+        Log.d("REGISTRATION", "encrypted mnemonic: $encryptedMnemonicEncoded length: ${encryptedMnemonicEncoded.length}")
+        val mnemonicIvEncoded = Base64.toBase64String(mnemonicIv)
+        Log.d("REGISTRATION", "mnemonic iv: $mnemonicIvEncoded length: ${mnemonicIvEncoded.length}")
     }
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)

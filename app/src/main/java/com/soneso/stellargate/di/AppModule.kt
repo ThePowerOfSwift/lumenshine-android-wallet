@@ -5,15 +5,13 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import com.commonsware.cwac.saferoom.SafeHelperFactory
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.domain.usecases.AccountManager
 import com.soneso.stellargate.domain.usecases.AccountUseCases
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
+import com.soneso.stellargate.model.dto.Parse
 import com.soneso.stellargate.model.user.UserRepository
 import com.soneso.stellargate.networking.SgApi
 import com.soneso.stellargate.networking.UserApi
@@ -92,19 +90,12 @@ class AppModule(private val context: Context) {
             chain.proceed(requestBuilder.build())
         }
 
-        // cristi.paval, 3/28/18 - jackson object mapper
-        val mapper = ObjectMapper()
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
-        mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false)
-        mapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true)
 
         // cristi.paval, 3/28/18 - retrofit builder
         return Retrofit.Builder()
                 .baseUrl(SgApi.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create(mapper))
+                .addConverterFactory(JacksonConverterFactory.create(Parse.createMapper()))
                 .client(okHttpBuilder.build())
                 .build()!!
     }

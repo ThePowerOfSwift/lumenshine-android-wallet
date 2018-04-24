@@ -1,32 +1,31 @@
 package com.soneso.stellargate.domain.data
 
 import com.soneso.stellargate.R
-import com.soneso.stellargate.model.dto.SgErrorStatus
 import com.soneso.stellargate.model.dto.SgNetworkError
 
 class SgError {
 
     var errorResId = 0
-    var message = ""
+    var message: CharSequence = ""
 
-    companion object {
-
-    }
+    companion object
 }
 
 fun SgError.Companion.fromNetworkError(networkError: SgNetworkError): SgError {
-    val errorStatus = networkError.errorStatus
     val error = SgError()
-
-    when (errorStatus.code) {
-        SgErrorStatus.UNKNOWN -> {
+    when {
+        networkError.isUnknownError() -> {
             error.errorResId = R.string.unknown_error
         }
-        SgErrorStatus.NO_INTERNET -> {
+        networkError.isNoInternetError() -> {
             error.errorResId = R.string.no_internet_error
         }
         else -> {
-            error.message = errorStatus.message
+            val errorBuilder = StringBuilder()
+            networkError.forEach {
+                errorBuilder.append(it.message).append("\n")
+            }
+            error.message = errorBuilder.removeSuffix("\n")
         }
     }
     return error
