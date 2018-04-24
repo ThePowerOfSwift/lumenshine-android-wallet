@@ -9,10 +9,10 @@ import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.domain.usecases.AccountManager
 import com.soneso.stellargate.domain.usecases.AccountUseCases
 import com.soneso.stellargate.domain.usecases.AuthUseCases
+import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
 import com.soneso.stellargate.model.dto.Parse
-import com.soneso.stellargate.model.user.UserRepository
 import com.soneso.stellargate.networking.SgApi
 import com.soneso.stellargate.networking.UserApi
 import com.soneso.stellargate.networking.UserRequester

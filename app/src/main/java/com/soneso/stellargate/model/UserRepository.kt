@@ -1,4 +1,4 @@
-package com.soneso.stellargate.model.user
+package com.soneso.stellargate.model
 
 import com.soneso.stellargate.domain.data.Account
 import com.soneso.stellargate.domain.data.SgError
@@ -12,6 +12,7 @@ import com.soneso.stellargate.model.dto.auth.RegistrationResponse
 import com.soneso.stellargate.model.dto.auth.TfaRegistrationResponse
 import com.soneso.stellargate.networking.UserRequester
 import com.soneso.stellargate.persistence.SgPrefs
+import com.soneso.stellargate.persistence.UserDao
 import okhttp3.Headers
 
 /**

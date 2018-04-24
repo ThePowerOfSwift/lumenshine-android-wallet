@@ -5,8 +5,8 @@ import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.domain.data.Account
 import com.soneso.stellargate.domain.data.UserLogin
 import com.soneso.stellargate.domain.util.Cryptor
+import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellargate.model.dto.DataProvider
-import com.soneso.stellargate.model.user.UserRepository
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.util.PrimitiveUtil
 import org.bouncycastle.util.encoders.Base64

@@ -1,4 +1,4 @@
-package com.soneso.stellargate.model.user
+package com.soneso.stellargate.persistence
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
