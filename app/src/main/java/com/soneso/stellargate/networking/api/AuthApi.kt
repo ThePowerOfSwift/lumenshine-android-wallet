@@ -25,7 +25,8 @@ interface AuthApi {
             @Field("mnemonic") encryptedMnemonic: String,
             @Field("mnemonic_iv") mnemonicIv: String,
             @Field("public_key_0") publicKey0: String,
-            @Field("public_key_188") publicKey188: String
+            @Field("public_key_188") publicKey188: String,
+            @Field("country_code") countryCode: String?
     ): Single<Result<RegistrationResponse>>
 
     @FormUrlEncoded

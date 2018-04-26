@@ -136,8 +136,11 @@ class RegistrationFragment : AuthFragment() {
             return
         }
 
-        regViewModel.createAccount(email.trimmedText, password.trimmedText)
-
+        regViewModel.createAccount(
+                email.trimmedText,
+                password.trimmedText,
+                country_spinner.selectedItemPosition
+        )
     }
 
     private fun isValidForm() =

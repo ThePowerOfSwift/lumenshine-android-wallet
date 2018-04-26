@@ -14,9 +14,9 @@ import io.reactivex.Single
  */
 class UserRepository(private val authRequester: AuthRequester, private val userDao: UserDao) {
 
-    fun createUserAccount(account: Account): Single<String> {
+    fun createUserAccount(account: Account, countryCode: String?): Single<String> {
 
-        return authRequester.registerUser(account)
+        return authRequester.registerUser(account, countryCode)
                 .map {
                     it.token2fa
                 }

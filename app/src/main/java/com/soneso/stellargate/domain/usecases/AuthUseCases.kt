@@ -16,7 +16,7 @@ import org.bouncycastle.util.encoders.Base64
  */
 class AuthUseCases(private val userRepo: UserRepository) {
 
-    fun generateAccount(email: CharSequence, password: CharSequence): Single<String> {
+    fun generateAccount(email: CharSequence, password: CharSequence, countryCode: String?): Single<String> {
 
         val pass = CharArray(password.length)
         password.asSequence().forEachIndexed { index, c ->
@@ -25,7 +25,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
         val account = createAccountForPass(pass)
         account.email = email.toString()
 
-        return userRepo.createUserAccount(account)
+        return userRepo.createUserAccount(account, countryCode)
     }
 
     //password, kdf salt, kdf password, master key, master key iv, encrypted master key, nmemonic, mnemonic iv, encrypted mnemonic

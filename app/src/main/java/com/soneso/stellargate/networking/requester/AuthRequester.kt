@@ -19,7 +19,7 @@ import retrofit2.Response
 
 class AuthRequester(private val authApi: AuthApi, private val sessionProfile: SessionProfileService) {
 
-    fun registerUser(account: Account): Single<RegistrationResponse> {
+    fun registerUser(account: Account, countryCode: String?): Single<RegistrationResponse> {
         val mapper = ResponseMapper<RegistrationResponse>()
         return authApi.registerUser(
                 account.email,
@@ -29,7 +29,8 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
                 Base64.toBase64String(account.encryptedMnemonic),
                 Base64.toBase64String(account.mnemonicIV),
                 account.publicKeyIndex0,
-                account.publicKeyIndex188
+                account.publicKeyIndex188,
+                countryCode
         )
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

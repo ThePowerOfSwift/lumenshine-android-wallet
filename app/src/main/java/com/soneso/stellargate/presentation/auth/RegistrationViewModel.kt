@@ -23,9 +23,17 @@ class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel(
 
     val liveCountries: LiveData<SgViewState<List<Country>>> = MutableLiveData()
 
-    fun createAccount(email: CharSequence, password: CharSequence) {
+    fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int) {
+
+        val countryCode = try {
+            liveCountries.value?.data?.get(countryPosition)?.code
+        } catch (ignored: Exception) {
+            null
+        }
+
         (liveTfaSecret as MutableLiveData).value = SgViewState(State.LOADING)
-        authUseCases.generateAccount(email, password)
+
+        authUseCases.generateAccount(email, password, countryCode)
                 .subscribe({
                     liveTfaSecret.value = SgViewState(it)
                 }, {
@@ -34,7 +42,9 @@ class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel(
     }
 
     fun confirmTfaRegistration(tfaCode: String) {
+
         (liveConfirmation as MutableLiveData).value = SgViewState(State.LOADING)
+
         authUseCases.confirmTfaRegistration(tfaCode)
                 .subscribe({
                     liveConfirmation.value = SgViewState(it)
@@ -44,7 +54,9 @@ class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel(
     }
 
     fun refreshSalutations() {
+
         (liveSalutations as MutableLiveData).value = SgViewState(State.LOADING)
+
         authUseCases.provideSalutations()
                 .subscribe({
                     liveSalutations.value = SgViewState(it)
@@ -54,7 +66,9 @@ class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel(
     }
 
     fun refreshCountries() {
+
         (liveCountries as MutableLiveData).value = SgViewState(State.LOADING)
+
         authUseCases.provideCountries()
                 .subscribe({
                     liveCountries.value = SgViewState(it)
