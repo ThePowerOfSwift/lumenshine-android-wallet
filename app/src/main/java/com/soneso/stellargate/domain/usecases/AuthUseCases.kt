@@ -109,6 +109,8 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun provideSalutations() = userRepo.getSalutations()
 
+    fun provideCountries() = userRepo.getCountries()
+
     companion object {
         const val TAG = "AuthUseCases"
     }

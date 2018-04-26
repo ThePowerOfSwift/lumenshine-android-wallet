@@ -1,6 +1,7 @@
 package com.soneso.stellargate.model
 
 import com.soneso.stellargate.domain.data.Account
+import com.soneso.stellargate.domain.data.Country
 import com.soneso.stellargate.domain.data.SgError
 import com.soneso.stellargate.domain.data.singleFromNetworkException
 import com.soneso.stellargate.networking.requester.AuthRequester
@@ -33,8 +34,16 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun getSalutations(): Single<List<String>> {
         return authRequester.fetchSalutationList()
-                .map { salutationListResponse ->
-                    return@map salutationListResponse.salutations
+                .map {
+                    return@map it.salutations
+                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    fun getCountries(): Single<List<Country>> {
+        return authRequester.fetchCountryList()
+                .map {
+                    it.countries
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }

@@ -3,6 +3,7 @@ package com.soneso.stellargate.presentation.auth
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.soneso.stellargate.domain.data.Country
 import com.soneso.stellargate.domain.data.SgError
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.presentation.general.SgViewState
@@ -19,6 +20,8 @@ class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel(
     val liveTfaSecret: LiveData<SgViewState<String>> = MutableLiveData()
 
     val liveConfirmation: LiveData<SgViewState<Unit>> = MutableLiveData()
+
+    val liveCountries: LiveData<SgViewState<List<Country>>> = MutableLiveData()
 
     fun createAccount(email: CharSequence, password: CharSequence) {
         (liveTfaSecret as MutableLiveData).value = SgViewState(State.LOADING)
@@ -47,6 +50,16 @@ class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel(
                     liveSalutations.value = SgViewState(it)
                 }, {
                     liveSalutations.value = SgViewState(it as SgError)
+                })
+    }
+
+    fun refreshCountries() {
+        (liveCountries as MutableLiveData).value = SgViewState(State.LOADING)
+        authUseCases.provideCountries()
+                .subscribe({
+                    liveCountries.value = SgViewState(it)
+                }, {
+                    liveCountries.value = SgViewState(it as SgError)
                 })
     }
 }

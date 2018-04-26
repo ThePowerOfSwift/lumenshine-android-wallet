@@ -1,5 +1,6 @@
 package com.soneso.stellargate.networking.api
 
+import com.soneso.stellargate.networking.dto.auth.GetCountryListResponse
 import com.soneso.stellargate.networking.dto.auth.GetSalutationListResponse
 import com.soneso.stellargate.networking.dto.auth.RegistrationResponse
 import com.soneso.stellargate.networking.dto.auth.TfaRegistrationResponse
@@ -36,4 +37,7 @@ interface AuthApi {
 
     @GET("/ico/salutation_list/{${SgApi.URL_PARAM_LANG}}")
     fun getSalutationList(@Path(SgApi.URL_PARAM_LANG) langKey: String): Single<Result<GetSalutationListResponse>>
+
+    @GET("/ico/country_list/{${SgApi.URL_PARAM_LANG}}")
+    fun getCountryList(@Path(SgApi.URL_PARAM_LANG) langKey: String): Single<Result<GetCountryListResponse>>
 }

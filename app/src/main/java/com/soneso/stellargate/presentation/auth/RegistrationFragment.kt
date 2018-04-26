@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.soneso.stellargate.R
+import com.soneso.stellargate.domain.data.Country
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import kotlinx.android.synthetic.main.fragment_registration.*
@@ -20,13 +21,13 @@ import kotlinx.android.synthetic.main.fragment_registration.*
  */
 class RegistrationFragment : AuthFragment() {
 
+    private lateinit var regViewModel: RegistrationViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         regViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[RegistrationViewModel::class.java]
     }
-
-    private lateinit var regViewModel: RegistrationViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_registration, container, false)
@@ -37,11 +38,9 @@ class RegistrationFragment : AuthFragment() {
         subscribeForLiveData()
 
         regViewModel.refreshSalutations()
-        sign_in_button.setOnClickListener { replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG) }
+        regViewModel.refreshCountries()
 
-        email_registration_button.setOnClickListener {
-            attemptRegistration()
-        }
+        setupListeners()
     }
 
     private fun subscribeForLiveData() {
@@ -50,10 +49,21 @@ class RegistrationFragment : AuthFragment() {
             renderSalutations(viewState)
         })
 
+        regViewModel.liveCountries.observe(this, Observer {
+            val viewState = it ?: return@Observer
+            renderCountries(viewState)
+        })
+
         regViewModel.liveTfaSecret.observe(this, Observer {
             val viewState = it ?: return@Observer
             renderConfirmationResponse(viewState)
         })
+    }
+
+    private fun setupListeners() {
+
+        sign_in_button.setOnClickListener { replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG) }
+        email_registration_button.setOnClickListener { attemptRegistration() }
     }
 
     private fun renderConfirmationResponse(viewState: SgViewState<String>) {
@@ -80,6 +90,20 @@ class RegistrationFragment : AuthFragment() {
                 adapter.clear()
                 adapter.addAll(viewState.data!!)
                 salutation_spinner.adapter = adapter
+            }
+            State.ERROR -> {
+                showErrorSnackbar(viewState.error)
+            }
+        }
+    }
+
+    private fun renderCountries(viewState: SgViewState<List<Country>>) {
+        when (viewState.state) {
+            State.LOADING -> {
+
+            }
+            State.READY -> {
+                // TODO: cristi.paval, 4/26/18 - fill countries here
             }
             State.ERROR -> {
                 showErrorSnackbar(viewState.error)

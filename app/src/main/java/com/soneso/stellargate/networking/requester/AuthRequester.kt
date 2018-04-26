@@ -6,6 +6,7 @@ import com.soneso.stellargate.networking.api.AuthApi
 import com.soneso.stellargate.networking.api.SgApi
 import com.soneso.stellargate.networking.dto.ResponseMapper
 import com.soneso.stellargate.networking.dto.ResultMapper
+import com.soneso.stellargate.networking.dto.auth.GetCountryListResponse
 import com.soneso.stellargate.networking.dto.auth.GetSalutationListResponse
 import com.soneso.stellargate.networking.dto.auth.RegistrationResponse
 import com.soneso.stellargate.networking.dto.auth.TfaRegistrationResponse
@@ -56,6 +57,13 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
 
     fun fetchSalutationList(): Single<GetSalutationListResponse> {
         return authApi.getSalutationList(sessionProfile.langKey)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(ResponseMapper())
+    }
+
+    fun fetchCountryList(): Single<GetCountryListResponse> {
+        return authApi.getCountryList(sessionProfile.langKey)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(ResponseMapper())
