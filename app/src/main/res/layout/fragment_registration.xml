@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
-        android:text="test@test.test"
+        android:text="test@test1.test"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/email_input_level"
         app:regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$" />
@@ -49,7 +49,8 @@
         <Spinner
             android:id="@+id/salutation_spinner"
             android:layout_width="@dimen/size_75"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light" />
 
         <com.soneso.stellargate.presentation.auth.FormInputView
             android:id="@+id/first_name"
@@ -67,6 +68,12 @@
         android:hint="@string/hint_last_name"
         android:inputType="textPersonName"
         app:input_level="@integer/last_name_input_level" />
+
+    <Spinner
+        android:id="@+id/country_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_45"
+        android:background="@android:color/background_light" />
 
     <FrameLayout
         android:layout_width="match_parent"

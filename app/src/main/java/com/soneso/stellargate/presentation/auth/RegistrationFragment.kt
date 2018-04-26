@@ -3,12 +3,16 @@ package com.soneso.stellargate.presentation.auth
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.Country
 import com.soneso.stellargate.presentation.general.SgViewState
@@ -64,6 +68,16 @@ class RegistrationFragment : AuthFragment() {
 
         sign_in_button.setOnClickListener { replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG) }
         email_registration_button.setOnClickListener { attemptRegistration() }
+        salutation_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d(TAG, "Selected position: nothing")
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val textView = view as? TextView ?: return
+                textView.setTextColor(Color.BLACK)
+            }
+        }
     }
 
     private fun renderConfirmationResponse(viewState: SgViewState<String>) {
@@ -103,7 +117,12 @@ class RegistrationFragment : AuthFragment() {
 
             }
             State.READY -> {
-                // TODO: cristi.paval, 4/26/18 - fill countries here
+                val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
+                adapter.clear()
+                for (country in viewState.data!!) {
+                    adapter.add(country.name)
+                }
+                country_spinner.adapter = adapter
             }
             State.ERROR -> {
                 showErrorSnackbar(viewState.error)
