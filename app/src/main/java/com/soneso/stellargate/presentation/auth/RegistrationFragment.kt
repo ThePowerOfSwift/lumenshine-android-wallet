@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.soneso.stellargate.R
+import com.soneso.stellargate.presentation.general.SgViewState
+import com.soneso.stellargate.presentation.general.State
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
@@ -43,26 +45,46 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-        regViewModel.liveError.observe(this, Observer {
-            showErrorSnackbar(it)
-        })
-
         regViewModel.liveSalutations.observe(this, Observer {
-            val salutations = it ?: return@Observer
-            renderSalutations(salutations)
+            val viewState = it ?: return@Observer
+            renderSalutations(viewState)
         })
 
         regViewModel.liveTfaSecret.observe(this, Observer {
-            val token = it ?: return@Observer
-            replaceFragment(TfaRegistrationFragment.newInstance(token), TfaRegistrationFragment.TAG)
+            val viewState = it ?: return@Observer
+            renderConfirmationResponse(viewState)
         })
     }
 
-    private fun renderSalutations(salutations: List<String>) {
-        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
-        adapter.clear()
-        adapter.addAll(salutations)
-        salutation_spinner.adapter = adapter
+    private fun renderConfirmationResponse(viewState: SgViewState<String>) {
+        when (viewState.state) {
+            State.LOADING -> {
+
+            }
+            State.READY -> {
+                replaceFragment(TfaRegistrationFragment.newInstance(viewState.data!!), TfaRegistrationFragment.TAG)
+            }
+            State.ERROR -> {
+                showErrorSnackbar(viewState.error)
+            }
+        }
+    }
+
+    private fun renderSalutations(viewState: SgViewState<List<String>>) {
+        when (viewState.state) {
+            State.LOADING -> {
+
+            }
+            State.READY -> {
+                val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
+                adapter.clear()
+                adapter.addAll(viewState.data!!)
+                salutation_spinner.adapter = adapter
+            }
+            State.ERROR -> {
+                showErrorSnackbar(viewState.error)
+            }
+        }
     }
 
     private fun attemptRegistration() {

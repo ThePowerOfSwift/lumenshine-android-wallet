@@ -2,47 +2,51 @@ package com.soneso.stellargate.presentation.auth
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import com.soneso.stellargate.domain.data.SgError
 import com.soneso.stellargate.domain.usecases.AuthUseCases
-import com.soneso.stellargate.presentation.general.SgViewModel
+import com.soneso.stellargate.presentation.general.SgViewState
+import com.soneso.stellargate.presentation.general.State
 
 /**
  * View model.
  * Created by cristi.paval on 3/22/18.
  */
-class RegistrationViewModel(private val authUseCases: AuthUseCases) : SgViewModel() {
+class RegistrationViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
-    val liveSalutations: LiveData<List<String>> = MutableLiveData()
+    val liveSalutations: LiveData<SgViewState<List<String>>> = MutableLiveData()
 
-    val liveTfaSecret: LiveData<String> = MutableLiveData()
+    val liveTfaSecret: LiveData<SgViewState<String>> = MutableLiveData()
 
-    val liveConfirmation: LiveData<Boolean> = MutableLiveData()
+    val liveConfirmation: LiveData<SgViewState<Unit>> = MutableLiveData()
 
     fun createAccount(email: CharSequence, password: CharSequence) {
+        (liveTfaSecret as MutableLiveData).value = SgViewState(State.LOADING)
         authUseCases.generateAccount(email, password)
                 .subscribe({
-                    (liveTfaSecret as MutableLiveData).value = it
+                    liveTfaSecret.value = SgViewState(it)
                 }, {
-                    setError(it as SgError)
-//                    setError(SgError("Mock Error"))
+                    liveTfaSecret.value = SgViewState(it as SgError)
                 })
     }
 
     fun confirmTfaRegistration(tfaCode: String) {
+        (liveConfirmation as MutableLiveData).value = SgViewState(State.LOADING)
         authUseCases.confirmTfaRegistration(tfaCode)
                 .subscribe({
-                    (liveConfirmation as MutableLiveData).value = true
+                    liveConfirmation.value = SgViewState(it)
                 }, {
-                    setError(it as SgError)
+                    liveConfirmation.value = SgViewState(it as SgError)
                 })
     }
 
     fun refreshSalutations() {
+        (liveSalutations as MutableLiveData).value = SgViewState(State.LOADING)
         authUseCases.provideSalutations()
                 .subscribe({
-                    (liveSalutations as MutableLiveData).value = it
+                    liveSalutations.value = SgViewState(it)
                 }, {
-                    setError(it as SgError)
+                    liveSalutations.value = SgViewState(it as SgError)
                 })
     }
 }
