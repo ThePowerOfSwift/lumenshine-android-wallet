@@ -1,4 +1,4 @@
-package com.soneso.stellargate.networking
+package com.soneso.stellargate.networking.api
 
 object SgApi {
 

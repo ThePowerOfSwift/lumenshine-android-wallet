@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.soneso.stellargate.R
-import com.soneso.stellargate.model.dto.DataStatus
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
@@ -52,6 +51,11 @@ class RegistrationFragment : AuthFragment() {
             val salutations = it ?: return@Observer
             renderSalutations(salutations)
         })
+
+        regViewModel.liveTfaSecret.observe(this, Observer {
+            val token = it ?: return@Observer
+            replaceFragment(TfaRegistrationFragment.newInstance(token), TfaRegistrationFragment.TAG)
+        })
     }
 
     private fun renderSalutations(salutations: List<String>) {
@@ -67,27 +71,8 @@ class RegistrationFragment : AuthFragment() {
             return
         }
 
-        val dataProvider = regViewModel.createAccount(email.trimmedText, password.trimmedText)
-        dataProvider.liveStatus.observe(this, Observer {
-            val status = it ?: return@Observer
+        regViewModel.createAccount(email.trimmedText, password.trimmedText)
 
-            when (status) {
-                DataStatus.SUCCESS -> {
-                    progress_bar.visibility = View.GONE
-                    val userLogin = dataProvider.data!!
-                    replaceFragment(TfaRegistrationFragment.newInstance(userLogin.token2fa), TfaRegistrationFragment.TAG)
-                }
-                DataStatus.ERROR -> {
-                    progress_bar.visibility = View.GONE
-                    email_registration_button.visibility = View.VISIBLE
-                    showErrorSnackbar(dataProvider.error)
-                }
-                DataStatus.LOADING -> {
-                    email_registration_button.visibility = View.INVISIBLE
-                    progress_bar.visibility = View.VISIBLE
-                }
-            }
-        })
     }
 
     private fun isValidForm() =

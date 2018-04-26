@@ -1,4 +1,4 @@
-package com.soneso.stellargate.model.dto.auth
+package com.soneso.stellargate.networking.dto.auth
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

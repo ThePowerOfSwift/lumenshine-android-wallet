@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
-import com.soneso.stellargate.model.dto.DataStatus
 import com.soneso.stellargate.presentation.util.displayQrCode
 import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 
@@ -40,29 +39,25 @@ class TfaRegistrationFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        subscribeForLiveData()
         setupQrCode()
         setupToken()
         setupTfaCode()
     }
 
+    private fun subscribeForLiveData() {
+        regViewModel.liveError.observe(this, Observer {
+            showErrorSnackbar(it)
+        })
+        regViewModel.liveConfirmation.observe(this, Observer {
+            it ?: return@Observer
+            showSnackbar("Successful confirmation!")
+        })
+    }
+
     private fun setupTfaCode() {
         send_button.setOnClickListener {
-            val dataProvider = regViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
-            dataProvider.liveStatus.observe(this, Observer {
-                val status = it ?: return@Observer
-
-                when (status) {
-                    DataStatus.SUCCESS -> {
-                        showSnackbar("Successful confirmation!")
-                    }
-                    DataStatus.ERROR -> {
-                        showErrorSnackbar(dataProvider.error)
-                    }
-                    else -> {
-                        showSnackbar("Loading...")
-                    }
-                }
-            })
+            regViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
         }
     }
 

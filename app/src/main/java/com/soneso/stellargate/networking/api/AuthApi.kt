@@ -1,9 +1,8 @@
-package com.soneso.stellargate.networking
+package com.soneso.stellargate.networking.api
 
-import com.soneso.stellargate.model.dto.auth.GetSalutationListResponse
-import com.soneso.stellargate.model.dto.auth.RegistrationResponse
-import com.soneso.stellargate.model.dto.auth.TfaRegistrationResponse
-import io.reactivex.Observable
+import com.soneso.stellargate.networking.dto.auth.GetSalutationListResponse
+import com.soneso.stellargate.networking.dto.auth.RegistrationResponse
+import com.soneso.stellargate.networking.dto.auth.TfaRegistrationResponse
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
@@ -26,14 +25,14 @@ interface AuthApi {
             @Field("mnemonic_iv") mnemonicIv: String,
             @Field("public_key_0") publicKey0: String,
             @Field("public_key_188") publicKey188: String
-    ): Observable<Result<RegistrationResponse>>
+    ): Single<Result<RegistrationResponse>>
 
     @FormUrlEncoded
     @POST("/ico/auth/confirm_tfa_registration")
     fun confirmTfaRegistration(
             @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String,
             @Field("tfa_code") tfaCode: String
-    ): Observable<Result<TfaRegistrationResponse>>
+    ): Single<Result<TfaRegistrationResponse>>
 
     @GET("/ico/salutation_list/{${SgApi.URL_PARAM_LANG}}")
     fun getSalutationList(@Path(SgApi.URL_PARAM_LANG) langKey: String): Single<Result<GetSalutationListResponse>>

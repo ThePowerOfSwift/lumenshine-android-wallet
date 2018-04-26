@@ -1,4 +1,4 @@
-package com.soneso.stellargate.model.dto
+package com.soneso.stellargate.networking.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature

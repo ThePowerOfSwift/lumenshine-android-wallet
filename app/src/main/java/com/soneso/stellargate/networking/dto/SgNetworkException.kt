@@ -1,6 +1,4 @@
-package com.soneso.stellargate.model.dto
-
-import com.soneso.stellargate.model.dto.auth.ValidationError
+package com.soneso.stellargate.networking.dto
 
 class SgNetworkException(val validationErrors: List<ValidationError>?, throwable: Throwable?) : Exception(throwable) {
 

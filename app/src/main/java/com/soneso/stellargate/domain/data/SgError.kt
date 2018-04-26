@@ -1,9 +1,11 @@
 package com.soneso.stellargate.domain.data
 
 import com.soneso.stellargate.R
-import com.soneso.stellargate.model.dto.SgNetworkError
-import com.soneso.stellargate.model.dto.SgNetworkException
 import com.soneso.stellargate.networking.NetworkUtil
+import com.soneso.stellargate.networking.dto.SgNetworkException
+import io.reactivex.Single
+import io.reactivex.SingleSource
+import io.reactivex.functions.Function
 
 class SgError(val errorResId: Int, message: String?) : Exception(message) {
 
@@ -14,41 +16,27 @@ class SgError(val errorResId: Int, message: String?) : Exception(message) {
     companion object
 }
 
-fun SgError.Companion.fromNetworkError(networkError: SgNetworkError): SgError {
-    return when {
-        networkError.isUnknownError() -> {
-            SgError(R.string.unknown_error)
-        }
-        networkError.isNoInternetError() -> {
-            SgError(R.string.no_internet_error)
-        }
-        else -> {
-            val errorBuilder = StringBuilder()
-            networkError.forEach {
-                errorBuilder.append(it.message).append("\n")
-            }
-            SgError(errorBuilder.removeSuffix("\n").toString())
-        }
-    }
-}
+fun <T> SgError.Companion.singleFromNetworkException(): Function<Throwable, SingleSource<T>> {
 
-fun SgError.Companion.fromNetworkException(networkException: SgNetworkException): SgError {
-    return when {
-        networkException.validationErrors != null -> {
-            val errorBuilder = StringBuilder()
-            networkException.validationErrors.forEach {
-                errorBuilder.append(it.message).append("\n")
+    return Function {
+        val networkException = it as SgNetworkException
+        when {
+            networkException.validationErrors != null -> {
+                val errorBuilder = StringBuilder()
+                networkException.validationErrors.forEach {
+                    errorBuilder.append(it.message).append("\n")
+                }
+                Single.error(SgError(errorBuilder.removeSuffix("\n").toString()))
             }
-            SgError(errorBuilder.removeSuffix("\n").toString())
-        }
-        else -> {
+            else -> {
 
-            val errorResId = if (!NetworkUtil.isNetworkAvailable()) {
-                R.string.no_internet_error
-            } else {
-                R.string.unknown_error
+                val errorResId = if (!NetworkUtil.isNetworkAvailable()) {
+                    R.string.no_internet_error
+                } else {
+                    R.string.unknown_error
+                }
+                Single.error(SgError(errorResId))
             }
-            SgError(errorResId)
         }
     }
 }

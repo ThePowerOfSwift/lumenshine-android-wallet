@@ -3,12 +3,11 @@ package com.soneso.stellargate.domain.usecases
 import android.util.Log
 import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.domain.data.Account
-import com.soneso.stellargate.domain.data.UserLogin
 import com.soneso.stellargate.domain.util.Cryptor
 import com.soneso.stellargate.model.UserRepository
-import com.soneso.stellargate.model.dto.DataProvider
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.util.PrimitiveUtil
+import io.reactivex.Single
 import org.bouncycastle.util.encoders.Base64
 
 /**
@@ -17,7 +16,7 @@ import org.bouncycastle.util.encoders.Base64
  */
 class AuthUseCases(private val userRepo: UserRepository) {
 
-    fun generateAccount(email: CharSequence, password: CharSequence): DataProvider<UserLogin> {
+    fun generateAccount(email: CharSequence, password: CharSequence): Single<String> {
 
         val pass = CharArray(password.length)
         password.asSequence().forEachIndexed { index, c ->

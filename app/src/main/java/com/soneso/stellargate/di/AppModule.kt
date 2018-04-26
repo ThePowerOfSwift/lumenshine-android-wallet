@@ -12,11 +12,11 @@ import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
-import com.soneso.stellargate.model.dto.Parse
-import com.soneso.stellargate.networking.AuthApi
-import com.soneso.stellargate.networking.AuthRequester
 import com.soneso.stellargate.networking.SessionProfileService
-import com.soneso.stellargate.networking.SgApi
+import com.soneso.stellargate.networking.api.AuthApi
+import com.soneso.stellargate.networking.api.SgApi
+import com.soneso.stellargate.networking.dto.Parse
+import com.soneso.stellargate.networking.requester.AuthRequester
 import com.soneso.stellargate.persistence.SgDatabase
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.accounts.AccountsViewModel

@@ -14,9 +14,28 @@ class RegistrationViewModel(private val authUseCases: AuthUseCases) : SgViewMode
 
     val liveSalutations: LiveData<List<String>> = MutableLiveData()
 
-    fun createAccount(email: CharSequence, password: CharSequence) = authUseCases.generateAccount(email, password)
+    val liveTfaSecret: LiveData<String> = MutableLiveData()
 
-    fun confirmTfaRegistration(tfaCode: String) = authUseCases.confirmTfaRegistration(tfaCode)
+    val liveConfirmation: LiveData<Boolean> = MutableLiveData()
+
+    fun createAccount(email: CharSequence, password: CharSequence) {
+        authUseCases.generateAccount(email, password)
+                .subscribe({
+                    (liveTfaSecret as MutableLiveData).value = it
+                }, {
+                    setError(it as SgError)
+//                    setError(SgError("Mock Error"))
+                })
+    }
+
+    fun confirmTfaRegistration(tfaCode: String) {
+        authUseCases.confirmTfaRegistration(tfaCode)
+                .subscribe({
+                    (liveConfirmation as MutableLiveData).value = true
+                }, {
+                    setError(it as SgError)
+                })
+    }
 
     fun refreshSalutations() {
         authUseCases.provideSalutations()

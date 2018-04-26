@@ -1,14 +1,11 @@
 package com.soneso.stellargate.model
 
-import com.soneso.stellargate.domain.data.*
-import com.soneso.stellargate.model.dto.*
-import com.soneso.stellargate.model.dto.auth.RegistrationResponse
-import com.soneso.stellargate.model.dto.auth.TfaRegistrationResponse
-import com.soneso.stellargate.networking.AuthRequester
-import com.soneso.stellargate.persistence.SgPrefs
+import com.soneso.stellargate.domain.data.Account
+import com.soneso.stellargate.domain.data.SgError
+import com.soneso.stellargate.domain.data.singleFromNetworkException
+import com.soneso.stellargate.networking.requester.AuthRequester
 import com.soneso.stellargate.persistence.UserDao
 import io.reactivex.Single
-import okhttp3.Headers
 
 /**
  * Class used to user operations to server.
@@ -16,54 +13,22 @@ import okhttp3.Headers
  */
 class UserRepository(private val authRequester: AuthRequester, private val userDao: UserDao) {
 
-    fun createUserAccount(account: Account): DataProvider<UserLogin> {
+    fun createUserAccount(account: Account): Single<String> {
 
-        val dataProvider = DataProvider<UserLogin>()
-        val responseObserver = object : ResponseObserver<RegistrationResponse>() {
-
-            override fun onSuccess(headers: Headers, body: RegistrationResponse?) {
-                val data = body ?: return
-
-                SgPrefs.username = account.email
-                val jwtToken = headers.get("Authorization")!!
-
-                val userLogin = UserLogin(account.email, jwtToken, data.token2fa)
-                userDao.saveUserLogin(userLogin)
-                dataProvider.data = userLogin
-                dataProvider.status = DataStatus.SUCCESS
-            }
-
-            override fun onError(error: SgNetworkError) {
-                dataProvider.error = SgError.fromNetworkError(error)
-                dataProvider.status = DataStatus.ERROR
-            }
-        }
-
-        dataProvider.status = DataStatus.LOADING
-        authRequester.registerUser(account, responseObserver)
-        return dataProvider
+        return authRequester.registerUser(account)
+                .map {
+                    it.token2fa
+                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun confirmTfaRegistration(tfaCode: String): DataProvider<Void> {
+    fun confirmTfaRegistration(tfaCode: String): Single<Unit> {
 
-        val dataProvider = DataProvider<Void>()
-
-        val responseObserver = object : ResponseObserver<TfaRegistrationResponse>() {
-
-            override fun onSuccess(headers: Headers, body: TfaRegistrationResponse?) {
-                dataProvider.status = DataStatus.SUCCESS
-            }
-
-            override fun onError(error: SgNetworkError) {
-                dataProvider.error = SgError.fromNetworkError(error)
-                dataProvider.status = DataStatus.ERROR
-            }
-        }
-
-        dataProvider.status = DataStatus.LOADING
-        authRequester.confirmTfaRegistration(tfaCode, responseObserver)
-
-        return dataProvider
+        return authRequester.confirmTfaRegistration(tfaCode)
+                .map {
+                    Unit
+                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
     fun getSalutations(): Single<List<String>> {
@@ -71,9 +36,6 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .map { salutationListResponse ->
                     return@map salutationListResponse.salutations
                 }
-                .onErrorResumeNext {
-                    val networkException = it as SgNetworkException
-                    Single.error(SgError.fromNetworkException(networkException))
-                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 }

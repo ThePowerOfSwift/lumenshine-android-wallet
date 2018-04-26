@@ -1,4 +1,4 @@
-package com.soneso.stellargate.presentation.auth
+package com.soneso.stellargate.presentation.mnemonic
 
 
 import android.arch.lifecycle.Observer
@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.soneso.stellargate.R
 import com.soneso.stellargate.presentation.MainActivity
+import com.soneso.stellargate.presentation.auth.AuthFragment
 import kotlinx.android.synthetic.main.fragment_mnemonic.*
 import kotlinx.android.synthetic.main.layout_flipper_mnemonic_question.view.*
 

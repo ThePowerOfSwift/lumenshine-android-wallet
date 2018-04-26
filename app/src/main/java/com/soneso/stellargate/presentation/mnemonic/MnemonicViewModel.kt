@@ -1,4 +1,4 @@
-package com.soneso.stellargate.presentation.auth
+package com.soneso.stellargate.presentation.mnemonic
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
