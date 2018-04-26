@@ -1,20 +1,19 @@
 package com.soneso.stellargate.networking
 
+import com.soneso.stellargate.model.dto.auth.GetSalutationListResponse
 import com.soneso.stellargate.model.dto.auth.RegistrationResponse
 import com.soneso.stellargate.model.dto.auth.TfaRegistrationResponse
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 /**
  * Service used to retrofit.
  * Created by cristi.paval on 3/26/18.
  */
-interface UserApi {
+interface AuthApi {
 
     @FormUrlEncoded
     @POST("/ico/register_user")
@@ -36,4 +35,6 @@ interface UserApi {
             @Field("tfa_code") tfaCode: String
     ): Observable<Result<TfaRegistrationResponse>>
 
+    @GET("/ico/salutation_list/{${SgApi.URL_PARAM_LANG}}")
+    fun getSalutationList(@Path(SgApi.URL_PARAM_LANG) langKey: String): Single<Result<GetSalutationListResponse>>
 }

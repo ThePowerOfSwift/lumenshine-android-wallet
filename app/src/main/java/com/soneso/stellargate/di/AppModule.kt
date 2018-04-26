@@ -13,9 +13,10 @@ import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
 import com.soneso.stellargate.model.dto.Parse
+import com.soneso.stellargate.networking.AuthApi
+import com.soneso.stellargate.networking.AuthRequester
+import com.soneso.stellargate.networking.SessionProfileService
 import com.soneso.stellargate.networking.SgApi
-import com.soneso.stellargate.networking.UserApi
-import com.soneso.stellargate.networking.UserRequester
 import com.soneso.stellargate.persistence.SgDatabase
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.accounts.AccountsViewModel
@@ -53,11 +54,15 @@ class AppModule(private val context: Context) {
     fun provideHomeViewModel(rm: AccountRepository) = HomeViewModel(rm)
 
     @Provides
-    fun provideUserRequester(r: Retrofit) = UserRequester(r.create(UserApi::class.java))
+    @Singleton
+    fun provideSessionProfileService() = SessionProfileService()
+
+    @Provides
+    fun provideAuthRequester(r: Retrofit, s: SessionProfileService) = AuthRequester(r.create(AuthApi::class.java), s)
 
     @Provides
     @Singleton
-    fun provideUserRepository(r: UserRequester, d: SgDatabase) = UserRepository(r, d.userDao())
+    fun provideUserRepository(r: AuthRequester, d: SgDatabase) = UserRepository(r, d.userDao())
 
     @Provides
     @Singleton

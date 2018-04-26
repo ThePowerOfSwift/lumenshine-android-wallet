@@ -18,6 +18,7 @@ object SgPrefs {
     private const val KEY_ACCOUNT_ID = "account-id"
     private const val KEY_SECRET_SEED = "secret-seed"
     private const val KEY_USERNAME = "username"
+    private const val KEY_API_TOKEN = "api-token"
 
     private val prefs: SharedPreferences
     private val cipher: SgCipher
@@ -33,6 +34,10 @@ object SgPrefs {
         set(value) {
             saveString(KEY_USERNAME, value)
         }
+
+    var apiToken: String
+        get() = getString(KEY_API_TOKEN)
+        set(value) = saveString(KEY_API_TOKEN, value)
 
     val appId: String
         get() {

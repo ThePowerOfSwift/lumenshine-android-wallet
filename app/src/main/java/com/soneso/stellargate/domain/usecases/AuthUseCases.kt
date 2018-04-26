@@ -108,6 +108,8 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)
 
+    fun provideSalutations() = userRepo.getSalutations()
+
     companion object {
         const val TAG = "AuthUseCases"
     }

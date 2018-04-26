@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import com.soneso.stellargate.R
 import com.soneso.stellargate.model.dto.DataStatus
 import kotlinx.android.synthetic.main.fragment_registration.*
@@ -32,11 +33,32 @@ class RegistrationFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        subscribeForLiveData()
+
+        regViewModel.refreshSalutations()
         sign_in_button.setOnClickListener { replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG) }
 
         email_registration_button.setOnClickListener {
             attemptRegistration()
         }
+    }
+
+    private fun subscribeForLiveData() {
+        regViewModel.liveError.observe(this, Observer {
+            showErrorSnackbar(it)
+        })
+
+        regViewModel.liveSalutations.observe(this, Observer {
+            val salutations = it ?: return@Observer
+            renderSalutations(salutations)
+        })
+    }
+
+    private fun renderSalutations(salutations: List<String>) {
+        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
+        adapter.clear()
+        adapter.addAll(salutations)
+        salutation_spinner.adapter = adapter
     }
 
     private fun attemptRegistration() {

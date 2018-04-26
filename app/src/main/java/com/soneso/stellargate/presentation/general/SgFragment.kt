@@ -40,7 +40,7 @@ open class SgFragment : Fragment() {
     fun showErrorSnackbar(e: SgError?) {
         val error = e ?: return
         val view = view ?: return
-        val snackbar = if (error.errorResId > 0) Snackbar.make(view, error.errorResId, Snackbar.LENGTH_LONG) else Snackbar.make(view, error.message, Snackbar.LENGTH_LONG)
+        val snackbar = if (error.errorResId > 0) Snackbar.make(view, error.errorResId, Snackbar.LENGTH_LONG) else Snackbar.make(view, error.message!!, Snackbar.LENGTH_LONG)
         snackbar.setAction(R.string.ok, null)
                 .show()
     }
