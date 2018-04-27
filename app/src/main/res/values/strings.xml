@@ -45,6 +45,7 @@
     <string name="already_have_account">Already have an account?</string>
     <string name="create_account"><u>Create one!</u></string>
     <string name="sign_in_underlined"><u>Sign in</u></string>
+    <string name="login_password_wrong">Wrong password!</string>
 
 
     <string name="mnemonic_description">Please write down the following phrase:</string>

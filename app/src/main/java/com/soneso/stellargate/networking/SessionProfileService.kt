@@ -5,6 +5,7 @@ import com.soneso.stellargate.persistence.SgPrefs
 class SessionProfileService {
 
     private var apiToken = ""
+    private var tfaCode = ""
 
     val langKey: String
         get() = "EN"
@@ -20,4 +21,17 @@ class SessionProfileService {
             }
             return apiToken
         }
+
+    var tfaSecret: String
+        get() {
+            if (tfaCode.isEmpty()) {
+                tfaCode = SgPrefs.tfaSecret
+            }
+            return tfaCode
+        }
+        set(value) {
+            tfaCode = value
+            SgPrefs.tfaSecret = value
+        }
+
 }

@@ -49,7 +49,25 @@ object Cryptor {
     }
 
     // encrypts the master key by using the given password
-    data class EncryptionAndIvTuple(val encryptedValue: ByteArray, val iv: ByteArray)
+    data class EncryptionAndIvTuple(val encryptedValue: ByteArray, val iv: ByteArray) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as EncryptionAndIvTuple
+
+            if (!Arrays.equals(encryptedValue, other.encryptedValue)) return false
+            if (!Arrays.equals(iv, other.iv)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = Arrays.hashCode(encryptedValue)
+            result = 31 * result + Arrays.hashCode(iv)
+            return result
+        }
+    }
 
     fun encryptValue(value: ByteArray, key: ByteArray): EncryptionAndIvTuple {
 
@@ -65,7 +83,7 @@ object Cryptor {
 
     //decrypts a master key
     @Throws(GeneralSecurityException::class)
-    private fun decryptValue(derivedPassword: ByteArray, encryptedMasterKey: ByteArray, encryptedIV: ByteArray): ByteArray {
+    fun decryptValue(derivedPassword: ByteArray, encryptedMasterKey: ByteArray, encryptedIV: ByteArray): ByteArray {
 
 
         // Decrypt the master key using the loaded data and given password.
@@ -75,21 +93,6 @@ object Cryptor {
         val ivParams = IvParameterSpec(encryptedIV)
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParams)
         return cipher.doFinal(encryptedMasterKey)
-    }
-
-    fun padCharsTo16BytesFormat(source: CharArray): CharArray {
-        //String result = pSource;
-        val size = 16
-        val x = source.size % size
-        val extensionLength = size - x
-
-        val result = Arrays.copyOf(source, source.size + extensionLength)
-
-        for (i in source.size until result.size) {
-            result[i] = ' '
-        }
-
-        return result
     }
 
     fun applyPadding(blockSize: Int, data: ByteArray): ByteArray {

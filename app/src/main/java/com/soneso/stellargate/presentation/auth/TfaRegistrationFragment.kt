@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_tfa_registration.*
  */
 class TfaRegistrationFragment : AuthFragment() {
 
-    private lateinit var regViewModel: RegistrationViewModel
+    private lateinit var authViewModel: AuthViewModel
 
     private lateinit var token: String
 
@@ -32,7 +32,7 @@ class TfaRegistrationFragment : AuthFragment() {
 
         token = arguments?.getString(ARG_TOKEN) ?: ""
 
-        regViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[RegistrationViewModel::class.java]
+        authViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[AuthViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -48,9 +48,8 @@ class TfaRegistrationFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-        regViewModel.liveConfirmation.observe(this, Observer {
-            val viewState = it ?: return@Observer
-            renderConfirmation(viewState)
+        authViewModel.liveConfirmation.observe(this, Observer {
+            renderConfirmation(it ?: return@Observer)
         })
     }
 
@@ -70,7 +69,7 @@ class TfaRegistrationFragment : AuthFragment() {
 
     private fun setupTfaCode() {
         send_button.setOnClickListener {
-            regViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
+            authViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
         }
     }
 

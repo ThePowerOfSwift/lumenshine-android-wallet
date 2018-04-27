@@ -1,9 +1,6 @@
 package com.soneso.stellargate.networking.api
 
-import com.soneso.stellargate.networking.dto.auth.GetCountryListResponse
-import com.soneso.stellargate.networking.dto.auth.GetSalutationListResponse
-import com.soneso.stellargate.networking.dto.auth.RegistrationResponse
-import com.soneso.stellargate.networking.dto.auth.TfaRegistrationResponse
+import com.soneso.stellargate.networking.dto.auth.*
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
@@ -41,4 +38,18 @@ interface AuthApi {
 
     @GET("/ico/country_list/{${SgApi.URL_PARAM_LANG}}")
     fun getCountryList(@Path(SgApi.URL_PARAM_LANG) langKey: String): Single<Result<GetCountryListResponse>>
+
+    @FormUrlEncoded
+    @POST("/ico/login_step1")
+    fun loginWithTfaStep1(
+            @Field("email") email: String,
+            @Field("tfa_code") tfaCode: String
+    ): Single<Result<LoginWithTfaStep1Response>>
+
+    @FormUrlEncoded
+    @POST("/ico/login_step2")
+    fun loginWithTfaStep2(
+            @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String,
+            @Field("key") publicKey188: String
+    ): Single<Result<LoginWithTfaStep2Response>>
 }

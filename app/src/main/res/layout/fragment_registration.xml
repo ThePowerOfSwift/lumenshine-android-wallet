@@ -17,7 +17,7 @@
         android:text="test@test1.test"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/email_input_level"
-        app:regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$" />
+        app:regex="@string/email_regex" />
 
 
     <com.soneso.stellargate.presentation.auth.FormInputView
@@ -29,7 +29,7 @@
         android:text="t3stPassword"
         app:error_text="@string/error_invalid_password"
         app:input_level="@integer/password_input_level"
-        app:regex="^([a-zA-Z0-9+]+)\$" />
+        app:regex="@string/password_regex" />
 
 
     <com.soneso.stellargate.presentation.auth.FormInputView

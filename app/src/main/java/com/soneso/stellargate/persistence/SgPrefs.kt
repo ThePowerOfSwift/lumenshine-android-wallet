@@ -19,6 +19,7 @@ object SgPrefs {
     private const val KEY_SECRET_SEED = "secret-seed"
     private const val KEY_USERNAME = "username"
     private const val KEY_API_TOKEN = "api-token"
+    private const val KEY_TFA_SECRET = "tfa-secret"
 
     private val prefs: SharedPreferences
     private val cipher: SgCipher
@@ -50,6 +51,9 @@ object SgPrefs {
                 getString(KEY_APP_ID)
             }
         }
+    var tfaSecret: String
+        get() = getString(KEY_TFA_SECRET)
+        set(value) = saveString(KEY_TFA_SECRET, value)
 
     fun saveAccount(accountId: String, secretSeed: String) {
         saveString(KEY_ACCOUNT_ID, accountId)

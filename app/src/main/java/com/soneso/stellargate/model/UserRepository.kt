@@ -1,9 +1,9 @@
 package com.soneso.stellargate.model
 
-import com.soneso.stellargate.domain.data.Account
-import com.soneso.stellargate.domain.data.Country
-import com.soneso.stellargate.domain.data.SgError
-import com.soneso.stellargate.domain.data.singleFromNetworkException
+import com.soneso.stellargate.domain.data.*
+import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep1Request
+import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep2Request
+import com.soneso.stellargate.networking.dto.auth.RegistrationRequest
 import com.soneso.stellargate.networking.requester.AuthRequester
 import com.soneso.stellargate.persistence.UserDao
 import io.reactivex.Single
@@ -14,9 +14,20 @@ import io.reactivex.Single
  */
 class UserRepository(private val authRequester: AuthRequester, private val userDao: UserDao) {
 
-    fun createUserAccount(account: Account, countryCode: String?): Single<String> {
+    fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Single<String> {
 
-        return authRequester.registerUser(account, countryCode)
+        val request = RegistrationRequest()
+        request.email = userProfile.email
+        request.countryCode = userProfile.country?.code
+        request.publicKeyIndex0 = userSecurity.publicKeyIndex0
+        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
+        request.setPasswordKdfSalt(userSecurity.passwordKdfSalt)
+        request.setEncryptedMasterKey(userSecurity.encryptedMasterKey)
+        request.setMasterKeyEncryptionIv(userSecurity.masterKeyEncryptionIv)
+        request.setEncryptedMnemonic(userSecurity.encryptedMnemonic)
+        request.setMnemonicEncryptionIv(userSecurity.mnemonicEncryptionIv)
+
+        return authRequester.registerUser(request)
                 .map {
                     it.token2fa
                 }
@@ -44,6 +55,43 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         return authRequester.fetchCountryList()
                 .map {
                     it.countries
+                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    fun loginWithTfaStep1(email: String, tfaCode: String): Single<UserSecurity> {
+
+        val request = LoginWithTfaStep1Request()
+        request.email = email
+        request.tfaCode = tfaCode
+
+        return authRequester.loginWithTfaStep1(request)
+                .map {
+                    val userSecurity = UserSecurity(
+                            it.publicKeyIndex0,
+                            "",
+                            it.passwordKdfSalt(),
+                            it.encryptedMasterKey(),
+                            it.masterKeyEncryptionIv(),
+                            it.encryptedMnemonic(),
+                            it.mnemonicEncryptionIv()
+                    )
+                    userSecurity
+                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    fun loginWithTfaStep2(userSecurity: UserSecurity): Single<DashboardStatus> {
+
+        val request = LoginWithTfaStep2Request()
+        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
+
+        return authRequester.loginWithTfaStep2(request)
+                .map {
+                    DashboardStatus(
+                            it.emailConfirmed,
+                            it.mnemonicConfirmed
+                    )
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }

@@ -25,12 +25,12 @@ import kotlinx.android.synthetic.main.fragment_registration.*
  */
 class RegistrationFragment : AuthFragment() {
 
-    private lateinit var regViewModel: RegistrationViewModel
+    private lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        regViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[RegistrationViewModel::class.java]
+        authViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[AuthViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -41,26 +41,23 @@ class RegistrationFragment : AuthFragment() {
 
         subscribeForLiveData()
 
-        regViewModel.refreshSalutations()
-        regViewModel.refreshCountries()
+        authViewModel.refreshSalutations()
+        authViewModel.refreshCountries()
 
         setupListeners()
     }
 
     private fun subscribeForLiveData() {
-        regViewModel.liveSalutations.observe(this, Observer {
-            val viewState = it ?: return@Observer
-            renderSalutations(viewState)
+        authViewModel.liveSalutations.observe(this, Observer {
+            renderSalutations(it ?: return@Observer)
         })
 
-        regViewModel.liveCountries.observe(this, Observer {
-            val viewState = it ?: return@Observer
-            renderCountries(viewState)
+        authViewModel.liveCountries.observe(this, Observer {
+            renderCountries(it ?: return@Observer)
         })
 
-        regViewModel.liveTfaSecret.observe(this, Observer {
-            val viewState = it ?: return@Observer
-            renderConfirmationResponse(viewState)
+        authViewModel.liveTfaSecret.observe(this, Observer {
+            renderConfirmationResponse(it ?: return@Observer)
         })
     }
 
@@ -113,10 +110,15 @@ class RegistrationFragment : AuthFragment() {
 
     private fun renderCountries(viewState: SgViewState<List<Country>>) {
         when (viewState.state) {
+
             State.LOADING -> {
 
+                showLoadingButton(true)
             }
             State.READY -> {
+
+                showLoadingButton(false)
+
                 val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
                 adapter.clear()
                 for (country in viewState.data!!) {
@@ -124,9 +126,22 @@ class RegistrationFragment : AuthFragment() {
                 }
                 country_spinner.adapter = adapter
             }
+
             State.ERROR -> {
+
+                showLoadingButton(false)
                 showErrorSnackbar(viewState.error)
             }
+        }
+    }
+
+    private fun showLoadingButton(loading: Boolean) {
+        if (loading) {
+            progress_bar.visibility = View.VISIBLE
+            email_registration_button.visibility = View.INVISIBLE
+        } else {
+            progress_bar.visibility = View.GONE
+            email_registration_button.visibility = View.VISIBLE
         }
     }
 
@@ -136,7 +151,7 @@ class RegistrationFragment : AuthFragment() {
             return
         }
 
-        regViewModel.createAccount(
+        authViewModel.createAccount(
                 email.trimmedText,
                 password.trimmedText,
                 country_spinner.selectedItemPosition
