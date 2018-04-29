@@ -47,7 +47,7 @@ interface AuthApi {
     ): Single<Result<LoginWithTfaStep1Response>>
 
     @FormUrlEncoded
-    @POST("/ico/login_step2")
+    @POST("/ico/auth/login_step2")
     fun loginWithTfaStep2(
             @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String,
             @Field("key") publicKey188: String

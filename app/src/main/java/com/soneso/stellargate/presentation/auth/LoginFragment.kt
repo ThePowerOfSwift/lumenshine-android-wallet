@@ -67,7 +67,7 @@ class LoginFragment : AuthFragment() {
             return
         }
 
-        authViewModel.loginWithTfa(email.trimmedText, password.trimmedText, "")
+        authViewModel.loginWithTfa(email.trimmedText, password.trimmedText, two_factor_code.trimmedText)
     }
 
     private fun showLoadingButton(loading: Boolean) {

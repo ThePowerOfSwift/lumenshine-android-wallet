@@ -5,10 +5,10 @@ import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.*
 import com.soneso.stellargate.domain.util.Cryptor
+import com.soneso.stellargate.domain.util.toByteArray
 import com.soneso.stellargate.domain.util.toCharArray
 import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellarmnemonics.Wallet
-import com.soneso.stellarmnemonics.util.PrimitiveUtil
 import io.reactivex.Single
 import org.bouncycastle.util.encoders.Base64
 
@@ -47,11 +47,12 @@ class AuthUseCases(private val userRepo: UserRepository) {
         val mnemonic = Wallet.generate24WordMnemonic()
 
         // cristi.paval, 3/23/18 - encrypt the mnemonic
-        val adjustedMnemonic = Cryptor.applyPadding(16, PrimitiveUtil.toBytes(mnemonic))
+        val adjustedMnemonic = Cryptor.applyPadding(16, mnemonic.toByteArray())
         val (encryptedMnemonic, mnemonicIv) = Cryptor.encryptValue(adjustedMnemonic, masterKey)
 
         // cristi.paval, 3/23/18 - generate public keys
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonic, null, 0).accountId
+
         val publicKeyIndex188 = Wallet.createKeyPair(mnemonic, null, 188).accountId
 
         val userSecurity = UserSecurity(
@@ -78,20 +79,20 @@ class AuthUseCases(private val userRepo: UserRepository) {
             mnemonic: CharArray,
             userSecurity: UserSecurity
     ) {
-        Log.d("REGISTRATION", "password: ${String(pass)}")
+        Log.d(TAG, "password: ${String(pass)}")
         val encodedPassSalt = Base64.toBase64String(userSecurity.passwordKdfSalt)
-        Log.d("REGISTRATION", "kdf salt: $encodedPassSalt length: ${encodedPassSalt.length}")
-        Log.d("REGISTRATION", "kdf password: ${Base64.toBase64String(derivedPassword)}")
-        Log.d("REGISTRATION", "master key: ${Base64.toBase64String(masterKey)}")
+        Log.d(TAG, "kdf salt: $encodedPassSalt length: ${encodedPassSalt.length}")
+        Log.d(TAG, "kdf password: ${Base64.toBase64String(derivedPassword)}")
+        Log.d(TAG, "master key: ${Base64.toBase64String(masterKey)}")
         val encryptedMasterKeyEncoded = Base64.toBase64String(userSecurity.encryptedMasterKey)
-        Log.d("REGISTRATION", "encrypted master key: $encryptedMasterKeyEncoded length: ${encryptedMasterKeyEncoded.length}")
+        Log.d(TAG, "encrypted master key: $encryptedMasterKeyEncoded length: ${encryptedMasterKeyEncoded.length}")
         val masterKeyIvEncoded = Base64.toBase64String(userSecurity.masterKeyEncryptionIv)
-        Log.d("REGISTRATION", "master key iv: $masterKeyIvEncoded length: ${masterKeyIvEncoded.length}")
-        Log.d("REGISTRATION", "mnemonic: ${String(mnemonic)}")
+        Log.d(TAG, "master key iv: $masterKeyIvEncoded length: ${masterKeyIvEncoded.length}")
+        Log.d(TAG, "mnemonic: ${String(mnemonic)}")
         val encryptedMnemonicEncoded = Base64.toBase64String(userSecurity.encryptedMnemonic)
-        Log.d("REGISTRATION", "encrypted mnemonic: $encryptedMnemonicEncoded length: ${encryptedMnemonicEncoded.length}")
+        Log.d(TAG, "encrypted mnemonic: $encryptedMnemonicEncoded length: ${encryptedMnemonicEncoded.length}")
         val mnemonicIvEncoded = Base64.toBase64String(userSecurity.mnemonicEncryptionIv)
-        Log.d("REGISTRATION", "mnemonic iv: $mnemonicIvEncoded length: ${mnemonicIvEncoded.length}")
+        Log.d(TAG, "mnemonic iv: $mnemonicIvEncoded length: ${mnemonicIvEncoded.length}")
     }
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)
@@ -101,10 +102,21 @@ class AuthUseCases(private val userRepo: UserRepository) {
     fun provideCountries() = userRepo.getCountries()
 
     fun loginWithTfa(email: CharSequence, password: CharSequence, tfaCode: CharSequence): Single<DashboardStatus> {
+
+        var error: SgError? = null
         return userRepo.loginWithTfaStep1(email.toString(), tfaCode.toString())
+                .onErrorResumeNext {
+                    error = it as SgError
+                    Single.just(UserSecurity.mockInstance())
+                }
                 .flatMap {
+                    if (it.publicKeyIndex0.isEmpty()) {
+                        // cristi.paval, 4/27/18 - is mocked instance
+                        return@flatMap Single.error<DashboardStatus>(error
+                                ?: SgError(R.string.unknown_error))
+                    }
                     val publicKeyIndex188 = validateUserSecurity(password.toCharArray(), it)
-                            ?: throw SgError(R.string.login_password_wrong)
+                            ?: return@flatMap Single.error<DashboardStatus>(SgError(R.string.login_password_wrong))
                     it.publicKeyIndex188 = publicKeyIndex188
                     userRepo.loginWithTfaStep2(it)
                 }
@@ -133,8 +145,8 @@ class AuthUseCases(private val userRepo: UserRepository) {
         // cristi.paval, 4/27/18 - generate public keys
         val mnemonicChars = mnemonic.toCharArray()
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
-        if (publicKeyIndex0 != userSecurity.publicKeyIndex0) {
-            return null
+        if (publicKeyIndex0 != userSecurity.publicKeyIndex0) { // GA4I2AGEGIBA2ZO5RGTW4KIZATXQX3GXN6KXR7K3FFOUDNTRO63OJGKL
+            return null // obtain cover shy swift antique suggest talk mercy half ice clean kidney hip coach cage holiday embark kite noise peace inspire scorpion journey bunker
         }
 
         return Wallet.createKeyPair(mnemonicChars, null, 188).accountId

@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_email"
+        android:text="test@test.test"
         android:inputType="textEmailAddress"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/input_mandatory"
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
+        android:text="pass1234"
         app:error_text="@string/error_invalid_password"
         app:input_level="@integer/input_mandatory"
         app:regex="@string/password_regex" />
@@ -38,7 +40,7 @@
         android:imeActionId="6"
         android:imeActionLabel="@string/action_sign_in"
         android:imeOptions="actionUnspecified"
-        android:inputType="textPassword"
+        android:inputType="number"
         app:error_text="@string/error_invalid_password"
         app:input_level="@integer/input_optional"
         app:regex="@string/password_regex" />

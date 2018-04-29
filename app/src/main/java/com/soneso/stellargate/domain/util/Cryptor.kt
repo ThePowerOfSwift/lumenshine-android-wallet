@@ -124,14 +124,14 @@ object Cryptor {
 
     fun removePadding(paddedData: ByteArray): ByteArray {
 
-        // cristi.paval, 4/18/18 - remove 0x00 bytes
-        paddedData.dropLastWhile {
-            it == 0x00.toByte()
-        }
-        // cristi.paval, 4/18/18 - remove delimiter byte 0x80
-        paddedData.dropLast(1)
-
         return paddedData
+                // cristi.paval, 4/18/18 - remove 0x00 bytes
+                .dropLastWhile {
+                    it == 0x00.toByte()
+                }
+                // cristi.paval, 4/18/18 - remove delimiter byte 0x80
+                .dropLast(1)
+                .toByteArray()
     }
 
     // generates a new IV.

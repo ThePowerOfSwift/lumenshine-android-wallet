@@ -8,4 +8,16 @@ class UserSecurity(
         val masterKeyEncryptionIv: ByteArray,
         val encryptedMnemonic: ByteArray,
         val mnemonicEncryptionIv: ByteArray
-)
+) {
+    companion object {
+        fun mockInstance() = UserSecurity(
+                "",
+                "",
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0)
+        )
+    }
+}
