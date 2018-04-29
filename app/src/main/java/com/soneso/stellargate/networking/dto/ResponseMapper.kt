@@ -9,10 +9,14 @@ class ResponseMapper<T> : ResultMapper<T>() {
 
     override fun handleError(errorBody: ResponseBody?): Throwable {
         if (errorBody == null) {
-            return SgNetworkException(NullPointerException())
+            return SgNetworkException(Exception())
         }
-        val javaType = OBJECT_MAPPER.typeFactory.constructCollectionType(List::class.java, ValidationError::class.java)
-        return SgNetworkException(OBJECT_MAPPER.readValue<List<ValidationError>>(errorBody.string(), javaType))
+        return try {
+            val javaType = OBJECT_MAPPER.typeFactory.constructCollectionType(List::class.java, ValidationError::class.java)
+            SgNetworkException(OBJECT_MAPPER.readValue<List<ValidationError>>(errorBody.string(), javaType))
+        } catch (e: Exception) {
+            SgNetworkException(e)
+        }
     }
 
     companion object {
