@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_email"
-        android:text="test@test.test"
+        android:text="test@test1.test"
         android:inputType="textEmailAddress"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/input_mandatory"

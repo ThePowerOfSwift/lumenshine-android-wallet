@@ -20,3 +20,8 @@
 - implement login flow
 - implement mnemonic quiz flow in dashboard
 - check the crypto algorithms from Jira issue https://jira-armada.atlassian.net/projects/SW/issues/SW-2?filter=allopenissues
+
+
+
+04/30/2018
+- certificate pinning

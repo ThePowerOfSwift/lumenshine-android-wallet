@@ -33,5 +33,4 @@ class SessionProfileService {
             tfaCode = value
             SgPrefs.tfaSecret = value
         }
-
 }

@@ -80,19 +80,29 @@ class AuthUseCases(private val userRepo: UserRepository) {
             userSecurity: UserSecurity
     ) {
         Log.d(TAG, "password: ${String(pass)}")
+
         val encodedPassSalt = Base64.toBase64String(userSecurity.passwordKdfSalt)
-        Log.d(TAG, "kdf salt: $encodedPassSalt length: ${encodedPassSalt.length}")
-        Log.d(TAG, "kdf password: ${Base64.toBase64String(derivedPassword)}")
-        Log.d(TAG, "master key: ${Base64.toBase64String(masterKey)}")
+        Log.d(TAG, "kdf salt: $encodedPassSalt \t\t\t\tlength: ${encodedPassSalt.length}")
+
+        val encodedKdfPass = Base64.toBase64String(derivedPassword)
+        Log.d(TAG, "kdf password: $encodedKdfPass \t\t\t\tlength: ${encodedKdfPass.length}")
+
+        val encodedMasterKey = Base64.toBase64String(masterKey)
+        Log.d(TAG, "master key: $encodedMasterKey \t\t\t\tlength: ${encodedMasterKey.length}")
+
         val encryptedMasterKeyEncoded = Base64.toBase64String(userSecurity.encryptedMasterKey)
-        Log.d(TAG, "encrypted master key: $encryptedMasterKeyEncoded length: ${encryptedMasterKeyEncoded.length}")
+        Log.d(TAG, "encrypted master key: $encryptedMasterKeyEncoded \t\t\t\tlength: ${encryptedMasterKeyEncoded.length}")
+
         val masterKeyIvEncoded = Base64.toBase64String(userSecurity.masterKeyEncryptionIv)
-        Log.d(TAG, "master key iv: $masterKeyIvEncoded length: ${masterKeyIvEncoded.length}")
+        Log.d(TAG, "master key iv: $masterKeyIvEncoded \t\t\t\tlength: ${masterKeyIvEncoded.length}")
+
         Log.d(TAG, "mnemonic: ${String(mnemonic)}")
+
         val encryptedMnemonicEncoded = Base64.toBase64String(userSecurity.encryptedMnemonic)
         Log.d(TAG, "encrypted mnemonic: $encryptedMnemonicEncoded length: ${encryptedMnemonicEncoded.length}")
+
         val mnemonicIvEncoded = Base64.toBase64String(userSecurity.mnemonicEncryptionIv)
-        Log.d(TAG, "mnemonic iv: $mnemonicIvEncoded length: ${mnemonicIvEncoded.length}")
+        Log.d(TAG, "mnemonic iv: $mnemonicIvEncoded \t\t\t\tlength: ${mnemonicIvEncoded.length}")
     }
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)
