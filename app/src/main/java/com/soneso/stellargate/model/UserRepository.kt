@@ -7,6 +7,8 @@ import com.soneso.stellargate.networking.dto.auth.RegistrationRequest
 import com.soneso.stellargate.networking.requester.AuthRequester
 import com.soneso.stellargate.persistence.UserDao
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Class used to user operations to server.
@@ -29,6 +31,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         return authRequester.registerUser(request)
                 .map {
+                    userDao.insert(LoginSession(request.email, it.token2fa, it.jwtToken))
                     it.token2fa
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
@@ -59,7 +62,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun loginWithTfaStep1(email: String, tfaCode: String): Single<UserSecurity> {
+    fun loginWithTfaStep1(email: String, tfaCode: String?): Single<UserSecurity> {
 
         val request = LoginWithTfaStep1Request()
         request.email = email
@@ -67,7 +70,9 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         return authRequester.loginWithTfaStep1(request)
                 .map {
-                    val userSecurity = UserSecurity(
+                    userDao.updateLoginSession(email, it.jwtToken)
+
+                    UserSecurity(
                             it.publicKeyIndex0,
                             "",
                             it.passwordKdfSalt(),
@@ -76,7 +81,6 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                             it.encryptedMnemonic(),
                             it.mnemonicEncryptionIv()
                     )
-                    userSecurity
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
@@ -94,5 +98,11 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                     )
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    fun getLoginSession(username: String): Single<LoginSession?> {
+        return Single.just(userDao.loadLoginSession(username))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
     }
 }

@@ -43,7 +43,7 @@ interface AuthApi {
     @POST("/ico/login_step1")
     fun loginWithTfaStep1(
             @Field("email") email: String,
-            @Field("tfa_code") tfaCode: String
+            @Field("tfa_code") tfaCode: String?
     ): Single<Result<LoginWithTfaStep1Response>>
 
     @FormUrlEncoded

@@ -17,6 +17,7 @@ import com.soneso.stellargate.networking.api.AuthApi
 import com.soneso.stellargate.networking.api.SgApi
 import com.soneso.stellargate.networking.dto.Parse
 import com.soneso.stellargate.networking.requester.AuthRequester
+import com.soneso.stellargate.persistence.DbNames
 import com.soneso.stellargate.persistence.SgDatabase
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.accounts.AccountsViewModel
@@ -111,7 +112,7 @@ class AppModule(private val context: Context) {
 
         val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appId))
 
-        return Room.databaseBuilder(context, SgDatabase::class.java, SgDatabase.DB_NAME)
+        return Room.databaseBuilder(context, SgDatabase::class.java, DbNames.DB_NAME)
                 .openHelperFactory(factory)
                 .allowMainThreadQueries()
                 .build()

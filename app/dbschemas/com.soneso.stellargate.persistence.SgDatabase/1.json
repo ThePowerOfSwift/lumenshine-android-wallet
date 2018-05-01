@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f546cd3e540874ad80401ab5d58f9e7b",
+    "identityHash": "16b44b2c65d0b3337df8043347873baf",
     "entities": [
       {
         "tableName": "StellarAccount",
@@ -29,11 +29,43 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "login_sessions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `tfa_code` TEXT NOT NULL, `auth_token` TEXT NOT NULL, PRIMARY KEY(`username`))",
+        "fields": [
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tfaSecret",
+            "columnName": "tfa_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "jwtToken",
+            "columnName": "auth_token",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "username"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f546cd3e540874ad80401ab5d58f9e7b\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"16b44b2c65d0b3337df8043347873baf\")"
     ]
   }
 }

@@ -33,12 +33,13 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
 
                     override fun handleSuccess(response: Response<RegistrationResponse>): RegistrationResponse {
 
+                        val registrationResponse = mapper.handleSuccess(response)
+
                         val authHeader = response.headers()[SgApi.HEADER_NAME_AUTHORIZATION]
                         if (authHeader != null) {
                             sessionProfile.authToken = authHeader
+                            registrationResponse.jwtToken = authHeader
                         }
-                        val registrationResponse = mapper.handleSuccess(response)
-                        sessionProfile.tfaSecret = registrationResponse.token2fa
                         return registrationResponse
                     }
 
@@ -80,11 +81,14 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
 
                     override fun handleSuccess(response: Response<LoginWithTfaStep1Response>): LoginWithTfaStep1Response {
 
+                        val loginResponse = mapper.handleSuccess(response)
+
                         val authHeader = response.headers()[SgApi.HEADER_NAME_AUTHORIZATION]
                         if (authHeader != null) {
                             sessionProfile.authToken = authHeader
+                            loginResponse.jwtToken = authHeader
                         }
-                        return mapper.handleSuccess(response)
+                        return loginResponse
                     }
 
                     override fun handleError(errorBody: ResponseBody?) = mapper.handleError(errorBody)
@@ -94,19 +98,9 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
 
     fun loginWithTfaStep2(request: LoginWithTfaStep2Request): Single<LoginWithTfaStep2Response> {
 
-        val mapper = ResponseMapper<LoginWithTfaStep2Response>()
         return authApi.loginWithTfaStep2(sessionProfile.authToken, request.publicKeyIndex188)
                 .subscribeOn(Schedulers.newThread())
-                .map(object : ResultMapper<LoginWithTfaStep2Response>() {
-
-                    override fun handleSuccess(response: Response<LoginWithTfaStep2Response>): LoginWithTfaStep2Response {
-                        val loginResponse = mapper.handleSuccess(response)
-                        sessionProfile.tfaSecret = loginResponse.tfaSecret
-                        return loginResponse
-                    }
-
-                    override fun handleError(errorBody: ResponseBody?) = mapper.handleError(errorBody)
-                })
+                .map(ResponseMapper())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 }

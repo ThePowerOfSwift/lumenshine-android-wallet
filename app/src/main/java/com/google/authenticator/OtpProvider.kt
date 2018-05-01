@@ -16,7 +16,6 @@
 
 package com.google.authenticator
 
-import android.content.Context
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -27,24 +26,21 @@ import javax.crypto.spec.SecretKeySpec
  * @author Steve Weis (sweis@google.com)
  * @author Cem Paya (cemp@google.com)
  */
-class OtpProvider(context: Context) {
+object OtpProvider {
+
+    const val TAG = "OtpProvider"
+    private const val DEFAULT_INTERVAL: Long = 30
+    private const val PIN_LENGTH = 6
+    private const val REFLECTIVE_PIN_LENGTH = 9
     /**
      * Counter for time-based OTPs (TOTP).
      */
-    private val totpCounter: TotpCounter = TotpCounter(DEFAULT_INTERVAL.toLong())
-    private val totpClock = TotpClock(context)
+    private val totpCounter: TotpCounter = TotpCounter(DEFAULT_INTERVAL)
 
-    fun getCurrentTotpCode(secret: String, challenge: ByteArray?): String {
+    fun currentTotpCode(secret: String, challenge: ByteArray? = null): String {
 
         // For time-based OTP, the state is derived from clock.
-        val otpState = totpCounter.getValueAtTime(totpClock.currentTimeMillis() / 1000)
-        return computePin(secret, otpState, challenge)
-    }
-
-    fun getCurrentHotpCode(secret: String, counter: Int, challenge: ByteArray?): String {
-
-        // For counter-based OTP, the state is obtained by incrementing stored counter.
-        val otpState = counter.toLong()
+        val otpState = totpCounter.getValueAtTime(System.currentTimeMillis() / 1000)
         return computePin(secret, otpState, challenge)
     }
 
@@ -69,16 +65,5 @@ class OtpProvider(context: Context) {
         })
 
         return pcg.generateResponseCode(otp_state, challenge)
-    }
-
-    companion object {
-
-        const val TAG = "OtpProvider"
-        /**
-         * Default passcode timeout period (in seconds)
-         */
-        private const val DEFAULT_INTERVAL = 30
-        private const val PIN_LENGTH = 6 // HOTP or TOTP
-        private const val REFLECTIVE_PIN_LENGTH = 9 // ROTP
     }
 }

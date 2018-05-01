@@ -23,6 +23,8 @@ class LoginWithTfaStep1Response {
     @JsonProperty("public_key_index0")
     var publicKeyIndex0 = ""
 
+    var jwtToken = ""
+
     fun passwordKdfSalt() = Base64.decode(passwordKdfSalt)
 
     fun encryptedMasterKey() = Base64.decode(encryptedMasterKey)

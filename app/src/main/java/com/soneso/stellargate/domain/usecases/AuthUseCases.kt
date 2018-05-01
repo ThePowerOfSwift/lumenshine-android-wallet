@@ -1,6 +1,7 @@
 package com.soneso.stellargate.domain.usecases
 
 import android.util.Log
+import com.google.authenticator.OtpProvider
 import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.*
@@ -111,10 +112,26 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun provideCountries() = userRepo.getCountries()
 
-    fun loginWithTfa(email: CharSequence, password: CharSequence, tfaCode: CharSequence): Single<DashboardStatus> {
+    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence): Single<DashboardStatus> {
+
+        return if (tfaCode.isBlank()) {
+            userRepo.getLoginSession(email.toString())
+                    .flatMap {
+                        val code = OtpProvider.currentTotpCode(it.tfaSecret)
+                        loginWithCredentials(email.toString(), password.toString(), code)
+                    }
+                    .onErrorResumeNext {
+                        loginWithCredentials(email.toString(), password.toString())
+                    }
+        } else {
+            loginWithCredentials(email.toString(), password.toString(), tfaCode.toString())
+        }
+    }
+
+    private fun loginWithCredentials(email: String, password: String, tfaCode: String? = null): Single<DashboardStatus> {
 
         var error: SgError? = null
-        return userRepo.loginWithTfaStep1(email.toString(), tfaCode.toString())
+        return userRepo.loginWithTfaStep1(email, tfaCode)
                 .onErrorResumeNext {
                     error = it as SgError
                     Single.just(UserSecurity.mockInstance())

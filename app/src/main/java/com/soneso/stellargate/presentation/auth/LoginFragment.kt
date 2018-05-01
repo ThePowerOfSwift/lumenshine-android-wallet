@@ -5,16 +5,13 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import com.google.authenticator.OtpProvider
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.DashboardStatus
-import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -38,12 +35,6 @@ class LoginFragment : AuthFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val tfaSecret = SgPrefs.tfaSecret
-        if (tfaSecret.isNotEmpty()) {
-            val otpProvider = OtpProvider(context!!)
-            Log.d(TAG, otpProvider.getCurrentTotpCode(tfaSecret, null))
-        }
 
         subscribeForLiveData()
         setupListeners()

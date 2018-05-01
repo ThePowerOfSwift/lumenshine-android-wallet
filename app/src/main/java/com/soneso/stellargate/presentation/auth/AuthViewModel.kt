@@ -84,7 +84,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveDashboardStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.loginWithTfa(email, password, tfaCode)
+        authUseCases.login(email, password, tfaCode)
                 .subscribe({
                     liveDashboardStatus.value = SgViewState(it)
                 }, {
