@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/size_10"
-    tools:context=".presentation.mnemonic.MnemonicFragment">
+    tools:context=".presentation.auth.MnemonicFragment">
 
     <TextView
         android:id="@+id/mnemonic_view"

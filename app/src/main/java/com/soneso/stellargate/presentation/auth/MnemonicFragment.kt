@@ -1,4 +1,4 @@
-package com.soneso.stellargate.presentation.mnemonic
+package com.soneso.stellargate.presentation.auth
 
 
 import android.arch.lifecycle.Observer
@@ -11,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
 import com.soneso.stellargate.presentation.MainActivity
-import com.soneso.stellargate.presentation.auth.AuthFragment
-import com.soneso.stellargate.presentation.auth.AuthViewModel
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import com.soneso.stellargate.presentation.util.fadeIn

@@ -14,7 +14,6 @@ import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.DashboardStatus
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
-import com.soneso.stellargate.presentation.mnemonic.MnemonicFragment
 import kotlinx.android.synthetic.main.fragment_login.*
 
 

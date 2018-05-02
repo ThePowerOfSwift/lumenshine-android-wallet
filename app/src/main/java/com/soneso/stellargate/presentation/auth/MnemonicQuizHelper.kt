@@ -1,4 +1,4 @@
-package com.soneso.stellargate.presentation.mnemonic
+package com.soneso.stellargate.presentation.auth
 
 class MnemonicQuizHelper(mnemonic: String) {
 
