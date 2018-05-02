@@ -1,6 +1,8 @@
 package com.soneso.stellargate.presentation.util
 
+import android.animation.ObjectAnimator
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -37,4 +39,11 @@ fun ImageView.displayQrCode(text: String) {
             Log.e(AccountsFragment.TAG, e.javaClass.simpleName, e)
         }
     }
+}
+
+fun View.fadeIn() {
+    visibility = View.VISIBLE
+    val animator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f)
+    animator.duration = 500
+    animator.start()
 }

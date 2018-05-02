@@ -5,14 +5,17 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
+import com.soneso.stellargate.presentation.MainActivity
 import com.soneso.stellargate.presentation.auth.AuthFragment
 import com.soneso.stellargate.presentation.auth.AuthViewModel
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
+import com.soneso.stellargate.presentation.util.fadeIn
 import kotlinx.android.synthetic.main.fragment_mnemonic.*
 
 
@@ -40,6 +43,8 @@ class MnemonicFragment : AuthFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeForLiveData()
+        setupListeners()
+
         authViewModel.fetchMnemonic(password)
     }
 
@@ -47,6 +52,20 @@ class MnemonicFragment : AuthFragment() {
         authViewModel.liveMnemonic.observe(this, Observer {
             renderMnemonicViewState(it ?: return@Observer)
         })
+    }
+
+    private fun setupListeners() {
+        mnemonic_button.setOnClickListener {
+            if (quizHelper.checkCurrentWord(mnemonic_answer.text.toString())) {
+                if (quizHelper.isCompleted()) {
+                    onQuizCompleted()
+                } else {
+                    showQuestion()
+                }
+            } else {
+                resetQuiz()
+            }
+        }
     }
 
     private fun renderMnemonicViewState(viewState: SgViewState<String>) {
@@ -65,6 +84,26 @@ class MnemonicFragment : AuthFragment() {
             }
         }
     }
+
+    private fun showQuestion() {
+        mnemonic_view.visibility = View.GONE
+        mnemonic_question.text = getString(R.string.mnemonic_question, quizHelper.generatePositionToAsk() + 1)
+        mnemonic_answer.text = SpannableStringBuilder()
+        question_layout.fadeIn()
+    }
+
+    private fun resetQuiz() {
+        quizHelper.reset()
+        mnemonic_answer.text = SpannableStringBuilder()
+        question_layout.visibility = View.GONE
+        mnemonic_view.fadeIn()
+    }
+
+    private fun onQuizCompleted() {
+        MainActivity.startInstance(context!!)
+        activity?.finishAffinity()
+    }
+
 
     companion object {
         const val TAG = "MnemonicFragment"

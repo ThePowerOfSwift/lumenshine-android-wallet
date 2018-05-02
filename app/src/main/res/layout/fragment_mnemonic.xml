@@ -14,17 +14,25 @@
         android:textSize="@dimen/text_size_16" />
 
     <LinearLayout
+        android:id="@+id/question_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/size_50"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
+            android:id="@+id/mnemonic_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/cyan_800"
-            android:textSize="@dimen/text_size_16" />
+            android:padding="@dimen/size_10"
+            android:text="@string/mnemonic_question" />
 
+        <EditText
+            android:id="@+id/mnemonic_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_10"
+            tools:ignore="LabelFor,TextFields" />
     </LinearLayout>
 
     <Button
