@@ -5,6 +5,7 @@ import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep1Request
 import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep2Request
 import com.soneso.stellargate.networking.dto.auth.RegistrationRequest
 import com.soneso.stellargate.networking.requester.AuthRequester
+import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.persistence.UserDao
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,7 +32,9 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         return authRequester.registerUser(request)
                 .map {
+                    userDao.insert(userSecurity)
                     userDao.insert(LoginSession(request.email, it.token2fa, it.jwtToken))
+                    SgPrefs.currentUsername = request.email
                     it.token2fa
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
@@ -73,6 +76,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                     userDao.updateLoginSession(email, it.jwtToken)
 
                     UserSecurity(
+                            email,
                             it.publicKeyIndex0,
                             "",
                             it.passwordKdfSalt(),
@@ -92,6 +96,8 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         return authRequester.loginWithTfaStep2(request)
                 .map {
+                    userDao.insert(userSecurity)
+                    SgPrefs.currentUsername = userSecurity.username
                     DashboardStatus(
                             it.emailConfirmed,
                             it.mnemonicConfirmed
@@ -100,8 +106,15 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun getLoginSession(username: String): Single<LoginSession?> {
-        return Single.just(userDao.loadLoginSession(username))
+    fun getLoginSession(username: String): Single<LoginSession> {
+        return Single.just(userDao.loadLoginSession(username) ?: LoginSession())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getCurrentUserSecurity(): Single<UserSecurity?> {
+        val username = SgPrefs.currentUsername
+        return Single.just(userDao.loadUserSecurity(username))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
     }

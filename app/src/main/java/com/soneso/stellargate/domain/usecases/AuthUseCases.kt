@@ -25,13 +25,13 @@ class AuthUseCases(private val userRepo: UserRepository) {
         userProfile.email = email.toString()
         userProfile.country = country
 
-        val userSecurity = createUserSecurity(password.toCharArray())
+        val userSecurity = createUserSecurity(userProfile.email, password.toCharArray())
 
         return userRepo.createUserAccount(userProfile, userSecurity)
     }
 
     //password, kdf salt, kdf password, master key, master key iv, encrypted master key, nmemonic, mnemonic iv, encrypted mnemonic
-    private fun createUserSecurity(pass: CharArray): UserSecurity {
+    private fun createUserSecurity(email: String, pass: CharArray): UserSecurity {
 
         // cristi.paval, 3/23/18 - generate 256 bit password and salt
         val passwordSalt = Cryptor.generateSalt()
@@ -57,6 +57,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
         val publicKeyIndex188 = Wallet.createKeyPair(mnemonic, null, 188).accountId
 
         val userSecurity = UserSecurity(
+                email,
                 publicKeyIndex0,
                 publicKeyIndex188,
                 passwordSalt,
@@ -137,7 +138,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
                     Single.just(UserSecurity.mockInstance())
                 }
                 .flatMap {
-                    if (it.publicKeyIndex0.isEmpty()) {
+                    if (it.username.isEmpty()) {
                         // cristi.paval, 4/27/18 - is mocked instance
                         return@flatMap Single.error<DashboardStatus>(error
                                 ?: SgError(R.string.unknown_error))
@@ -149,11 +150,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
                 }
     }
 
-    /**
-     * @return public key index 188 if valid, null otherwise
-     */
-    private fun validateUserSecurity(password: CharArray, userSecurity: UserSecurity): String? {
-
+    private fun decryptMnemonic(password: CharArray, userSecurity: UserSecurity): String {
         // cristi.paval, 4/27/18 - generate 256 bit password
         val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, password)
 
@@ -163,7 +160,15 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
         // cristi.paval, 4/27/18 - decrypt mnemonic
         val paddedMnemonic = Cryptor.decryptValue(masterKey, userSecurity.encryptedMnemonic, userSecurity.mnemonicEncryptionIv)
-        val mnemonic = String(Cryptor.removePadding(paddedMnemonic), charset("UTF-8"))
+        return String(Cryptor.removePadding(paddedMnemonic), charset("UTF-8"))
+    }
+
+    /**
+     * @return public key index 188 if valid, null otherwise
+     */
+    private fun validateUserSecurity(password: CharArray, userSecurity: UserSecurity): String? {
+
+        val mnemonic = decryptMnemonic(password, userSecurity)
 
         if (mnemonic.split(" ").size != 24) {
             return null
@@ -177,6 +182,13 @@ class AuthUseCases(private val userRepo: UserRepository) {
         }
 
         return Wallet.createKeyPair(mnemonicChars, null, 188).accountId
+    }
+
+    fun provideMnemonicForCurrentUser(password: CharSequence): Single<String> {
+        return userRepo.getCurrentUserSecurity()
+                .map {
+                    decryptMnemonic(password.toCharArray(), it)
+                }
     }
 
     companion object {

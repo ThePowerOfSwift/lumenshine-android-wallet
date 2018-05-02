@@ -3,46 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/size_10"
     tools:context=".presentation.mnemonic.MnemonicFragment">
 
-    <ViewFlipper
-        android:id="@+id/mnemonic_flipper"
+    <TextView
+        android:id="@+id/mnemonic_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/cyan_800"
+        android:textSize="@dimen/text_size_16" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/size_45"
-        android:inAnimation="@anim/slide_in_right"
-        android:outAnimation="@anim/slide_out_left">
+        android:layout_marginBottom="@dimen/size_50"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:ignore="UselessParent">
+            android:layout_height="wrap_content"
+            android:textColor="@color/cyan_800"
+            android:textSize="@dimen/text_size_16" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/size_10"
-                android:text="@string/mnemonic_description"
-                android:textColor="@color/cyan_800"
-                android:textSize="@dimen/text_size_16" />
-
-            <TextView
-                android:id="@+id/mnemonic_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/size_10"
-                android:text="@string/mnemonic_description"
-                android:textColor="@color/cyan_400"
-                android:textSize="@dimen/text_size_18" />
-        </LinearLayout>
-
-    </ViewFlipper>
+    </LinearLayout>
 
     <Button
         android:id="@+id/mnemonic_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/size_45"
         android:layout_gravity="bottom"
         android:text="@string/mnemonic_next_button" />
 

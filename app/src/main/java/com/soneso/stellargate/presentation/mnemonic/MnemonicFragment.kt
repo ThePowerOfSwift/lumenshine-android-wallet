@@ -8,12 +8,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.soneso.stellargate.R
-import com.soneso.stellargate.presentation.MainActivity
 import com.soneso.stellargate.presentation.auth.AuthFragment
+import com.soneso.stellargate.presentation.auth.AuthViewModel
+import com.soneso.stellargate.presentation.general.SgViewState
+import com.soneso.stellargate.presentation.general.State
 import kotlinx.android.synthetic.main.fragment_mnemonic.*
-import kotlinx.android.synthetic.main.layout_flipper_mnemonic_question.view.*
 
 
 /**
@@ -22,15 +22,15 @@ import kotlinx.android.synthetic.main.layout_flipper_mnemonic_question.view.*
  */
 class MnemonicFragment : AuthFragment() {
 
-    private lateinit var mnemonic: String
-    private lateinit var mnemonicViewModel: MnemonicViewModel
+    private lateinit var password: String
+    private lateinit var authViewModel: AuthViewModel
+    private lateinit var quizHelper: MnemonicQuizHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mnemonic = arguments?.getString(ARG_MNEMONIC) ?: ""
-        mnemonicViewModel = ViewModelProviders.of(this)[MnemonicViewModel::class.java]
-        mnemonicViewModel.init(mnemonic)
+        password = arguments?.getString(ARG_PASSWORD) ?: ""
+        authViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[AuthViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -39,55 +39,41 @@ class MnemonicFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mnemonic_value.text = mnemonic
+        subscribeForLiveData()
+        authViewModel.fetchMnemonic(password)
+    }
 
-        mnemonic_button.setOnClickListener {
-            val currentFlipperView = mnemonic_flipper.currentView
-            when {
-                mnemonicViewModel.isMnemonicCurrentlyPresented() -> {
-                    mnemonicViewModel.randomizeQuestion()
-                }
-                mnemonicViewModel.isAnswerCorrect(currentFlipperView.mnemonic_answer.text.trim()) -> {
-                    mnemonicViewModel.randomizeQuestion()
-                }
-                else -> {
-                    Toast.makeText(context, "You're wrong! Please repeat!", Toast.LENGTH_SHORT).show()
-                    mnemonicViewModel.resetQuiz()
-                    mnemonic_flipper.showNext()
-                    for (index in (1 until mnemonic_flipper.childCount).reversed()) {
-                        mnemonic_flipper.removeViewAt(index)
-                    }
-                }
-            }
-        }
-
-        mnemonicViewModel.liveCurrentQuestion.observe(this, Observer {
-            val currentQuestion = it ?: return@Observer
-            if (currentQuestion >= resources.getInteger(R.integer.mnemonic_question_count)) {
-                success()
-            } else {
-                val flipperPage = LayoutInflater.from(context).inflate(R.layout.layout_flipper_mnemonic_question, mnemonic_flipper, false)
-                flipperPage.mnemonic_question.text = getString(R.string.mnemonic_question, mnemonicViewModel.currentWordIndex + 1)
-                flipperPage.mnemonic_answer.setText("")
-                mnemonic_flipper.addView(flipperPage, mnemonic_flipper.childCount)
-                mnemonic_flipper.showNext()
-            }
+    private fun subscribeForLiveData() {
+        authViewModel.liveMnemonic.observe(this, Observer {
+            renderMnemonicViewState(it ?: return@Observer)
         })
     }
 
-    private fun success() {
-        MainActivity.startInstance(context ?: return)
-        activity?.finishAffinity()
+    private fun renderMnemonicViewState(viewState: SgViewState<String>) {
+        when (viewState.state) {
+            State.READY -> {
+
+                val mnemonic = viewState.data ?: return
+                quizHelper = MnemonicQuizHelper(mnemonic)
+                mnemonic_view.text = getString(R.string.mnemonic_description, mnemonic)
+            }
+            State.LOADING -> {
+            }
+            State.ERROR -> {
+
+                showErrorSnackbar(viewState.error)
+            }
+        }
     }
 
     companion object {
         const val TAG = "MnemonicFragment"
-        private const val ARG_MNEMONIC = "$TAG.ARG_MNEMONIC"
+        private const val ARG_PASSWORD = "$TAG.ARG_PASSWORD"
 
-        fun newInstance(mnemonic: String): MnemonicFragment {
+        fun newInstance(password: String): MnemonicFragment {
             val instance = MnemonicFragment()
             val args = Bundle()
-            args.putString(ARG_MNEMONIC, mnemonic)
+            args.putString(ARG_PASSWORD, password)
             instance.arguments = args
             return instance
         }

@@ -14,6 +14,7 @@ import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.DashboardStatus
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
+import com.soneso.stellargate.presentation.mnemonic.MnemonicFragment
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
@@ -90,12 +91,24 @@ class LoginFragment : AuthFragment() {
             State.READY -> {
 
                 showLoadingButton(false)
+                handleDashboardStatus(viewState.data!!)
                 // TODO: cristi.paval, 4/27/18 - handle here if the user has to confirm the email or has to confirm the mnemonic
             }
             State.ERROR -> {
 
                 showLoadingButton(false)
                 showErrorSnackbar(viewState.error)
+            }
+        }
+    }
+
+    private fun handleDashboardStatus(status: DashboardStatus) {
+        when {
+            !status.mnemonicConfirmed -> {
+                replaceFragment(MnemonicFragment.newInstance(password.trimmedText.toString()), MnemonicFragment.TAG)
+            }
+            !status.emailConfirmed -> {
+
             }
         }
     }

@@ -48,7 +48,7 @@
     <string name="login_password_wrong">Wrong password!</string>
 
 
-    <string name="mnemonic_description">Please write down the following phrase:</string>
+    <string name="mnemonic_description">Please write down the following phrase:\n\n%s</string>
     <string name="mnemonic_next_button">Done</string>
     <string name="mnemonic_question">What\'s the word at the position %d in your mnemonic?</string>
 

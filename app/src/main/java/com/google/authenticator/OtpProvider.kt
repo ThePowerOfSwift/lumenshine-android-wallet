@@ -37,7 +37,10 @@ object OtpProvider {
      */
     private val totpCounter: TotpCounter = TotpCounter(DEFAULT_INTERVAL)
 
-    fun currentTotpCode(secret: String, challenge: ByteArray? = null): String {
+    fun currentTotpCode(secret: String, challenge: ByteArray? = null): String? {
+        if (secret.isEmpty()) {
+            return null
+        }
 
         // For time-based OTP, the state is derived from clock.
         val otpState = totpCounter.getValueAtTime(System.currentTimeMillis() / 1000)

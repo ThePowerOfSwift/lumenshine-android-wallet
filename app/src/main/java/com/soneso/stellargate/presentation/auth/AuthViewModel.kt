@@ -3,6 +3,7 @@ package com.soneso.stellargate.presentation.auth
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.Country
 import com.soneso.stellargate.domain.data.DashboardStatus
 import com.soneso.stellargate.domain.data.SgError
@@ -25,6 +26,8 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
     val liveCountries: LiveData<SgViewState<List<Country>>> = MutableLiveData()
 
     val liveDashboardStatus: LiveData<SgViewState<DashboardStatus>> = MutableLiveData()
+
+    val liveMnemonic: LiveData<SgViewState<String>> = MutableLiveData()
 
     fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int) {
 
@@ -89,6 +92,16 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
                     liveDashboardStatus.value = SgViewState(it)
                 }, {
                     liveDashboardStatus.value = SgViewState(it as SgError)
+                })
+    }
+
+    fun fetchMnemonic(password: CharSequence) {
+        (liveMnemonic as MutableLiveData).value = SgViewState(State.LOADING)
+        authUseCases.provideMnemonicForCurrentUser(password)
+                .subscribe({
+                    liveMnemonic.value = SgViewState(it)
+                }, {
+                    liveMnemonic.value = SgViewState(SgError(R.string.unknown_error))
                 })
     }
 }

@@ -30,12 +30,6 @@ object SgPrefs {
         cipher = SgCipher(context, PREF_NAME)
     }
 
-    var username: String
-        get() = getString(KEY_USERNAME)
-        set(value) {
-            saveString(KEY_USERNAME, value)
-        }
-
     var apiToken: String
         get() = getString(KEY_API_TOKEN)
         set(value) = saveString(KEY_API_TOKEN, value)
@@ -51,9 +45,12 @@ object SgPrefs {
                 getString(KEY_APP_ID)
             }
         }
-    var tfaSecret: String
-        get() = getString(KEY_TFA_SECRET)
-        set(value) = saveString(KEY_TFA_SECRET, value)
+
+    var currentUsername: String
+        get() = getString(KEY_USERNAME)
+        set(value) {
+            saveString(KEY_USERNAME, value)
+        }
 
     fun saveAccount(accountId: String, secretSeed: String) {
         saveString(KEY_ACCOUNT_ID, accountId)

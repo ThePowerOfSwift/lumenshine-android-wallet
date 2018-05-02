@@ -2,34 +2,8 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "16b44b2c65d0b3337df8043347873baf",
+    "identityHash": "0c0b8a2fe4328e3feb6354cab1ca5904",
     "entities": [
-      {
-        "tableName": "StellarAccount",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`accountId` TEXT NOT NULL, `balance` TEXT NOT NULL, PRIMARY KEY(`accountId`))",
-        "fields": [
-          {
-            "fieldPath": "accountId",
-            "columnName": "accountId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "balance",
-            "columnName": "balance",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "accountId"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
       {
         "tableName": "login_sessions",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `tfa_code` TEXT NOT NULL, `auth_token` TEXT NOT NULL, PRIMARY KEY(`username`))",
@@ -61,11 +35,73 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "user_securities",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `public_key_index_0` TEXT NOT NULL, `public_key_index_188` TEXT NOT NULL, `ppassword_kdf_salt` BLOB NOT NULL, `encrypted_master_key` BLOB NOT NULL, `master_key_encryption_iv` BLOB NOT NULL, `encrypted_mnemonic` BLOB NOT NULL, `mnemonic_encryption_iv` BLOB NOT NULL, PRIMARY KEY(`username`))",
+        "fields": [
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicKeyIndex0",
+            "columnName": "public_key_index_0",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicKeyIndex188",
+            "columnName": "public_key_index_188",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "passwordKdfSalt",
+            "columnName": "ppassword_kdf_salt",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedMasterKey",
+            "columnName": "encrypted_master_key",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "masterKeyEncryptionIv",
+            "columnName": "master_key_encryption_iv",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedMnemonic",
+            "columnName": "encrypted_mnemonic",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mnemonicEncryptionIv",
+            "columnName": "mnemonic_encryption_iv",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "username"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"16b44b2c65d0b3337df8043347873baf\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0c0b8a2fe4328e3feb6354cab1ca5904\")"
     ]
   }
 }

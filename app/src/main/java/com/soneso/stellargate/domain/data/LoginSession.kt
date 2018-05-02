@@ -17,4 +17,6 @@ data class LoginSession(
 
         @ColumnInfo(name = DbNames.COLUMN_AUTH_TOKEN)
         var jwtToken: String
-)
+) {
+    constructor() : this("", "", "")
+}
