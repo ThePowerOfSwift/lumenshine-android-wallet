@@ -118,4 +118,9 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
     }
+
+    fun confirmMnemonic(): Single<Unit> {
+        return authRequester.confirmMnemonic()
+                .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
 }

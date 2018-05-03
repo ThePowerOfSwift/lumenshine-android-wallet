@@ -191,6 +191,8 @@ class AuthUseCases(private val userRepo: UserRepository) {
                 }
     }
 
+    fun confirmMnemonic() = userRepo.confirmMnemonic()
+
     companion object {
         const val TAG = "AuthUseCases"
     }

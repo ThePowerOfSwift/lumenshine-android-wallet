@@ -48,11 +48,15 @@ class MnemonicFragment : AuthFragment() {
 
     private fun subscribeForLiveData() {
         authViewModel.liveMnemonic.observe(this, Observer {
-            renderMnemonicViewState(it ?: return@Observer)
+            renderMnemonic(it ?: return@Observer)
+        })
+        authViewModel.liveMnemonicConfirmation.observe(this, Observer {
+            renderMnemonicConfirmation(it ?: return@Observer)
         })
     }
 
     private fun setupListeners() {
+
         mnemonic_button.setOnClickListener {
             if (quizHelper.checkCurrentWord(mnemonic_answer.text.toString())) {
                 if (quizHelper.isCompleted()) {
@@ -66,13 +70,31 @@ class MnemonicFragment : AuthFragment() {
         }
     }
 
-    private fun renderMnemonicViewState(viewState: SgViewState<String>) {
+    private fun renderMnemonic(viewState: SgViewState<String>) {
+
         when (viewState.state) {
             State.READY -> {
 
                 val mnemonic = viewState.data ?: return
                 quizHelper = MnemonicQuizHelper(mnemonic)
                 mnemonic_view.text = getString(R.string.mnemonic_description, mnemonic)
+            }
+            State.LOADING -> {
+            }
+            State.ERROR -> {
+
+                showErrorSnackbar(viewState.error)
+            }
+        }
+    }
+
+    private fun renderMnemonicConfirmation(viewState: SgViewState<Unit>) {
+
+        when (viewState.state) {
+            State.READY -> {
+
+                MainActivity.startInstance(context!!)
+                activity?.finishAffinity()
             }
             State.LOADING -> {
             }
@@ -98,8 +120,7 @@ class MnemonicFragment : AuthFragment() {
     }
 
     private fun onQuizCompleted() {
-        MainActivity.startInstance(context!!)
-        activity?.finishAffinity()
+        authViewModel.confirmMnemonic()
     }
 
 

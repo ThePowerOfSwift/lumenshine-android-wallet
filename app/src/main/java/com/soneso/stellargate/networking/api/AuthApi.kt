@@ -52,4 +52,9 @@ interface AuthApi {
             @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String,
             @Field("key") publicKey188: String
     ): Single<Result<LoginWithTfaStep2Response>>
+
+    @POST("/portal/user/dashboard/confirm_mnemonic")
+    fun confirmMnemonic(
+            @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String
+    ): Single<Result<Unit>>
 }

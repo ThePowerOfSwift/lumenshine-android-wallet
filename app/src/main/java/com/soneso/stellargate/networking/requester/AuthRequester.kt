@@ -103,4 +103,11 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
                 .map(ResponseMapper())
                 .observeOn(AndroidSchedulers.mainThread())
     }
+
+    fun confirmMnemonic(): Single<Unit> {
+        return authApi.confirmMnemonic(sessionProfile.authToken)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
 }

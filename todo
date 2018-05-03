@@ -25,3 +25,28 @@
 
 04/30/2018
 - certificate pinning
+
+05/02/2018
+ - hello together. I made a new app to handle the microservice Actions.
+
+   Please pull the latest Version
+
+   I also added memcached as a Service to the docker-compose file. Please do a docke-compose up in order to get that memcached installed, followed by <ctrl>+<c> and docker-compose start
+
+   Inside the icop (root) Folder do:
+   - dep ensure
+   - go build
+   you will now have a icop executable
+
+   You can start all Services by doing:
+   - icop run
+
+   You can run the migrations by doing:
+   - icop migrate --down
+   and
+   - icop migrate
+
+   You can rebuild all Services by doing:
+   - icop build
+
+   I tested this with dani on Linux and Windows. Please let me know, if it's working for you also
