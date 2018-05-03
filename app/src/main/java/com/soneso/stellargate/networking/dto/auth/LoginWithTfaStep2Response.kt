@@ -12,4 +12,7 @@ class LoginWithTfaStep2Response {
 
     @JsonProperty("menmonic_confirmed")
     var mnemonicConfirmed = false
+
+    @JsonProperty("tfa_enabled")
+    var tfaConfirmed = false
 }

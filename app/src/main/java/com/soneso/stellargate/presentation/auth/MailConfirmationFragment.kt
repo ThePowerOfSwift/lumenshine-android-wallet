@@ -40,17 +40,22 @@ class MailConfirmationFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
+
         authViewModel.liveConfirmationMail.observe(this, Observer {
             renderConfirmationMail(it ?: return@Observer)
         })
     }
 
     private fun setupListeners() {
+
         open_mail.setOnClickListener {
             openEmailApp()
         }
         resend_mail.setOnClickListener {
             authViewModel.resendConfirmationMail()
+        }
+        already_confirmed.setOnClickListener {
+            authViewModel.refreshRegistrationStatus()
         }
     }
 

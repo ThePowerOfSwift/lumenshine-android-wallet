@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.soneso.stellargate.R
-import com.soneso.stellargate.domain.data.DashboardStatus
+import com.soneso.stellargate.domain.data.RegistrationStatus
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -41,7 +41,7 @@ class LoginFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-        authViewModel.liveDashboardStatus.observe(this, Observer {
+        authViewModel.liveRegistrationStatus.observe(this, Observer {
             renderDashboardStatus(it ?: return@Observer)
         })
     }
@@ -80,7 +80,7 @@ class LoginFragment : AuthFragment() {
         }
     }
 
-    private fun renderDashboardStatus(viewState: SgViewState<DashboardStatus>) {
+    private fun renderDashboardStatus(viewState: SgViewState<RegistrationStatus>) {
 
         when (viewState.state) {
             State.LOADING -> {
@@ -101,7 +101,7 @@ class LoginFragment : AuthFragment() {
         }
     }
 
-    private fun handleDashboardStatus(status: DashboardStatus) {
+    private fun handleDashboardStatus(status: RegistrationStatus) {
 
         when {
             !status.emailConfirmed -> {

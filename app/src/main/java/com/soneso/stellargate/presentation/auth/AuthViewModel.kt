@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.Country
-import com.soneso.stellargate.domain.data.DashboardStatus
+import com.soneso.stellargate.domain.data.RegistrationStatus
 import com.soneso.stellargate.domain.data.SgError
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.presentation.general.SgViewState
@@ -25,7 +25,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
     val liveCountries: LiveData<SgViewState<List<Country>>> = MutableLiveData()
 
-    val liveDashboardStatus: LiveData<SgViewState<DashboardStatus>> = MutableLiveData()
+    val liveRegistrationStatus: LiveData<SgViewState<RegistrationStatus>> = MutableLiveData()
 
     val liveMnemonic: LiveData<SgViewState<String>> = MutableLiveData()
 
@@ -89,13 +89,13 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
     fun loginWithTfa(email: CharSequence, password: CharSequence, tfaCode: CharSequence) {
 
-        (liveDashboardStatus as MutableLiveData).value = SgViewState(State.LOADING)
+        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
         authUseCases.login(email, password, tfaCode)
                 .subscribe({
-                    liveDashboardStatus.value = SgViewState(it)
+                    liveRegistrationStatus.value = SgViewState(it)
                 }, {
-                    liveDashboardStatus.value = SgViewState(it as SgError)
+                    liveRegistrationStatus.value = SgViewState(it as SgError)
                 })
     }
 
@@ -132,6 +132,18 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
                     liveConfirmationMail.value = SgViewState(Unit)
                 }, {
                     liveConfirmationMail.value = SgViewState(it as SgError)
+                })
+    }
+
+    fun refreshRegistrationStatus() {
+
+        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
+
+        authUseCases.provideRegistrationStatus()
+                .subscribe({
+                    liveRegistrationStatus.value = SgViewState(it)
+                }, {
+                    liveRegistrationStatus.value = SgViewState(it as SgError)
                 })
     }
 }

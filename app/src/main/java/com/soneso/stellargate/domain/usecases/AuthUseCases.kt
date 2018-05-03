@@ -113,7 +113,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun provideCountries() = userRepo.getCountries()
 
-    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence): Single<DashboardStatus> {
+    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence): Single<RegistrationStatus> {
 
         return if (tfaCode.isBlank()) {
             userRepo.getLoginSession(email.toString())
@@ -129,7 +129,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
         }
     }
 
-    private fun loginWithCredentials(email: String, password: String, tfaCode: String? = null): Single<DashboardStatus> {
+    private fun loginWithCredentials(email: String, password: String, tfaCode: String? = null): Single<RegistrationStatus> {
 
         var error: SgError? = null
         return userRepo.loginWithTfaStep1(email, tfaCode)
@@ -140,11 +140,11 @@ class AuthUseCases(private val userRepo: UserRepository) {
                 .flatMap {
                     if (it.username.isEmpty()) {
                         // cristi.paval, 4/27/18 - is mocked instance
-                        return@flatMap Single.error<DashboardStatus>(error
+                        return@flatMap Single.error<RegistrationStatus>(error
                                 ?: SgError(R.string.unknown_error))
                     }
                     val publicKeyIndex188 = validateUserSecurity(password.toCharArray(), it)
-                            ?: return@flatMap Single.error<DashboardStatus>(SgError(R.string.login_password_wrong))
+                            ?: return@flatMap Single.error<RegistrationStatus>(SgError(R.string.login_password_wrong))
                     it.publicKeyIndex188 = publicKeyIndex188
                     userRepo.loginWithTfaStep2(it)
                 }
@@ -194,6 +194,15 @@ class AuthUseCases(private val userRepo: UserRepository) {
     fun confirmMnemonic() = userRepo.confirmMnemonic()
 
     fun resendConfirmationMail() = userRepo.resendConfirmationMail()
+
+    fun provideRegistrationStatus(): Single<RegistrationStatus> {
+        return userRepo.getCurrentLoginSession()
+                .flatMap {
+                    val tfaCode = OtpProvider.currentTotpCode(it.tfaSecret)
+                            ?: throw SgError(R.string.unknown_error)
+                    userRepo.getRegistrationStatus(tfaCode)
+                }
+    }
 
     companion object {
         const val TAG = "AuthUseCases"

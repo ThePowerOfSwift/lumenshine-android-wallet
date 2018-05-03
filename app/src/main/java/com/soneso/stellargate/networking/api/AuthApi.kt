@@ -63,4 +63,11 @@ interface AuthApi {
     fun resendConfirmationMail(
             @Field("email") email: String
     ): Single<Result<Unit>>
+
+    @GET("/ico/get_user_details")
+    fun getRegistrationStatus(
+            @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String,
+            @Query("email") email: String,
+            @Query("tfa_code") tfaCode: String
+    ): Single<Result<GetRegistrationStatusResponse>>
 }

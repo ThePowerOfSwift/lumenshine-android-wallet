@@ -117,4 +117,11 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
                 .map(ResponseMapper())
                 .observeOn(AndroidSchedulers.mainThread())
     }
+
+    fun fetchRegistrationStatus(request: GetRegistrationStatusRequest): Single<GetRegistrationStatusResponse> {
+        return authApi.getRegistrationStatus(sessionProfile.authToken, request.email, request.tfaCode)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
 }
