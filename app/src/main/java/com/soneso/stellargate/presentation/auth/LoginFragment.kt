@@ -2,7 +2,6 @@ package com.soneso.stellargate.presentation.auth
 
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -22,14 +21,6 @@ import kotlinx.android.synthetic.main.fragment_login.*
  */
 class LoginFragment : AuthFragment() {
 
-    private lateinit var authViewModel: AuthViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        authViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[AuthViewModel::class.java]
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_login, container, false)
 
@@ -41,8 +32,9 @@ class LoginFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
+
         authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderDashboardStatus(it ?: return@Observer)
+            renderRegistrationStatus(it ?: return@Observer)
         })
     }
 
@@ -80,35 +72,20 @@ class LoginFragment : AuthFragment() {
         }
     }
 
-    private fun renderDashboardStatus(viewState: SgViewState<RegistrationStatus>) {
+    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
 
         when (viewState.state) {
             State.LOADING -> {
 
                 showLoadingButton(true)
             }
-            State.READY -> {
-
-                showLoadingButton(false)
-                handleDashboardStatus(viewState.data!!)
-                // TODO: cristi.paval, 4/27/18 - handle here if the user has to confirm the email or has to confirm the mnemonic
-            }
             State.ERROR -> {
 
-                showLoadingButton(false)
                 showErrorSnackbar(viewState.error)
             }
-        }
-    }
+            else -> {
 
-    private fun handleDashboardStatus(status: RegistrationStatus) {
-
-        when {
-            !status.emailConfirmed -> {
-                replaceFragment(MailConfirmationFragment.newInstance(), MailConfirmationFragment.TAG)
-            }
-            !status.mnemonicConfirmed -> {
-                replaceFragment(MnemonicFragment.newInstance(password.trimmedText.toString()), MnemonicFragment.TAG)
+                showLoadingButton(false)
             }
         }
     }

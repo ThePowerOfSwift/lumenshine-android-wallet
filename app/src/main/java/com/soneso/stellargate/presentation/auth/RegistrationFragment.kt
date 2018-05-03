@@ -2,7 +2,6 @@ package com.soneso.stellargate.presentation.auth
 
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -24,14 +23,6 @@ import kotlinx.android.synthetic.main.fragment_registration.*
  * A simple [Fragment] subclass.
  */
 class RegistrationFragment : AuthFragment() {
-
-    private lateinit var authViewModel: AuthViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        authViewModel = ViewModelProviders.of(authActivity, viewModelFactory)[AuthViewModel::class.java]
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_registration, container, false)
@@ -83,7 +74,7 @@ class RegistrationFragment : AuthFragment() {
 
             }
             State.READY -> {
-                replaceFragment(TfaRegistrationFragment.newInstance(viewState.data!!), TfaRegistrationFragment.TAG)
+                replaceFragment(TfaRegistrationFragment.newInstance(), TfaRegistrationFragment.TAG)
             }
             State.ERROR -> {
                 showErrorSnackbar(viewState.error)

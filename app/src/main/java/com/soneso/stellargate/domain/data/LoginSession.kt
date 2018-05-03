@@ -14,11 +14,14 @@ data class LoginSession
         @ColumnInfo(name = DbNames.COLUMN_USERNAME)
         var username: String,
 
+        @ColumnInfo(name = DbNames.COLUMN_PASSWORD)
+        var password: String,
+
         @ColumnInfo(name = DbNames.COLUMN_TFA_CODE)
         var tfaSecret: String,
 
         @ColumnInfo(name = DbNames.COLUMN_AUTH_TOKEN)
         var jwtToken: String
 ) {
-    constructor() : this("", "", "")
+    constructor() : this("", "", "", "")
 }

@@ -132,7 +132,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
     private fun loginWithCredentials(email: String, password: String, tfaCode: String? = null): Single<RegistrationStatus> {
 
         var error: SgError? = null
-        return userRepo.loginWithTfaStep1(email, tfaCode)
+        return userRepo.loginWithTfaStep1(email, password, tfaCode)
                 .onErrorResumeNext {
                     error = it as SgError
                     Single.just(UserSecurity.mockInstance())
@@ -177,18 +177,22 @@ class AuthUseCases(private val userRepo: UserRepository) {
         // cristi.paval, 4/27/18 - generate public keys
         val mnemonicChars = mnemonic.toCharArray()
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
-        if (publicKeyIndex0 != userSecurity.publicKeyIndex0) { // GA4I2AGEGIBA2ZO5RGTW4KIZATXQX3GXN6KXR7K3FFOUDNTRO63OJGKL
-            return null // obtain cover shy swift antique suggest talk mercy half ice clean kidney hip coach cage holiday embark kite noise peace inspire scorpion journey bunker
+        if (publicKeyIndex0 != userSecurity.publicKeyIndex0) {
+            return null
         }
 
         return Wallet.createKeyPair(mnemonicChars, null, 188).accountId
     }
 
-    fun provideMnemonicForCurrentUser(password: CharSequence): Single<String> {
-        return userRepo.getCurrentUserSecurity()
-                .map {
-                    decryptMnemonic(password.toCharArray(), it)
+    fun provideMnemonicForCurrentUser(): Single<String> {
+        return userRepo.getCurrentLoginSession()
+                .flatMap { ls: LoginSession ->
+                    userRepo.getCurrentUserSecurity()
+                            .map {
+                                decryptMnemonic(ls.password.toCharArray(), it)
+                            }
                 }
+
     }
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()

@@ -9,7 +9,7 @@ import org.json.JSONObject
  * Firebase messaging service.
  * Created by cristi.paval on 3/12/18.
  */
-class SgFirebaseMessagingService : FirebaseMessagingService() {
+open class SgFirebaseMessagingService : FirebaseMessagingService() {
 
     private lateinit var pushController: SgPushController
 

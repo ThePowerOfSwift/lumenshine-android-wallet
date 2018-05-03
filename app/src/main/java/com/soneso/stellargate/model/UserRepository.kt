@@ -31,7 +31,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         return authRequester.registerUser(request)
                 .map {
                     userDao.insert(userSecurity)
-                    userDao.insert(LoginSession(request.email, it.token2fa, it.jwtToken))
+                    userDao.insert(LoginSession(userProfile.email, userProfile.password, it.token2fa, it.jwtToken))
                     SgPrefs.currentUsername = request.email
                     it.token2fa
                 }
@@ -63,7 +63,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun loginWithTfaStep1(email: String, tfaCode: String?): Single<UserSecurity> {
+    fun loginWithTfaStep1(email: String, password: String, tfaCode: String?): Single<UserSecurity> {
 
         val request = LoginWithTfaStep1Request()
         request.email = email
@@ -71,7 +71,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         return authRequester.loginWithTfaStep1(request)
                 .map {
-                    userDao.updateLoginSession(email, it.jwtToken)
+                    userDao.updateLoginSession(email, password, it.jwtToken)
 
                     UserSecurity(
                             email,

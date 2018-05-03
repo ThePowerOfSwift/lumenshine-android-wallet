@@ -1,5 +1,6 @@
 package com.soneso.stellargate.di
 
+import com.soneso.stellargate.presentation.general.SgActivity
 import com.soneso.stellargate.presentation.general.SgFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -13,4 +14,6 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun inject(fragment: SgFragment)
+
+    fun inject(fragment: SgActivity)
 }

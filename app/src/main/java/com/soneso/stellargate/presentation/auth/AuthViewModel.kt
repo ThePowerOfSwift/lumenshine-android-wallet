@@ -99,11 +99,11 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
                 })
     }
 
-    fun fetchMnemonic(password: CharSequence) {
+    fun fetchMnemonic() {
 
         (liveMnemonic as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.provideMnemonicForCurrentUser(password)
+        authUseCases.provideMnemonicForCurrentUser()
                 .subscribe({
                     liveMnemonic.value = SgViewState(it)
                 }, {

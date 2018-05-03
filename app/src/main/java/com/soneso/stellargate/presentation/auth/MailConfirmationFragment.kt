@@ -2,7 +2,6 @@ package com.soneso.stellargate.presentation.auth
 
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
+import com.soneso.stellargate.domain.data.RegistrationStatus
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
@@ -20,14 +20,6 @@ import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
  *
  */
 class MailConfirmationFragment : AuthFragment() {
-
-    private lateinit var authViewModel: AuthViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        authViewModel = ViewModelProviders.of(this, viewModelFactory)[AuthViewModel::class.java]
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_mail_confirmation, container, false)
@@ -41,6 +33,9 @@ class MailConfirmationFragment : AuthFragment() {
 
     private fun subscribeForLiveData() {
 
+        authViewModel.liveRegistrationStatus.observe(this, Observer {
+            renderRegistrationStatus(it ?: return@Observer)
+        })
         authViewModel.liveConfirmationMail.observe(this, Observer {
             renderConfirmationMail(it ?: return@Observer)
         })
@@ -78,6 +73,22 @@ class MailConfirmationFragment : AuthFragment() {
             State.ERROR -> {
 
                 showErrorSnackbar(viewState.error)
+            }
+        }
+    }
+
+    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
+
+        when (viewState.state) {
+            State.LOADING -> {
+                // cristi.paval, 5/3/18 - show here loading in ui
+            }
+            State.ERROR -> {
+
+                showErrorSnackbar(viewState.error)
+            }
+            else -> {
+                // cristi.paval, 5/3/18 - stop loading in ui
             }
         }
     }

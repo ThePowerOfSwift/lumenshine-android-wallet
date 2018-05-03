@@ -17,7 +17,7 @@ open class SgFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: SgViewModelFactory
 
-    val sgActivity: SgActivity
+    private val sgActivity: SgActivity
         get() = activity as SgActivity
 
     val appComponent: AppComponent

@@ -7,7 +7,7 @@ class LoginWithTfaStep2Response {
     @JsonProperty("tfa_secret")
     var tfaSecret = ""
 
-    @JsonProperty("email_confirmed")
+    @JsonProperty("mail_confirmed")
     var emailConfirmed = false
 
     @JsonProperty("menmonic_confirmed")

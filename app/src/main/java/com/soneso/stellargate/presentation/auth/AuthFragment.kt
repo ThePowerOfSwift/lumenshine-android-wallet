@@ -8,11 +8,14 @@ import com.soneso.stellargate.presentation.general.SgFragment
  */
 open class AuthFragment : SgFragment() {
 
-    val authActivity: AuthActivity
+    protected val authViewModel: AuthViewModel
+        get() = authActivity.authViewModel
+
+    private val authActivity: AuthActivity
         get() = activity as AuthActivity
 
-
     fun replaceFragment(fragment: AuthFragment, tag: String) {
+
         authActivity.replaceFragment(fragment, tag)
     }
 }
