@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/size_10"
+    tools:context=".presentation.auth.MailConfirmationFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_45"
+        android:text="@string/mail_confirmation_description"
+        android:textColor="@color/cyan_800"
+        android:textSize="@dimen/text_size_16" />
+
+    <Button
+        android:id="@+id/open_mail"
+        android:layout_width="@dimen/size_200"
+        android:layout_height="wrap_content"
+        android:text="@string/open_mail" />
+
+    <Button
+        android:id="@+id/resend_mail"
+        android:layout_width="@dimen/size_200"
+        android:layout_height="wrap_content"
+        android:text="@string/resend_mail" />
+
+    <Button
+        android:id="@+id/already_confirmed"
+        android:layout_width="@dimen/size_200"
+        android:layout_height="wrap_content"
+        android:text="@string/already_confirmed" />
+
+</LinearLayout>

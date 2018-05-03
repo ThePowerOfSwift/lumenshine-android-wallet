@@ -193,6 +193,8 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()
 
+    fun resendConfirmationMail() = userRepo.resendConfirmationMail()
+
     companion object {
         const val TAG = "AuthUseCases"
     }

@@ -57,4 +57,10 @@ interface AuthApi {
     fun confirmMnemonic(
             @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String
     ): Single<Result<Unit>>
+
+    @FormUrlEncoded
+    @POST("/ico/resend_confirmation_mail")
+    fun resendConfirmationMail(
+            @Field("email") email: String
+    ): Single<Result<Unit>>
 }

@@ -31,6 +31,8 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
     val liveMnemonicConfirmation: LiveData<SgViewState<Unit>> = MutableLiveData()
 
+    val liveConfirmationMail: LiveData<SgViewState<Unit>> = MutableLiveData()
+
     fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int) {
 
         val country = try {
@@ -118,6 +120,18 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
                     liveMnemonicConfirmation.value = SgViewState(Unit)
                 }, {
                     liveMnemonicConfirmation.value = SgViewState(it as SgError)
+                })
+    }
+
+    fun resendConfirmationMail() {
+
+        (liveConfirmationMail as MutableLiveData).value = SgViewState(State.LOADING)
+
+        authUseCases.resendConfirmationMail()
+                .subscribe({
+                    liveConfirmationMail.value = SgViewState(Unit)
+                }, {
+                    liveConfirmationMail.value = SgViewState(it as SgError)
                 })
     }
 }

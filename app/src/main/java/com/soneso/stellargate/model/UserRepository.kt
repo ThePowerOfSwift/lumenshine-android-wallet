@@ -4,6 +4,7 @@ import com.soneso.stellargate.domain.data.*
 import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep1Request
 import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep2Request
 import com.soneso.stellargate.networking.dto.auth.RegistrationRequest
+import com.soneso.stellargate.networking.dto.auth.ResendConfirmationMailRequest
 import com.soneso.stellargate.networking.requester.AuthRequester
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.persistence.UserDao
@@ -121,6 +122,14 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun confirmMnemonic(): Single<Unit> {
         return authRequester.confirmMnemonic()
+                .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    fun resendConfirmationMail(): Single<Unit> {
+
+        val request = ResendConfirmationMailRequest()
+        request.email = SgPrefs.currentUsername
+        return authRequester.resendConfirmationMail(request)
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 }

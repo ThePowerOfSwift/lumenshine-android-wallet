@@ -102,12 +102,13 @@ class LoginFragment : AuthFragment() {
     }
 
     private fun handleDashboardStatus(status: DashboardStatus) {
+
         when {
+            !status.emailConfirmed -> {
+                replaceFragment(MailConfirmationFragment.newInstance(), MailConfirmationFragment.TAG)
+            }
             !status.mnemonicConfirmed -> {
                 replaceFragment(MnemonicFragment.newInstance(password.trimmedText.toString()), MnemonicFragment.TAG)
-            }
-            !status.emailConfirmed -> {
-
             }
         }
     }

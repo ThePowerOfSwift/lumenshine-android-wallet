@@ -110,4 +110,11 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
                 .map(ResponseMapper())
                 .observeOn(AndroidSchedulers.mainThread())
     }
+
+    fun resendConfirmationMail(request: ResendConfirmationMailRequest): Single<Unit> {
+        return authApi.resendConfirmationMail(request.email)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
 }
