@@ -117,12 +117,12 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
         return if (tfaCode.isBlank()) {
             userRepo.getLoginSession(email.toString())
+                    .onErrorResumeNext {
+                        Single.just(LoginSession())
+                    }
                     .flatMap {
                         val code = OtpProvider.currentTotpCode(it.tfaSecret)
                         loginWithCredentials(email.toString(), password.toString(), code)
-                    }
-                    .onErrorResumeNext {
-                        loginWithCredentials(email.toString(), password.toString())
                     }
         } else {
             loginWithCredentials(email.toString(), password.toString(), tfaCode.toString())
@@ -132,7 +132,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
     private fun loginWithCredentials(email: String, password: String, tfaCode: String? = null): Single<RegistrationStatus> {
 
         var error: SgError? = null
-        return userRepo.loginWithTfaStep1(email, password, tfaCode)
+        return userRepo.loginStep1(email, password, tfaCode)
                 .onErrorResumeNext {
                     error = it as SgError
                     Single.just(UserSecurity.mockInstance())
@@ -199,12 +199,12 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun resendConfirmationMail() = userRepo.resendConfirmationMail()
 
-    fun provideRegistrationStatus(): Single<RegistrationStatus> {
+    fun provideRegistrationStatus() = userRepo.getRegistrationStatus()
+
+    fun provideTfaSecret(): Single<String> {
         return userRepo.getCurrentLoginSession()
-                .flatMap {
-                    val tfaCode = OtpProvider.currentTotpCode(it.tfaSecret)
-                            ?: throw SgError(R.string.unknown_error)
-                    userRepo.getRegistrationStatus(tfaCode)
+                .map {
+                    it.tfaSecret
                 }
     }
 

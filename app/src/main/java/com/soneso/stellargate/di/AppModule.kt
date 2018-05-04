@@ -12,7 +12,6 @@ import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
-import com.soneso.stellargate.networking.SessionProfileService
 import com.soneso.stellargate.networking.api.AuthApi
 import com.soneso.stellargate.networking.api.SgApi
 import com.soneso.stellargate.networking.dto.Parse
@@ -55,11 +54,7 @@ class AppModule(private val context: Context) {
     fun provideHomeViewModel(rm: AccountRepository) = HomeViewModel(rm)
 
     @Provides
-    @Singleton
-    fun provideSessionProfileService() = SessionProfileService()
-
-    @Provides
-    fun provideAuthRequester(r: Retrofit, s: SessionProfileService) = AuthRequester(r.create(AuthApi::class.java), s)
+    fun provideAuthRequester(r: Retrofit) = AuthRequester(r.create(AuthApi::class.java))
 
     @Provides
     @Singleton

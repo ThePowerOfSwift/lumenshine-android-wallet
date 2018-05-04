@@ -23,6 +23,9 @@ fun ImageView.displayQrCode(text: String) {
         val sizeAsPixels = min(height, width)
         scaleType = ImageView.ScaleType.CENTER_INSIDE
 
+        if (text.isBlank()) {
+            return@post
+        }
         val multiFormatWriter = MultiFormatWriter()
         try {
             val hints = EnumMap<EncodeHintType, Any>(EncodeHintType::class.java)

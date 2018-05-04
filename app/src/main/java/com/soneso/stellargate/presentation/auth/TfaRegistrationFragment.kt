@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.authenticator.OtpProvider
 import com.soneso.stellargate.R
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
@@ -28,16 +29,13 @@ class TfaRegistrationFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        authViewModel.fetchTfaSecret()
         subscribeForLiveData()
         setupListeners()
-        renderTfaSecret(authViewModel.liveTfaSecret.value ?: return)
     }
 
     private fun subscribeForLiveData() {
 
-        authViewModel.liveConfirmation.observe(this, Observer {
-            renderConfirmation(it ?: return@Observer)
-        })
         authViewModel.liveTfaSecret.observe(this, Observer {
             renderTfaSecret(it ?: return@Observer)
         })
@@ -66,21 +64,6 @@ class TfaRegistrationFragment : AuthFragment() {
         }
     }
 
-    private fun renderConfirmation(viewState: SgViewState<Unit>) {
-
-        when (viewState.state) {
-            State.LOADING -> {
-
-            }
-            State.READY -> {
-                showSnackbar("Successful confirmation!")
-            }
-            State.ERROR -> {
-                showErrorSnackbar(viewState.error)
-            }
-        }
-    }
-
     private fun setupToken(token: String) {
 
         qr_code_view.post {
@@ -92,8 +75,9 @@ class TfaRegistrationFragment : AuthFragment() {
         token_view.keyListener = null
         token_view.setText(token)
         copy_button.setOnClickListener {
+
             val clipboard = context?.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("", token)
+            val clip = ClipData.newPlainText("", OtpProvider.currentTotpCode(token))
             clipboard.primaryClip = clip
             showSnackbar("Token copied in clipboard!")
         }

@@ -6,6 +6,7 @@
     <string name="unknown_error">Unexpected error!</string>
     <string name="no_internet_error">No Internet! Please check phone connection.</string>
     <string name="invalid">Invalid!</string>
+    <string name="unauthorized_user">Unauthorized user!</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -1,18 +1,16 @@
 package com.soneso.stellargate.networking.requester
 
-import com.soneso.stellargate.networking.SessionProfileService
 import com.soneso.stellargate.networking.api.AuthApi
 import com.soneso.stellargate.networking.api.SgApi
 import com.soneso.stellargate.networking.dto.ResponseMapper
 import com.soneso.stellargate.networking.dto.ResultMapper
 import com.soneso.stellargate.networking.dto.auth.*
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-class AuthRequester(private val authApi: AuthApi, private val sessionProfile: SessionProfileService) {
+class AuthRequester(private val authApi: AuthApi) {
 
     fun registerUser(request: RegistrationRequest): Single<RegistrationResponse> {
 
@@ -30,14 +28,11 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
         )
                 .subscribeOn(Schedulers.newThread())
                 .map(object : ResultMapper<RegistrationResponse>() {
-
                     override fun handleSuccess(response: Response<RegistrationResponse>): RegistrationResponse {
 
                         val registrationResponse = mapper.handleSuccess(response)
-
                         val authHeader = response.headers()[SgApi.HEADER_NAME_AUTHORIZATION]
                         if (authHeader != null) {
-                            sessionProfile.authToken = authHeader
                             registrationResponse.jwtToken = authHeader
                         }
                         return registrationResponse
@@ -45,34 +40,43 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
 
                     override fun handleError(errorBody: ResponseBody?) = mapper.handleError(errorBody)
                 })
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun confirmTfaRegistration(tfaCode: String): Single<TfaRegistrationResponse> {
+    fun confirmTfaRegistration(jwtToken: String, tfaCode: String): Single<ConfirmTfaResponse> {
 
-        return authApi.confirmTfaRegistration(sessionProfile.authToken, tfaCode)
+        val mapper = ResponseMapper<ConfirmTfaResponse>()
+        return authApi.confirmTfaRegistration(jwtToken, tfaCode)
                 .subscribeOn(Schedulers.newThread())
-                .map(ResponseMapper())
-                .observeOn(AndroidSchedulers.mainThread())
+                .map(object : ResultMapper<ConfirmTfaResponse>() {
+                    override fun handleSuccess(response: Response<ConfirmTfaResponse>): ConfirmTfaResponse {
+
+                        val registrationResponse = mapper.handleSuccess(response)
+                        val authHeader = response.headers()[SgApi.HEADER_NAME_AUTHORIZATION]
+                        if (authHeader != null) {
+                            registrationResponse.jwtToken = authHeader
+                        }
+                        return registrationResponse
+                    }
+
+                    override fun handleError(errorBody: ResponseBody?) = mapper.handleError(errorBody)
+                })
     }
 
     fun fetchSalutationList(): Single<GetSalutationListResponse> {
 
-        return authApi.getSalutationList(sessionProfile.langKey)
+        return authApi.getSalutationList("EN")
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun fetchCountryList(): Single<GetCountryListResponse> {
 
-        return authApi.getCountryList(sessionProfile.langKey)
+        return authApi.getCountryList("EN")
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun loginWithTfaStep1(request: LoginWithTfaStep1Request): Single<LoginWithTfaStep1Response> {
+    fun loginStep1(request: LoginWithTfaStep1Request): Single<LoginWithTfaStep1Response> {
 
         val mapper = ResponseMapper<LoginWithTfaStep1Response>()
         return authApi.loginWithTfaStep1(request.email, request.tfaCode)
@@ -85,7 +89,6 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
 
                         val authHeader = response.headers()[SgApi.HEADER_NAME_AUTHORIZATION]
                         if (authHeader != null) {
-                            sessionProfile.authToken = authHeader
                             loginResponse.jwtToken = authHeader
                         }
                         return loginResponse
@@ -93,35 +96,45 @@ class AuthRequester(private val authApi: AuthApi, private val sessionProfile: Se
 
                     override fun handleError(errorBody: ResponseBody?) = mapper.handleError(errorBody)
                 })
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun loginWithTfaStep2(request: LoginWithTfaStep2Request): Single<LoginWithTfaStep2Response> {
+    fun loginWithTfaStep2(jwtToken: String, request: LoginWithTfaStep2Request): Single<LoginWithTfaStep2Response> {
 
-        return authApi.loginWithTfaStep2(sessionProfile.authToken, request.publicKeyIndex188)
+        val mapper = ResponseMapper<LoginWithTfaStep2Response>()
+        return authApi.loginWithTfaStep2(jwtToken, request.publicKeyIndex188)
                 .subscribeOn(Schedulers.newThread())
-                .map(ResponseMapper())
-                .observeOn(AndroidSchedulers.mainThread())
+                .map(object : ResultMapper<LoginWithTfaStep2Response>() {
+
+                    override fun handleSuccess(response: Response<LoginWithTfaStep2Response>): LoginWithTfaStep2Response {
+
+                        val loginResponse = mapper.handleSuccess(response)
+
+                        val authHeader = response.headers()[SgApi.HEADER_NAME_AUTHORIZATION]
+                        if (authHeader != null) {
+                            loginResponse.jwtToken = authHeader
+                        }
+                        return loginResponse
+                    }
+
+                    override fun handleError(errorBody: ResponseBody?) = mapper.handleError(errorBody)
+                })
     }
 
-    fun confirmMnemonic(): Single<Unit> {
-        return authApi.confirmMnemonic(sessionProfile.authToken)
+    fun confirmMnemonic(jwtToken: String): Single<Unit> {
+        return authApi.confirmMnemonic(jwtToken)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun resendConfirmationMail(request: ResendConfirmationMailRequest): Single<Unit> {
         return authApi.resendConfirmationMail(request.email)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun fetchRegistrationStatus(request: GetRegistrationStatusRequest): Single<GetRegistrationStatusResponse> {
-        return authApi.getRegistrationStatus(sessionProfile.authToken, request.email, request.tfaCode)
+    fun fetchRegistrationStatus(jwtToken: String): Single<GetRegistrationStatusResponse> {
+        return authApi.getRegistrationStatus(jwtToken)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 }

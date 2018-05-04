@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class GetRegistrationStatusResponse {
 
-    @JsonProperty("tfa_enabled")
+    @JsonProperty("tfa_confirmed")
     var tfaConfirmed = false
 
-    @JsonProperty("menmonic_confirmed")
+    @JsonProperty("mnemonic_confirmed")
     var mnemonicConfirmed = false
 
     @JsonProperty("mail_confirmed")

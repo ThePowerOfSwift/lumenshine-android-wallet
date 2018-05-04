@@ -13,8 +13,14 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg loginSession: LoginSession)
 
-    @Query("update ${DbNames.TABLE_LOGIN_SESSION} set ${DbNames.COLUMN_AUTH_TOKEN} = :jwtToken, ${DbNames.COLUMN_PASSWORD} = :password where ${DbNames.COLUMN_USERNAME} = :username")
+    @Query("update ${DbNames.TABLE_LOGIN_SESSION} set ${DbNames.COLUMN_JWT_TOKEN} = :jwtToken, ${DbNames.COLUMN_PASSWORD} = :password where ${DbNames.COLUMN_USERNAME} = :username")
     fun updateLoginSession(username: String, password: String, jwtToken: String)
+
+    @Query("update ${DbNames.TABLE_LOGIN_SESSION} set ${DbNames.COLUMN_JWT_TOKEN} = :jwtToken where ${DbNames.COLUMN_USERNAME} = :username")
+    fun updateJwtToken(username: String, jwtToken: String)
+
+    @Query("update ${DbNames.TABLE_LOGIN_SESSION} set ${DbNames.COLUMN_TFA_SECRET} = :tfaSecret where ${DbNames.COLUMN_USERNAME} = :username")
+    fun updateTfaSecret(username: String, tfaSecret: String)
 
     @Query("select * from ${DbNames.TABLE_LOGIN_SESSION} where ${DbNames.COLUMN_USERNAME} = :username")
     fun loadLoginSession(username: String): LoginSession?

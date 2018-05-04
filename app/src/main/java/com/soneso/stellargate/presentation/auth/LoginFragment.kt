@@ -81,6 +81,7 @@ class LoginFragment : AuthFragment() {
             }
             State.ERROR -> {
 
+                showLoadingButton(false)
                 showErrorSnackbar(viewState.error)
             }
             else -> {

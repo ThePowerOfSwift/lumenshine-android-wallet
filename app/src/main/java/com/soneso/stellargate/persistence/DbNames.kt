@@ -6,8 +6,8 @@ object DbNames {
 
     const val TABLE_LOGIN_SESSION = "login_sessions"
     const val COLUMN_USERNAME = "username"
-    const val COLUMN_TFA_CODE = "tfa_code"
-    const val COLUMN_AUTH_TOKEN = "auth_token"
+    const val COLUMN_TFA_SECRET = "tfa_secret"
+    const val COLUMN_JWT_TOKEN = "jwt_token"
     const val COLUMN_PASSWORD = "password"
 
     const val TABLE_USER_SECURITY = "user_securities"

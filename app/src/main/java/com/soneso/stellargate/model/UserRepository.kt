@@ -1,12 +1,15 @@
 package com.soneso.stellargate.model
 
+import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.*
-import com.soneso.stellargate.networking.dto.auth.*
+import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep1Request
+import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep2Request
+import com.soneso.stellargate.networking.dto.auth.RegistrationRequest
+import com.soneso.stellargate.networking.dto.auth.ResendConfirmationMailRequest
 import com.soneso.stellargate.networking.requester.AuthRequester
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.persistence.UserDao
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -30,19 +33,28 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         return authRequester.registerUser(request)
                 .map {
+                    SgPrefs.currentUsername = request.email
                     userDao.insert(userSecurity)
                     userDao.insert(LoginSession(userProfile.email, userProfile.password, it.token2fa, it.jwtToken))
-                    SgPrefs.currentUsername = request.email
                     it.token2fa
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun confirmTfaRegistration(tfaCode: String): Single<Unit> {
+    fun confirmTfaRegistration(tfaCode: String): Single<RegistrationStatus> {
 
-        return authRequester.confirmTfaRegistration(tfaCode)
+        return getCurrentLoginSession()
+                .flatMap {
+                    authRequester.confirmTfaRegistration(it.jwtToken, tfaCode)
+                }
                 .map {
-                    Unit
+
+                    userDao.updateJwtToken(SgPrefs.currentUsername, it.jwtToken)
+                    RegistrationStatus(
+                            it.emailConfirmed,
+                            it.mnemonicConfirmed,
+                            it.tfaConfirmed
+                    )
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
@@ -63,15 +75,17 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun loginWithTfaStep1(email: String, password: String, tfaCode: String?): Single<UserSecurity> {
+    fun loginStep1(email: String, password: String, tfaCode: String?): Single<UserSecurity> {
 
         val request = LoginWithTfaStep1Request()
         request.email = email
         request.tfaCode = tfaCode
 
-        return authRequester.loginWithTfaStep1(request)
+        return authRequester.loginStep1(request)
                 .map {
-                    userDao.updateLoginSession(email, password, it.jwtToken)
+
+                    SgPrefs.currentUsername = email
+                    userDao.insert(LoginSession(email, password, "", it.jwtToken))
 
                     UserSecurity(
                             email,
@@ -89,13 +103,19 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun loginWithTfaStep2(userSecurity: UserSecurity): Single<RegistrationStatus> {
 
-        val request = LoginWithTfaStep2Request()
-        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
+        return getCurrentLoginSession()
+                .flatMap {
+                    val request = LoginWithTfaStep2Request()
+                    request.publicKeyIndex188 = userSecurity.publicKeyIndex188
 
-        return authRequester.loginWithTfaStep2(request)
+                    authRequester.loginWithTfaStep2(it.jwtToken, request)
+                }
                 .map {
                     userDao.insert(userSecurity)
-                    SgPrefs.currentUsername = userSecurity.username
+                    userDao.updateJwtToken(userSecurity.username, it.jwtToken)
+                    if (it.tfaSecret.isNotEmpty()) {
+                        userDao.updateTfaSecret(userSecurity.username, it.tfaSecret)
+                    }
                     RegistrationStatus(
                             it.emailConfirmed,
                             it.mnemonicConfirmed,
@@ -107,8 +127,13 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun getLoginSession(username: String): Single<LoginSession> {
         return Single.just(userDao.loadLoginSession(username) ?: LoginSession())
+                .map { ls ->
+                    if (ls.username.isEmpty()) {
+                        throw SgError(R.string.unauthorized_user)
+                    }
+                    ls
+                }
                 .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun getCurrentLoginSession(): Single<LoginSession> {
@@ -119,11 +144,13 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         val username = SgPrefs.currentUsername
         return Single.just(userDao.loadUserSecurity(username))
                 .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun confirmMnemonic(): Single<Unit> {
-        return authRequester.confirmMnemonic()
+        return getCurrentLoginSession()
+                .flatMap {
+                    authRequester.confirmMnemonic(it.jwtToken)
+                }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
@@ -135,12 +162,12 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun getRegistrationStatus(tfaCode: String): Single<RegistrationStatus> {
+    fun getRegistrationStatus(): Single<RegistrationStatus> {
 
-        val request = GetRegistrationStatusRequest()
-        request.email = SgPrefs.currentUsername
-        request.tfaCode = tfaCode
-        return authRequester.fetchRegistrationStatus(request)
+        return getCurrentLoginSession()
+                .flatMap {
+                    authRequester.fetchRegistrationStatus(it.jwtToken)
+                }
                 .map {
                     RegistrationStatus(
                             it.mailConfirmed,

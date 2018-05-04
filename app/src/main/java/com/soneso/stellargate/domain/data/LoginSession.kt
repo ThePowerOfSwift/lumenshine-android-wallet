@@ -17,10 +17,10 @@ data class LoginSession
         @ColumnInfo(name = DbNames.COLUMN_PASSWORD)
         var password: String,
 
-        @ColumnInfo(name = DbNames.COLUMN_TFA_CODE)
+        @ColumnInfo(name = DbNames.COLUMN_TFA_SECRET)
         var tfaSecret: String,
 
-        @ColumnInfo(name = DbNames.COLUMN_AUTH_TOKEN)
+        @ColumnInfo(name = DbNames.COLUMN_JWT_TOKEN)
         var jwtToken: String
 ) {
     constructor() : this("", "", "", "")

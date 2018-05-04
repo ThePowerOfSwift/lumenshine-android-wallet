@@ -3,7 +3,6 @@ package com.soneso.stellargate.presentation.auth
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.RegistrationStatus
 import com.soneso.stellargate.presentation.general.SgActivity
@@ -38,8 +37,6 @@ class AuthActivity : SgActivity() {
     }
 
     private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
-
-        Log.d("Here", "renderRegistrationStatus")
 
         when (viewState.state) {
             State.READY -> {
