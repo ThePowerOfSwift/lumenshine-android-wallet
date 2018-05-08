@@ -154,7 +154,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun resendConfirmationMail(): Single<Unit> {
+    fun resendConfirmationMail(): Single<Any> {
 
         val request = ResendConfirmationMailRequest()
         request.email = SgPrefs.currentUsername

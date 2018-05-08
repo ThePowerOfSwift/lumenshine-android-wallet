@@ -126,7 +126,7 @@ class AuthRequester(private val authApi: AuthApi) {
                 .map(ResponseMapper())
     }
 
-    fun resendConfirmationMail(request: ResendConfirmationMailRequest): Single<Unit> {
+    fun resendConfirmationMail(request: ResendConfirmationMailRequest): Single<Any> {
         return authApi.resendConfirmationMail(request.email)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())

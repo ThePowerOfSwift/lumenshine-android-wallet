@@ -70,7 +70,7 @@ interface AuthApi {
     @POST("/portal/user/resend_confirmation_mail")
     fun resendConfirmationMail(
             @Field("email") email: String
-    ): Single<Result<Unit>>
+    ): Single<Result<Any>>
 
 
     @GET("/portal/user/dashboard/get_user_registration_status")
