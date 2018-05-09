@@ -47,14 +47,26 @@ object NetworkUtil {
 
             if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_CONTENT_TYPE))) {
                 requestBuilder.addHeader(SgApi.HEADER_NAME_CONTENT_TYPE, SgApi.HEADER_VALUE_CONTENT_TYPE)
+
+                if (BuildConfig.DEBUG) {
+                    Log.d("OkHttp", "${SgApi.HEADER_NAME_CONTENT_TYPE}:${SgApi.HEADER_VALUE_CONTENT_TYPE}")
+                }
             }
 
             if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_AUTHORIZATION))) {
                 requestBuilder.addHeader(SgApi.HEADER_NAME_AUTHORIZATION, SgSessionProfile.jwtToken)
+
+                if (BuildConfig.DEBUG) {
+                    Log.d("OkHttp", "${SgApi.HEADER_NAME_AUTHORIZATION}:${SgSessionProfile.jwtToken}")
+                }
             }
 
             if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_LANGUAGE))) {
                 requestBuilder.addHeader(SgApi.HEADER_NAME_LANGUAGE, SgSessionProfile.langKey)
+
+                if (BuildConfig.DEBUG) {
+                    Log.d("OkHttp", "${SgApi.HEADER_NAME_LANGUAGE}:${SgSessionProfile.langKey}")
+                }
             }
 
             chain.proceed(requestBuilder.build())
