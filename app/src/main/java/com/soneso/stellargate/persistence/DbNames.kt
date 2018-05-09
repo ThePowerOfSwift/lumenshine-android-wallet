@@ -18,4 +18,6 @@ object DbNames {
     const val COLUMN_MK_ENCRYPTION_IV = "master_key_encryption_iv"
     const val COLUMN_ENCRYPTED_MNEMONIC = "encrypted_mnemonic"
     const val COLUMN_MNEMONIC_ENCRYPTION_IV = "mnemonic_encryption_iv"
+    const val COLUMN_ENCRYPTED_WORD_LIST = "encrypted_word_list"
+    const val COLUMN_WORD_LIST_ENCRYPTION_IV = "word_list_encryption_iv"
 }

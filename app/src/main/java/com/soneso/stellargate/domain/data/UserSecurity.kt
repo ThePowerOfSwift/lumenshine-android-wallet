@@ -31,13 +31,21 @@ class UserSecurity(
         val encryptedMnemonic: ByteArray,
 
         @ColumnInfo(name = DbNames.COLUMN_MNEMONIC_ENCRYPTION_IV)
-        val mnemonicEncryptionIv: ByteArray
+        val mnemonicEncryptionIv: ByteArray,
+
+        @ColumnInfo(name = DbNames.COLUMN_ENCRYPTED_WORD_LIST)
+        val encryptedWordList: ByteArray,
+
+        @ColumnInfo(name = DbNames.COLUMN_WORD_LIST_ENCRYPTION_IV)
+        val wordListEncryptionIv: ByteArray
 ) {
     companion object {
         fun mockInstance() = UserSecurity(
                 "",
                 "",
                 "",
+                ByteArray(0),
+                ByteArray(0),
                 ByteArray(0),
                 ByteArray(0),
                 ByteArray(0),

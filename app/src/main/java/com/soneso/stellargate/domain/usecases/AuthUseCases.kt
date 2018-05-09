@@ -1,16 +1,12 @@
 package com.soneso.stellargate.domain.usecases
 
-import android.util.Log
-import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.*
 import com.soneso.stellargate.domain.util.Cryptor
-import com.soneso.stellargate.domain.util.toByteArray
 import com.soneso.stellargate.domain.util.toCharArray
 import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellarmnemonics.Wallet
 import io.reactivex.Single
-import org.bouncycastle.util.encoders.Base64
 
 /**
  * Manager.
@@ -27,86 +23,10 @@ class AuthUseCases(private val userRepo: UserRepository) {
         userProfile.email = email.toString()
         userProfile.country = country
 
-        val userSecurity = createUserSecurity(userProfile.email, password.toCharArray())
+        val helper = UserSecurityHelper(password.toCharArray())
+        val userSecurity = helper.generateUserSecurity(userProfile.email)
 
         return userRepo.createUserAccount(userProfile, userSecurity)
-    }
-
-    //password, kdf salt, kdf password, master key, master key iv, encrypted master key, nmemonic, mnemonic iv, encrypted mnemonic
-    private fun createUserSecurity(email: String, pass: CharArray): UserSecurity {
-
-        // cristi.paval, 3/23/18 - generate 256 bit password and salt
-        val passwordSalt = Cryptor.generateSalt()
-        val derivedPassword = Cryptor.deriveKeyPbkdf2(passwordSalt, pass)
-
-        // cristi.paval, 3/23/18 - generate master key
-        val masterKey = Cryptor.generateMasterKey()
-
-        // cristi.paval, 3/23/18 - encrypt master key
-        val (encryptedMasterKey, masterKeyIv) = Cryptor.encryptValue(masterKey, derivedPassword)
-
-
-        // cristi.paval, 3/23/18 - generate mnemonic
-        val mnemonic = Wallet.generate24WordMnemonic()
-
-        // cristi.paval, 3/23/18 - encrypt the mnemonic
-        val adjustedMnemonic = Cryptor.applyPadding(16, mnemonic.toByteArray())
-        val (encryptedMnemonic, mnemonicIv) = Cryptor.encryptValue(adjustedMnemonic, masterKey)
-
-        // cristi.paval, 3/23/18 - generate public keys
-        val publicKeyIndex0 = Wallet.createKeyPair(mnemonic, null, 0).accountId
-
-        val publicKeyIndex188 = Wallet.createKeyPair(mnemonic, null, 188).accountId
-
-        val userSecurity = UserSecurity(
-                email,
-                publicKeyIndex0,
-                publicKeyIndex188,
-                passwordSalt,
-                encryptedMasterKey,
-                masterKeyIv,
-                encryptedMnemonic,
-                mnemonicIv
-        )
-
-        if (BuildConfig.DEBUG) {
-            logSecurityData(pass, derivedPassword, masterKey, mnemonic, userSecurity)
-        }
-
-        return userSecurity
-    }
-
-    private fun logSecurityData(
-            pass: CharArray,
-            derivedPassword: ByteArray,
-            masterKey: ByteArray,
-            mnemonic: CharArray,
-            userSecurity: UserSecurity
-    ) {
-        Log.d(TAG, "password: ${String(pass)}")
-
-        val encodedPassSalt = Base64.toBase64String(userSecurity.passwordKdfSalt)
-        Log.d(TAG, "kdf salt: $encodedPassSalt \t\t\t\tlength: ${encodedPassSalt.length}")
-
-        val encodedKdfPass = Base64.toBase64String(derivedPassword)
-        Log.d(TAG, "kdf password: $encodedKdfPass \t\t\t\tlength: ${encodedKdfPass.length}")
-
-        val encodedMasterKey = Base64.toBase64String(masterKey)
-        Log.d(TAG, "master key: $encodedMasterKey \t\t\t\tlength: ${encodedMasterKey.length}")
-
-        val encryptedMasterKeyEncoded = Base64.toBase64String(userSecurity.encryptedMasterKey)
-        Log.d(TAG, "encrypted master key: $encryptedMasterKeyEncoded \t\t\t\tlength: ${encryptedMasterKeyEncoded.length}")
-
-        val masterKeyIvEncoded = Base64.toBase64String(userSecurity.masterKeyEncryptionIv)
-        Log.d(TAG, "master key iv: $masterKeyIvEncoded \t\t\t\tlength: ${masterKeyIvEncoded.length}")
-
-        Log.d(TAG, "mnemonic: ${String(mnemonic)}")
-
-        val encryptedMnemonicEncoded = Base64.toBase64String(userSecurity.encryptedMnemonic)
-        Log.d(TAG, "encrypted mnemonic: $encryptedMnemonicEncoded length: ${encryptedMnemonicEncoded.length}")
-
-        val mnemonicIvEncoded = Base64.toBase64String(userSecurity.mnemonicEncryptionIv)
-        Log.d(TAG, "mnemonic iv: $mnemonicIvEncoded \t\t\t\tlength: ${mnemonicIvEncoded.length}")
     }
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)
