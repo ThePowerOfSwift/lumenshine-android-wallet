@@ -3,7 +3,6 @@ package com.soneso.stellargate.model.account
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.soneso.stellargate.domain.data.StellarAccount
-import com.soneso.stellargate.persistence.SgPrefs
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -29,7 +28,7 @@ class AccountSyncer() : com.soneso.stellargate.model.account.AccountRepository {
                             accountId)
                     val response = URL(friendbotUrl).openStream()
                     val body = Scanner(response, "UTF-8").useDelimiter("\\A").next()
-                    Log.d(com.soneso.stellargate.model.account.AccountSyncer.Companion.TAG, "SUCCESS! You have a new account :)\n$body")
+                    Log.d(com.soneso.stellargate.model.account.AccountSyncer.TAG, "SUCCESS! You have a new account :)\n$body")
                 }
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -37,13 +36,13 @@ class AccountSyncer() : com.soneso.stellargate.model.account.AccountRepository {
     }
 
     fun getAccountDetails(liveData: MutableLiveData<StellarAccount>) {
-        val accountId = SgPrefs.accountId()
+        val accountId = "ahsdka7asd6f7asdrfasd This is a fake id"
 
         Observable
                 .fromCallable {
                     val server = Server("https://horizon-testnet.stellar.org")
                     val account = server.accounts().account(KeyPair.fromAccountId(accountId))
-                    Log.d(com.soneso.stellargate.model.account.AccountSyncer.Companion.TAG, "Account details retrieved successfully!")
+                    Log.d(com.soneso.stellargate.model.account.AccountSyncer.TAG, "Account details retrieved successfully!")
                     return@fromCallable account
                 }
                 .subscribeOn(Schedulers.newThread())

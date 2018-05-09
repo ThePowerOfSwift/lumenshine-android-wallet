@@ -1,7 +1,6 @@
 package com.soneso.stellargate.domain.usecases
 
 import android.util.Log
-import com.google.authenticator.OtpProvider
 import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.*
@@ -19,8 +18,11 @@ import org.bouncycastle.util.encoders.Base64
  */
 class AuthUseCases(private val userRepo: UserRepository) {
 
+    private var password: CharSequence = ""
+
     fun generateAccount(email: CharSequence, password: CharSequence, country: Country?): Single<String> {
 
+        this.password = password
         val userProfile = UserProfile()
         userProfile.email = email.toString()
         userProfile.country = country
@@ -115,15 +117,10 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence): Single<RegistrationStatus> {
 
+        this.password = password.toString()
+
         return if (tfaCode.isBlank()) {
-            userRepo.getLoginSession(email.toString())
-                    .onErrorResumeNext {
-                        Single.just(LoginSession())
-                    }
-                    .flatMap {
-                        val code = OtpProvider.currentTotpCode(it.tfaSecret)
-                        loginWithCredentials(email.toString(), password.toString(), code)
-                    }
+            loginWithCredentials(email.toString(), password.toString(), tfaCode.toString())
         } else {
             loginWithCredentials(email.toString(), password.toString(), tfaCode.toString())
         }
@@ -132,7 +129,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
     private fun loginWithCredentials(email: String, password: String, tfaCode: String? = null): Single<RegistrationStatus> {
 
         var error: SgError? = null
-        return userRepo.loginStep1(email, password, tfaCode)
+        return userRepo.loginStep1(email, tfaCode)
                 .onErrorResumeNext {
                     error = it as SgError
                     Single.just(UserSecurity.mockInstance())
@@ -185,14 +182,10 @@ class AuthUseCases(private val userRepo: UserRepository) {
     }
 
     fun provideMnemonicForCurrentUser(): Single<String> {
-        return userRepo.getCurrentLoginSession()
-                .flatMap { ls: LoginSession ->
-                    userRepo.getCurrentUserSecurity()
-                            .map {
-                                decryptMnemonic(ls.password.toCharArray(), it)
-                            }
+        return userRepo.getCurrentUserSecurity()
+                .map {
+                    decryptMnemonic(password.toCharArray(), it)
                 }
-
     }
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()
@@ -201,12 +194,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun provideRegistrationStatus() = userRepo.getRegistrationStatus()
 
-    fun provideTfaSecret(): Single<String> {
-        return userRepo.getCurrentLoginSession()
-                .map {
-                    it.tfaSecret
-                }
-    }
+    fun provideTfaSecret() = userRepo.getTfaSecret()
 
     companion object {
         const val TAG = "AuthUseCases"

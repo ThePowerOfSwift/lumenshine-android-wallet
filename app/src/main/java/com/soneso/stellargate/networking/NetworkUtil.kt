@@ -1,6 +1,12 @@
 package com.soneso.stellargate.networking
 
+import android.text.TextUtils
 import android.util.Log
+import com.soneso.stellargate.BuildConfig
+import com.soneso.stellargate.networking.api.SgApi
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 object NetworkUtil {
 
@@ -17,5 +23,36 @@ object NetworkUtil {
         }
 
         return false
+    }
+
+    fun sgHttpClient(): OkHttpClient {
+
+        val okHttpBuilder = OkHttpClient.Builder()
+
+        if (BuildConfig.DEBUG) {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            okHttpBuilder.addInterceptor(interceptor)
+        }
+
+        okHttpBuilder.connectTimeout(60, TimeUnit.SECONDS)
+        okHttpBuilder.writeTimeout(60, TimeUnit.SECONDS)
+        okHttpBuilder.readTimeout(60, TimeUnit.SECONDS)
+
+        okHttpBuilder.addInterceptor { chain ->
+
+            val request = chain.request()
+            val requestBuilder = request.newBuilder()
+
+            if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_CONTENT_TYPE))) {
+                requestBuilder.addHeader(SgApi.HEADER_NAME_CONTENT_TYPE, SgApi.HEADER_VALUE_CONTENT_TYPE)
+            }
+
+            if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_AUTHORIZATION))) {
+                requestBuilder.addHeader(SgApi.HEADER_NAME_AUTHORIZATION, SgSessionProfile.jwtToken)
+            }
+            chain.proceed(requestBuilder.build())
+        }
+        return okHttpBuilder.build()
     }
 }

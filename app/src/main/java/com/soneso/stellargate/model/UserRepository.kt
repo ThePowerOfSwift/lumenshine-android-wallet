@@ -1,6 +1,5 @@
 package com.soneso.stellargate.model
 
-import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.*
 import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep1Request
 import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep2Request
@@ -33,9 +32,11 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         return authRequester.registerUser(request)
                 .map {
-                    SgPrefs.currentUsername = request.email
+                    SgPrefs.username = request.email
+                    SgPrefs.jwtToken = it.jwtToken
+                    SgPrefs.tfaSecret = it.token2fa
                     userDao.insert(userSecurity)
-                    userDao.insert(LoginSession(userProfile.email, userProfile.password, it.token2fa, it.jwtToken))
+
                     it.token2fa
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
@@ -43,13 +44,10 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun confirmTfaRegistration(tfaCode: String): Single<RegistrationStatus> {
 
-        return getCurrentLoginSession()
-                .flatMap {
-                    authRequester.confirmTfaRegistration(it.jwtToken, tfaCode)
-                }
+        return authRequester.confirmTfaRegistration(tfaCode)
                 .map {
+                    SgPrefs.jwtToken = it.jwtToken
 
-                    userDao.updateJwtToken(SgPrefs.currentUsername, it.jwtToken)
                     RegistrationStatus(
                             it.emailConfirmed,
                             it.mnemonicConfirmed,
@@ -75,7 +73,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun loginStep1(email: String, password: String, tfaCode: String?): Single<UserSecurity> {
+    fun loginStep1(email: String, tfaCode: String?): Single<UserSecurity> {
 
         val request = LoginWithTfaStep1Request()
         request.email = email
@@ -84,8 +82,8 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         return authRequester.loginStep1(request)
                 .map {
 
-                    SgPrefs.currentUsername = email
-                    userDao.insert(LoginSession(email, password, "", it.jwtToken))
+                    SgPrefs.username = email
+                    SgPrefs.jwtToken = it.jwtToken
 
                     UserSecurity(
                             email,
@@ -103,19 +101,18 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun loginWithTfaStep2(userSecurity: UserSecurity): Single<RegistrationStatus> {
 
-        return getCurrentLoginSession()
-                .flatMap {
-                    val request = LoginWithTfaStep2Request()
-                    request.publicKeyIndex188 = userSecurity.publicKeyIndex188
+        val request = LoginWithTfaStep2Request()
+        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
 
-                    authRequester.loginWithTfaStep2(it.jwtToken, request)
-                }
+        return authRequester.loginWithTfaStep2(request)
                 .map {
+                    SgPrefs.jwtToken = it.jwtToken
                     userDao.insert(userSecurity)
-                    userDao.updateJwtToken(userSecurity.username, it.jwtToken)
-                    if (it.tfaSecret.isNotEmpty()) {
-                        userDao.updateTfaSecret(userSecurity.username, it.tfaSecret)
-                    }
+                    // TODO: cristi.paval, 5/9/18 - finish here
+//                    if (it.tfaSecret.isNotEmpty()) {
+//                        userDao.updateTfaSecret(userSecurity.username, it.tfaSecret)
+//                    }
+
                     RegistrationStatus(
                             it.emailConfirmed,
                             it.mnemonicConfirmed,
@@ -125,49 +122,28 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun getLoginSession(username: String): Single<LoginSession> {
-        return Single.just(userDao.loadLoginSession(username) ?: LoginSession())
-                .map { ls ->
-                    if (ls.username.isEmpty()) {
-                        throw SgError(R.string.unauthorized_user)
-                    }
-                    ls
-                }
-                .subscribeOn(Schedulers.newThread())
-    }
-
-    fun getCurrentLoginSession(): Single<LoginSession> {
-        return getLoginSession(SgPrefs.currentUsername)
-    }
-
     fun getCurrentUserSecurity(): Single<UserSecurity?> {
-        val username = SgPrefs.currentUsername
+        val username = SgPrefs.username
         return Single.just(userDao.loadUserSecurity(username))
                 .subscribeOn(Schedulers.newThread())
     }
 
     fun confirmMnemonic(): Single<Unit> {
-        return getCurrentLoginSession()
-                .flatMap {
-                    authRequester.confirmMnemonic(it.jwtToken)
-                }
+        return authRequester.confirmMnemonic()
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
     fun resendConfirmationMail(): Single<Any> {
 
         val request = ResendConfirmationMailRequest()
-        request.email = SgPrefs.currentUsername
+        request.email = SgPrefs.username
         return authRequester.resendConfirmationMail(request)
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
     fun getRegistrationStatus(): Single<RegistrationStatus> {
 
-        return getCurrentLoginSession()
-                .flatMap {
-                    authRequester.fetchRegistrationStatus(it.jwtToken)
-                }
+        return authRequester.fetchRegistrationStatus()
                 .map {
                     RegistrationStatus(
                             it.mailConfirmed,
@@ -176,5 +152,10 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                     )
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    fun getTfaSecret(): Single<String> {
+        return Single.just(SgPrefs.tfaSecret)
+                .subscribeOn(Schedulers.newThread())
     }
 }

@@ -2,46 +2,8 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d236a148ccae5b0df56428a63426a498",
+    "identityHash": "73c8086c23c56a6c51cabe0d15a8d7d2",
     "entities": [
-      {
-        "tableName": "login_sessions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `password` TEXT NOT NULL, `tfa_secret` TEXT NOT NULL, `jwt_token` TEXT NOT NULL, PRIMARY KEY(`username`))",
-        "fields": [
-          {
-            "fieldPath": "username",
-            "columnName": "username",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "password",
-            "columnName": "password",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "tfaSecret",
-            "columnName": "tfa_secret",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "jwtToken",
-            "columnName": "jwt_token",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "username"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
       {
         "tableName": "user_securities",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `public_key_index_0` TEXT NOT NULL, `public_key_index_188` TEXT NOT NULL, `ppassword_kdf_salt` BLOB NOT NULL, `encrypted_master_key` BLOB NOT NULL, `master_key_encryption_iv` BLOB NOT NULL, `encrypted_mnemonic` BLOB NOT NULL, `mnemonic_encryption_iv` BLOB NOT NULL, PRIMARY KEY(`username`))",
@@ -107,7 +69,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d236a148ccae5b0df56428a63426a498\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"73c8086c23c56a6c51cabe0d15a8d7d2\")"
     ]
   }
 }

@@ -3,15 +3,14 @@ package com.soneso.stellargate.di
 import android.arch.persistence.room.Room
 import android.content.Context
 import android.text.SpannableStringBuilder
-import android.text.TextUtils
 import com.commonsware.cwac.saferoom.SafeHelperFactory
-import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.domain.usecases.AccountManager
 import com.soneso.stellargate.domain.usecases.AccountUseCases
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellargate.model.account.AccountRepository
 import com.soneso.stellargate.model.account.AccountSyncer
+import com.soneso.stellargate.networking.NetworkUtil
 import com.soneso.stellargate.networking.api.AuthApi
 import com.soneso.stellargate.networking.api.SgApi
 import com.soneso.stellargate.networking.dto.Parse
@@ -24,12 +23,9 @@ import com.soneso.stellargate.presentation.general.SgViewModelFactory
 import com.soneso.stellargate.presentation.home.HomeViewModel
 import dagger.Module
 import dagger.Provides
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 /**
@@ -72,32 +68,12 @@ class AppModule(private val context: Context) {
     @Singleton
     fun provideRetrofit(): Retrofit {
 
-        // cristi.paval, 3/28/18 - okhttp builder
-        val okHttpBuilder = OkHttpClient.Builder()
-        if (BuildConfig.DEBUG) {
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
-            okHttpBuilder.addInterceptor(interceptor)
-        }
-        okHttpBuilder.connectTimeout(60, TimeUnit.SECONDS)
-        okHttpBuilder.writeTimeout(60, TimeUnit.SECONDS)
-        okHttpBuilder.readTimeout(60, TimeUnit.SECONDS)
-        okHttpBuilder.addInterceptor { chain ->
-            val request = chain.request()
-            val requestBuilder = request.newBuilder()
-            if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_CONTENT_TYPE))) {
-                requestBuilder.addHeader(SgApi.HEADER_NAME_CONTENT_TYPE, SgApi.HEADER_VALUE_CONTENT_TYPE)
-            }
-            chain.proceed(requestBuilder.build())
-        }
-
-
         // cristi.paval, 3/28/18 - retrofit builder
         return Retrofit.Builder()
                 .baseUrl(SgApi.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(Parse.createMapper()))
-                .client(okHttpBuilder.build())
+                .client(NetworkUtil.sgHttpClient())
                 .build()!!
     }
 

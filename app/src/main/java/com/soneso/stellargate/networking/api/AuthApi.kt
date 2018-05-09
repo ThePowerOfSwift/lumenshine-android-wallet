@@ -3,7 +3,10 @@ package com.soneso.stellargate.networking.api
 import com.soneso.stellargate.networking.dto.auth.*
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
-import retrofit2.http.*
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.POST
 
 
 /**
@@ -31,17 +34,16 @@ interface AuthApi {
     @FormUrlEncoded
     @POST("/portal/user/auth/confirm_tfa_registration")
     fun confirmTfaRegistration(
-            @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String,
             @Field("tfa_code") tfaCode: String
     ): Single<Result<ConfirmTfaResponse>>
 
 
-    @GET("/portal/user/salutation_list/{${SgApi.URL_PARAM_LANG}}")
-    fun getSalutationList(@Path(SgApi.URL_PARAM_LANG) langKey: String): Single<Result<GetSalutationListResponse>>
+    @GET("/portal/user/salutation_list")
+    fun getSalutationList(): Single<Result<GetSalutationListResponse>>
 
 
-    @GET("/portal/user/country_list/{${SgApi.URL_PARAM_LANG}}")
-    fun getCountryList(@Path(SgApi.URL_PARAM_LANG) langKey: String): Single<Result<GetCountryListResponse>>
+    @GET("/portal/user/country_list")
+    fun getCountryList(): Single<Result<GetCountryListResponse>>
 
 
     @FormUrlEncoded
@@ -55,15 +57,12 @@ interface AuthApi {
     @FormUrlEncoded
     @POST("/portal/user/auth/login_step2")
     fun loginWithTfaStep2(
-            @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String,
             @Field("key") publicKey188: String
     ): Single<Result<LoginWithTfaStep2Response>>
 
 
     @POST("/portal/user/dashboard/confirm_mnemonic")
-    fun confirmMnemonic(
-            @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String
-    ): Single<Result<Unit>>
+    fun confirmMnemonic(): Single<Result<Unit>>
 
 
     @FormUrlEncoded
@@ -74,7 +73,5 @@ interface AuthApi {
 
 
     @GET("/portal/user/dashboard/get_user_registration_status")
-    fun getRegistrationStatus(
-            @Header(SgApi.HEADER_NAME_AUTHORIZATION) jwtToken: String
-    ): Single<Result<GetRegistrationStatusResponse>>
+    fun getRegistrationStatus(): Single<Result<GetRegistrationStatusResponse>>
 }

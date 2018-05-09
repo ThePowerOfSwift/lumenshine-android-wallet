@@ -42,10 +42,10 @@ class AuthRequester(private val authApi: AuthApi) {
                 })
     }
 
-    fun confirmTfaRegistration(jwtToken: String, tfaCode: String): Single<ConfirmTfaResponse> {
+    fun confirmTfaRegistration(tfaCode: String): Single<ConfirmTfaResponse> {
 
         val mapper = ResponseMapper<ConfirmTfaResponse>()
-        return authApi.confirmTfaRegistration(jwtToken, tfaCode)
+        return authApi.confirmTfaRegistration(tfaCode)
                 .subscribeOn(Schedulers.newThread())
                 .map(object : ResultMapper<ConfirmTfaResponse>() {
                     override fun handleSuccess(response: Response<ConfirmTfaResponse>): ConfirmTfaResponse {
@@ -64,14 +64,14 @@ class AuthRequester(private val authApi: AuthApi) {
 
     fun fetchSalutationList(): Single<GetSalutationListResponse> {
 
-        return authApi.getSalutationList("EN")
+        return authApi.getSalutationList()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun fetchCountryList(): Single<GetCountryListResponse> {
 
-        return authApi.getCountryList("EN")
+        return authApi.getCountryList()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
@@ -98,10 +98,10 @@ class AuthRequester(private val authApi: AuthApi) {
                 })
     }
 
-    fun loginWithTfaStep2(jwtToken: String, request: LoginWithTfaStep2Request): Single<LoginWithTfaStep2Response> {
+    fun loginWithTfaStep2(request: LoginWithTfaStep2Request): Single<LoginWithTfaStep2Response> {
 
         val mapper = ResponseMapper<LoginWithTfaStep2Response>()
-        return authApi.loginWithTfaStep2(jwtToken, request.publicKeyIndex188)
+        return authApi.loginWithTfaStep2(request.publicKeyIndex188)
                 .subscribeOn(Schedulers.newThread())
                 .map(object : ResultMapper<LoginWithTfaStep2Response>() {
 
@@ -120,8 +120,8 @@ class AuthRequester(private val authApi: AuthApi) {
                 })
     }
 
-    fun confirmMnemonic(jwtToken: String): Single<Unit> {
-        return authApi.confirmMnemonic(jwtToken)
+    fun confirmMnemonic(): Single<Unit> {
+        return authApi.confirmMnemonic()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
@@ -132,8 +132,8 @@ class AuthRequester(private val authApi: AuthApi) {
                 .map(ResponseMapper())
     }
 
-    fun fetchRegistrationStatus(jwtToken: String): Single<GetRegistrationStatusResponse> {
-        return authApi.getRegistrationStatus(jwtToken)
+    fun fetchRegistrationStatus(): Single<GetRegistrationStatusResponse> {
+        return authApi.getRegistrationStatus()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
