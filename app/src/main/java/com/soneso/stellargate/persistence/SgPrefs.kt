@@ -19,7 +19,9 @@ object SgPrefs {
     const val KEY_JWT_TOKEN = "api-token"
     const val KEY_TFA_SECRET = "tfa-secret"
 
-    val prefs: SharedPreferences
+    private val listeners = mutableListOf<((String) -> Unit)>()
+
+    private val prefs: SharedPreferences
     private val cipher: SgCipher
 
     init {
@@ -59,10 +61,18 @@ object SgPrefs {
         prefs.edit()
                 .putString(key, encryptedValue)
                 .apply()
+
+        for (listener in listeners) {
+            listener.invoke(key)
+        }
     }
 
     private fun getString(key: String): String {
         val encrytedValue = prefs.getString(key, "")
         return cipher.decryptText(encrytedValue) ?: ""
+    }
+
+    fun registerListener(listener: ((String) -> Unit)) {
+        listeners.add(listener)
     }
 }

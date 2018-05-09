@@ -40,14 +40,14 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
             null
         }
 
-        (liveTfaSecret as MutableLiveData).value = SgViewState(State.LOADING)
+        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.generateAccount(email, password, country)
+        authUseCases.registerAccount(email, password, country)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    liveTfaSecret.value = SgViewState(it)
+                    liveRegistrationStatus.value = SgViewState(it)
                 }, {
-                    liveTfaSecret.value = SgViewState(it as SgError)
+                    liveRegistrationStatus.value = SgViewState(it as SgError)
                 })
     }
 
@@ -90,11 +90,17 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
                 })
     }
 
-    fun loginWithTfa(email: CharSequence, password: CharSequence, tfaCode: CharSequence) {
+    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence) {
+
+        val tfa = if (tfaCode.isBlank()) {
+            null
+        } else {
+            tfaCode
+        }
 
         (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.login(email, password, tfaCode)
+        authUseCases.login(email, password, tfa)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveRegistrationStatus.value = SgViewState(it)

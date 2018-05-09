@@ -20,7 +20,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     private var password: CharSequence = ""
 
-    fun generateAccount(email: CharSequence, password: CharSequence, country: Country?): Single<String> {
+    fun registerAccount(email: CharSequence, password: CharSequence, country: Country?): Single<RegistrationStatus> {
 
         this.password = password
         val userProfile = UserProfile()
@@ -115,21 +115,12 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun provideCountries() = userRepo.getCountries()
 
-    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence): Single<RegistrationStatus> {
+    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Single<RegistrationStatus> {
 
         this.password = password.toString()
-
-        return if (tfaCode.isBlank()) {
-            loginWithCredentials(email.toString(), password.toString(), tfaCode.toString())
-        } else {
-            loginWithCredentials(email.toString(), password.toString(), tfaCode.toString())
-        }
-    }
-
-    private fun loginWithCredentials(email: String, password: String, tfaCode: String? = null): Single<RegistrationStatus> {
-
         var error: SgError? = null
-        return userRepo.loginStep1(email, tfaCode)
+
+        return userRepo.loginStep1(email.toString(), tfaCode?.toString())
                 .onErrorResumeNext {
                     error = it as SgError
                     Single.just(UserSecurity.mockInstance())

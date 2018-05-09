@@ -6,5 +6,5 @@ object SgApi {
     const val HEADER_NAME_CONTENT_TYPE = "Content-Type"
     const val HEADER_VALUE_CONTENT_TYPE = "application/json"
     const val HEADER_NAME_AUTHORIZATION = "Authorization"
-    const val HEADER_LANGUAGE = "Accept-Language"
+    const val HEADER_NAME_LANGUAGE = "Accept-Language"
 }

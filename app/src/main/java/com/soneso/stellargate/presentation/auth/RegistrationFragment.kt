@@ -46,10 +46,6 @@ class RegistrationFragment : AuthFragment() {
         authViewModel.liveCountries.observe(this, Observer {
             renderCountries(it ?: return@Observer)
         })
-
-        authViewModel.liveTfaSecret.observe(this, Observer {
-            renderConfirmationResponse(it ?: return@Observer)
-        })
     }
 
     private fun setupListeners() {
@@ -64,20 +60,6 @@ class RegistrationFragment : AuthFragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val textView = view as? TextView ?: return
                 textView.setTextColor(Color.BLACK)
-            }
-        }
-    }
-
-    private fun renderConfirmationResponse(viewState: SgViewState<String>) {
-        when (viewState.state) {
-            State.LOADING -> {
-
-            }
-            State.READY -> {
-                replaceFragment(TfaRegistrationFragment.newInstance(), TfaRegistrationFragment.TAG)
-            }
-            State.ERROR -> {
-                showErrorSnackbar(viewState.error)
             }
         }
     }

@@ -6,6 +6,7 @@ import com.soneso.stellargate.BuildConfig
 import com.soneso.stellargate.networking.api.SgApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 object NetworkUtil {
@@ -51,6 +52,11 @@ object NetworkUtil {
             if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_AUTHORIZATION))) {
                 requestBuilder.addHeader(SgApi.HEADER_NAME_AUTHORIZATION, SgSessionProfile.jwtToken)
             }
+
+            if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_LANGUAGE))) {
+                requestBuilder.addHeader(SgApi.HEADER_NAME_LANGUAGE, SgSessionProfile.langKey)
+            }
+
             chain.proceed(requestBuilder.build())
         }
         return okHttpBuilder.build()

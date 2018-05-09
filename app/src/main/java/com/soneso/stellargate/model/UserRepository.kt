@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers
  */
 class UserRepository(private val authRequester: AuthRequester, private val userDao: UserDao) {
 
-    fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Single<String> {
+    fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Single<RegistrationStatus> {
 
         val request = RegistrationRequest()
         request.email = userProfile.email
@@ -32,12 +32,13 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         return authRequester.registerUser(request)
                 .map {
-                    SgPrefs.username = request.email
+
                     SgPrefs.jwtToken = it.jwtToken
                     SgPrefs.tfaSecret = it.token2fa
+                    SgPrefs.username = request.email
                     userDao.insert(userSecurity)
 
-                    it.token2fa
+                    RegistrationStatus(false, false, false)
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
@@ -73,7 +74,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun loginStep1(email: String, tfaCode: String?): Single<UserSecurity> {
+    fun loginStep1(email: String, tfaCode: String? = null): Single<UserSecurity> {
 
         val request = LoginStep1Request()
         request.email = email
@@ -82,8 +83,8 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         return authRequester.loginStep1(request)
                 .map {
 
-                    SgPrefs.username = email
                     SgPrefs.jwtToken = it.jwtToken
+                    SgPrefs.username = email
 
                     UserSecurity(
                             email,
@@ -108,10 +109,9 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .map {
                     SgPrefs.jwtToken = it.jwtToken
                     userDao.insert(userSecurity)
-                    // TODO: cristi.paval, 5/9/18 - finish here
-//                    if (it.tfaSecret.isNotEmpty()) {
-//                        userDao.updateTfaSecret(userSecurity.username, it.tfaSecret)
-//                    }
+                    if (it.tfaSecret.isNotEmpty()) {
+                        SgPrefs.tfaSecret = it.tfaSecret
+                    }
 
                     RegistrationStatus(
                             it.emailConfirmed,
