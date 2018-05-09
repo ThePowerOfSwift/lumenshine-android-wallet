@@ -48,17 +48,17 @@ interface AuthApi {
 
     @FormUrlEncoded
     @POST("/portal/user/login_step1")
-    fun loginWithTfaStep1(
+    fun loginStep1(
             @Field("email") email: String,
             @Field("tfa_code") tfaCode: String?
-    ): Single<Result<LoginWithTfaStep1Response>>
+    ): Single<Result<LoginStep1Response>>
 
 
     @FormUrlEncoded
     @POST("/portal/user/auth/login_step2")
-    fun loginWithTfaStep2(
+    fun loginStep2(
             @Field("key") publicKey188: String
-    ): Single<Result<LoginWithTfaStep2Response>>
+    ): Single<Result<LoginStep2Response>>
 
 
     @POST("/portal/user/dashboard/confirm_mnemonic")

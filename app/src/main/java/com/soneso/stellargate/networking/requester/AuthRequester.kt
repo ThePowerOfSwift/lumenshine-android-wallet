@@ -76,14 +76,14 @@ class AuthRequester(private val authApi: AuthApi) {
                 .map(ResponseMapper())
     }
 
-    fun loginStep1(request: LoginWithTfaStep1Request): Single<LoginWithTfaStep1Response> {
+    fun loginStep1(request: LoginStep1Request): Single<LoginStep1Response> {
 
-        val mapper = ResponseMapper<LoginWithTfaStep1Response>()
-        return authApi.loginWithTfaStep1(request.email, request.tfaCode)
+        val mapper = ResponseMapper<LoginStep1Response>()
+        return authApi.loginStep1(request.email, request.tfaCode)
                 .subscribeOn(Schedulers.newThread())
-                .map(object : ResultMapper<LoginWithTfaStep1Response>() {
+                .map(object : ResultMapper<LoginStep1Response>() {
 
-                    override fun handleSuccess(response: Response<LoginWithTfaStep1Response>): LoginWithTfaStep1Response {
+                    override fun handleSuccess(response: Response<LoginStep1Response>): LoginStep1Response {
 
                         val loginResponse = mapper.handleSuccess(response)
 
@@ -98,14 +98,14 @@ class AuthRequester(private val authApi: AuthApi) {
                 })
     }
 
-    fun loginWithTfaStep2(request: LoginWithTfaStep2Request): Single<LoginWithTfaStep2Response> {
+    fun loginStep2(request: LoginStep2Request): Single<LoginStep2Response> {
 
-        val mapper = ResponseMapper<LoginWithTfaStep2Response>()
-        return authApi.loginWithTfaStep2(request.publicKeyIndex188)
+        val mapper = ResponseMapper<LoginStep2Response>()
+        return authApi.loginStep2(request.publicKeyIndex188)
                 .subscribeOn(Schedulers.newThread())
-                .map(object : ResultMapper<LoginWithTfaStep2Response>() {
+                .map(object : ResultMapper<LoginStep2Response>() {
 
-                    override fun handleSuccess(response: Response<LoginWithTfaStep2Response>): LoginWithTfaStep2Response {
+                    override fun handleSuccess(response: Response<LoginStep2Response>): LoginStep2Response {
 
                         val loginResponse = mapper.handleSuccess(response)
 

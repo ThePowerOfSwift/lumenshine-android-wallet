@@ -1,6 +1,6 @@
 package com.soneso.stellargate.networking.dto.auth
 
-class LoginWithTfaStep2Request {
+class LoginStep2Request {
 
     var publicKeyIndex188 = ""
 }

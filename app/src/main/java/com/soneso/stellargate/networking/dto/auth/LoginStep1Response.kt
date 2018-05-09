@@ -3,7 +3,7 @@ package com.soneso.stellargate.networking.dto.auth
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.bouncycastle.util.encoders.Base64
 
-class LoginWithTfaStep1Response {
+class LoginStep1Response {
 
     @JsonProperty("kdf_password_salt")
     var passwordKdfSalt = ""

@@ -143,7 +143,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
                     val publicKeyIndex188 = validateUserSecurity(password.toCharArray(), it)
                             ?: return@flatMap Single.error<RegistrationStatus>(SgError(R.string.login_password_wrong))
                     it.publicKeyIndex188 = publicKeyIndex188
-                    userRepo.loginWithTfaStep2(it)
+                    userRepo.loginStep2(it)
                 }
     }
 

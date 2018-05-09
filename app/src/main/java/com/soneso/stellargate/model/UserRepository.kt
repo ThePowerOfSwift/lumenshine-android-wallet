@@ -1,8 +1,8 @@
 package com.soneso.stellargate.model
 
 import com.soneso.stellargate.domain.data.*
-import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep1Request
-import com.soneso.stellargate.networking.dto.auth.LoginWithTfaStep2Request
+import com.soneso.stellargate.networking.dto.auth.LoginStep1Request
+import com.soneso.stellargate.networking.dto.auth.LoginStep2Request
 import com.soneso.stellargate.networking.dto.auth.RegistrationRequest
 import com.soneso.stellargate.networking.dto.auth.ResendConfirmationMailRequest
 import com.soneso.stellargate.networking.requester.AuthRequester
@@ -75,7 +75,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun loginStep1(email: String, tfaCode: String?): Single<UserSecurity> {
 
-        val request = LoginWithTfaStep1Request()
+        val request = LoginStep1Request()
         request.email = email
         request.tfaCode = tfaCode
 
@@ -99,12 +99,12 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun loginWithTfaStep2(userSecurity: UserSecurity): Single<RegistrationStatus> {
+    fun loginStep2(userSecurity: UserSecurity): Single<RegistrationStatus> {
 
-        val request = LoginWithTfaStep2Request()
+        val request = LoginStep2Request()
         request.publicKeyIndex188 = userSecurity.publicKeyIndex188
 
-        return authRequester.loginWithTfaStep2(request)
+        return authRequester.loginStep2(request)
                 .map {
                     SgPrefs.jwtToken = it.jwtToken
                     userDao.insert(userSecurity)
