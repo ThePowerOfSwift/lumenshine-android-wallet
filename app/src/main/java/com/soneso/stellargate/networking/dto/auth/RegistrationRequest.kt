@@ -7,23 +7,33 @@ class RegistrationRequest {
     var email = ""
     var publicKeyIndex0 = ""
     var publicKeyIndex188 = ""
+
     var passwordKdfSalt = ""
-    var encryptedMasterKey = ""
-    var masterKeyEncryptionIv = ""
+
+    var encryptedMnemonicMasterKey = ""
+    var mnemonicMasterKeyEncryptionIv = ""
+
     var encryptedMnemonic = ""
     var mnemonicEncryptionIv = ""
+
+    var encryptedWordListMasterKey = ""
+    var wordListMasterKeyEncryptionIv = ""
+
+    var encryptedWordList = ""
+    var wordListEncryptionIv = ""
+
     var countryCode: String? = null
 
     fun setPasswordKdfSalt(salt: ByteArray) {
         passwordKdfSalt = Base64.toBase64String(salt)
     }
 
-    fun setEncryptedMasterKey(masterKey: ByteArray) {
-        encryptedMasterKey = Base64.toBase64String(masterKey)
+    fun setEncryptedMnemonicMasterKey(masterKey: ByteArray) {
+        encryptedMnemonicMasterKey = Base64.toBase64String(masterKey)
     }
 
-    fun setMasterKeyEncryptionIv(encryptionIv: ByteArray) {
-        masterKeyEncryptionIv = Base64.toBase64String(encryptionIv)
+    fun setMnemonicMasterKeyEncryptionIv(encryptionIv: ByteArray) {
+        mnemonicMasterKeyEncryptionIv = Base64.toBase64String(encryptionIv)
     }
 
     fun setEncryptedMnemonic(mnemonic: ByteArray) {
@@ -32,5 +42,21 @@ class RegistrationRequest {
 
     fun setMnemonicEncryptionIv(encryptionIv: ByteArray) {
         mnemonicEncryptionIv = Base64.toBase64String(encryptionIv)
+    }
+
+    fun setEncryptedWordListMasterKey(masterKey: ByteArray) {
+        encryptedWordListMasterKey = Base64.toBase64String(masterKey)
+    }
+
+    fun setWordListMasterKeyEncryptionIv(encryptionIv: ByteArray) {
+        wordListMasterKeyEncryptionIv = Base64.toBase64String(encryptionIv)
+    }
+
+    fun setEncryptedWordList(wordList: ByteArray) {
+        encryptedWordList = Base64.toBase64String(wordList)
+    }
+
+    fun setWordListEncryptionIv(encryptionIv: ByteArray) {
+        wordListEncryptionIv = Base64.toBase64String(encryptionIv)
     }
 }

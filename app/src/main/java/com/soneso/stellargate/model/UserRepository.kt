@@ -24,11 +24,20 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         request.countryCode = userProfile.country?.code
         request.publicKeyIndex0 = userSecurity.publicKeyIndex0
         request.publicKeyIndex188 = userSecurity.publicKeyIndex188
+
         request.setPasswordKdfSalt(userSecurity.passwordKdfSalt)
-        request.setEncryptedMasterKey(userSecurity.encryptedMasterKey)
-        request.setMasterKeyEncryptionIv(userSecurity.masterKeyEncryptionIv)
+
+        request.setEncryptedMnemonicMasterKey(userSecurity.encryptedMnemonicMasterKey)
+        request.setMnemonicMasterKeyEncryptionIv(userSecurity.mnemonicMasterKeyEncryptionIv)
+
         request.setEncryptedMnemonic(userSecurity.encryptedMnemonic)
         request.setMnemonicEncryptionIv(userSecurity.mnemonicEncryptionIv)
+
+        request.setEncryptedWordListMasterKey(userSecurity.encryptedWordListMasterKey)
+        request.setWordListMasterKeyEncryptionIv(userSecurity.wordListMasterKeyEncryptionIv)
+
+        request.setEncryptedWordList(userSecurity.encryptedWordList)
+        request.setWordListEncryptionIv(userSecurity.wordListEncryptionIv)
 
         return authRequester.registerUser(request)
                 .map {
@@ -91,10 +100,14 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                             it.publicKeyIndex0,
                             "",
                             it.passwordKdfSalt(),
-                            it.encryptedMasterKey(),
-                            it.masterKeyEncryptionIv(),
+                            it.encryptedMnemonicMasterKey(),
+                            it.mnemonicMasterKeyEncryptionIv(),
                             it.encryptedMnemonic(),
-                            it.mnemonicEncryptionIv()
+                            it.mnemonicEncryptionIv(),
+                            it.encryptedWordListMasterKey(),
+                            it.wordListMasterKeyEncryptionIv(),
+                            it.encryptedWordList(),
+                            it.wordListEncryptionIv()
                     )
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())

@@ -20,13 +20,13 @@ class UserSecurityHelper(private val pass: CharArray) {
     private val wordListMasterKeyIv: ByteArray
     private val mnemonicChars = Wallet.generate24WordMnemonic()
     private val mnemonicWords = String(mnemonicChars).split(" ")
+    private val wordList = mutableListOf<String>(*WordList.ENGLISH.words.toTypedArray()).shuffled()
     private val mnemonicIndexes = ShortArray(mnemonicWords.size, {
         wordList.indexOf(mnemonicWords[it]).toShort()
     })
     private val mnemonicBytes: ByteArray
     private val encryptedMnemonic: ByteArray
     private val mnemonicEncryptionIv: ByteArray
-    private val wordList = mutableListOf<String>(*WordList.ENGLISH.words.toTypedArray()).shuffled()
     private val wordListBytes: ByteArray
     private val encryptedWordList: ByteArray
     private val wordListEncryptionIv: ByteArray
@@ -80,6 +80,8 @@ class UserSecurityHelper(private val pass: CharArray) {
                 mnemonicMasterKeyEncryptionIv,
                 encryptedMnemonic,
                 mnemonicEncryptionIv,
+                encryptedWordListMasterKey,
+                wordListMasterKeyIv,
                 encryptedWordList,
                 wordListEncryptionIv
         )
@@ -98,7 +100,7 @@ class UserSecurityHelper(private val pass: CharArray) {
         val encodedMnemonicMasterKey = Base64.toBase64String(mnemonicMasterKey)
         Log.d(AuthUseCases.TAG, "master key: $encodedMnemonicMasterKey \t\t\t\tlength: ${encodedMnemonicMasterKey.length}")
 
-//        val encryptedMasterKeyEncoded = Base64.toBase64String(encryptedMasterKey)
+//        val encryptedMasterKeyEncoded = Base64.toBase64String(encryptedMnemonicMasterKey)
 //        Log.d(AuthUseCases.TAG, "encrypted master key: $encryptedMasterKeyEncoded \t\t\t\tlength: ${encryptedMasterKeyEncoded.length}")
 
         val masterKeyIvEncoded = Base64.toBase64String(mnemonicMasterKeyEncryptionIv)

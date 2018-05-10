@@ -20,14 +20,25 @@ interface AuthApi {
     @POST("/portal/user/register_user")
     fun registerUser(
             @Field("email") email: String,
+
             @Field("kdf_salt") passwordSalt: String,
-            @Field("master_key") encryptedMasterKey: String,
-            @Field("master_iv") masterKeyIv: String,
+
+            @Field("mnemonic_master_key") encryptedMnemonicMasterKey: String,
+            @Field("mnemonic_master_iv") mnemonicMasterKeyIv: String,
+
             @Field("mnemonic") encryptedMnemonic: String,
             @Field("mnemonic_iv") mnemonicIv: String,
+
+            @Field("wordlist_master_key") encryptedWordListMasterKey: String,
+            @Field("wordlist_master_iv") wordListMasterKeyEncryptionIv: String,
+
+            @Field("wordlist") encryptedWordList: String,
+            @Field("wordlist_iv") wordListEncryptionIv: String,
+
             @Field("public_key_0") publicKey0: String,
             @Field("public_key_188") publicKey188: String,
             @Field("country_code") countryCode: String?
+
     ): Single<Result<RegistrationResponse>>
 
 

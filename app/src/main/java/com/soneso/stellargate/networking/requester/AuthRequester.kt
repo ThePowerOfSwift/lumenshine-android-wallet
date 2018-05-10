@@ -18,10 +18,14 @@ class AuthRequester(private val authApi: AuthApi) {
         return authApi.registerUser(
                 request.email,
                 request.passwordKdfSalt,
-                request.encryptedMasterKey,
-                request.masterKeyEncryptionIv,
+                request.encryptedMnemonicMasterKey,
+                request.mnemonicMasterKeyEncryptionIv,
                 request.encryptedMnemonic,
                 request.mnemonicEncryptionIv,
+                request.encryptedWordListMasterKey,
+                request.wordListMasterKeyEncryptionIv,
+                request.encryptedWordList,
+                request.wordListEncryptionIv,
                 request.publicKeyIndex0,
                 request.publicKeyIndex188,
                 request.countryCode

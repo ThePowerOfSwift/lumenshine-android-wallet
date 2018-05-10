@@ -64,7 +64,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
 
         // cristi.paval, 4/27/18 - decrypt master key
-        val masterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMasterKey, userSecurity.masterKeyEncryptionIv)
+        val masterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMnemonicMasterKey, userSecurity.mnemonicMasterKeyEncryptionIv)
 
         // cristi.paval, 4/27/18 - decrypt mnemonic
         val paddedMnemonic = Cryptor.decryptValue(masterKey, userSecurity.encryptedMnemonic, userSecurity.mnemonicEncryptionIv)
@@ -108,6 +108,7 @@ class AuthUseCases(private val userRepo: UserRepository) {
     fun provideTfaSecret() = userRepo.getTfaSecret()
 
     companion object {
+
         const val TAG = "AuthUseCases"
     }
 }
