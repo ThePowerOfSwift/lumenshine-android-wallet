@@ -2,10 +2,8 @@ package com.soneso.stellargate.domain.usecases
 
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.*
-import com.soneso.stellargate.domain.util.Cryptor
 import com.soneso.stellargate.domain.util.toCharArray
 import com.soneso.stellargate.model.UserRepository
-import com.soneso.stellarmnemonics.Wallet
 import io.reactivex.Single
 
 /**
@@ -51,51 +49,21 @@ class AuthUseCases(private val userRepo: UserRepository) {
                         return@flatMap Single.error<RegistrationStatus>(error
                                 ?: SgError(R.string.unknown_error))
                     }
-                    val publicKeyIndex188 = validateUserSecurity(password.toCharArray(), it)
+
+                    val helper = UserSecurityHelper(password.toCharArray())
+                    val publicKeyIndex188 = helper.decipherUserSecurity(it)
                             ?: return@flatMap Single.error<RegistrationStatus>(SgError(R.string.login_password_wrong))
                     it.publicKeyIndex188 = publicKeyIndex188
                     userRepo.loginStep2(it)
                 }
     }
 
-    private fun decryptMnemonic(password: CharArray, userSecurity: UserSecurity): String {
-        // cristi.paval, 4/27/18 - generate 256 bit password
-        val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, password)
-
-
-        // cristi.paval, 4/27/18 - decrypt master key
-        val masterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMnemonicMasterKey, userSecurity.mnemonicMasterKeyEncryptionIv)
-
-        // cristi.paval, 4/27/18 - decrypt mnemonic
-        val paddedMnemonic = Cryptor.decryptValue(masterKey, userSecurity.encryptedMnemonic, userSecurity.mnemonicEncryptionIv)
-        return String(Cryptor.removePadding(paddedMnemonic), charset("UTF-8"))
-    }
-
-    /**
-     * @return public key index 188 if valid, null otherwise
-     */
-    private fun validateUserSecurity(password: CharArray, userSecurity: UserSecurity): String? {
-
-        val mnemonic = decryptMnemonic(password, userSecurity)
-
-        if (mnemonic.split(" ").size != 24) {
-            return null
-        }
-
-        // cristi.paval, 4/27/18 - generate public keys
-        val mnemonicChars = mnemonic.toCharArray()
-        val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
-        if (publicKeyIndex0 != userSecurity.publicKeyIndex0) {
-            return null
-        }
-
-        return Wallet.createKeyPair(mnemonicChars, null, 188).accountId
-    }
-
     fun provideMnemonicForCurrentUser(): Single<String> {
         return userRepo.getCurrentUserSecurity()
                 .map {
-                    decryptMnemonic(password.toCharArray(), it)
+                    val helper = UserSecurityHelper(password.toCharArray())
+                    helper.decipherUserSecurity(it)
+                    String(helper.mnemonicChars)
                 }
     }
 

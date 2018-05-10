@@ -1,75 +1,59 @@
 package com.soneso.stellargate.domain.usecases
 
-import android.util.Log
 import com.soneso.stellargate.domain.data.UserSecurity
 import com.soneso.stellargate.domain.util.Cryptor
+import com.soneso.stellargate.domain.util.padToBlocks
+import com.soneso.stellargate.domain.util.toByteArray
+import com.soneso.stellargate.domain.util.toCharArray
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.mnemonic.WordList
-import org.bouncycastle.util.encoders.Base64
 import java.nio.ByteBuffer
 
 class UserSecurityHelper(private val pass: CharArray) {
 
-    private val passwordKdfSalt = Cryptor.generateSalt()
-    private val derivedPassword = Cryptor.deriveKeyPbkdf2(passwordKdfSalt, pass)
-    private val mnemonicMasterKey = Cryptor.generateMasterKey()
-    private val wordListMasterKey = Cryptor.generateMasterKey()
-    private val encryptedMnemonicMasterKey: ByteArray
-    private val mnemonicMasterKeyEncryptionIv: ByteArray
-    private val encryptedWordListMasterKey: ByteArray
-    private val wordListMasterKeyIv: ByteArray
-    private val mnemonicChars = Wallet.generate24WordMnemonic()
-    private val mnemonicWords = String(mnemonicChars).split(" ")
-    private val wordList = mutableListOf<String>(*WordList.ENGLISH.words.toTypedArray()).shuffled()
-    private val mnemonicIndexes = ShortArray(mnemonicWords.size, {
-        wordList.indexOf(mnemonicWords[it]).toShort()
-    })
-    private val mnemonicBytes: ByteArray
-    private val encryptedMnemonic: ByteArray
-    private val mnemonicEncryptionIv: ByteArray
-    private val wordListBytes: ByteArray
-    private val encryptedWordList: ByteArray
-    private val wordListEncryptionIv: ByteArray
+    lateinit var mnemonicChars: CharArray
+        private set
 
-    init {
-        val (emmKey, mmkIv) = Cryptor.encryptValue(mnemonicMasterKey, derivedPassword)
-        encryptedMnemonicMasterKey = emmKey
-        mnemonicMasterKeyEncryptionIv = mmkIv
+    fun generateUserSecurity(email: String): UserSecurity {
 
-        val (ewlmKey, wlmkIv) = Cryptor.encryptValue(wordListMasterKey, derivedPassword)
-        encryptedWordListMasterKey = ewlmKey
-        wordListMasterKeyIv = wlmkIv
+        val passwordKdfSalt = Cryptor.generateSalt()
+        val derivedPassword = Cryptor.deriveKeyPbkdf2(passwordKdfSalt, pass)
 
+        val wordListMasterKey = Cryptor.generateMasterKey()
+        val (encryptedWordListMasterKey, wordListMasterKeyEncryptionIv) = Cryptor.encryptValue(wordListMasterKey, derivedPassword)
+
+        val wordList = mutableListOf<String>(*WordList.ENGLISH.words.toTypedArray()).shuffled()
+
+        val mnemonicMasterKey = Cryptor.generateMasterKey()
+        val (encryptedMnemonicMasterKey, mnemonicMasterKeyEncryptionIv) = Cryptor.encryptValue(mnemonicMasterKey, derivedPassword)
+
+        mnemonicChars = Wallet.generate24WordMnemonic()
+        val mnemonicWords = String(mnemonicChars).split(" ")
+
+
+        val mnemonicIndexes = ShortArray(mnemonicWords.size, {
+            wordList.indexOf(mnemonicWords[it]).toShort()
+        })
         val mnemonicByteList = mnemonicIndexes.flatMap { index: Short ->
             val bytes = ByteBuffer.allocate(2)
             bytes.putShort(index)
             bytes.array().asList()
         }
-        mnemonicBytes = ByteArray(2 * mnemonicIndexes.size, {
+        val mnemonicBytes = ByteArray(2 * mnemonicIndexes.size, {
             mnemonicByteList[it]
         })
+        val (encryptedMnemonic, mnemonicEncryptionIv) = Cryptor.encryptValue(mnemonicBytes, mnemonicMasterKey)
 
-        val (em, mi) = Cryptor.encryptValue(mnemonicBytes, mnemonicMasterKey)
-        encryptedMnemonic = em
-        mnemonicEncryptionIv = mi
+        val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
+        val publicKeyIndex188 = Wallet.createKeyPair(mnemonicChars, null, 188).accountId
 
         val wordListStringBuilder = StringBuilder()
         wordList.forEach {
             wordListStringBuilder.append(it).append(",")
         }
-        wordListBytes = wordListStringBuilder.removeSuffix(",").toString().toByteArray()
+        val wordListBytes = wordListStringBuilder.dropLast(1).padToBlocks(16).toByteArray()
 
-        val (ewl, wli) = Cryptor.encryptValue(mnemonicBytes, mnemonicMasterKey)
-        encryptedWordList = ewl
-        wordListEncryptionIv = wli
-    }
-
-    fun generateUserSecurity(email: String): UserSecurity {
-
-        // cristi.paval, 3/23/18 - generate public keys
-        val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
-
-        val publicKeyIndex188 = Wallet.createKeyPair(mnemonicChars, null, 188).accountId
+        val (encryptedWordList, wordListEncryptionIv) = Cryptor.encryptValue(wordListBytes, wordListMasterKey)
 
         return UserSecurity(
                 email,
@@ -81,37 +65,51 @@ class UserSecurityHelper(private val pass: CharArray) {
                 encryptedMnemonic,
                 mnemonicEncryptionIv,
                 encryptedWordListMasterKey,
-                wordListMasterKeyIv,
+                wordListMasterKeyEncryptionIv,
                 encryptedWordList,
                 wordListEncryptionIv
         )
     }
 
-    @Suppress("unused")
-    fun logSecurityData() {
-        Log.d(AuthUseCases.TAG, "password: ${String(pass)}")
+    fun decipherUserSecurity(userSecurity: UserSecurity): String? {
 
-        val encodedPassSalt = Base64.toBase64String(passwordKdfSalt)
-        Log.d(AuthUseCases.TAG, "kdf salt: $encodedPassSalt \t\t\t\tlength: ${encodedPassSalt.length}")
+        val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
 
-        val encodedKdfPass = Base64.toBase64String(derivedPassword)
-        Log.d(AuthUseCases.TAG, "kdf password: $encodedKdfPass \t\t\t\tlength: ${encodedKdfPass.length}")
+        val wordListMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedWordListMasterKey, userSecurity.wordListMasterKeyEncryptionIv)
 
-        val encodedMnemonicMasterKey = Base64.toBase64String(mnemonicMasterKey)
-        Log.d(AuthUseCases.TAG, "master key: $encodedMnemonicMasterKey \t\t\t\tlength: ${encodedMnemonicMasterKey.length}")
+        val wordListCsvBytes = Cryptor.decryptValue(wordListMasterKey, userSecurity.encryptedWordList, userSecurity.wordListEncryptionIv)
+        val wordList = String(wordListCsvBytes).trim().split(",")
 
-//        val encryptedMasterKeyEncoded = Base64.toBase64String(encryptedMnemonicMasterKey)
-//        Log.d(AuthUseCases.TAG, "encrypted master key: $encryptedMasterKeyEncoded \t\t\t\tlength: ${encryptedMasterKeyEncoded.length}")
+        val mnemonicMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMnemonicMasterKey, userSecurity.mnemonicMasterKeyEncryptionIv)
 
-        val masterKeyIvEncoded = Base64.toBase64String(mnemonicMasterKeyEncryptionIv)
-        Log.d(AuthUseCases.TAG, "master key iv: $masterKeyIvEncoded \t\t\t\tlength: ${masterKeyIvEncoded.length}")
+        val mnemonicBytes = Cryptor.decryptValue(mnemonicMasterKey, userSecurity.encryptedMnemonic, userSecurity.mnemonicEncryptionIv)
 
-        Log.d(AuthUseCases.TAG, "mnemonic: ${String(mnemonicChars)}")
+        if (mnemonicBytes.size != 48) {
+            return null
+        }
 
-//        val encryptedMnemonicEncoded = Base64.toBase64String(encryptedMnemonic)
-//        Log.d(AuthUseCases.TAG, "encrypted mnemonic: $encryptedMnemonicEncoded length: ${encryptedMnemonicEncoded.length}")
+        val mnemonicIndexes = ShortArray(mnemonicBytes.size / 2, { index ->
+            val bf = ByteBuffer.wrap(mnemonicBytes, index * 2, 2)
+            bf.short
+        })
+        val mnemonicBuilder = StringBuilder()
+        mnemonicIndexes.forEach { index ->
+            mnemonicBuilder.append(wordList[index.toInt()]).append(" ")
+        }
+        mnemonicChars = mnemonicBuilder.removeSuffix(" ").toCharArray()
 
-//        val mnemonicIvEncoded = Base64.toBase64String(userSecurity.mnemonicEncryptionIv)
-//        Log.d(AuthUseCases.TAG, "mnemonic iv: $mnemonicIvEncoded \t\t\t\tlength: ${mnemonicIvEncoded.length}")
+        val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
+
+        if (publicKeyIndex0 != userSecurity.publicKeyIndex0) {
+            return null
+        }
+        val publicKeyIndex188 = Wallet.createKeyPair(mnemonicChars, null, 188).accountId
+
+        return publicKeyIndex188
+    }
+
+    companion object {
+
+        const val TAG = "UserSecurityHelper"
     }
 }

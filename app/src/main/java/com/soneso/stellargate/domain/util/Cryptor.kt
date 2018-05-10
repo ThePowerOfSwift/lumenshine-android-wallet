@@ -32,7 +32,7 @@ object Cryptor {
     private const val KEY_LENGTH = 256
     private const val BITS_IN_BYTES = 8
     private const val SALT_LENGTH = KEY_LENGTH / BITS_IN_BYTES
-    private const val PBE_ITERATION_COUNT = 10000
+    private const val PBE_ITERATION_COUNT = 20000
     private const val PBKDF2_DERIVATION_ALGORITHM = "PBKDF2WithHmacSHA1"
     private const val CIPHER_ALGORITHM = "AES/CBC/NoPadding"
 
@@ -83,43 +83,16 @@ object Cryptor {
 
     //decrypts a master key
     @Throws(GeneralSecurityException::class)
-    fun decryptValue(derivedPassword: ByteArray, encryptedMasterKey: ByteArray, encryptedIV: ByteArray): ByteArray {
+    fun decryptValue(derivedPassword: ByteArray, encryptedValue: ByteArray, encryptionIV: ByteArray): ByteArray {
 
 
         // Decrypt the master key using the loaded data and given password.
 
         val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
         val secretKey = SecretKeySpec(derivedPassword, CIPHER_ALGORITHM)
-        val ivParams = IvParameterSpec(encryptedIV)
+        val ivParams = IvParameterSpec(encryptionIV)
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParams)
-        return cipher.doFinal(encryptedMasterKey)
-    }
-
-    fun applyPadding(blockSize: Int, data: ByteArray): ByteArray {
-
-        var resultSize = data.size + 1
-
-        if (resultSize % blockSize != 0) {
-            val blockCount = resultSize / blockSize + 1
-            resultSize = blockSize * blockCount
-        }
-
-        val paddedData = ByteArray(resultSize)
-        paddedData.forEachIndexed { index, _ ->
-            when {
-                index < data.size -> {
-                    paddedData[index] = data[index]
-                }
-                index == data.size -> {
-                    paddedData[index] = 0x80.toByte()
-                }
-                else -> {
-                    paddedData[index] = 0x00.toByte()
-                }
-            }
-        }
-
-        return paddedData
+        return cipher.doFinal(encryptedValue)
     }
 
     fun removePadding(paddedData: ByteArray): ByteArray {
