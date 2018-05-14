@@ -91,4 +91,10 @@ interface AuthApi {
     fun requestResetPasswordEmail(
             @Field("email") email: String
     ): Single<Result<Any>>
+
+    @FormUrlEncoded
+    @POST("/portal/user/lost_tfa")
+    fun requestResetTfaEmail(
+            @Field("email") email: String
+    ): Single<Result<Any>>
 }

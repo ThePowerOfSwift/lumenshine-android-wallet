@@ -147,4 +147,10 @@ class AuthRequester(private val authApi: AuthApi) {
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
+
+    fun requestEmailForTfaReset(email: String): Single<Any> {
+        return authApi.requestResetTfaEmail(email)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+    }
 }

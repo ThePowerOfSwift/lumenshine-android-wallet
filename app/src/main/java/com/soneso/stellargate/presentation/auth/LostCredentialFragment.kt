@@ -45,10 +45,9 @@ class LostCredentialFragment : AuthFragment() {
                     authViewModel.requestPasswordResetEmail(email_input.trimmedText)
                 }
                 Credential.TFA -> {
-
+                    authViewModel.requestTfaResetEmail(email_input.trimmedText)
                 }
             }
-
         }
     }
 

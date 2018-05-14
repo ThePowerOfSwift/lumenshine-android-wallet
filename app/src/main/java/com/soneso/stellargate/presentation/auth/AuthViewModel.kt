@@ -186,4 +186,17 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
                     liveCredentialResetEmail.value = SgViewState(it as SgError)
                 })
     }
+
+    fun requestTfaResetEmail(email: CharSequence) {
+
+        (liveCredentialResetEmail as MutableLiveData).value = SgViewState(State.LOADING)
+
+        authUseCases.requestTfaReset(email.toString())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveCredentialResetEmail.value = SgViewState(Unit)
+                }, {
+                    liveCredentialResetEmail.value = SgViewState(it as SgError)
+                })
+    }
 }
