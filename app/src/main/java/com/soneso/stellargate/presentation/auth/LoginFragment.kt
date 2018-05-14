@@ -51,6 +51,12 @@ class LoginFragment : AuthFragment() {
         create_account_button.setOnClickListener {
             replaceFragment(RegistrationFragment.newInstance(), RegistrationFragment.TAG)
         }
+        lost_pass_button.setOnClickListener {
+            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.PASSWORD), LostCredentialFragment.TAG)
+        }
+        lost_tfa_button.setOnClickListener {
+            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.TFA), LostCredentialFragment.TAG)
+        }
     }
 
     private fun attemptLogin() {

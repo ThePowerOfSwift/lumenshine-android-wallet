@@ -37,14 +37,18 @@
     <string name="hint_first_name">First name</string>
     <string name="hint_last_name">Last name</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="action_submit">Submit</string>
     <string name="action_register">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">Password must contain at least one digit, one lower case and one upper case letter and has to be at least 9 characters long!</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_account">Don\'t have an account?</string>
+    <string name="lost_password">Lost password?</string>
+    <string name="lost_tfa">Lost your tfa?</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="create_account"><u>Create one!</u></string>
+    <string name="reset"><u>Reset!</u></string>
     <string name="sign_in_underlined"><u>Sign in</u></string>
     <string name="login_password_wrong">Wrong password!</string>
 
@@ -57,4 +61,5 @@
     <string name="open_mail">Open Mail</string>
     <string name="resend_mail">Resend mail</string>
     <string name="already_confirmed">Already confirmed</string>
+
 </resources>
