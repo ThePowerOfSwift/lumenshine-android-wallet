@@ -174,4 +174,9 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         return Single.just(SgPrefs.tfaSecret)
                 .subscribeOn(Schedulers.newThread())
     }
+
+    fun requestEmailForPasswordReset(email: String): Single<Any> {
+        return authRequester.requestEmailForPasswordReset(email)
+                .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
 }

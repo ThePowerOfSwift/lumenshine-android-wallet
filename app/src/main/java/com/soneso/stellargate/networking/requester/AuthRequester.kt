@@ -141,4 +141,10 @@ class AuthRequester(private val authApi: AuthApi) {
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
+
+    fun requestEmailForPasswordReset(email: String): Single<Any> {
+        return authApi.requestResetPasswordEmail(email)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+    }
 }

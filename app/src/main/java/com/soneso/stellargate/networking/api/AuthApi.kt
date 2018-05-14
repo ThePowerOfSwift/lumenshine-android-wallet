@@ -85,4 +85,10 @@ interface AuthApi {
 
     @GET("/portal/user/dashboard/get_user_registration_status")
     fun getRegistrationStatus(): Single<Result<GetRegistrationStatusResponse>>
+
+    @FormUrlEncoded
+    @POST("/portal/user/lost_password")
+    fun requestResetPasswordEmail(
+            @Field("email") email: String
+    ): Single<Result<Any>>
 }

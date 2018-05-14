@@ -75,6 +75,8 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun provideTfaSecret() = userRepo.getTfaSecret()
 
+    fun requestPasswordReset(email: String) = userRepo.requestEmailForPasswordReset(email)
+
     companion object {
 
         const val TAG = "AuthUseCases"

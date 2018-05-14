@@ -30,6 +30,8 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
     val liveConfirmationMail: LiveData<SgViewState<Unit>> = MutableLiveData()
 
+    val liveCredentialResetEmail: LiveData<SgViewState<Unit>> = MutableLiveData()
+
     fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int) {
 
         val country = try {
@@ -169,6 +171,19 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
                     liveTfaSecret.value = SgViewState(it)
                 }, {
                     liveTfaSecret.value = SgViewState(it as SgError)
+                })
+    }
+
+    fun requestPasswordResetEmail(email: CharSequence) {
+
+        (liveCredentialResetEmail as MutableLiveData).value = SgViewState(State.LOADING)
+
+        authUseCases.requestPasswordReset(email.toString())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveCredentialResetEmail.value = SgViewState(Unit)
+                }, {
+                    liveCredentialResetEmail.value = SgViewState(it as SgError)
                 })
     }
 }
