@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.stellargate.R
-import com.soneso.stellargate.presentation.MainActivity
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import com.soneso.stellargate.presentation.util.fadeIn
@@ -40,9 +39,6 @@ class MnemonicFragment : AuthFragment() {
         authViewModel.liveMnemonic.observe(this, Observer {
             renderMnemonic(it ?: return@Observer)
         })
-        authViewModel.liveMnemonicConfirmation.observe(this, Observer {
-            renderMnemonicConfirmation(it ?: return@Observer)
-        })
     }
 
     private fun setupListeners() {
@@ -68,23 +64,6 @@ class MnemonicFragment : AuthFragment() {
                 val mnemonic = viewState.data ?: return
                 quizHelper = MnemonicQuizHelper(mnemonic)
                 mnemonic_view.text = getString(R.string.mnemonic_description, mnemonic)
-            }
-            State.LOADING -> {
-            }
-            State.ERROR -> {
-
-                showErrorSnackbar(viewState.error)
-            }
-        }
-    }
-
-    private fun renderMnemonicConfirmation(viewState: SgViewState<Unit>) {
-
-        when (viewState.state) {
-            State.READY -> {
-
-                MainActivity.startInstance(context!!)
-                activity?.finishAffinity()
             }
             State.LOADING -> {
             }

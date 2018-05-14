@@ -73,7 +73,7 @@ interface AuthApi {
 
 
     @POST("/portal/user/dashboard/confirm_mnemonic")
-    fun confirmMnemonic(): Single<Result<Unit>>
+    fun confirmMnemonic(): Single<Result<Any>>
 
 
     @FormUrlEncoded

@@ -1,5 +1,6 @@
 package com.soneso.stellargate.domain.usecases
 
+import android.util.Log
 import com.soneso.stellargate.domain.data.UserSecurity
 import com.soneso.stellargate.domain.util.Cryptor
 import com.soneso.stellargate.domain.util.padToBlocks
@@ -7,7 +8,9 @@ import com.soneso.stellargate.domain.util.toByteArray
 import com.soneso.stellargate.domain.util.toCharArray
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.mnemonic.WordList
+import org.bouncycastle.util.encoders.Base64
 import java.nio.ByteBuffer
+import java.util.*
 
 class UserSecurityHelper(private val pass: CharArray) {
 
@@ -17,23 +20,32 @@ class UserSecurityHelper(private val pass: CharArray) {
     fun generateUserSecurity(email: String): UserSecurity {
 
         val passwordKdfSalt = Cryptor.generateSalt()
+        Log.d(TAG, "password kdf salt: ${Base64.toBase64String(passwordKdfSalt)}")
         val derivedPassword = Cryptor.deriveKeyPbkdf2(passwordKdfSalt, pass)
+        Log.d(TAG, "derived password: ${Base64.toBase64String(derivedPassword)}")
 
         val wordListMasterKey = Cryptor.generateMasterKey()
+        Log.d(TAG, "word list master key: ${Base64.toBase64String(wordListMasterKey)}")
         val (encryptedWordListMasterKey, wordListMasterKeyEncryptionIv) = Cryptor.encryptValue(wordListMasterKey, derivedPassword)
+        Log.d(TAG, "word list master key encryption iv: ${Base64.toBase64String(wordListMasterKeyEncryptionIv)}")
+        Log.d(TAG, "encrypted word list master key: ${Base64.toBase64String(encryptedWordListMasterKey)}")
+
+        val mnemonicMasterKey = Cryptor.generateMasterKey()
+        Log.d(TAG, "mnemonic master key: ${Base64.toBase64String(mnemonicMasterKey)}")
+        val (encryptedMnemonicMasterKey, mnemonicMasterKeyEncryptionIv) = Cryptor.encryptValue(mnemonicMasterKey, derivedPassword)
+        Log.d(TAG, "mnemonic master key encryption iv: ${Base64.toBase64String(mnemonicMasterKey)}")
+        Log.d(TAG, "encrypted mnmemonic master key: ${Base64.toBase64String(encryptedMnemonicMasterKey)}")
 
         val wordList = mutableListOf<String>(*WordList.ENGLISH.words.toTypedArray()).shuffled()
 
-        val mnemonicMasterKey = Cryptor.generateMasterKey()
-        val (encryptedMnemonicMasterKey, mnemonicMasterKeyEncryptionIv) = Cryptor.encryptValue(mnemonicMasterKey, derivedPassword)
-
         mnemonicChars = Wallet.generate24WordMnemonic()
         val mnemonicWords = String(mnemonicChars).split(" ")
-
+        Log.d(TAG, "mnemonic: ${String(mnemonicChars)}")
 
         val mnemonicIndexes = ShortArray(mnemonicWords.size, {
             wordList.indexOf(mnemonicWords[it]).toShort()
         })
+        Log.d(TAG, "mnemonic indexes: ${Arrays.toString(mnemonicIndexes)}")
         val mnemonicByteList = mnemonicIndexes.flatMap { index: Short ->
             val bytes = ByteBuffer.allocate(2)
             bytes.putShort(index)
@@ -43,17 +55,24 @@ class UserSecurityHelper(private val pass: CharArray) {
             mnemonicByteList[it]
         })
         val (encryptedMnemonic, mnemonicEncryptionIv) = Cryptor.encryptValue(mnemonicBytes, mnemonicMasterKey)
+        Log.d(TAG, "mnemonic encryption iv: ${Base64.toBase64String(mnemonicEncryptionIv)}")
+        Log.d(TAG, "encrypted mnemonic: ${Base64.toBase64String(encryptedMnemonic)}")
 
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
         val publicKeyIndex188 = Wallet.createKeyPair(mnemonicChars, null, 188).accountId
+        Log.d(TAG, "public key index 0: $publicKeyIndex0")
+        Log.d(TAG, "public key index 188: $publicKeyIndex188")
 
         val wordListStringBuilder = StringBuilder()
         wordList.forEach {
             wordListStringBuilder.append(it).append(",")
         }
+        logLongString("word list: ${wordListStringBuilder.dropLast(1)}")
         val wordListBytes = wordListStringBuilder.dropLast(1).padToBlocks(16).toByteArray()
 
         val (encryptedWordList, wordListEncryptionIv) = Cryptor.encryptValue(wordListBytes, wordListMasterKey)
+        Log.d(TAG, "word list encryption iv: ${Base64.toBase64String(wordListEncryptionIv)}")
+        logLongString("encrypted word list: ${Base64.toBase64String(encryptedWordList)}")
 
         return UserSecurity(
                 email,
@@ -107,6 +126,17 @@ class UserSecurityHelper(private val pass: CharArray) {
 
         return publicKeyIndex188
     }
+
+    fun logLongString(string: String) {
+        val maxLogSize = 1000
+        for (i in 0..string.length / maxLogSize) {
+            val start = i * maxLogSize
+            var end = (i + 1) * maxLogSize
+            end = if (end > string.length) string.length else end
+            Log.v(TAG, string.substring(start, end))
+        }
+    }
+
 
     companion object {
 

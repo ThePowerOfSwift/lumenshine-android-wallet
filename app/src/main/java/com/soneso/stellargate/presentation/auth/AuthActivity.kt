@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.RegistrationStatus
+import com.soneso.stellargate.presentation.MainActivity
 import com.soneso.stellargate.presentation.general.SgActivity
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
@@ -63,6 +64,11 @@ class AuthActivity : SgActivity() {
             !status.mnemonicConfirmed -> {
 
                 replaceFragment(MnemonicFragment.newInstance(), MnemonicFragment.TAG)
+            }
+            else -> {
+
+                MainActivity.startInstance(this)
+                finishAffinity()
             }
         }
     }

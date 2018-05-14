@@ -124,7 +124,7 @@ class AuthRequester(private val authApi: AuthApi) {
                 })
     }
 
-    fun confirmMnemonic(): Single<Unit> {
+    fun confirmMnemonic(): Single<Any> {
         return authApi.confirmMnemonic()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())

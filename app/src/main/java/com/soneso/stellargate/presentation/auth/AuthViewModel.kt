@@ -28,8 +28,6 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
     val liveMnemonic: LiveData<SgViewState<String>> = MutableLiveData()
 
-    val liveMnemonicConfirmation: LiveData<SgViewState<Unit>> = MutableLiveData()
-
     val liveConfirmationMail: LiveData<SgViewState<Unit>> = MutableLiveData()
 
     fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int) {
@@ -124,14 +122,14 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
     fun confirmMnemonic() {
 
-        (liveMnemonicConfirmation as MutableLiveData).value = SgViewState(State.LOADING)
+        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
         authUseCases.confirmMnemonic()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    liveMnemonicConfirmation.value = SgViewState(Unit)
+                    liveRegistrationStatus.value = SgViewState(it)
                 }, {
-                    liveMnemonicConfirmation.value = SgViewState(it as SgError)
+                    liveRegistrationStatus.value = SgViewState(it as SgError)
                 })
     }
 
