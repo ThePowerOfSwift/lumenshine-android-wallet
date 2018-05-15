@@ -1,10 +1,8 @@
 package com.soneso.stellargate.model
 
+import android.util.Log
 import com.soneso.stellargate.domain.data.*
-import com.soneso.stellargate.networking.dto.auth.LoginStep1Request
-import com.soneso.stellargate.networking.dto.auth.LoginStep2Request
-import com.soneso.stellargate.networking.dto.auth.RegistrationRequest
-import com.soneso.stellargate.networking.dto.auth.ResendConfirmationMailRequest
+import com.soneso.stellargate.networking.dto.auth.*
 import com.soneso.stellargate.networking.requester.AuthRequester
 import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.persistence.UserDao
@@ -68,6 +66,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
     }
 
     fun getSalutations(): Single<List<String>> {
+
         return authRequester.fetchSalutationList()
                 .map {
                     return@map it.salutations
@@ -76,6 +75,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
     }
 
     fun getCountries(): Single<List<Country>> {
+
         return authRequester.fetchCountryList()
                 .map {
                     it.countries
@@ -124,6 +124,8 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                     userDao.insert(userSecurity)
                     if (it.tfaSecret.isNotEmpty()) {
                         SgPrefs.tfaSecret = it.tfaSecret
+                    } else {
+                        refreshTfaSecret(userSecurity.publicKeyIndex188)
                     }
 
                     RegistrationStatus(
@@ -136,6 +138,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
     }
 
     fun getCurrentUserSecurity(): Single<UserSecurity?> {
+
         val username = SgPrefs.username
         return Single
                 .create<UserSecurity> {
@@ -146,6 +149,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
     }
 
     fun confirmMnemonic(): Single<RegistrationStatus> {
+
         return authRequester.confirmMnemonic()
                 .map {
                     RegistrationStatus(true, true, true)
@@ -175,18 +179,40 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
     }
 
     fun getTfaSecret(): Single<String> {
+
         return Single
                 .create<String> { it.onSuccess(SgPrefs.tfaSecret) }
                 .subscribeOn(Schedulers.newThread())
     }
 
     fun requestEmailForPasswordReset(email: String): Single<Any> {
+
         return authRequester.requestEmailForPasswordReset(email)
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
     fun requestEmailForTfaReset(email: String): Single<Any> {
+
         return authRequester.requestEmailForTfaReset(email)
                 .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    private fun refreshTfaSecret(publicKey188: String) {
+
+        val request = GetTfaSecretRequest()
+        request.publicKey188 = publicKey188
+        authRequester.fetchTfaSecret(request)
+                .map {
+                    it.tfaSecret
+                }
+                .subscribe({
+                    SgPrefs.tfaSecret = it
+                }, {
+                    Log.e(TAG, "Error", it)
+                })
+    }
+
+    companion object {
+        const val TAG = "UserRepository"
     }
 }

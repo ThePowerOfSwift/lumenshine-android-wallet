@@ -97,4 +97,10 @@ interface AuthApi {
     fun requestResetTfaEmail(
             @Field("email") email: String
     ): Single<Result<Any>>
+
+    @FormUrlEncoded
+    @POST("/portal/user/dashboard/tfa_secret")
+    fun getTfaSecret(
+            @Field("key") publicKey188: String
+    ): Single<Result<GetTfaRequestResponse>>
 }

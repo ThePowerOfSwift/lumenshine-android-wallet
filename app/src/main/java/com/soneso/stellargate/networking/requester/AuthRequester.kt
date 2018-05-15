@@ -153,4 +153,10 @@ class AuthRequester(private val authApi: AuthApi) {
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
+
+    fun fetchTfaSecret(request: GetTfaSecretRequest): Single<GetTfaRequestResponse> {
+        return authApi.getTfaSecret(request.publicKey188)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+    }
 }
