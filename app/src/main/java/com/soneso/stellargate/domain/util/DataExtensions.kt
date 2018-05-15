@@ -1,7 +1,7 @@
 package com.soneso.stellargate.domain.util
 
-import android.os.Looper
 import android.util.Log
+import com.soneso.stellargate.domain.usecases.UserSecurityHelper
 import java.nio.CharBuffer
 import java.nio.charset.Charset
 import java.util.*
@@ -35,6 +35,13 @@ fun CharSequence.toByteArray(): ByteArray {
     return toString().toByteArray(charset("UTF-8"))
 }
 
-fun logThread() {
-    Log.d("App - General", "Running on main thread: ${Looper.getMainLooper() == Looper.myLooper()}")
+fun logLongString(string: String) {
+
+    val maxLogSize = 1000
+    for (i in 0..string.length / maxLogSize) {
+        val start = i * maxLogSize
+        var end = (i + 1) * maxLogSize
+        end = if (end > string.length) string.length else end
+        Log.v(UserSecurityHelper.TAG, string.substring(start, end))
+    }
 }
