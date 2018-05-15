@@ -1,5 +1,7 @@
 package com.soneso.stellargate.domain.util
 
+import android.os.Looper
+import android.util.Log
 import java.nio.CharBuffer
 import java.nio.charset.Charset
 import java.util.*
@@ -12,6 +14,7 @@ fun CharSequence.toCharArray(): CharArray {
     return array
 }
 
+@Suppress("unused")
 fun CharArray.toByteArray(): ByteArray {
     val charBuffer = CharBuffer.wrap(this)
     val byteBuffer = Charset.forName("UTF-8").encode(charBuffer)
@@ -30,4 +33,8 @@ fun CharSequence.padToBlocks(blockSize: Int): CharSequence {
 
 fun CharSequence.toByteArray(): ByteArray {
     return toString().toByteArray(charset("UTF-8"))
+}
+
+fun logThread() {
+    Log.d("App - General", "Running on main thread: ${Looper.getMainLooper() == Looper.myLooper()}")
 }

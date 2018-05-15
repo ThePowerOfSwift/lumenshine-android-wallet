@@ -5,6 +5,7 @@ import com.soneso.stellargate.domain.data.*
 import com.soneso.stellargate.domain.util.toCharArray
 import com.soneso.stellargate.model.UserRepository
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Manager.
@@ -22,9 +23,12 @@ class AuthUseCases(private val userRepo: UserRepository) {
         userProfile.country = country
 
         val helper = UserSecurityHelper(password.toCharArray())
-        val userSecurity = helper.generateUserSecurity(userProfile.email)
-
-        return userRepo.createUserAccount(userProfile, userSecurity)
+        return Single
+                .create<UserSecurity> {
+                    it.onSuccess(helper.generateUserSecurity(userProfile.email))
+                }
+                .subscribeOn(Schedulers.newThread())
+                .flatMap { userRepo.createUserAccount(userProfile, it) }
     }
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)

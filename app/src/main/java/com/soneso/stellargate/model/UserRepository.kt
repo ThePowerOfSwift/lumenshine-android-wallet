@@ -137,7 +137,11 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun getCurrentUserSecurity(): Single<UserSecurity?> {
         val username = SgPrefs.username
-        return Single.just(userDao.loadUserSecurity(username))
+        return Single
+                .create<UserSecurity> {
+                    val us = userDao.loadUserSecurity(username) ?: UserSecurity.mockInstance()
+                    it.onSuccess(us)
+                }
                 .subscribeOn(Schedulers.newThread())
     }
 
@@ -171,7 +175,8 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
     }
 
     fun getTfaSecret(): Single<String> {
-        return Single.just(SgPrefs.tfaSecret)
+        return Single
+                .create<String> { it.onSuccess(SgPrefs.tfaSecret) }
                 .subscribeOn(Schedulers.newThread())
     }
 

@@ -2,6 +2,7 @@ package com.soneso.stellargate.presentation.home
 
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -19,7 +20,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
  */
 class HomeFragment : SgFragment() {
 
-    //    @Inject
     lateinit var homeViewModel: HomeViewModel
 
     lateinit var adapter: HomeFeedAdapter
@@ -27,7 +27,7 @@ class HomeFragment : SgFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        appComponent.inject(this)
+        homeViewModel = ViewModelProviders.of(this)[HomeViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =

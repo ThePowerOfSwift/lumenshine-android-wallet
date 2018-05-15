@@ -2,10 +2,7 @@ package com.soneso.stellargate.domain.usecases
 
 import android.util.Log
 import com.soneso.stellargate.domain.data.UserSecurity
-import com.soneso.stellargate.domain.util.Cryptor
-import com.soneso.stellargate.domain.util.padToBlocks
-import com.soneso.stellargate.domain.util.toByteArray
-import com.soneso.stellargate.domain.util.toCharArray
+import com.soneso.stellargate.domain.util.*
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.mnemonic.WordList
 import org.bouncycastle.util.encoders.Base64
@@ -18,6 +15,8 @@ class UserSecurityHelper(private val pass: CharArray) {
         private set
 
     fun generateUserSecurity(email: String): UserSecurity {
+
+        logThread()
 
         val passwordKdfSalt = Cryptor.generateSalt()
         Log.d(TAG, "password kdf salt: ${Base64.toBase64String(passwordKdfSalt)}")

@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.Country
+import com.soneso.stellargate.domain.data.RegistrationStatus
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import kotlinx.android.synthetic.main.fragment_registration.*
@@ -45,6 +46,10 @@ class RegistrationFragment : AuthFragment() {
 
         authViewModel.liveCountries.observe(this, Observer {
             renderCountries(it ?: return@Observer)
+        })
+
+        authViewModel.liveRegistrationStatus.observe(this, Observer {
+            renderRegistrationStatus(it ?: return@Observer)
         })
     }
 
@@ -104,6 +109,26 @@ class RegistrationFragment : AuthFragment() {
 
                 showLoadingButton(false)
                 showErrorSnackbar(viewState.error)
+            }
+        }
+    }
+
+    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
+
+        when (viewState.state) {
+
+            State.LOADING -> {
+
+                showLoadingButton(true)
+            }
+            State.ERROR -> {
+
+                showLoadingButton(false)
+                showErrorSnackbar(viewState.error)
+            }
+            else -> {
+
+                showLoadingButton(false)
             }
         }
     }
