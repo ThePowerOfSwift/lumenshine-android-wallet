@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
  * Manager.
  * Created by cristi.paval on 3/22/18.
  */
-class AuthUseCases(private val userRepo: UserRepository) {
+class UserUseCases(private val userRepo: UserRepository) {
 
     private var password: CharSequence = ""
 
@@ -87,6 +87,6 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     companion object {
 
-        const val TAG = "AuthUseCases"
+        const val TAG = "UserUseCases"
     }
 }

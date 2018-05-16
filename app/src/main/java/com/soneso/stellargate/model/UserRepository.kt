@@ -3,9 +3,8 @@ package com.soneso.stellargate.model
 import android.util.Log
 import com.soneso.stellargate.domain.data.*
 import com.soneso.stellargate.networking.dto.auth.*
-import com.soneso.stellargate.networking.requester.AuthRequester
+import com.soneso.stellargate.networking.requester.UserRequester
 import com.soneso.stellargate.persistence.SgPrefs
-import com.soneso.stellargate.persistence.UserDao
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
@@ -13,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
  * Class used to user operations to server.
  * Created by cristi.paval on 3/26/18.
  */
-class UserRepository(private val authRequester: AuthRequester, private val userDao: UserDao) {
+class UserRepository(private val userRequester: UserRequester) {
 
     fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Single<RegistrationStatus> {
 
@@ -37,13 +36,12 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         request.setEncryptedWordList(userSecurity.encryptedWordList)
         request.setWordListEncryptionIv(userSecurity.wordListEncryptionIv)
 
-        return authRequester.registerUser(request)
+        return userRequester.registerUser(request)
                 .map {
 
                     SgPrefs.jwtToken = it.jwtToken
                     SgPrefs.tfaSecret = it.token2fa
                     SgPrefs.username = request.email
-                    userDao.insert(userSecurity)
 
                     RegistrationStatus(false, false, false)
                 }
@@ -52,7 +50,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun confirmTfaRegistration(tfaCode: String): Single<RegistrationStatus> {
 
-        return authRequester.confirmTfaRegistration(tfaCode)
+        return userRequester.confirmTfaRegistration(tfaCode)
                 .map {
                     SgPrefs.jwtToken = it.jwtToken
 
@@ -67,7 +65,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun getSalutations(): Single<List<String>> {
 
-        return authRequester.fetchSalutationList()
+        return userRequester.fetchSalutationList()
                 .map {
                     return@map it.salutations
                 }
@@ -76,7 +74,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun getCountries(): Single<List<Country>> {
 
-        return authRequester.fetchCountryList()
+        return userRequester.fetchCountryList()
                 .map {
                     it.countries
                 }
@@ -89,7 +87,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         request.email = email
         request.tfaCode = tfaCode
 
-        return authRequester.loginStep1(request)
+        return userRequester.loginStep1(request)
                 .map {
 
                     SgPrefs.jwtToken = it.jwtToken
@@ -118,10 +116,9 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
         val request = LoginStep2Request()
         request.publicKeyIndex188 = userSecurity.publicKeyIndex188
 
-        return authRequester.loginStep2(request)
+        return userRequester.loginStep2(request)
                 .map {
                     SgPrefs.jwtToken = it.jwtToken
-                    userDao.insert(userSecurity)
                     if (it.tfaSecret.isNotEmpty()) {
                         SgPrefs.tfaSecret = it.tfaSecret
                     } else {
@@ -137,20 +134,31 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun getCurrentUserSecurity(): Single<UserSecurity?> {
+    fun getCurrentUserSecurity(): Single<UserSecurity> {
 
-        val username = SgPrefs.username
-        return Single
-                .create<UserSecurity> {
-                    val us = userDao.loadUserSecurity(username) ?: UserSecurity.mockInstance()
-                    it.onSuccess(us)
+        return userRequester.fetchUserSecurity()
+                .map {
+                    UserSecurity(
+                            SgPrefs.username,
+                            it.publicKeyIndex0,
+                            "",
+                            it.passwordKdfSalt(),
+                            it.encryptedMnemonicMasterKey(),
+                            it.mnemonicMasterKeyEncryptionIv(),
+                            it.encryptedMnemonic(),
+                            it.mnemonicEncryptionIv(),
+                            it.encryptedWordListMasterKey(),
+                            it.wordListMasterKeyEncryptionIv(),
+                            it.encryptedWordList(),
+                            it.wordListEncryptionIv()
+                    )
                 }
-                .subscribeOn(Schedulers.newThread())
+                .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
     fun confirmMnemonic(): Single<RegistrationStatus> {
 
-        return authRequester.confirmMnemonic()
+        return userRequester.confirmMnemonic()
                 .map {
                     RegistrationStatus(true, true, true)
                 }
@@ -161,13 +169,13 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         val request = ResendConfirmationMailRequest()
         request.email = SgPrefs.username
-        return authRequester.resendConfirmationMail(request)
+        return userRequester.resendConfirmationMail(request)
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
     fun getRegistrationStatus(): Single<RegistrationStatus> {
 
-        return authRequester.fetchRegistrationStatus()
+        return userRequester.fetchRegistrationStatus()
                 .map {
                     RegistrationStatus(
                             it.mailConfirmed,
@@ -187,13 +195,13 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
     fun requestEmailForPasswordReset(email: String): Single<Any> {
 
-        return authRequester.requestEmailForPasswordReset(email)
+        return userRequester.requestEmailForPasswordReset(email)
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
     fun requestEmailForTfaReset(email: String): Single<Any> {
 
-        return authRequester.requestEmailForTfaReset(email)
+        return userRequester.requestEmailForTfaReset(email)
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
@@ -201,7 +209,7 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
 
         val request = GetTfaSecretRequest()
         request.publicKey188 = publicKey188
-        authRequester.fetchTfaSecret(request)
+        userRequester.fetchTfaSecret(request)
                 .map {
                     it.tfaSecret
                 }

@@ -120,7 +120,7 @@ class LoginFragment : AuthFragment() {
                     credentials.username.contentEquals(email.trimmedText) && credentials.username.isNotEmpty() -> {
                         two_factor_code.trimmedText = "******"
                     }
-                    email.trimmedText.isEmpty() -> {
+                    email.trimmedText.isEmpty() && !credentials.username.contentEquals(email.trimmedText) -> {
                         email.trimmedText = credentials.username
                         two_factor_code.trimmedText = "******"
                     }

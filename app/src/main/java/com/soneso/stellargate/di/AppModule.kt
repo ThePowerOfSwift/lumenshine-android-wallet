@@ -4,13 +4,13 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import android.text.SpannableStringBuilder
 import com.commonsware.cwac.saferoom.SafeHelperFactory
-import com.soneso.stellargate.domain.usecases.AuthUseCases
+import com.soneso.stellargate.domain.usecases.UserUseCases
 import com.soneso.stellargate.model.UserRepository
 import com.soneso.stellargate.networking.NetworkUtil
-import com.soneso.stellargate.networking.api.AuthApi
 import com.soneso.stellargate.networking.api.SgApi
+import com.soneso.stellargate.networking.api.UserApi
 import com.soneso.stellargate.networking.dto.Parse
-import com.soneso.stellargate.networking.requester.AuthRequester
+import com.soneso.stellargate.networking.requester.UserRequester
 import com.soneso.stellargate.persistence.DbNames
 import com.soneso.stellargate.persistence.SgDatabase
 import com.soneso.stellargate.persistence.SgPrefs
@@ -30,19 +30,19 @@ import javax.inject.Singleton
 class AppModule(private val context: Context) {
 
     @Provides
-    fun provideAuthRequester(r: Retrofit) = AuthRequester(r.create(AuthApi::class.java))
+    fun provideAuthRequester(r: Retrofit) = UserRequester(r.create(UserApi::class.java))
 
     @Provides
     @Singleton
-    fun provideUserRepository(r: AuthRequester, d: SgDatabase) = UserRepository(r, d.userDao())
+    fun provideUserRepository(r: UserRequester) = UserRepository(r)
 
     @Provides
     @Singleton
-    fun provideAuthUseCases(ur: UserRepository) = AuthUseCases(ur)
+    fun provideAuthUseCases(ur: UserRepository) = UserUseCases(ur)
 
     @Provides
     @Singleton
-    fun provideSgViewModelFactory(authUC: AuthUseCases) = SgViewModelFactory(authUC)
+    fun provideSgViewModelFactory(userUC: UserUseCases) = SgViewModelFactory(userUC)
 
     @Provides
     @Singleton

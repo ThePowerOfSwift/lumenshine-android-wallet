@@ -8,7 +8,7 @@ import com.soneso.stellargate.domain.data.Country
 import com.soneso.stellargate.domain.data.RegistrationStatus
 import com.soneso.stellargate.domain.data.SgError
 import com.soneso.stellargate.domain.data.UserCredentials
-import com.soneso.stellargate.domain.usecases.AuthUseCases
+import com.soneso.stellargate.domain.usecases.UserUseCases
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,7 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  * View model.
  * Created by cristi.paval on 3/22/18.
  */
-class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
+class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveLastCredentials: LiveData<SgViewState<UserCredentials>> = MutableLiveData()
 
@@ -45,7 +45,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.registerAccount(email, password, country)
+        userUseCases.registerAccount(email, password, country)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveRegistrationStatus.value = SgViewState(it)
@@ -58,7 +58,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.confirmTfaRegistration(tfaCode)
+        userUseCases.confirmTfaRegistration(tfaCode)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveRegistrationStatus.value = SgViewState(it)
@@ -71,7 +71,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveSalutations as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.provideSalutations()
+        userUseCases.provideSalutations()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveSalutations.value = SgViewState(it)
@@ -84,7 +84,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveCountries as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.provideCountries()
+        userUseCases.provideCountries()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveCountries.value = SgViewState(it)
@@ -103,7 +103,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.login(email, password, tfa)
+        userUseCases.login(email, password, tfa)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveRegistrationStatus.value = SgViewState(it)
@@ -116,7 +116,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveMnemonic as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.provideMnemonicForCurrentUser()
+        userUseCases.provideMnemonicForCurrentUser()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveMnemonic.value = SgViewState(it)
@@ -129,7 +129,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.confirmMnemonic()
+        userUseCases.confirmMnemonic()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveRegistrationStatus.value = SgViewState(it)
@@ -142,7 +142,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveConfirmationMail as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.resendConfirmationMail()
+        userUseCases.resendConfirmationMail()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveConfirmationMail.value = SgViewState(Unit)
@@ -155,7 +155,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.provideRegistrationStatus()
+        userUseCases.provideRegistrationStatus()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveRegistrationStatus.value = SgViewState(it)
@@ -168,7 +168,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveTfaSecret as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.provideTfaSecret()
+        userUseCases.provideTfaSecret()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveTfaSecret.value = SgViewState(it)
@@ -181,7 +181,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveCredentialResetEmail as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.requestPasswordReset(email.toString())
+        userUseCases.requestPasswordReset(email.toString())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveCredentialResetEmail.value = SgViewState(Unit)
@@ -194,7 +194,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveCredentialResetEmail as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.requestTfaReset(email.toString())
+        userUseCases.requestTfaReset(email.toString())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveCredentialResetEmail.value = SgViewState(Unit)
@@ -207,7 +207,7 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
 
         (liveLastCredentials as MutableLiveData).value = SgViewState(State.LOADING)
 
-        authUseCases.provideLastUserCredentials()
+        userUseCases.provideLastUserCredentials()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveLastCredentials.value = SgViewState(it)

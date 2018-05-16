@@ -13,7 +13,7 @@ import retrofit2.http.POST
  * Service used to retrofit.
  * Created by cristi.paval on 3/26/18.
  */
-interface AuthApi {
+interface UserApi {
 
 
     @FormUrlEncoded
@@ -103,4 +103,7 @@ interface AuthApi {
     fun getTfaSecret(
             @Field("key") publicKey188: String
     ): Single<Result<GetTfaRequestResponse>>
+
+    @GET("/portal/user/dashboard/user_auth_data")
+    fun getUserAuthData(): Single<Result<GetUserAuthDataResponse>>
 }

@@ -1,7 +1,7 @@
 package com.soneso.stellargate.networking.requester
 
-import com.soneso.stellargate.networking.api.AuthApi
 import com.soneso.stellargate.networking.api.SgApi
+import com.soneso.stellargate.networking.api.UserApi
 import com.soneso.stellargate.networking.dto.ResponseMapper
 import com.soneso.stellargate.networking.dto.ResultMapper
 import com.soneso.stellargate.networking.dto.auth.*
@@ -10,12 +10,12 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-class AuthRequester(private val authApi: AuthApi) {
+class UserRequester(private val userApi: UserApi) {
 
     fun registerUser(request: RegistrationRequest): Single<RegistrationResponse> {
 
         val mapper = ResponseMapper<RegistrationResponse>()
-        return authApi.registerUser(
+        return userApi.registerUser(
                 request.email,
                 request.passwordKdfSalt,
                 request.encryptedMnemonicMasterKey,
@@ -49,7 +49,7 @@ class AuthRequester(private val authApi: AuthApi) {
     fun confirmTfaRegistration(tfaCode: String): Single<ConfirmTfaResponse> {
 
         val mapper = ResponseMapper<ConfirmTfaResponse>()
-        return authApi.confirmTfaRegistration(tfaCode)
+        return userApi.confirmTfaRegistration(tfaCode)
                 .subscribeOn(Schedulers.newThread())
                 .map(object : ResultMapper<ConfirmTfaResponse>() {
                     override fun handleSuccess(response: Response<ConfirmTfaResponse>): ConfirmTfaResponse {
@@ -68,14 +68,14 @@ class AuthRequester(private val authApi: AuthApi) {
 
     fun fetchSalutationList(): Single<GetSalutationListResponse> {
 
-        return authApi.getSalutationList()
+        return userApi.getSalutationList()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun fetchCountryList(): Single<GetCountryListResponse> {
 
-        return authApi.getCountryList()
+        return userApi.getCountryList()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
@@ -83,7 +83,7 @@ class AuthRequester(private val authApi: AuthApi) {
     fun loginStep1(request: LoginStep1Request): Single<LoginStep1Response> {
 
         val mapper = ResponseMapper<LoginStep1Response>()
-        return authApi.loginStep1(request.email, request.tfaCode)
+        return userApi.loginStep1(request.email, request.tfaCode)
                 .subscribeOn(Schedulers.newThread())
                 .map(object : ResultMapper<LoginStep1Response>() {
 
@@ -105,7 +105,7 @@ class AuthRequester(private val authApi: AuthApi) {
     fun loginStep2(request: LoginStep2Request): Single<LoginStep2Response> {
 
         val mapper = ResponseMapper<LoginStep2Response>()
-        return authApi.loginStep2(request.publicKeyIndex188)
+        return userApi.loginStep2(request.publicKeyIndex188)
                 .subscribeOn(Schedulers.newThread())
                 .map(object : ResultMapper<LoginStep2Response>() {
 
@@ -125,37 +125,43 @@ class AuthRequester(private val authApi: AuthApi) {
     }
 
     fun confirmMnemonic(): Single<Any> {
-        return authApi.confirmMnemonic()
+        return userApi.confirmMnemonic()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun resendConfirmationMail(request: ResendConfirmationMailRequest): Single<Any> {
-        return authApi.resendConfirmationMail(request.email)
+        return userApi.resendConfirmationMail(request.email)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun fetchRegistrationStatus(): Single<GetRegistrationStatusResponse> {
-        return authApi.getRegistrationStatus()
+        return userApi.getRegistrationStatus()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun requestEmailForPasswordReset(email: String): Single<Any> {
-        return authApi.requestResetPasswordEmail(email)
+        return userApi.requestResetPasswordEmail(email)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun requestEmailForTfaReset(email: String): Single<Any> {
-        return authApi.requestResetTfaEmail(email)
+        return userApi.requestResetTfaEmail(email)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun fetchTfaSecret(request: GetTfaSecretRequest): Single<GetTfaRequestResponse> {
-        return authApi.getTfaSecret(request.publicKey188)
+        return userApi.getTfaSecret(request.publicKey188)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+    }
+
+    fun fetchUserSecurity(): Single<GetUserAuthDataResponse> {
+        return userApi.getUserAuthData()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
