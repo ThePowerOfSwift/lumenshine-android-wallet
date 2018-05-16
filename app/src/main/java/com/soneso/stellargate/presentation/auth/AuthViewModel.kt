@@ -7,6 +7,7 @@ import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.Country
 import com.soneso.stellargate.domain.data.RegistrationStatus
 import com.soneso.stellargate.domain.data.SgError
+import com.soneso.stellargate.domain.data.UserCredentials
 import com.soneso.stellargate.domain.usecases.AuthUseCases
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
@@ -17,6 +18,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  * Created by cristi.paval on 3/22/18.
  */
 class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
+
+    val liveLastCredentials: LiveData<SgViewState<UserCredentials>> = MutableLiveData()
 
     val liveSalutations: LiveData<SgViewState<List<String>>> = MutableLiveData()
 
@@ -197,6 +200,19 @@ class AuthViewModel(private val authUseCases: AuthUseCases) : ViewModel() {
                     liveCredentialResetEmail.value = SgViewState(Unit)
                 }, {
                     liveCredentialResetEmail.value = SgViewState(it as SgError)
+                })
+    }
+
+    fun refreshLastUserCredentials() {
+
+        (liveLastCredentials as MutableLiveData).value = SgViewState(State.LOADING)
+
+        authUseCases.provideLastUserCredentials()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveLastCredentials.value = SgViewState(it)
+                }, {
+                    liveLastCredentials.value = SgViewState(it as SgError)
                 })
     }
 }

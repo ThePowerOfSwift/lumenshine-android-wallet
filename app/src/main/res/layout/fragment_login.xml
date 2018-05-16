@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
-        android:text="test@test1.test"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/input_mandatory"
         app:regex="@string/email_regex" />
@@ -27,7 +26,6 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
-        android:text="pass1234"
         app:error_text="@string/error_invalid_password"
         app:input_level="@integer/input_mandatory"
         app:regex="@string/password_regex" />

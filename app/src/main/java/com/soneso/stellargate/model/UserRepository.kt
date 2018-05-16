@@ -212,6 +212,15 @@ class UserRepository(private val authRequester: AuthRequester, private val userD
                 })
     }
 
+    fun getLastUserCredentials(): Single<UserCredentials> {
+        return Single
+                .create<UserCredentials> {
+                    val uc = UserCredentials(SgPrefs.username, SgPrefs.tfaSecret)
+                    it.onSuccess(uc)
+                }
+                .subscribeOn(Schedulers.newThread())
+    }
+
     companion object {
         const val TAG = "UserRepository"
     }

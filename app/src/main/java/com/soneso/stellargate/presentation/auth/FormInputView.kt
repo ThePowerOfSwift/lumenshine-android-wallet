@@ -1,6 +1,7 @@
 package com.soneso.stellargate.presentation.auth
 
 import android.content.Context
+import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.view.View
 import android.widget.EditText
@@ -13,8 +14,11 @@ class FormInputView @JvmOverloads constructor(
     private var inputLevel = 0
     private var errorText: CharSequence = ""
     private var regexToMatch = ""
-    val trimmedText: CharSequence
+    var trimmedText: CharSequence
         get() = text?.trim() ?: ""
+        set(value) {
+            text = SpannableStringBuilder(value)
+        }
 
     init {
         applyAttrs(attrs)

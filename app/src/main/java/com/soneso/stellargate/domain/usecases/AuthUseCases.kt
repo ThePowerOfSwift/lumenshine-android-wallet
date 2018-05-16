@@ -83,6 +83,8 @@ class AuthUseCases(private val userRepo: UserRepository) {
 
     fun requestTfaReset(email: String) = userRepo.requestEmailForTfaReset(email)
 
+    fun provideLastUserCredentials() = userRepo.getLastUserCredentials()
+
     companion object {
 
         const val TAG = "AuthUseCases"
