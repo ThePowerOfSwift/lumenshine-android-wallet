@@ -16,6 +16,7 @@ import com.soneso.stellargate.presentation.accounts.AccountsFragment
 import com.soneso.stellargate.presentation.general.SgActivity
 import com.soneso.stellargate.presentation.general.SgFragment
 import com.soneso.stellargate.presentation.home.HomeFragment
+import com.soneso.stellargate.presentation.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -89,7 +90,8 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
 
             }
             R.id.nav_settings -> {
-
+                app_bar_layout.setExpanded(false)
+                replaceFragment(SettingsFragment.newInstance(), SettingsFragment.TAG)
             }
             R.id.nav_help -> {
 

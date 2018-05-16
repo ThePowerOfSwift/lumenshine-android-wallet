@@ -62,4 +62,8 @@
     <string name="resend_mail">Resend mail</string>
     <string name="already_confirmed">Already confirmed</string>
 
+    <!-- cristi.paval, 5/16/18 Settings screen -->
+    <string name="change_password_label">Change your password:</string>
+    <string name="hint_current_password">Current password</string>
+    <string name="change_password_button">Change password</string>
 </resources>

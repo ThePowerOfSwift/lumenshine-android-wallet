@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/size_10"
+    tools:context=".presentation.settings.SettingsFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/change_password_label" />
+
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/current_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_current_password"
+        android:inputType="textPassword" />
+
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/new_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        app:regex="@string/password_regex" />
+
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/pass_confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_password_confirmation"
+        android:inputType="textPassword"
+        app:regex="@string/password_regex" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/change_pass_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/change_password_button"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/change_pass_progress"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+    </FrameLayout>
+
+</LinearLayout>
