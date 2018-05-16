@@ -1,4 +1,4 @@
-package com.soneso.stellargate.model.account
+package com.soneso.stellargate.model
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
@@ -17,9 +17,9 @@ import java.util.*
  * Class used to perform requests.
  * Created by cristi.paval on 3/9/18.
  */
-class AccountSyncer() : com.soneso.stellargate.model.account.AccountRepository {
+class AccountRepository() {
 
-    override fun createUserAccount(accountId: String) {
+    fun createUserAccount(accountId: String) {
 
         Observable
                 .fromCallable {
@@ -28,7 +28,7 @@ class AccountSyncer() : com.soneso.stellargate.model.account.AccountRepository {
                             accountId)
                     val response = URL(friendbotUrl).openStream()
                     val body = Scanner(response, "UTF-8").useDelimiter("\\A").next()
-                    Log.d(com.soneso.stellargate.model.account.AccountSyncer.TAG, "SUCCESS! You have a new account :)\n$body")
+                    Log.d(TAG, "SUCCESS! You have a new account :)\n$body")
                 }
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -42,7 +42,7 @@ class AccountSyncer() : com.soneso.stellargate.model.account.AccountRepository {
                 .fromCallable {
                     val server = Server("https://horizon-testnet.stellar.org")
                     val account = server.accounts().account(KeyPair.fromAccountId(accountId))
-                    Log.d(com.soneso.stellargate.model.account.AccountSyncer.TAG, "Account details retrieved successfully!")
+                    Log.d(TAG, "Account details retrieved successfully!")
                     return@fromCallable account
                 }
                 .subscribeOn(Schedulers.newThread())
@@ -56,6 +56,6 @@ class AccountSyncer() : com.soneso.stellargate.model.account.AccountRepository {
     }
 
     companion object {
-        const val TAG = "AccountSyncer"
+        const val TAG = "AccountRepository"
     }
 }

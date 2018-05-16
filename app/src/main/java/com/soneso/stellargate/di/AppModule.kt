@@ -4,12 +4,10 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import android.text.SpannableStringBuilder
 import com.commonsware.cwac.saferoom.SafeHelperFactory
-import com.soneso.stellargate.domain.usecases.AccountManager
 import com.soneso.stellargate.domain.usecases.AccountUseCases
 import com.soneso.stellargate.domain.usecases.AuthUseCases
+import com.soneso.stellargate.model.AccountRepository
 import com.soneso.stellargate.model.UserRepository
-import com.soneso.stellargate.model.account.AccountRepository
-import com.soneso.stellargate.model.account.AccountSyncer
 import com.soneso.stellargate.networking.NetworkUtil
 import com.soneso.stellargate.networking.api.AuthApi
 import com.soneso.stellargate.networking.api.SgApi
@@ -37,17 +35,17 @@ class AppModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideAccountRepository(): AccountRepository = AccountSyncer()
+    fun provideAccountRepository() = AccountRepository()
 
     @Singleton
     @Provides
-    fun provideAccountUseCases(repo: AccountRepository): AccountUseCases = AccountManager(repo)
+    fun provideAccountUseCases(repo: AccountRepository) = AccountUseCases(repo)
 
     @Provides
     fun provideAccountsViewModel(useCases: AccountUseCases) = AccountsViewModel(useCases)
 
     @Provides
-    fun provideHomeViewModel(rm: AccountRepository) = HomeViewModel(rm)
+    fun provideHomeViewModel(uc: AccountUseCases) = HomeViewModel(uc)
 
     @Provides
     fun provideAuthRequester(r: Retrofit) = AuthRequester(r.create(AuthApi::class.java))
@@ -62,7 +60,7 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideSgViewModelFactory(useCases: AuthUseCases) = SgViewModelFactory(useCases)
+    fun provideSgViewModelFactory(authUC: AuthUseCases, accountUC: AccountUseCases) = SgViewModelFactory(authUC, accountUC)
 
     @Provides
     @Singleton

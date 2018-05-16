@@ -10,14 +10,12 @@ import org.stellar.sdk.KeyPair
  * View model.
  * Created by cristi.paval on 3/13/18.
  */
-class AccountsViewModel(private val accountUseCases: AccountUseCases) : ViewModel() {
+class AccountsViewModel(private val useCases: AccountUseCases) : ViewModel() {
 
     val liveAccountDetails = MutableLiveData<StellarAccount>()
 
     fun createAccount() {
         val keyPair = KeyPair.random()
-        accountUseCases.createAccount(keyPair.accountId)
+        useCases.createAccount(keyPair.accountId)
     }
-
-
 }

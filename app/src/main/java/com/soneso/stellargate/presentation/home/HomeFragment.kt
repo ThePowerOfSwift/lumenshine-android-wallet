@@ -20,14 +20,14 @@ import kotlinx.android.synthetic.main.fragment_home.*
  */
 class HomeFragment : SgFragment() {
 
-    lateinit var homeViewModel: HomeViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     lateinit var adapter: HomeFeedAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        homeViewModel = ViewModelProviders.of(this)[HomeViewModel::class.java]
+        homeViewModel = ViewModelProviders.of(this, viewModelFactory)[HomeViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =

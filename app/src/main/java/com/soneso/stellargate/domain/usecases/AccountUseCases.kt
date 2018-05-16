@@ -1,10 +1,14 @@
 package com.soneso.stellargate.domain.usecases
 
+import com.soneso.stellargate.model.AccountRepository
+
 /**
- * Class which provides data to ui in a convenient manner. Gets objects from repository and wraps them here for presentation layer.
+ * Manager.
  * Created by cristi.paval on 3/20/18.
  */
-interface AccountUseCases {
+class AccountUseCases(private val repo: AccountRepository) {
 
-    fun createAccount(accountId: String)
+    fun createAccount(accountId: String) {
+        repo.createUserAccount(accountId)
+    }
 }
