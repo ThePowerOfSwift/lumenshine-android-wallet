@@ -106,4 +106,18 @@ interface UserApi {
 
     @GET("/portal/user/dashboard/user_auth_data")
     fun getUserAuthData(): Single<Result<GetUserAuthDataResponse>>
+
+    @FormUrlEncoded
+    @POST("/portal/user/dashboard/change_password")
+    fun changePassword(
+            @Field("kdf_salt") passwordSalt: String,
+
+            @Field("mnemonic_master_key") encryptedMnemonicMasterKey: String,
+            @Field("mnemonic_master_iv") mnemonicMasterKeyIv: String,
+
+            @Field("wordlist_master_key") encryptedWordListMasterKey: String,
+            @Field("wordlist_master_iv") wordListMasterKeyEncryptionIv: String,
+
+            @Field("public_key_188") publicKey188: String
+    ): Single<Result<Any>>
 }

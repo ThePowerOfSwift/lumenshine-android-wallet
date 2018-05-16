@@ -85,6 +85,15 @@ class UserUseCases(private val userRepo: UserRepository) {
 
     fun provideLastUserCredentials() = userRepo.getLastUserCredentials()
 
+    fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Single<Unit> {
+        return userRepo.getCurrentUserSecurity()
+                .flatMap {
+                    val helper = UserSecurityHelper(currentPass.toCharArray())
+                    val us = helper.changePassword(it, newPass.toCharArray())
+                    userRepo.changeUserPassword(us)
+                }
+    }
+
     companion object {
 
         const val TAG = "UserUseCases"

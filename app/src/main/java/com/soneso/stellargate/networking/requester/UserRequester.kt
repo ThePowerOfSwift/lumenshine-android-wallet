@@ -165,4 +165,18 @@ class UserRequester(private val userApi: UserApi) {
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
+
+    fun changeUserPassword(request: ChangePasswordRequest): Single<Any> {
+        return userApi
+                .changePassword(
+                        request.passwordKdfSalt,
+                        request.encryptedMnemonicMasterKey,
+                        request.mnemonicMasterKeyEncryptionIv,
+                        request.encryptedWordListMasterKey,
+                        request.wordListMasterKeyEncryptionIv,
+                        request.publicKeyIndex188
+                )
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+    }
 }

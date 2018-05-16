@@ -133,6 +133,33 @@ class UserSecurityHelper(private val pass: CharArray) {
         return Wallet.createKeyPair(mnemonicChars, null, 188).accountId
     }
 
+    fun changePassword(userSecurity: UserSecurity, newPassword: CharArray): UserSecurity {
+
+        val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
+        val wordListMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedWordListMasterKey, userSecurity.wordListMasterKeyEncryptionIv)
+        val mnemonicMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMnemonicMasterKey, userSecurity.mnemonicMasterKeyEncryptionIv)
+
+        val newKdfSalt = Cryptor.generateSalt()
+        val derivedNewPassword = Cryptor.deriveKeyPbkdf2(newKdfSalt, newPassword)
+        val (encryptedWordListMasterKey, wordListMasterKeyEncryptionIv) = Cryptor.encryptValue(wordListMasterKey, derivedNewPassword)
+        val (encryptedMnemonicMasterKey, mnemonicMasterKeyEncryptionIv) = Cryptor.encryptValue(mnemonicMasterKey, derivedNewPassword)
+
+        return UserSecurity(
+                userSecurity.username,
+                userSecurity.publicKeyIndex0,
+                decipherUserSecurity(userSecurity) ?: "",
+                newKdfSalt,
+                encryptedMnemonicMasterKey,
+                mnemonicMasterKeyEncryptionIv,
+                userSecurity.encryptedMnemonic,
+                userSecurity.mnemonicEncryptionIv,
+                encryptedWordListMasterKey,
+                wordListMasterKeyEncryptionIv,
+                userSecurity.encryptedWordList,
+                userSecurity.wordListEncryptionIv
+        )
+    }
+
 
     companion object {
 

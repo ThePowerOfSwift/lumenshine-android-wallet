@@ -165,11 +165,14 @@ class UserRepository(private val userRequester: UserRequester) {
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun resendConfirmationMail(): Single<Any> {
+    fun resendConfirmationMail(): Single<Unit> {
 
         val request = ResendConfirmationMailRequest()
         request.email = SgPrefs.username
         return userRequester.resendConfirmationMail(request)
+                .map {
+                    Unit
+                }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
@@ -193,15 +196,21 @@ class UserRepository(private val userRequester: UserRequester) {
                 .subscribeOn(Schedulers.newThread())
     }
 
-    fun requestEmailForPasswordReset(email: String): Single<Any> {
+    fun requestEmailForPasswordReset(email: String): Single<Unit> {
 
         return userRequester.requestEmailForPasswordReset(email)
+                .map {
+                    Unit
+                }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun requestEmailForTfaReset(email: String): Single<Any> {
+    fun requestEmailForTfaReset(email: String): Single<Unit> {
 
         return userRequester.requestEmailForTfaReset(email)
+                .map {
+                    Unit
+                }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
@@ -227,6 +236,22 @@ class UserRepository(private val userRequester: UserRequester) {
                     it.onSuccess(uc)
                 }
                 .subscribeOn(Schedulers.newThread())
+    }
+
+    fun changeUserPassword(userSecurity: UserSecurity): Single<Unit> {
+
+        val request = ChangePasswordRequest()
+        request.setPasswordKdfSalt(userSecurity.passwordKdfSalt)
+        request.setEncryptedMnemonicMasterKey(userSecurity.encryptedMnemonicMasterKey)
+        request.setMnemonicMasterKeyEncryptionIv(userSecurity.mnemonicMasterKeyEncryptionIv)
+        request.setEncryptedWordListMasterKey(userSecurity.encryptedWordListMasterKey)
+        request.setWordListMasterKeyEncryptionIv(userSecurity.wordListMasterKeyEncryptionIv)
+        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
+        return userRequester.changeUserPassword(request)
+                .map {
+                    Unit
+                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
     companion object {
