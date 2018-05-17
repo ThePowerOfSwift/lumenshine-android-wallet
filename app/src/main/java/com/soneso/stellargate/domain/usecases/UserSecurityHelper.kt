@@ -99,38 +99,45 @@ class UserSecurityHelper(private val pass: CharArray) {
 
     fun decipherUserSecurity(userSecurity: UserSecurity): String? {
 
-        val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
+        try {
 
-        val wordListMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedWordListMasterKey, userSecurity.wordListMasterKeyEncryptionIv)
+            val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
 
-        val wordListCsvBytes = Cryptor.decryptValue(wordListMasterKey, userSecurity.encryptedWordList, userSecurity.wordListEncryptionIv)
-        val wordList = String(wordListCsvBytes).trim().split(",")
+            val wordListMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedWordListMasterKey, userSecurity.wordListMasterKeyEncryptionIv)
 
-        val mnemonicMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMnemonicMasterKey, userSecurity.mnemonicMasterKeyEncryptionIv)
+            val wordListCsvBytes = Cryptor.decryptValue(wordListMasterKey, userSecurity.encryptedWordList, userSecurity.wordListEncryptionIv)
+            val wordList = String(wordListCsvBytes).trim().split(",")
 
-        val mnemonicBytes = Cryptor.decryptValue(mnemonicMasterKey, userSecurity.encryptedMnemonic, userSecurity.mnemonicEncryptionIv)
+            val mnemonicMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMnemonicMasterKey, userSecurity.mnemonicMasterKeyEncryptionIv)
 
-        if (mnemonicBytes.size != 48) {
+            val mnemonicBytes = Cryptor.decryptValue(mnemonicMasterKey, userSecurity.encryptedMnemonic, userSecurity.mnemonicEncryptionIv)
+
+            if (mnemonicBytes.size != 48) {
+                return null
+            }
+
+            val mnemonicIndexes = ShortArray(mnemonicBytes.size / 2, { index ->
+                val bf = ByteBuffer.wrap(mnemonicBytes, index * 2, 2)
+                bf.short
+            })
+            val mnemonicBuilder = StringBuilder()
+            mnemonicIndexes.forEach { index ->
+                mnemonicBuilder.append(wordList[index.toInt()]).append(" ")
+            }
+            mnemonicChars = mnemonicBuilder.removeSuffix(" ").toCharArray()
+
+            val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
+
+            if (publicKeyIndex0 != userSecurity.publicKeyIndex0) {
+                return null
+            }
+
+            return Wallet.createKeyPair(mnemonicChars, null, 188).accountId
+
+        } catch (t: Throwable) {
+
             return null
         }
-
-        val mnemonicIndexes = ShortArray(mnemonicBytes.size / 2, { index ->
-            val bf = ByteBuffer.wrap(mnemonicBytes, index * 2, 2)
-            bf.short
-        })
-        val mnemonicBuilder = StringBuilder()
-        mnemonicIndexes.forEach { index ->
-            mnemonicBuilder.append(wordList[index.toInt()]).append(" ")
-        }
-        mnemonicChars = mnemonicBuilder.removeSuffix(" ").toCharArray()
-
-        val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
-
-        if (publicKeyIndex0 != userSecurity.publicKeyIndex0) {
-            return null
-        }
-
-        return Wallet.createKeyPair(mnemonicChars, null, 188).accountId
     }
 
     fun changePassword(userSecurity: UserSecurity, newPassword: CharArray): UserSecurity {
