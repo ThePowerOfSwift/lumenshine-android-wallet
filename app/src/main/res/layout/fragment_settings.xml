@@ -58,4 +58,40 @@
             android:indeterminate="true" />
     </FrameLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_20"
+        android:text="@string/change_tfa_label" />
+
+    <com.soneso.stellargate.presentation.auth.FormInputView
+        android:id="@+id/pass_for_tfa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        app:regex="@string/password_regex" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/change_tfa_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/change_tfa_button"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/change_tfa_progress"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+    </FrameLayout>
+
 </LinearLayout>

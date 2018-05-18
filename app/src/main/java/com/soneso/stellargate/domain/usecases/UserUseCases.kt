@@ -86,11 +86,26 @@ class UserUseCases(private val userRepo: UserRepository) {
     fun provideLastUserCredentials() = userRepo.getLastUserCredentials()
 
     fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Single<Unit> {
+
         return userRepo.getCurrentUserSecurity()
                 .flatMap {
                     val helper = UserSecurityHelper(currentPass.toCharArray())
                     val us = helper.changePassword(it, newPass.toCharArray())
                     userRepo.changeUserPassword(us)
+                }
+    }
+
+    fun changeTfaPassword(pass: CharSequence): Single<TfaSecret> {
+
+        return userRepo.getCurrentUserSecurity()
+                .flatMap {
+                    val helper = UserSecurityHelper(pass.toCharArray())
+                    val publicKey188 = helper.decipherUserSecurity(it)
+                    if (publicKey188 != null) {
+                        userRepo.changeTfaSecret(publicKey188)
+                    } else {
+                        Single.error(SgError(R.string.login_password_wrong))
+                    }
                 }
     }
 

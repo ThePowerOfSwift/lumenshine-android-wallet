@@ -66,4 +66,6 @@
     <string name="change_password_label">Change your password:</string>
     <string name="hint_current_password">Current password</string>
     <string name="change_password_button">Change password</string>
+    <string name="change_tfa_label">Change your 2FA secret:</string>
+    <string name="change_tfa_button">Change 2FA secret</string>
 </resources>

@@ -7,6 +7,7 @@ import com.soneso.stellargate.networking.requester.UserRequester
 import com.soneso.stellargate.persistence.SgPrefs
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import org.bouncycastle.util.encoders.Base64
 
 /**
  * Class used to user operations to server.
@@ -250,6 +251,17 @@ class UserRepository(private val userRequester: UserRequester) {
         return userRequester.changeUserPassword(request)
                 .map {
                     Unit
+                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    fun changeTfaSecret(publicKey188: String): Single<TfaSecret> {
+
+        val request = ChangeTfaSecretRequest()
+        request.publicKeyIndex188 = publicKey188
+        return userRequester.changeTfaSecret(request)
+                .map {
+                    TfaSecret(it.tfaSecret, Base64.decode(it.tfaImageData))
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }

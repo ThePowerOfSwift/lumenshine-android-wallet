@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.soneso.stellargate.R
+import com.soneso.stellargate.domain.data.TfaSecret
 import com.soneso.stellargate.presentation.general.SgFragment
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
@@ -41,6 +42,7 @@ class SettingsFragment : SgFragment() {
     private fun setupListeners() {
 
         change_pass_button.setOnClickListener { attemptPassChange() }
+        change_tfa_button.setOnClickListener { attemptTfaChange() }
     }
 
     private fun subscribeForLiveData() {
@@ -48,6 +50,15 @@ class SettingsFragment : SgFragment() {
         viewModel.livePasswordChange.observe(this, Observer {
             renderPassChange(it ?: return@Observer)
         })
+        viewModel.liveTfaSecret.observe(this, Observer {
+            renderTfaChange(it ?: return@Observer)
+        })
+    }
+
+    private fun attemptTfaChange() {
+        if (pass_for_tfa.hasValidInput()) {
+            viewModel.changeTfaSecret(pass_for_tfa.trimmedText)
+        }
     }
 
     private fun attemptPassChange() {
@@ -81,6 +92,30 @@ class SettingsFragment : SgFragment() {
 
                 change_pass_button.visibility = View.VISIBLE
                 change_pass_progress.visibility = View.GONE
+                showErrorSnackbar(viewState.error)
+            }
+        }
+    }
+
+    private fun renderTfaChange(viewState: SgViewState<TfaSecret>) {
+
+        when (viewState.state) {
+
+            State.READY -> {
+
+                change_tfa_button.visibility = View.VISIBLE
+                change_tfa_progress.visibility = View.GONE
+                showSnackbar("Tfa secret successfully changed!")
+            }
+            State.LOADING -> {
+
+                change_tfa_button.visibility = View.INVISIBLE
+                change_tfa_progress.visibility = View.VISIBLE
+            }
+            State.ERROR -> {
+
+                change_tfa_button.visibility = View.VISIBLE
+                change_tfa_progress.visibility = View.GONE
                 showErrorSnackbar(viewState.error)
             }
         }

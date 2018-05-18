@@ -179,4 +179,10 @@ class UserRequester(private val userApi: UserApi) {
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
+
+    fun changeTfaSecret(request: ChangeTfaSecretRequest): Single<ChangeTfaSecretResponse> {
+        return userApi.changeTfaSecret(request.publicKeyIndex188)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+    }
 }

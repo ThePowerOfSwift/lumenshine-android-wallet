@@ -120,4 +120,10 @@ interface UserApi {
 
             @Field("public_key_188") publicKey188: String
     ): Single<Result<Any>>
+
+    @FormUrlEncoded
+    @POST("/portal/user/auth/new_2fa_secret")
+    fun changeTfaSecret(
+            @Field("key") publicKey188: String
+    ): Single<Result<ChangeTfaSecretResponse>>
 }
