@@ -109,6 +109,8 @@ class UserUseCases(private val userRepo: UserRepository) {
                 }
     }
 
+    fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
+
     companion object {
 
         const val TAG = "UserUseCases"

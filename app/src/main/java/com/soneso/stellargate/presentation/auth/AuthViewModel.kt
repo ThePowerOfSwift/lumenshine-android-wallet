@@ -215,4 +215,17 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                     liveLastCredentials.value = SgViewState(it as SgError)
                 })
     }
+
+    fun confirmTfaSecretChange(tfaCode: CharSequence) {
+
+        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
+
+        userUseCases.confirmTfaSecretChange(tfaCode)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveRegistrationStatus.value = SgViewState(it)
+                }, {
+                    liveRegistrationStatus.value = SgViewState(it as SgError)
+                })
+    }
 }

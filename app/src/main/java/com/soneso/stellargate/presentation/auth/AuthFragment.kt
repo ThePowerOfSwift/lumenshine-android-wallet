@@ -11,7 +11,7 @@ open class AuthFragment : SgFragment() {
     protected val authViewModel: AuthViewModel
         get() = authActivity.authViewModel
 
-    private val authActivity: AuthActivity
+    protected val authActivity: AuthActivity
         get() = activity as AuthActivity
 
     fun replaceFragment(fragment: AuthFragment, tag: String) {

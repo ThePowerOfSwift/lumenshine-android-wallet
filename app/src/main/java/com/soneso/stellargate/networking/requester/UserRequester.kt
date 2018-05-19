@@ -125,24 +125,28 @@ class UserRequester(private val userApi: UserApi) {
     }
 
     fun confirmMnemonic(): Single<Any> {
+
         return userApi.confirmMnemonic()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun resendConfirmationMail(request: ResendConfirmationMailRequest): Single<Any> {
+
         return userApi.resendConfirmationMail(request.email)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun fetchRegistrationStatus(): Single<GetRegistrationStatusResponse> {
+
         return userApi.getRegistrationStatus()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun requestEmailForPasswordReset(email: String): Single<Any> {
+
         return userApi.requestResetPasswordEmail(email)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
@@ -155,18 +159,21 @@ class UserRequester(private val userApi: UserApi) {
     }
 
     fun fetchTfaSecret(request: GetTfaSecretRequest): Single<GetTfaRequestResponse> {
+
         return userApi.getTfaSecret(request.publicKey188)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun fetchUserSecurity(): Single<GetUserAuthDataResponse> {
+
         return userApi.getUserAuthData()
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }
 
     fun changeUserPassword(request: ChangePasswordRequest): Single<Any> {
+
         return userApi
                 .changePassword(
                         request.passwordKdfSalt,
@@ -181,7 +188,15 @@ class UserRequester(private val userApi: UserApi) {
     }
 
     fun changeTfaSecret(request: ChangeTfaSecretRequest): Single<ChangeTfaSecretResponse> {
+
         return userApi.changeTfaSecret(request.publicKeyIndex188)
+                .subscribeOn(Schedulers.newThread())
+                .map(ResponseMapper())
+    }
+
+    fun confirmTfaSecretChange(request: ConfirmTfaSecretChangeRequest): Single<ConfirmTfaSecretChangeResponse> {
+
+        return userApi.confirmTfaSecretChange(request.tfaCode)
                 .subscribeOn(Schedulers.newThread())
                 .map(ResponseMapper())
     }

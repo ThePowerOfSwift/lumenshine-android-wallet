@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_tfa_registration.*
  * A simple [Fragment] subclass.
  *
  */
-class TfaRegistrationFragment : AuthFragment() {
+class TfaConfirmationFragment : AuthFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_tfa_registration, container, false)
@@ -44,7 +44,15 @@ class TfaRegistrationFragment : AuthFragment() {
     private fun setupListeners() {
 
         send_button.setOnClickListener {
-            authViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
+
+            when (authActivity.useCase) {
+                AuthActivity.UseCase.AUTH -> {
+                    authViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
+                }
+                AuthActivity.UseCase.CONFIRM_TFA_SECRET_CHANGE -> {
+                    authViewModel.confirmTfaSecretChange(tfa_code_view.text.toString())
+                }
+            }
         }
     }
 
@@ -85,8 +93,8 @@ class TfaRegistrationFragment : AuthFragment() {
 
     companion object {
 
-        const val TAG = "TfaRegistrationFragment"
+        const val TAG = "TfaConfirmationFragment"
 
-        fun newInstance() = TfaRegistrationFragment()
+        fun newInstance() = TfaConfirmationFragment()
     }
 }

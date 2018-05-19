@@ -2,6 +2,8 @@ package com.soneso.stellargate.presentation.auth
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.RegistrationStatus
@@ -16,6 +18,9 @@ import com.soneso.stellargate.presentation.general.State
 class AuthActivity : SgActivity() {
 
     lateinit var authViewModel: AuthViewModel
+        private set
+    lateinit var useCase: UseCase
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +31,21 @@ class AuthActivity : SgActivity() {
         title = getString(R.string.action_sign_in)
 
         subscribeForLiveData()
+        useCase = intent?.getSerializableExtra(EXTRA_USE_CASE) as? UseCase ?: UseCase.AUTH
 
-        replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
+        startPage()
+    }
+
+    private fun startPage() {
+
+        when (useCase) {
+            UseCase.AUTH -> {
+                replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
+            }
+            UseCase.CONFIRM_TFA_SECRET_CHANGE -> {
+                replaceFragment(TfaConfirmationFragment.newInstance(), TfaConfirmationFragment.TAG)
+            }
+        }
     }
 
     private fun subscribeForLiveData() {
@@ -55,7 +73,7 @@ class AuthActivity : SgActivity() {
         when {
             !status.tfaConfirmed -> {
 
-                replaceFragment(TfaRegistrationFragment.newInstance(), TfaRegistrationFragment.TAG)
+                replaceFragment(TfaConfirmationFragment.newInstance(), TfaConfirmationFragment.TAG)
             }
             !status.emailConfirmed -> {
 
@@ -79,5 +97,21 @@ class AuthActivity : SgActivity() {
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, tag)
                 .commit()
+    }
+
+    companion object {
+
+        const val TAG = "AuthActivity"
+        private const val EXTRA_USE_CASE = "$TAG.EXTRA_USE_CASE"
+
+        fun startInstance(context: Context, page: UseCase) {
+            val intent = Intent(context, AuthActivity::class.java)
+            intent.putExtra(EXTRA_USE_CASE, page)
+            context.startActivity(intent)
+        }
+    }
+
+    enum class UseCase {
+        AUTH, CONFIRM_TFA_SECRET_CHANGE
     }
 }

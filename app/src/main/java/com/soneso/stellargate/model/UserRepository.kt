@@ -261,7 +261,23 @@ class UserRepository(private val userRequester: UserRequester) {
         request.publicKeyIndex188 = publicKey188
         return userRequester.changeTfaSecret(request)
                 .map {
+                    SgPrefs.tfaSecret = it.tfaSecret
                     TfaSecret(it.tfaSecret, Base64.decode(it.tfaImageData))
+                }
+                .onErrorResumeNext(SgError.singleFromNetworkException())
+    }
+
+    fun confirmTfaSecretChange(tfaCode: String): Single<RegistrationStatus> {
+
+        val request = ConfirmTfaSecretChangeRequest()
+        request.tfaCode = tfaCode
+        return userRequester.confirmTfaSecretChange(request)
+                .map {
+                    RegistrationStatus(
+                            it.mailConfirmed,
+                            it.mnemonicConfirmed,
+                            it.tfaConfirmed
+                    )
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }

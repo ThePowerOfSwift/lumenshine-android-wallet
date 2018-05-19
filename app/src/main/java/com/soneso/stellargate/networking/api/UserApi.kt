@@ -126,4 +126,10 @@ interface UserApi {
     fun changeTfaSecret(
             @Field("public_key_188") publicKey188: String
     ): Single<Result<ChangeTfaSecretResponse>>
+
+    @FormUrlEncoded
+    @POST("/portal/user/dashboard/confirm_new_2fa_secret")
+    fun confirmTfaSecretChange(
+            @Field("tfa_code") tfaCode: String
+    ): Single<Result<ConfirmTfaSecretChangeResponse>>
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.TfaSecret
+import com.soneso.stellargate.presentation.auth.AuthActivity
 import com.soneso.stellargate.presentation.general.SgFragment
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
@@ -105,7 +106,8 @@ class SettingsFragment : SgFragment() {
 
                 change_tfa_button.visibility = View.VISIBLE
                 change_tfa_progress.visibility = View.GONE
-                showSnackbar("Tfa secret successfully changed!")
+                AuthActivity.startInstance(context
+                        ?: return, AuthActivity.UseCase.CONFIRM_TFA_SECRET_CHANGE)
             }
             State.LOADING -> {
 
