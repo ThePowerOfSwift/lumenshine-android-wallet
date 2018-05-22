@@ -10,6 +10,6 @@ class ConfirmTfaSecretChangeResponse {
     @JsonProperty("tfa_confirmed")
     var tfaConfirmed = false
 
-    @JsonProperty("tfa_confirmed")
+    @JsonProperty("mnemonic_confirmed")
     var mnemonicConfirmed = false
 }

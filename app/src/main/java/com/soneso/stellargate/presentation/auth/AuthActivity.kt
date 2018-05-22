@@ -85,8 +85,20 @@ class AuthActivity : SgActivity() {
             }
             else -> {
 
-                MainActivity.startInstance(this)
+                handleRegistrationCompleted()
+            }
+        }
+    }
+
+    private fun handleRegistrationCompleted() {
+
+        when (useCase) {
+            UseCase.AUTH -> {
                 finishAffinity()
+                MainActivity.startInstance(this)
+            }
+            UseCase.CONFIRM_TFA_SECRET_CHANGE -> {
+                finish()
             }
         }
     }
