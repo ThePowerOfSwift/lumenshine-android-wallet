@@ -97,16 +97,13 @@ dependencies {
     // cristi.paval, 3/19/18 - library used to draw charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
-    // cristi.paval, 3/20/18 - library for Qr code
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-
     // cristi.paval, 3/28/18 - Bouncy castle, library for java security compatibility
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.56'
 
     // cristi.paval, 3/29/18 - library for secured database
     implementation "com.commonsware.cwac:saferoom:0.3.2"
-    kapt 'android.arch.persistence.room:compiler:1.0.0'
-    implementation "android.arch.persistence.room:runtime:1.0.0"
+    kapt 'android.arch.persistence.room:compiler:1.1.0'
+    implementation "android.arch.persistence.room:runtime:1.1.0"
 
     // cristi.paval, 4/23/18 - Android KTX
     implementation 'androidx.core:core-ktx:0.3'

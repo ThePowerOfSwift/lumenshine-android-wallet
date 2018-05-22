@@ -4,6 +4,7 @@ package com.soneso.stellargate.presentation.auth
 import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -12,9 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.authenticator.OtpProvider
 import com.soneso.stellargate.R
+import com.soneso.stellargate.domain.data.TfaSecret
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
-import com.soneso.stellargate.presentation.util.displayQrCode
 import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 
 /**
@@ -56,7 +57,7 @@ class TfaConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun renderTfaSecret(viewState: SgViewState<String>) {
+    private fun renderTfaSecret(viewState: SgViewState<TfaSecret>) {
 
         when (viewState.state) {
             State.ERROR -> {
@@ -72,20 +73,21 @@ class TfaConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun setupToken(token: String) {
+    private fun setupToken(tfaSecret: TfaSecret) {
 
         qr_code_view.post {
             val params = qr_code_view.layoutParams
             params.height = qr_code_view.width
             qr_code_view.requestLayout()
-            qr_code_view.displayQrCode(token)
+
+            qr_code_view.setImageBitmap(BitmapFactory.decodeByteArray(tfaSecret.imageData, 0, tfaSecret.imageData.size))
         }
         token_view.keyListener = null
-        token_view.setText(token)
+        token_view.setText(tfaSecret.secretCode)
         copy_button.setOnClickListener {
 
             val clipboard = context?.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("", OtpProvider.currentTotpCode(token))
+            val clip = ClipData.newPlainText("", OtpProvider.currentTotpCode(tfaSecret.secretCode))
             clipboard.primaryClip = clip
             showSnackbar("Token copied in clipboard!")
         }

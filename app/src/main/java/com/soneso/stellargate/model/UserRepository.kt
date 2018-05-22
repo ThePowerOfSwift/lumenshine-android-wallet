@@ -42,6 +42,7 @@ class UserRepository(private val userRequester: UserRequester) {
 
                     SgPrefs.jwtToken = it.jwtToken
                     SgPrefs.tfaSecret = it.token2fa
+                    SgPrefs.tfaImageData = Base64.decode(it.tfaImageData)
                     SgPrefs.username = request.email
 
                     RegistrationStatus(false, false, false)
@@ -122,6 +123,7 @@ class UserRepository(private val userRequester: UserRequester) {
                     SgPrefs.jwtToken = it.jwtToken
                     if (it.tfaSecret.isNotEmpty()) {
                         SgPrefs.tfaSecret = it.tfaSecret
+                        SgPrefs.tfaImageData = Base64.decode(it.tfaImageData)
                     } else {
                         refreshTfaSecret(userSecurity.publicKeyIndex188)
                     }
@@ -190,10 +192,14 @@ class UserRepository(private val userRequester: UserRequester) {
                 .onErrorResumeNext(SgError.singleFromNetworkException())
     }
 
-    fun getTfaSecret(): Single<String> {
+    fun getTfaSecret(): Single<TfaSecret> {
 
         return Single
-                .create<String> { it.onSuccess(SgPrefs.tfaSecret) }
+                .create<TfaSecret> {
+                    it.onSuccess(
+                            TfaSecret(SgPrefs.tfaSecret, SgPrefs.tfaImageData)
+                    )
+                }
                 .subscribeOn(Schedulers.newThread())
     }
 
@@ -262,6 +268,7 @@ class UserRepository(private val userRequester: UserRequester) {
         return userRequester.changeTfaSecret(request)
                 .map {
                     SgPrefs.tfaSecret = it.tfaSecret
+                    SgPrefs.tfaImageData = Base64.decode(it.tfaImageData)
                     TfaSecret(it.tfaSecret, Base64.decode(it.tfaImageData))
                 }
                 .onErrorResumeNext(SgError.singleFromNetworkException())

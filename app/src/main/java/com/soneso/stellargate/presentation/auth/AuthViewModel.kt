@@ -4,10 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.soneso.stellargate.R
-import com.soneso.stellargate.domain.data.Country
-import com.soneso.stellargate.domain.data.RegistrationStatus
-import com.soneso.stellargate.domain.data.SgError
-import com.soneso.stellargate.domain.data.UserCredentials
+import com.soneso.stellargate.domain.data.*
 import com.soneso.stellargate.domain.usecases.UserUseCases
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
@@ -23,7 +20,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveSalutations: LiveData<SgViewState<List<String>>> = MutableLiveData()
 
-    val liveTfaSecret: LiveData<SgViewState<String>> = MutableLiveData()
+    val liveTfaSecret: LiveData<SgViewState<TfaSecret>> = MutableLiveData()
 
     val liveCountries: LiveData<SgViewState<List<Country>>> = MutableLiveData()
 

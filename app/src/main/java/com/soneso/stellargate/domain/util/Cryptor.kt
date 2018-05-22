@@ -3,7 +3,6 @@ package com.soneso.stellargate.domain.util
 
 import java.security.GeneralSecurityException
 import java.security.SecureRandom
-import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKeyFactory
@@ -48,51 +47,56 @@ object Cryptor {
         return keyFactory.generateSecret(keySpec).encoded
     }
 
-    // encrypts the master key by using the given password
-    data class EncryptionAndIvTuple(val encryptedValue: ByteArray, val iv: ByteArray) {
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as EncryptionAndIvTuple
-
-            if (!Arrays.equals(encryptedValue, other.encryptedValue)) return false
-            if (!Arrays.equals(iv, other.iv)) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = Arrays.hashCode(encryptedValue)
-            result = 31 * result + Arrays.hashCode(iv)
-            return result
-        }
-    }
-
-    fun encryptValue(value: ByteArray, key: ByteArray): EncryptionAndIvTuple {
+    fun encryptValue(value: ByteArray, key: ByteArray, iv: ByteArray): ByteArray {
 
         val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
-        val iv = generateIv(cipher.blockSize) // IV.
         val ivParams = IvParameterSpec(iv)
 
 
         val secretKey = SecretKeySpec(key, CIPHER_ALGORITHM)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParams)
-        return EncryptionAndIvTuple(cipher.doFinal(value), iv) // encrypt.
+        return cipher.doFinal(value) // encrypt
     }
 
     //decrypts a master key
     @Throws(GeneralSecurityException::class)
-    fun decryptValue(derivedPassword: ByteArray, encryptedValue: ByteArray, encryptionIV: ByteArray): ByteArray {
+    fun decryptValue(encryptedValue: ByteArray, key: ByteArray, encryptionIV: ByteArray): ByteArray {
 
 
         // Decrypt the master key using the loaded data and given password.
 
         val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
-        val secretKey = SecretKeySpec(derivedPassword, CIPHER_ALGORITHM)
+        val secretKey = SecretKeySpec(key, CIPHER_ALGORITHM)
         val ivParams = IvParameterSpec(encryptionIV)
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParams)
         return cipher.doFinal(encryptedValue)
+    }
+
+    fun applyPadding(data: ByteArray, blockSize: Int = 16): ByteArray {
+
+        var resultSize = data.size + 1
+
+        if (resultSize % blockSize != 0) {
+            val blockCount = resultSize / blockSize + 1
+            resultSize = blockSize * blockCount
+        }
+
+        val paddedData = ByteArray(resultSize)
+        paddedData.forEachIndexed { index, _ ->
+            when {
+                index < data.size -> {
+                    paddedData[index] = data[index]
+                }
+                index == data.size -> {
+                    paddedData[index] = 0x80.toByte()
+                }
+                else -> {
+                    paddedData[index] = 0x00.toByte()
+                }
+            }
+        }
+
+        return paddedData
     }
 
     fun removePadding(paddedData: ByteArray): ByteArray {
@@ -107,9 +111,10 @@ object Cryptor {
                 .toByteArray()
     }
 
-    // generates a new IV.
-    private fun generateIv(pLength: Int): ByteArray {
-        val b = ByteArray(pLength)
+    fun generateIv(): ByteArray {
+
+        val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
+        val b = ByteArray(cipher.blockSize)
         random.nextBytes(b)
         return b
     }

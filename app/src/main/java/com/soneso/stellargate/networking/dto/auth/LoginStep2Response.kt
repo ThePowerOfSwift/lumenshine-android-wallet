@@ -15,6 +15,9 @@ class LoginStep2Response {
     @JsonProperty("tfa_secret")
     var tfaSecret = ""
 
+    @JsonProperty("tfa_qr_image")
+    var tfaImageData = ""
+
     @JsonProperty("tfa_confirmed")
     var tfaConfirmed = false
 }

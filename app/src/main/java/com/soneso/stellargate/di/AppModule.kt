@@ -61,7 +61,7 @@ class AppModule(private val context: Context) {
     @Singleton
     fun provideDatabase(): SgDatabase {
 
-        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appId))
+        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appPass))
 
         return Room.databaseBuilder(context, SgDatabase::class.java, DbNames.DB_NAME)
                 .openHelperFactory(factory)

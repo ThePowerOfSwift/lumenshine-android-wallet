@@ -24,8 +24,6 @@ import kotlinx.android.synthetic.main.fragment_login.*
  */
 class LoginFragment : AuthFragment() {
 
-    private var tfaSecret = ""
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_login, container, false)
 
@@ -42,13 +40,6 @@ class LoginFragment : AuthFragment() {
 
         authViewModel.liveRegistrationStatus.observe(this, Observer {
             renderRegistrationStatus(it ?: return@Observer)
-        })
-
-        authViewModel.liveTfaSecret.observe(this, Observer {
-            val viewState = it ?: return@Observer
-            if (viewState.state == State.READY) {
-                tfaSecret = viewState.data!!
-            }
         })
 
         authViewModel.liveLastCredentials.observe(this, Observer {

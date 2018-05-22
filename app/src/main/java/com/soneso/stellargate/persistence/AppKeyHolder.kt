@@ -19,7 +19,7 @@ import javax.crypto.CipherInputStream
 import javax.crypto.CipherOutputStream
 import javax.security.auth.x500.X500Principal
 
-class SgCipher(context: Context, private val alias: String) {
+class AppKeyHolder(context: Context, private val alias: String) {
 
     private val keyStore = try {
         KeyStore.getInstance(ANDROID_KEYSTORE)
@@ -29,16 +29,16 @@ class SgCipher(context: Context, private val alias: String) {
 
     init {
         keyStore?.load(null)
-        createNewKeys(context)
+        createNewKeysIfNeeded(context)
     }
 
-    private fun createNewKeys(context: Context) {
+    private fun createNewKeysIfNeeded(context: Context) {
         try {
             // Create new key if needed
             if (keyStore?.containsAlias(alias) == false) {
                 val start = Calendar.getInstance()
                 val end = Calendar.getInstance()
-                end.add(Calendar.YEAR, 1)
+                end.add(Calendar.YEAR, 25)
                 val spec = KeyPairGeneratorSpec.Builder(context)
                         .setAlias(alias)
                         .setSubject(X500Principal("CN=Stellargate, O=Soneso"))
@@ -56,6 +56,7 @@ class SgCipher(context: Context, private val alias: String) {
         }
     }
 
+    @Suppress("unused")
     fun deleteKey() {
         try {
             keyStore?.deleteEntry(alias)
@@ -64,14 +65,14 @@ class SgCipher(context: Context, private val alias: String) {
         }
     }
 
-    fun encryptText(text: String): String? {
+    fun encryptPass(text: String): String {
         try {
             val privateKeyEntry = keyStore?.getEntry(alias, null) as KeyStore.PrivateKeyEntry
             val publicKey = privateKeyEntry.certificate.publicKey as RSAPublicKey
 
 
             if (text.isEmpty()) {
-                return null
+                return text
             }
 
             val inCipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
@@ -86,11 +87,36 @@ class SgCipher(context: Context, private val alias: String) {
             return Base64.encodeToString(bytes, Base64.DEFAULT)
         } catch (e: Exception) {
             Log.e(TAG, Log.getStackTraceString(e))
-            return null
+            return text
         }
     }
 
-    fun decryptText(text: String): String? {
+    fun encryptKey(data: ByteArray): ByteArray {
+        try {
+            val privateKeyEntry = keyStore?.getEntry(alias, null) as KeyStore.PrivateKeyEntry
+            val publicKey = privateKeyEntry.certificate.publicKey as RSAPublicKey
+
+
+            if (data.isEmpty()) {
+                return data
+            }
+
+            val inCipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
+            inCipher.init(Cipher.ENCRYPT_MODE, publicKey)
+
+            val outputStream = ByteArrayOutputStream()
+            val cipherOutputStream = CipherOutputStream(outputStream, inCipher)
+            cipherOutputStream.write(data)
+            cipherOutputStream.close()
+
+            return outputStream.toByteArray()
+        } catch (e: Exception) {
+            Log.e(TAG, Log.getStackTraceString(e))
+            return data
+        }
+    }
+
+    fun decryptPass(text: String): String {
         return try {
             val privateKeyEntry = keyStore?.getEntry(alias, null) as KeyStore.PrivateKeyEntry
             val privateKey = privateKeyEntry.privateKey
@@ -106,12 +132,32 @@ class SgCipher(context: Context, private val alias: String) {
 
         } catch (e: Exception) {
             Log.e(TAG, e.javaClass.name, e)
-            null
+            text
+        }
+    }
+
+    fun decryptKey(data: ByteArray): ByteArray {
+        return try {
+            val privateKeyEntry = keyStore?.getEntry(alias, null) as KeyStore.PrivateKeyEntry
+            val privateKey = privateKeyEntry.privateKey
+
+            val outCipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
+            outCipher.init(Cipher.DECRYPT_MODE, privateKey)
+
+            val cipherInputStream = CipherInputStream(
+                    ByteArrayInputStream(data),
+                    outCipher
+            )
+            return cipherInputStream.readBytes()
+
+        } catch (e: Exception) {
+            Log.e(TAG, e.javaClass.name, e)
+            data
         }
     }
 
     companion object {
-        const val TAG = "SgCipher"
+        const val TAG = "AppKeyHolder"
         private const val CIPHER_TRANSFORMATION = "RSA/ECB/PKCS1Padding"
         private const val ANDROID_KEYSTORE = "AndroidKeyStore"
     }

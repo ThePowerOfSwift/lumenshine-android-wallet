@@ -15,7 +15,6 @@ import com.soneso.stellargate.domain.data.BlogPostPreview
 import com.soneso.stellargate.domain.data.InternalLink
 import com.soneso.stellargate.domain.data.StellarAccount
 import com.soneso.stellargate.domain.util.Mock
-import com.soneso.stellargate.presentation.util.displayQrCode
 import kotlinx.android.synthetic.main.item_home_account.view.*
 import kotlinx.android.synthetic.main.item_home_chart.view.*
 import kotlinx.android.synthetic.main.item_home_internal_link.view.*
@@ -98,7 +97,6 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val imageView = view.account_image
 
         fun fillData(account: StellarAccount) {
-            imageView.displayQrCode(account.accountId)
 
         }
     }

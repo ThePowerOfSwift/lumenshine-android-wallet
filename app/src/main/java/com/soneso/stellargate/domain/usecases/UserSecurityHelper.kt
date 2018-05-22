@@ -21,10 +21,12 @@ class UserSecurityHelper(private val pass: CharArray) {
         val derivedPassword = Cryptor.deriveKeyPbkdf2(passwordKdfSalt, pass)
 
         val wordListMasterKey = Cryptor.generateMasterKey()
-        val (encryptedWordListMasterKey, wordListMasterKeyEncryptionIv) = Cryptor.encryptValue(wordListMasterKey, derivedPassword)
+        val wordListMasterKeyEncryptionIv = Cryptor.generateIv()
+        val encryptedWordListMasterKey = Cryptor.encryptValue(wordListMasterKey, derivedPassword, wordListMasterKeyEncryptionIv)
 
         val mnemonicMasterKey = Cryptor.generateMasterKey()
-        val (encryptedMnemonicMasterKey, mnemonicMasterKeyEncryptionIv) = Cryptor.encryptValue(mnemonicMasterKey, derivedPassword)
+        val mnemonicMasterKeyEncryptionIv = Cryptor.generateIv()
+        val encryptedMnemonicMasterKey = Cryptor.encryptValue(mnemonicMasterKey, derivedPassword, mnemonicMasterKeyEncryptionIv)
 
         val wordList = mutableListOf<String>(*WordList.ENGLISH.words.toTypedArray()).shuffled()
 
@@ -42,7 +44,8 @@ class UserSecurityHelper(private val pass: CharArray) {
         val mnemonicBytes = ByteArray(2 * mnemonicIndexes.size, {
             mnemonicByteList[it]
         })
-        val (encryptedMnemonic, mnemonicEncryptionIv) = Cryptor.encryptValue(mnemonicBytes, mnemonicMasterKey)
+        val mnemonicEncryptionIv = Cryptor.generateIv()
+        val encryptedMnemonic = Cryptor.encryptValue(mnemonicBytes, mnemonicMasterKey, mnemonicEncryptionIv)
 
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
         val publicKeyIndex188 = Wallet.createKeyPair(mnemonicChars, null, 188).accountId
@@ -53,7 +56,8 @@ class UserSecurityHelper(private val pass: CharArray) {
         }
         val wordListBytes = wordListStringBuilder.dropLast(1).padToBlocks(16).toByteArray()
 
-        val (encryptedWordList, wordListEncryptionIv) = Cryptor.encryptValue(wordListBytes, wordListMasterKey)
+        val wordListEncryptionIv = Cryptor.generateIv()
+        val encryptedWordList = Cryptor.encryptValue(wordListBytes, wordListMasterKey, wordListEncryptionIv)
 
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "password kdf salt: ${Base64.toBase64String(passwordKdfSalt)}")
@@ -103,14 +107,14 @@ class UserSecurityHelper(private val pass: CharArray) {
 
             val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
 
-            val wordListMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedWordListMasterKey, userSecurity.wordListMasterKeyEncryptionIv)
+            val wordListMasterKey = Cryptor.decryptValue(userSecurity.encryptedWordListMasterKey, derivedPassword, userSecurity.wordListMasterKeyEncryptionIv)
 
-            val wordListCsvBytes = Cryptor.decryptValue(wordListMasterKey, userSecurity.encryptedWordList, userSecurity.wordListEncryptionIv)
+            val wordListCsvBytes = Cryptor.decryptValue(userSecurity.encryptedWordList, wordListMasterKey, userSecurity.wordListEncryptionIv)
             val wordList = String(wordListCsvBytes).trim().split(",")
 
-            val mnemonicMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMnemonicMasterKey, userSecurity.mnemonicMasterKeyEncryptionIv)
+            val mnemonicMasterKey = Cryptor.decryptValue(userSecurity.encryptedMnemonicMasterKey, derivedPassword, userSecurity.mnemonicMasterKeyEncryptionIv)
 
-            val mnemonicBytes = Cryptor.decryptValue(mnemonicMasterKey, userSecurity.encryptedMnemonic, userSecurity.mnemonicEncryptionIv)
+            val mnemonicBytes = Cryptor.decryptValue(userSecurity.encryptedMnemonic, mnemonicMasterKey, userSecurity.mnemonicEncryptionIv)
 
             if (mnemonicBytes.size != 48) {
                 return null
@@ -143,13 +147,15 @@ class UserSecurityHelper(private val pass: CharArray) {
     fun changePassword(userSecurity: UserSecurity, newPassword: CharArray): UserSecurity {
 
         val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
-        val wordListMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedWordListMasterKey, userSecurity.wordListMasterKeyEncryptionIv)
-        val mnemonicMasterKey = Cryptor.decryptValue(derivedPassword, userSecurity.encryptedMnemonicMasterKey, userSecurity.mnemonicMasterKeyEncryptionIv)
+        val wordListMasterKey = Cryptor.decryptValue(userSecurity.encryptedWordListMasterKey, derivedPassword, userSecurity.wordListMasterKeyEncryptionIv)
+        val mnemonicMasterKey = Cryptor.decryptValue(userSecurity.encryptedMnemonicMasterKey, derivedPassword, userSecurity.mnemonicMasterKeyEncryptionIv)
 
         val newKdfSalt = Cryptor.generateSalt()
         val derivedNewPassword = Cryptor.deriveKeyPbkdf2(newKdfSalt, newPassword)
-        val (encryptedWordListMasterKey, wordListMasterKeyEncryptionIv) = Cryptor.encryptValue(wordListMasterKey, derivedNewPassword)
-        val (encryptedMnemonicMasterKey, mnemonicMasterKeyEncryptionIv) = Cryptor.encryptValue(mnemonicMasterKey, derivedNewPassword)
+        val wordListMasterKeyEncryptionIv = Cryptor.generateIv()
+        val encryptedWordListMasterKey = Cryptor.encryptValue(wordListMasterKey, derivedNewPassword, wordListMasterKeyEncryptionIv)
+        val mnemonicMasterKeyEncryptionIv = Cryptor.generateIv()
+        val encryptedMnemonicMasterKey = Cryptor.encryptValue(mnemonicMasterKey, derivedNewPassword, mnemonicMasterKeyEncryptionIv)
 
         return UserSecurity(
                 userSecurity.username,
