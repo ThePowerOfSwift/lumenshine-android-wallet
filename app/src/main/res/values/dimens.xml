@@ -35,4 +35,7 @@
     <dimen name="size_350">350dp</dimen>
     <dimen name="size_400">400dp</dimen>
     <dimen name="size_infinite">1000dp</dimen>
+
+    <dimen name="dialog_info_header">56dp</dimen>
+
 </resources>

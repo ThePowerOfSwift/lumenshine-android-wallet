@@ -1,9 +1,13 @@
 package com.soneso.stellargate.presentation.util
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.view.LayoutInflater
+import android.view.View
+import com.soneso.stellargate.R
 
 
 /**
@@ -22,4 +26,15 @@ fun Context.forwardToBrowser(url: String) {
 fun Context.isIntentSafe(intent: Intent): Boolean {
     val activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
     return activities.size > 0
+}
+
+fun Activity.showInfoDialog() {
+    val fragmentTransaction = this.fragmentManager.beginTransaction()
+    val infoDialog = InfoDialog.newInstance(R.string.info_dialog, R.drawable.ic_error_outline)
+    infoDialog.setViewBuilder(object : InfoDialog.ViewBuilder {
+        override fun createView(context: Context, inflater: LayoutInflater): View {
+            return inflater.inflate(R.layout.info, null)
+        }
+    })
+    infoDialog.show(fragmentTransaction, InfoDialog.TAG)
 }

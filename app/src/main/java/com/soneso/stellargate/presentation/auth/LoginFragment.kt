@@ -16,6 +16,7 @@ import com.soneso.stellargate.domain.data.UserCredentials
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import com.soneso.stellargate.presentation.util.setOnTextChangeListener
+import com.soneso.stellargate.presentation.util.showInfoDialog
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
@@ -69,6 +70,9 @@ class LoginFragment : AuthFragment() {
         email.setOnTextChangeListener {
             renderLastCredentials(authViewModel.liveLastCredentials.value
                     ?: return@setOnTextChangeListener)
+        }
+        show_dialog.setOnClickListener {
+            activity!!.showInfoDialog()
         }
     }
 
