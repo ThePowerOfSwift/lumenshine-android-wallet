@@ -26,9 +26,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
-        app:error_text="@string/error_invalid_password"
-        app:input_level="@integer/input_mandatory"
-        app:regex="@string/password_regex" />
+        app:input_level="@integer/input_mandatory"/>
 
     <com.soneso.stellargate.presentation.auth.FormInputView
         android:id="@+id/two_factor_code"
@@ -39,9 +37,7 @@
         android:imeActionLabel="@string/action_sign_in"
         android:imeOptions="actionUnspecified"
         android:inputType="number"
-        app:error_text="@string/error_invalid_password"
-        app:input_level="@integer/input_optional"
-        app:regex="@string/password_regex" />
+        app:input_level="@integer/input_optional"/>
 
     <FrameLayout
         android:layout_width="match_parent"

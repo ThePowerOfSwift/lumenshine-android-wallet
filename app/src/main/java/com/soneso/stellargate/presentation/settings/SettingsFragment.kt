@@ -70,9 +70,9 @@ class SettingsFragment : SgFragment() {
     }
 
     private fun validPassFields() =
-            current_pass.hasValidInput()
-                    && new_pass.hasValidInput()
+                    new_pass.isValidPassword()
                     && new_pass.trimmedText == pass_confirmation.trimmedText
+    // TODO: if passwords don't match show error message
 
     private fun renderPassChange(viewState: SgViewState<Unit>) {
 

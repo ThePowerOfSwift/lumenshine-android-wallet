@@ -158,7 +158,10 @@ class RegistrationFragment : AuthFragment() {
 
     private fun isValidForm() =
             email.hasValidInput()
-                    && password.hasValidInput()
+                    && password.isValidPassword()
+                    && password.trimmedText == password_confirmation.trimmedText
+
+    // TODO: if passwords don't match show error message
 
     companion object {
         const val TAG = "RegistrationFragment"
