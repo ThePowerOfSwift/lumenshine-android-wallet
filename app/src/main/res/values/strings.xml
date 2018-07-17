@@ -44,7 +44,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_account">Don\'t have an account?</string>
-    <string name="lost_password">Lost password?</string>
+    <string name="lost_password">Lost password</string>
     <string name="lost_tfa">Lost your tfa?</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="create_account"><u>Create one!</u></string>
@@ -68,6 +68,7 @@
     <string name="change_password_button">Change password</string>
     <string name="change_tfa_label">Change your 2FA secret:</string>
     <string name="change_tfa_button">Change 2FA secret</string>
+    <!--attila.janosi Info dialog-->
     <string name="info_dialog">Info</string>
     <string name="demo_info_text">
       What is Lorem Ipsum?\n
@@ -82,4 +83,12 @@ Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots 
 \n\n
 The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
     </string>
+    <!--attila.janosi  7/16/18 Login screen-->
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="lost_tfa_secret">Lost 2FA Secret</string>
+    <string name="import_mnemonic">Import mnemonic</string>
+    <string name="about">About</string>
+    <string name="welcome">Welcome</string>
+    <string name="more">More</string>
 </resources>

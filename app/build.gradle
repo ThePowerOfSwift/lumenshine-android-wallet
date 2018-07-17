@@ -94,6 +94,8 @@ dependencies {
     implementation 'android.arch.persistence.room:runtime:1.1.0'
     // cristi.paval, 4/23/18 - Android KTX
     implementation 'androidx.core:core-ktx:0.3'
+    //attila.janosi, 7/17/18
+    implementation 'com.mikhaellopez:circularimageview:3.2.0'
 }
 
 
