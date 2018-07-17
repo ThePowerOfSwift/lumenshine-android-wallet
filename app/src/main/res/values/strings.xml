@@ -40,7 +40,12 @@
     <string name="action_submit">Submit</string>
     <string name="action_register">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">Password must contain at least one digit, one lower case and one upper case letter and has to be at least 9 characters long!</string>
+    <string name="info_password_requirements">Password must contain at least one digit, one lower case and one upper case letter and has to be at least 9 characters long!</string>
+    <string name="error_invalid_password_min_one_lower_case_char">Password must contain at least one lower case character</string>
+    <string name="error_invalid_password_min_one_upper_case_char">Password must contain at least one upper case character</string>
+    <string name="error_invalid_password_min_one_digit">Password must contain at least one digit</string>
+    <string name="error_invalid_password_min_nine_characters">Password must contain at least 9 characters (including digits)</string>
+    <string name="error_invalid_password_repetion">Password repetition does not match to password</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_account">Don\'t have an account?</string>

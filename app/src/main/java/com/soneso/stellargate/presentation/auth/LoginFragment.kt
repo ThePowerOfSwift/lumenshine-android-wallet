@@ -146,9 +146,7 @@ class LoginFragment : AuthFragment() {
         }
     }
 
-    private fun isValidForm() =
-            email.hasValidInput()
-                    && password.hasValidInput()
+    private fun isValidForm() = email.hasValidInput()
 
     companion object {
 

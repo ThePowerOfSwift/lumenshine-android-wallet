@@ -13,7 +13,9 @@ class FormInputView @JvmOverloads constructor(
 
     private var inputLevel = 0
     private var errorText: CharSequence = ""
+    private var minPasswordLenght = 9
     private var regexToMatch = ""
+
     var trimmedText: CharSequence
         get() = text?.trim() ?: ""
         set(value) {
@@ -52,8 +54,39 @@ class FormInputView @JvmOverloads constructor(
             inputLevel == resources.getInteger(R.integer.input_optional) && text.isNullOrBlank() -> {
                 return true
             }
+
             regexToMatch.isNotEmpty() && !trimmedText.matches(Regex(regexToMatch)) -> {
                 error = errorText
+
+            }
+        }
+        return true
+    }
+
+    fun isValidPassword(): Boolean {
+        when {
+            inputLevel == resources.getInteger(R.integer.input_mandatory) && text.isNullOrBlank() -> {
+                error = resources.getText(R.string.error_field_required)
+                return false
+            }
+
+            !trimmedText.matches(Regex(".*[A-Z].*")) -> {
+                error = resources.getText(R.string.error_invalid_password_min_one_upper_case_char)
+                return false
+            }
+
+            !trimmedText.matches(Regex(".*[a-z].*")) -> {
+                error = resources.getText(R.string.error_invalid_password_min_one_lower_case_char)
+                return false
+            }
+
+            !trimmedText.matches(Regex(".*\\d.*")) -> {
+                error = resources.getText(R.string.error_invalid_password_min_one_digit)
+                return false
+            }
+
+            trimmedText.length < minPasswordLenght -> {
+                error = resources.getText(R.string.error_invalid_password_min_nine_characters)
                 return false
             }
         }
