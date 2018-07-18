@@ -12,7 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.google.firebase.iid.FirebaseInstanceId
 import com.soneso.stellargate.R
-import com.soneso.stellargate.presentation.accounts.AccountsFragment
+import com.soneso.stellargate.presentation.accounts.WalletsFragment
 import com.soneso.stellargate.presentation.general.SgActivity
 import com.soneso.stellargate.presentation.general.SgFragment
 import com.soneso.stellargate.presentation.home.HomeFragment
@@ -79,14 +79,20 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 app_bar_layout.setExpanded(true)
                 replaceFragment(HomeFragment.newInstance(), HomeFragment.TAG)
             }
-            R.id.nav_accounts -> {
+            R.id.nav_wallets -> {
                 app_bar_layout.setExpanded(false)
-                replaceFragment(AccountsFragment.newInstance(), AccountsFragment.TAG)
+                replaceFragment(WalletsFragment.newInstance(), WalletsFragment.TAG)
             }
             R.id.nav_transactions -> {
 
             }
-            R.id.nav_promotions -> {
+            R.id.nav_currencies -> {
+
+            }
+            R.id.nav_contacts -> {
+
+            }
+            R.id.nav_extras -> {
 
             }
             R.id.nav_settings -> {
@@ -94,6 +100,9 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 replaceFragment(SettingsFragment.newInstance(), SettingsFragment.TAG)
             }
             R.id.nav_help -> {
+
+            }
+            R.id.nav_sign_out -> {
 
             }
         }

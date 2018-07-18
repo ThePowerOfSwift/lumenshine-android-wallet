@@ -9,17 +9,25 @@
             android:icon="@drawable/ic_action_home"
             android:title="@string/menu_item_home" />
         <item
-            android:id="@+id/nav_accounts"
+            android:id="@+id/nav_wallets"
             android:icon="@drawable/ic_action_account_balance_wallet"
-            android:title="@string/menu_item_accounts" />
+            android:title="@string/menu_item_wallets" />
         <item
             android:id="@+id/nav_transactions"
             android:icon="@drawable/ic_action_list"
             android:title="@string/menu_item_transactions" />
         <item
-            android:id="@+id/nav_promotions"
-            android:icon="@drawable/ic_action_local_offer"
-            android:title="@string/menu_item_promotions" />
+            android:id="@+id/nav_currencies"
+            android:icon="@drawable/ic_action_list"
+            android:title="@string/menu_item_currencies" />
+        <item
+            android:id="@+id/nav_contacts"
+            android:icon="@drawable/ic_action_list"
+            android:title="@string/menu_item_contacts" />
+        <item
+            android:id="@+id/nav_extras"
+            android:icon="@drawable/ic_action_list"
+            android:title="@string/menu_item_extras" />
     </group>
 
     <group
@@ -33,6 +41,14 @@
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_action_help"
             android:title="@string/menu_item_help" />
+    </group>
+    <group
+        android:id="@+id/third_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/ic_action_settings"
+            android:title="@string/menu_item_sign_out" />
     </group>
 
 </menu>

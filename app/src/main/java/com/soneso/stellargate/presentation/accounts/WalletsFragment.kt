@@ -13,15 +13,15 @@ import com.soneso.stellargate.presentation.general.SgFragment
 /**
  * A simple [Fragment] subclass.
  */
-class AccountsFragment : SgFragment() {
+class WalletsFragment : SgFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_accounts, container, false)
 
 
     companion object {
-        const val TAG = "AccountsFragment"
+        const val TAG = "WalletsFragment"
 
-        fun newInstance() = AccountsFragment()
+        fun newInstance() = WalletsFragment()
     }
 }
