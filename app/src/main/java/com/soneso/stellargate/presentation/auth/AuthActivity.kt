@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.internal.NavigationMenu
+import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -13,12 +14,16 @@ import android.view.MenuItem
 import android.view.View
 import com.soneso.stellargate.R
 import com.soneso.stellargate.domain.data.RegistrationStatus
+import com.soneso.stellargate.domain.data.UserCredentials
+import com.soneso.stellargate.persistence.SgPrefs
 import com.soneso.stellargate.presentation.MainActivity
 import com.soneso.stellargate.presentation.general.SgActivity
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
+import com.soneso.stellargate.presentation.util.hasFingerPrintSensor
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.app_bar_login.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 /**
  * A login screen that offers login via email/password.
@@ -30,6 +35,8 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         private set
     lateinit var useCase: UseCase
         private set
+
+    private lateinit var moreDialog: BottomSheetDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +60,9 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
 
         subscribeForLiveData()
         useCase = intent?.getSerializableExtra(EXTRA_USE_CASE) as? UseCase ?: UseCase.AUTH
-
+        authViewModel.refreshLastUserCredentials()
         startPage()
+        setupMoreDialog()
         initTabView()
     }
 
@@ -106,11 +114,31 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 tab_more.isChecked = false
                 replaceFragment(RegistrationFragment.newInstance(), RegistrationFragment.TAG)
                 selectMenuItem(R.id.nav_sign_up)
+                authViewModel.refreshLastUserCredentials()
             }
             tab_more -> {
-                tab_login.isChecked = false
+                moreDialog.show()
+            }
+            tab_logout -> {
+                tab_login.isChecked = true
                 tab_sign_up.isChecked = false
-                tab_more.isChecked = true
+                tab_more.isChecked = false
+                SgPrefs.removeUserCrendentials()
+                replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
+            }
+            tab_fingerprint -> {
+                tab_logout.isChecked = false
+                tab_home.isChecked = false
+                tab_fingerprint.isChecked = true
+                replaceFragment(FingerPrintFragment.newInstance(FingerPrintFragment.FingerprintFragmentType.FINGERPRINT), FingerPrintFragment.TAG)
+                selectMenuItem(R.id.nav_fingerprit)
+            }
+            tab_home -> {
+                tab_logout.isChecked = false
+                tab_home.isChecked = true
+                tab_fingerprint.isChecked = false
+                replaceFragment(PasswordFragment.newInstance(), PasswordFragment.TAG)
+                selectMenuItem(R.id.nav_fingerprit)
             }
         }
     }
@@ -124,6 +152,9 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         tab_more.isChecked = false
     }
 
+    /**
+     * checks one menu item in navigationDrawer
+     */
     private fun selectMenuItem(menuItem: Int) {
         val item = nav_view.menu.findItem(menuItem)
         item.isChecked = true
@@ -147,7 +178,60 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         authViewModel.liveRegistrationStatus.observe(this, Observer {
             renderRegistrationStatus(it ?: return@Observer)
         })
+
+        authViewModel.liveLastCredentials.observe(this, Observer {
+            renderLastCredentials(it ?: return@Observer)
+        })
     }
+
+    private fun renderLastCredentials(viewState: SgViewState<UserCredentials>) {
+
+        when (viewState.state) {
+            State.LOADING -> {
+            }
+            State.ERROR -> {
+            }
+            State.READY -> {
+
+                val credentials = viewState.data!!
+                if (credentials.username.isNotEmpty() && credentials.tfaSecret.isNotEmpty()) {
+                    login_step_1_tabs.visibility = View.GONE
+                    login_step_2_tabs.visibility = View.VISIBLE
+                    replaceFragment(PasswordFragment.newInstance(), PasswordFragment.TAG)
+                    welcome_text.setText(R.string.welcome_back)
+                    welcome_user_email_text.visibility = View.VISIBLE
+                    welcome_user_email_text.text = credentials.username
+                    setLoginScenario2Menu()
+                    nav_header_username.text = credentials.username
+                } else {
+                    welcome_text.setText(R.string.welcome)
+                    welcome_user_email_text.visibility = View.INVISIBLE
+                    login_step_2_tabs.visibility = View.GONE
+                    login_step_1_tabs.visibility = View.VISIBLE
+                    setLoginScenario1Menu()
+                    nav_header_username.setText(R.string.not_logged_in)
+                }
+            }
+        }
+    }
+
+    /**
+     * sets menu for navigation drawer when the user credentials are saved(login scenario 2)
+     */
+    private fun setLoginScenario2Menu() {
+        nav_view.menu.clear()
+        nav_view.inflateMenu(R.menu.activity_login_drawer_scenario_2)
+        selectMenuItem(R.id.nav_home)
+    }
+
+    /**
+     * sets menu for navigation drawer when nothing is saved(login scenario 1)
+     */
+    private fun setLoginScenario1Menu() {
+        nav_view.menu.clear()
+        nav_view.inflateMenu(R.menu.activity_login_drawer_scenario_1)
+    }
+
 
     private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
 
@@ -197,6 +281,14 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         }
     }
 
+    /**
+     * setting up the More BottomSheetDialog
+     */
+    private fun setupMoreDialog() {
+        moreDialog = BottomSheetDialog(this)
+        val view = this.layoutInflater.inflate(R.layout.dialog_more, null)
+        moreDialog.setContentView(view)
+    }
 
     fun replaceFragment(fragment: AuthFragment, tag: String) {
         supportFragmentManager
@@ -205,11 +297,21 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 .commit()
     }
 
+    /**
+     * setting up the tab view
+     */
     private fun initTabView() {
         tab_login.setOnClickListener(this)
         tab_sign_up.setOnClickListener(this)
         tab_more.setOnClickListener(this)
         tab_login.isChecked = true
+        tab_home.setOnClickListener(this)
+        tab_logout.setOnClickListener(this)
+        tab_fingerprint.setOnClickListener(this)
+        if (this.hasFingerPrintSensor().not())
+            tab_fingerprint.visibility = View.GONE
+        else
+            tab_fingerprint.visibility = View.VISIBLE
     }
 
     companion object {
