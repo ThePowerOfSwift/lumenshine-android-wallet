@@ -21,6 +21,7 @@ import com.soneso.stellargate.presentation.general.SgActivity
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import com.soneso.stellargate.presentation.util.hasFingerPrintSensor
+import com.soneso.stellargate.presentation.util.showInfoDialog
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.app_bar_login.*
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -88,10 +89,10 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
 
             }
             R.id.nav_about -> {
-
+                this.showInfoDialog()
             }
             R.id.nav_help -> {
-
+                this.showInfoDialog()
             }
         }
 
@@ -114,7 +115,6 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 tab_more.isChecked = false
                 replaceFragment(RegistrationFragment.newInstance(), RegistrationFragment.TAG)
                 selectMenuItem(R.id.nav_sign_up)
-                authViewModel.refreshLastUserCredentials()
             }
             tab_more -> {
                 moreDialog.show()
@@ -124,6 +124,7 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 tab_sign_up.isChecked = false
                 tab_more.isChecked = false
                 SgPrefs.removeUserCrendentials()
+                authViewModel.refreshLastUserCredentials()
                 replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
             }
             tab_fingerprint -> {
@@ -262,7 +263,6 @@ class AuthActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 replaceFragment(MnemonicFragment.newInstance(), MnemonicFragment.TAG)
             }
             else -> {
-
                 handleRegistrationCompleted()
             }
         }
