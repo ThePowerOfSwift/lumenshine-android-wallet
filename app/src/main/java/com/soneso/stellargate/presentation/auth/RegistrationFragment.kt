@@ -1,6 +1,7 @@
 package com.soneso.stellargate.presentation.auth
 
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.graphics.Color
 import android.os.Bundle
@@ -17,6 +18,7 @@ import com.soneso.stellargate.domain.data.Country
 import com.soneso.stellargate.domain.data.RegistrationStatus
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
+import com.soneso.stellargate.presentation.util.showInfoDialog
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
@@ -33,20 +35,23 @@ class RegistrationFragment : AuthFragment() {
 
         subscribeForLiveData()
 
-        authViewModel.refreshSalutations()
-        authViewModel.refreshCountries()
+//        authViewModel.refreshSalutations()
+//        authViewModel.refreshCountries()
 
         setupListeners()
+        password_info_button.setOnClickListener {
+            (activity as Activity).showInfoDialog(R.string.password_requirements, R.layout.info_password)
+        }
     }
 
     private fun subscribeForLiveData() {
-        authViewModel.liveSalutations.observe(this, Observer {
-            renderSalutations(it ?: return@Observer)
-        })
-
-        authViewModel.liveCountries.observe(this, Observer {
-            renderCountries(it ?: return@Observer)
-        })
+//        authViewModel.liveSalutations.observe(this, Observer {
+//            renderSalutations(it ?: return@Observer)
+//        })
+//
+//        authViewModel.liveCountries.observe(this, Observer {
+//            renderCountries(it ?: return@Observer)
+//        })
 
         authViewModel.liveRegistrationStatus.observe(this, Observer {
             renderRegistrationStatus(it ?: return@Observer)
@@ -159,9 +164,16 @@ class RegistrationFragment : AuthFragment() {
     private fun isValidForm() =
             email.hasValidInput()
                     && password.isValidPassword()
-                    && password.trimmedText == password_confirmation.trimmedText
+                    && isPasswordMatch()
 
-    // TODO: if passwords don't match show error message
+    private fun isPasswordMatch(): Boolean {
+        val match = password.trimmedText == password_confirmation.trimmedText
+        if (!match) {
+            password.error = getString(R.string.password_not_match)
+            password_confirmation.error = getString(R.string.password_not_match)
+        }
+        return match
+    }
 
     companion object {
         const val TAG = "RegistrationFragment"

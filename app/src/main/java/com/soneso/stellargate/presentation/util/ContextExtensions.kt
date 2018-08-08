@@ -38,3 +38,21 @@ fun Activity.showInfoDialog() {
     })
     infoDialog.show(fragmentTransaction, InfoDialog.TAG)
 }
+
+/**
+ * show an fullscreen information dialog
+ *
+ * @param titleResId the dialog title resource id
+ * @param contentResId hte content layout resource id
+ * @param (optional) the dialog icon id
+ */
+fun Activity.showInfoDialog(titleResId: Int, contentResId: Int, iconResId: Int = 0) {
+    val fragmentTransaction = this.fragmentManager.beginTransaction()
+    val infoDialog = InfoDialog.newInstance(titleResId, iconResId)
+    infoDialog.setViewBuilder(object : InfoDialog.ViewBuilder {
+        override fun createView(context: Context, inflater: LayoutInflater): View {
+            return inflater.inflate(contentResId, null)
+        }
+    })
+    infoDialog.show(fragmentTransaction, InfoDialog.TAG)
+}

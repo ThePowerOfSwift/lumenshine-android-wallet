@@ -18,8 +18,6 @@ import com.soneso.stellargate.presentation.general.State
 import kotlinx.android.synthetic.main.fragment_password.*
 
 
-private const val FRAGMENT_TYPE = "fragment_type"
-
 /**
  * A simple [Fragment] subclass.
  *
@@ -102,6 +100,7 @@ class FingerPrintFragment : AuthFragment() {
     companion object {
 
         const val TAG = "FingerPrintFragment"
+        private const val FRAGMENT_TYPE = "fragment_type"
 
         fun newInstance(fragmentType: FingerPrintFragment.FingerprintFragmentType): FingerPrintFragment {
 
