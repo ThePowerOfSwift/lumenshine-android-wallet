@@ -17,7 +17,7 @@
         android:textStyle="bold"/>
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         app:regex="@string/email_regex" />
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:inputType="textPassword"
         app:input_level="@integer/input_mandatory"/>
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/two_factor_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
