@@ -39,5 +39,6 @@
     <dimen name="dialog_info_header">56dp</dimen>
     <dimen name="login_appbar_height">150dp</dimen>
     <dimen name="avatar_image_size">60dp</dimen>
+    <dimen name="size_35">35dp</dimen>
 
 </resources>
