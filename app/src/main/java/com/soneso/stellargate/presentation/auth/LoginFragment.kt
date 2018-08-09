@@ -16,8 +16,8 @@ import com.soneso.stellargate.domain.data.UserCredentials
 import com.soneso.stellargate.presentation.general.SgViewState
 import com.soneso.stellargate.presentation.general.State
 import com.soneso.stellargate.presentation.util.setOnTextChangeListener
-import com.soneso.stellargate.presentation.util.showInfoDialog
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.sg_input_view.view.*
 
 
 /**
@@ -34,7 +34,7 @@ class LoginFragment : AuthFragment() {
         subscribeForLiveData()
         setupListeners()
 
-        authViewModel.refreshLastUserCredentials()
+//        authViewModel.refreshLastUserCredentials()
     }
 
     private fun subscribeForLiveData() {
@@ -43,9 +43,9 @@ class LoginFragment : AuthFragment() {
             renderRegistrationStatus(it ?: return@Observer)
         })
 
-        authViewModel.liveLastCredentials.observe(this, Observer {
-            renderLastCredentials(it ?: return@Observer)
-        })
+//        authViewModel.liveLastCredentials.observe(this, Observer {
+//            renderLastCredentials(it ?: return@Observer)
+//        })
     }
 
     private fun setupListeners() {
@@ -58,22 +58,24 @@ class LoginFragment : AuthFragment() {
             false
         })
         email_sign_in_button.setOnClickListener { attemptLogin() }
-        create_account_button.setOnClickListener {
-            replaceFragment(RegistrationFragment.newInstance(), RegistrationFragment.TAG)
-        }
-        lost_pass_button.setOnClickListener {
-            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.PASSWORD), LostCredentialFragment.TAG)
-        }
-        lost_tfa_button.setOnClickListener {
-            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.TFA), LostCredentialFragment.TAG)
-        }
-        email.setOnTextChangeListener {
+
+        //TODO remove these buttons
+//        create_account_button.setOnClickListener {
+//            replaceFragment(RegistrationFragment.newInstance(), RegistrationFragment.TAG)
+//        }
+//        lost_pass_button.setOnClickListener {
+//            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.PASSWORD), LostCredentialFragment.TAG)
+//        }
+//        lost_tfa_button.setOnClickListener {
+//            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.TFA), LostCredentialFragment.TAG)
+//        }
+        email.input_edit_text.setOnTextChangeListener {
             renderLastCredentials(authViewModel.liveLastCredentials.value
                     ?: return@setOnTextChangeListener)
         }
-        show_dialog.setOnClickListener {
-            activity!!.showInfoDialog()
-        }
+//        show_dialog.setOnClickListener {
+//            activity!!.showInfoDialog()
+//        }
     }
 
     private fun attemptLogin() {

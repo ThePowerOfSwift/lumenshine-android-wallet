@@ -18,22 +18,17 @@
         android:layout_width="@dimen/avatar_image_size"
         android:layout_height="@dimen/avatar_image_size"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/stellar_logo"
-        tools:ignore="ContentDescription"
         android:scaleType="centerCrop"
-        app:civ_border_width="0dp"/>
+        app:civ_border_width="0dp"
+        app:srcCompat="@drawable/stellar_logo"
+        tools:ignore="ContentDescription" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/menu_header_profile"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:id="@+id/textView"
+    <com.soneso.stellargate.presentation.customViews.SgTextView
+        android:id="@+id/nav_header_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/menu_header_email_placeholder" />
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="@string/not_logged_in" />
 
 </LinearLayout>

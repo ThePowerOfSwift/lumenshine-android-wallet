@@ -5,8 +5,16 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="@dimen/size_15"
+    android:padding="@dimen/size_25"
     tools:context="com.soneso.stellargate.presentation.auth.LoginFragment">
+
+    <com.soneso.stellargate.presentation.customViews.SgTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:textSize="@dimen/text_size_20"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"/>
 
 
     <com.soneso.stellargate.presentation.customViews.FormInputView
@@ -37,7 +45,7 @@
         android:imeActionLabel="@string/action_sign_in"
         android:imeOptions="actionUnspecified"
         android:inputType="number"
-        app:input_level="@integer/input_optional"/>
+        app:input_level="@integer/input_optional" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -46,11 +54,12 @@
         <Button
             android:id="@+id/email_sign_in_button"
             style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/action_sign_in"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -61,65 +70,66 @@
             android:indeterminate="true" />
     </FrameLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_25"
-        android:gravity="center"
-        android:text="@string/no_account" />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/size_25"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/no_account" />-->
 
-    <TextView
-        android:id="@+id/create_account_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/create_account"
-        android:textColor="@color/cyan_500" />
+    <!--<TextView-->
+        <!--android:id="@+id/create_account_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/create_account"-->
+        <!--android:textColor="@color/cyan_500" />-->
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_25"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/size_25"-->
+        <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/size_15"
-            android:text="@string/lost_password" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="@dimen/size_15"-->
+            <!--android:text="@string/lost_password" />-->
 
-        <TextView
-            android:id="@+id/lost_pass_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reset"
-            android:textColor="@color/cyan_500" />
+        <!--<TextView-->
+            <!--android:id="@+id/lost_pass_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/reset"-->
+            <!--android:textColor="@color/cyan_500" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_25"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/size_25"-->
+        <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/size_15"
-            android:text="@string/lost_tfa" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="@dimen/size_15"-->
+            <!--android:text="@string/lost_tfa" />-->
 
-        <TextView
-            android:id="@+id/lost_tfa_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reset"
-            android:textColor="@color/cyan_500" />
+        <!--<TextView-->
+            <!--android:id="@+id/lost_tfa_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/reset"-->
+            <!--android:textColor="@color/cyan_500" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/show_dialog"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="show dialog"-->
+        <!--android:id="@+id/show_dialog"/>-->
 
 </LinearLayout>
