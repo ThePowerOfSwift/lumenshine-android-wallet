@@ -18,6 +18,9 @@
         android:id="@+id/tab_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="home"/>
+        android:maxLines="2"
+        android:text="@string/setup_fingerprint"
+        android:lines="2"
+        android:gravity="center_horizontal"/>
 
 </LinearLayout>

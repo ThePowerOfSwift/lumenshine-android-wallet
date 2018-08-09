@@ -112,6 +112,11 @@ object SgPrefs {
         get() = decryptAndGetByteArray(KEY_TFA_IMAGE_DATA)
         set(value) = encryptAndSaveByteArray(KEY_TFA_IMAGE_DATA, value)
 
+    fun removeUserCrendentials() {
+        username = ""
+        tfaSecret = ""
+    }
+
     private fun encryptAndSaveString(key: String, value: String) {
 
         if (value.isBlank()) {

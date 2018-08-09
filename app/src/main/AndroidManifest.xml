@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.soneso.stellargate">
 
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <application
         android:name=".SgApp"
         android:allowBackup="false"
@@ -39,7 +40,8 @@
 
         <activity
             android:name=".presentation.auth.AuthActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
