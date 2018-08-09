@@ -17,7 +17,7 @@
         android:textStyle="bold"/>
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:layout_marginRight="@dimen/size_20"/>
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         android:layout_marginLeft="@dimen/size_20"
         android:layout_marginRight="@dimen/size_20"/>
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/two_factor_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

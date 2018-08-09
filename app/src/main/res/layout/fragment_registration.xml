@@ -18,7 +18,7 @@
         android:textStyle="bold" />
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +26,6 @@
         android:layout_marginRight="@dimen/size_45"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
-        android:text="test@test1.test"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/email_input_level"
         app:regex="@string/email_regex" />
@@ -37,39 +36,39 @@
         android:orientation="horizontal">
 
 
-        <com.soneso.stellargate.presentation.auth.FormInputView
+        <com.soneso.stellargate.presentation.customViews.PasswordInputView
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_45"
-            android:layout_toLeftOf="@+id/info_button_container"
+            android:layout_marginStart="@dimen/size_45"
+            android:layout_toStartOf="@+id/info_button_container"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
-            android:text="pass1234"
             app:input_level="@integer/password_input_level" />
 
         <LinearLayout
             android:id="@+id/info_button_container"
             android:layout_width="@dimen/size_45"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/password_info_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="3dp"
                 android:src="@drawable/ic_help_circle"
-                android:id="@+id/password_info_button"/>
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
     </RelativeLayout>
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/password_confirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,7 +91,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/background_light" />
 
-        <com.soneso.stellargate.presentation.auth.FormInputView
+        <com.soneso.stellargate.presentation.customViews.FormInputView
             android:id="@+id/first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,7 +100,7 @@
             app:input_level="@integer/first_name_input_level" />
     </LinearLayout>
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -130,7 +129,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/action_register"
             android:textColor="@color/text_dark"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

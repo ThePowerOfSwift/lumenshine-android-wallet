@@ -26,7 +26,7 @@
         android:layout_margin="@dimen/size_10"/>
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

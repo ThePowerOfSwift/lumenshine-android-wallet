@@ -1,19 +1,16 @@
 package com.soneso.stellargate.presentation.customViews
 
 import android.content.Context
-import android.text.Editable
 import android.text.SpannableStringBuilder
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.soneso.stellargate.R
-import kotlinx.android.synthetic.main.sg_input_view.view.*
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import com.soneso.stellargate.presentation.util.setOnTextChangeListener
+import kotlinx.android.synthetic.main.sg_input_view.view.*
 
 
 open class FormInputView @JvmOverloads constructor(
@@ -90,8 +87,8 @@ open class FormInputView @JvmOverloads constructor(
         input_edit_text.setOnEditorActionListener(listener)
     }
 
-    var error: String
-        get() = error_text.text.toString()
+    var error: CharSequence
+        get() = error_text.text
         set(value) {
             error_text.text = value
         }

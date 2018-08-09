@@ -3,6 +3,7 @@ package com.soneso.stellargate.presentation.customViews
 import android.content.Context
 import android.util.AttributeSet
 import com.soneso.stellargate.R
+import kotlinx.android.synthetic.main.sg_input_view.view.*
 
 class PasswordInputView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle
@@ -12,7 +13,7 @@ class PasswordInputView @JvmOverloads constructor(
 
     fun isValidPassword(): Boolean {
         when {
-            inputLevel == resources.getInteger(R.integer.input_mandatory) && text.isNullOrBlank() -> {
+            inputLevel == resources.getInteger(R.integer.input_mandatory) && input_edit_text.text.isNullOrBlank() -> {
                 error = resources.getText(R.string.error_field_required)
                 return false
             }
