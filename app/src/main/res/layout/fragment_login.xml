@@ -6,9 +6,9 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="@dimen/size_25"
-    tools:context="com.soneso.stellargate.presentation.auth.LoginFragment">
+    tools:context="com.soneso.lumenshine.presentation.auth.LoginFragment">
 
-    <com.soneso.stellargate.presentation.customViews.SgTextView
+    <com.soneso.lumenshine.presentation.customViews.SgTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
@@ -17,7 +17,7 @@
         android:textStyle="bold"/>
 
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,18 +25,22 @@
         android:inputType="textEmailAddress"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/input_mandatory"
-        app:regex="@string/email_regex" />
+        app:regex="@string/email_regex"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"/>
 
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
-        app:input_level="@integer/input_mandatory"/>
+        app:input_level="@integer/input_mandatory"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"/>
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/two_factor_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +49,9 @@
         android:imeActionLabel="@string/action_sign_in"
         android:imeOptions="actionUnspecified"
         android:inputType="number"
-        app:input_level="@integer/input_optional" />
+        app:input_level="@integer/input_optional"
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -59,6 +65,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/action_sign_in"
             android:textStyle="bold"
+            android:textColor="@color/text_dark"
             android:layout_gravity="center_horizontal"/>
 
         <ProgressBar

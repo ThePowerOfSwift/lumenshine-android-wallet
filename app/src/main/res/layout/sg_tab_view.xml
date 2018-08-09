@@ -14,7 +14,7 @@
         android:src="@drawable/ic_action_home"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <com.soneso.stellargate.presentation.customViews.SgTextView
+    <com.soneso.lumenshine.presentation.customViews.SgTextView
         android:id="@+id/tab_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

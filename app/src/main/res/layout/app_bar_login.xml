@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.soneso.stellargate.presentation.MainActivity">
+    tools:context="com.soneso.lumenshine.presentation.MainActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                     android:gravity="center"
                     app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                    <com.soneso.stellargate.presentation.customViews.SgTextView
+                    <com.soneso.lumenshine.presentation.customViews.SgTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
@@ -43,7 +43,7 @@
 
                 </android.support.v7.widget.Toolbar>
 
-                <com.soneso.stellargate.presentation.customViews.SgTextView
+                <com.soneso.lumenshine.presentation.customViews.SgTextView
                     android:id="@+id/welcome_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/login_toolbar" />
 
-                <com.soneso.stellargate.presentation.customViews.SgTextView
+                <com.soneso.lumenshine.presentation.customViews.SgTextView
                     android:id="@+id/welcome_user_email_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/welcome_user_email_text">
 
-                    <com.soneso.stellargate.presentation.customViews.SgTabView
+                    <com.soneso.lumenshine.presentation.customViews.SgTabView
                         android:id="@+id/tab_login"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                         app:tab_icon="@drawable/ic_log_in"
                         app:tab_text="@string/login" />
 
-                    <com.soneso.stellargate.presentation.customViews.SgTabView
+                    <com.soneso.lumenshine.presentation.customViews.SgTabView
                         android:id="@+id/tab_sign_up"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                         app:tab_icon="@drawable/ic_edit"
                         app:tab_text="@string/sign_up" />
 
-                    <com.soneso.stellargate.presentation.customViews.SgTabView
+                    <com.soneso.lumenshine.presentation.customViews.SgTabView
                         android:id="@+id/tab_more"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -123,7 +123,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/welcome_user_email_text"
                     android:visibility="gone">
 
-                    <com.soneso.stellargate.presentation.customViews.SgTabView
+                    <com.soneso.lumenshine.presentation.customViews.SgTabView
                         android:id="@+id/tab_logout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                         app:tab_icon="@drawable/ic_log_out"
                         app:tab_text="@string/sign_out" />
 
-                    <com.soneso.stellargate.presentation.customViews.SgTabView
+                    <com.soneso.lumenshine.presentation.customViews.SgTabView
                         android:id="@+id/tab_home"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                         app:tab_icon="@drawable/ic_home"
                         app:tab_text="@string/home" />
 
-                    <com.soneso.stellargate.presentation.customViews.SgTabView
+                    <com.soneso.lumenshine.presentation.customViews.SgTabView
                         android:id="@+id/tab_fingerprint"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

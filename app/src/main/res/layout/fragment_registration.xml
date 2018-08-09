@@ -5,33 +5,75 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="@dimen/size_15"
-    tools:context="com.soneso.stellargate.presentation.auth.RegistrationFragment">
+    tools:context="com.soneso.lumenshine.presentation.auth.RegistrationFragment">
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+
+    <com.soneso.lumenshine.presentation.customViews.SgTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_25"
+        android:text="@string/sign_up"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_20"
+        android:textStyle="bold" />
+
+
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/email_input_level"
         app:regex="@string/email_regex" />
 
-
-    <com.soneso.stellargate.presentation.customViews.PasswordInputView
-        android:id="@+id/password"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_password"
-        android:inputType="textPassword"
-        app:input_level="@integer/password_input_level" />
+        android:orientation="horizontal">
 
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+        <com.soneso.lumenshine.presentation.customViews.PasswordInputView
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_45"
+            android:layout_toStartOf="@+id/info_button_container"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            app:input_level="@integer/password_input_level" />
+
+        <LinearLayout
+            android:id="@+id/info_button_container"
+            android:layout_width="@dimen/size_45"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/password_info_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="3dp"
+                android:src="@drawable/ic_help_circle"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/password_confirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_45"
+        android:layout_marginRight="@dimen/size_45"
         android:hint="@string/hint_password_confirmation"
         android:inputType="textPassword"
         app:input_level="@integer/password_confirmation_input_level" />
@@ -40,7 +82,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Spinner
             android:id="@+id/salutation_spinner"
@@ -48,7 +91,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/background_light" />
 
-        <com.soneso.stellargate.presentation.customViews.FormInputView
+        <com.soneso.lumenshine.presentation.customViews.FormInputView
             android:id="@+id/first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,19 +100,21 @@
             app:input_level="@integer/first_name_input_level" />
     </LinearLayout>
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_last_name"
         android:inputType="textPersonName"
+        android:visibility="gone"
         app:input_level="@integer/last_name_input_level" />
 
     <Spinner
         android:id="@+id/country_spinner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_45"
-        android:background="@android:color/background_light" />
+        android:background="@android:color/background_light"
+        android:visibility="gone" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -78,10 +123,12 @@
         <Button
             android:id="@+id/email_registration_button"
             style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:text="@string/action_register"
+            android:textColor="@color/text_dark"
             android:textStyle="bold" />
 
         <ProgressBar
@@ -98,13 +145,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_25"
         android:gravity="center"
-        android:text="@string/already_have_account" />
+        android:text="@string/already_have_account"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sign_in_underlined"
-        android:textColor="@color/cyan_500" />
+        android:textColor="@color/cyan_500"
+        android:visibility="gone" />
 
 </LinearLayout>
