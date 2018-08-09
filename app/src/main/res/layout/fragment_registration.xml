@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.soneso.stellargate.presentation.auth.RegistrationFragment">
+    tools:context="com.soneso.lumenshine.presentation.auth.RegistrationFragment">
 
 
-    <com.soneso.stellargate.presentation.customViews.SgTextView
+    <com.soneso.lumenshine.presentation.customViews.SgTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_25"
@@ -18,7 +18,7 @@
         android:textStyle="bold" />
 
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:orientation="horizontal">
 
 
-        <com.soneso.stellargate.presentation.customViews.PasswordInputView
+        <com.soneso.lumenshine.presentation.customViews.PasswordInputView
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
     </RelativeLayout>
 
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/password_confirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/background_light" />
 
-        <com.soneso.stellargate.presentation.customViews.FormInputView
+        <com.soneso.lumenshine.presentation.customViews.FormInputView
             android:id="@+id/first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
             app:input_level="@integer/first_name_input_level" />
     </LinearLayout>
 
-    <com.soneso.stellargate.presentation.customViews.FormInputView
+    <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
