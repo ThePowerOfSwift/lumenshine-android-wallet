@@ -1,4 +1,4 @@
-package com.soneso.stellargate.presentation.auth
+package com.soneso.stellargate.presentation.customViews
 
 import android.content.Context
 import android.text.Editable
@@ -16,13 +16,12 @@ import android.widget.EditText
 import com.soneso.stellargate.presentation.util.setOnTextChangeListener
 
 
-class FormInputView @JvmOverloads constructor(
+open class FormInputView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var inputLevel = 0
+    protected var inputLevel = 0
     private var errorText: CharSequence = ""
-    private var minPasswordLenght = 9
     private var regexToMatch = ""
 
     var trimmedText: CharSequence
@@ -85,35 +84,7 @@ class FormInputView @JvmOverloads constructor(
         return true
     }
 
-    fun isValidPassword(): Boolean {
-        when {
-            inputLevel == resources.getInteger(R.integer.input_mandatory) && input_edit_text.text.isNullOrBlank() -> {
-                error_text.text = resources.getText(R.string.error_field_required)
-                return false
-            }
 
-            !trimmedText.matches(Regex(".*[A-Z].*")) -> {
-                error_text.text = resources.getText(R.string.error_invalid_password_min_one_upper_case_char)
-                return false
-            }
-
-            !trimmedText.matches(Regex(".*[a-z].*")) -> {
-                error_text.text = resources.getText(R.string.error_invalid_password_min_one_lower_case_char)
-                return false
-            }
-
-            !trimmedText.matches(Regex(".*\\d.*")) -> {
-                error_text.text = resources.getText(R.string.error_invalid_password_min_one_digit)
-                return false
-            }
-
-            trimmedText.length < minPasswordLenght -> {
-                error_text.text = resources.getText(R.string.error_invalid_password_min_nine_characters)
-                return false
-            }
-        }
-        return true
-    }
 
     fun setOnEditorActionListener(listener: TextView.OnEditorActionListener) {
         input_edit_text.setOnEditorActionListener(listener)
