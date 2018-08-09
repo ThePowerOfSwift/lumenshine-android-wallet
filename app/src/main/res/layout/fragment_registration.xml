@@ -8,29 +8,27 @@
     android:padding="@dimen/size_15"
     tools:context="com.soneso.stellargate.presentation.auth.RegistrationFragment">
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
-        android:text="test@test1.test"
         app:error_text="@string/error_invalid_email"
         app:input_level="@integer/email_input_level"
         app:regex="@string/email_regex" />
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.PasswordInputView
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
-        android:text="pass1234"
         app:input_level="@integer/password_input_level" />
 
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/password_confirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,7 +48,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/background_light" />
 
-        <com.soneso.stellargate.presentation.auth.FormInputView
+        <com.soneso.stellargate.presentation.customViews.FormInputView
             android:id="@+id/first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +57,7 @@
             app:input_level="@integer/first_name_input_level" />
     </LinearLayout>
 
-    <com.soneso.stellargate.presentation.auth.FormInputView
+    <com.soneso.stellargate.presentation.customViews.FormInputView
         android:id="@+id/last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

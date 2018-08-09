@@ -1,4 +1,4 @@
-package com.soneso.stellargate.presentation.auth
+package com.soneso.stellargate.presentation.customViews
 
 import android.content.Context
 import android.text.SpannableStringBuilder
@@ -7,13 +7,12 @@ import android.view.View
 import android.widget.EditText
 import com.soneso.stellargate.R
 
-class FormInputView @JvmOverloads constructor(
+open class FormInputView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle
 ) : EditText(context, attrs, defStyleAttr) {
 
-    private var inputLevel = 0
+    protected var inputLevel = 0
     private var errorText: CharSequence = ""
-    private var minPasswordLenght = 9
     private var regexToMatch = ""
 
     var trimmedText: CharSequence
@@ -58,36 +57,6 @@ class FormInputView @JvmOverloads constructor(
             regexToMatch.isNotEmpty() && !trimmedText.matches(Regex(regexToMatch)) -> {
                 error = errorText
 
-            }
-        }
-        return true
-    }
-
-    fun isValidPassword(): Boolean {
-        when {
-            inputLevel == resources.getInteger(R.integer.input_mandatory) && text.isNullOrBlank() -> {
-                error = resources.getText(R.string.error_field_required)
-                return false
-            }
-
-            !trimmedText.matches(Regex(".*[A-Z].*")) -> {
-                error = resources.getText(R.string.error_invalid_password_min_one_upper_case_char)
-                return false
-            }
-
-            !trimmedText.matches(Regex(".*[a-z].*")) -> {
-                error = resources.getText(R.string.error_invalid_password_min_one_lower_case_char)
-                return false
-            }
-
-            !trimmedText.matches(Regex(".*\\d.*")) -> {
-                error = resources.getText(R.string.error_invalid_password_min_one_digit)
-                return false
-            }
-
-            trimmedText.length < minPasswordLenght -> {
-                error = resources.getText(R.string.error_invalid_password_min_nine_characters)
-                return false
             }
         }
         return true
