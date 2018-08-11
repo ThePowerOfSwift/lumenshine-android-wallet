@@ -103,6 +103,26 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         userUseCases.login(email, password, tfa)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
+                    it.fingerprintSetupRequested = true
+                    liveRegistrationStatus.value = SgViewState(it)
+                }, {
+                    liveRegistrationStatus.value = SgViewState(it as SgError)
+                })
+    }
+
+    fun loginAndFingerprintSetup(email: CharSequence, password: CharSequence, tfaCode: CharSequence) {
+
+        val tfa = if (tfaCode.isBlank()) {
+            null
+        } else {
+            tfaCode
+        }
+
+        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
+
+        userUseCases.login(email, password, tfa)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
                     liveRegistrationStatus.value = SgViewState(it)
                 }, {
                     liveRegistrationStatus.value = SgViewState(it as SgError)

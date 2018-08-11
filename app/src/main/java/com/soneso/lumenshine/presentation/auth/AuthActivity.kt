@@ -218,6 +218,10 @@ class AuthActivity : SgActivity() {
 
                 replaceFragment(MnemonicFragment.newInstance(), MnemonicFragment.TAG)
             }
+            status.fingerprintSetupRequested -> {
+                finishAffinity()
+                MainActivity.startInstanceWithFingerprintSetup(this)
+            }
             else -> {
                 handleRegistrationCompleted()
             }
@@ -307,10 +311,10 @@ class AuthActivity : SgActivity() {
         tab_home.setOnClickListener(tabClickListener)
         tab_logout.setOnClickListener(tabClickListener)
         tab_fingerprint.setOnClickListener(tabClickListener)
-        if (this.hasFingerPrintSensor().not())
-            tab_fingerprint.visibility = View.GONE
-        else
-            tab_fingerprint.visibility = View.VISIBLE
+//        if (this.hasFingerPrintSensor().not())
+//            tab_fingerprint.visibility = View.GONE
+//        else
+//            tab_fingerprint.visibility = View.VISIBLE
     }
 
     companion object {

@@ -4,4 +4,6 @@ class RegistrationStatus(
         val emailConfirmed: Boolean,
         val mnemonicConfirmed: Boolean,
         val tfaConfirmed: Boolean
-)
+){
+    var fingerprintSetupRequested: Boolean = false
+}
