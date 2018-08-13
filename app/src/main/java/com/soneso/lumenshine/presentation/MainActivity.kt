@@ -42,6 +42,8 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
+        collapsing_toolbar.isTitleEnabled = false
+        changeTitle(R.string.app_name)
 
         nav_view.setNavigationItemSelectedListener(this)
 
@@ -76,6 +78,8 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_home -> {
+                fab.show()
+                changeTitle(R.string.app_name)
                 app_bar_layout.setExpanded(true)
                 replaceFragment(HomeFragment.newInstance(), HomeFragment.TAG)
             }
@@ -97,6 +101,8 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
             }
             R.id.nav_settings -> {
                 app_bar_layout.setExpanded(false)
+                changeTitle(R.string.settings)
+                fab.hide()
                 replaceFragment(SettingsFragment.newInstance(), SettingsFragment.TAG)
             }
             R.id.nav_help -> {
@@ -116,6 +122,10 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, tag)
                 .commit()
+    }
+
+    private fun changeTitle(titleId: Int) {
+        toolbar.title = getString(titleId)
     }
 
     companion object {
