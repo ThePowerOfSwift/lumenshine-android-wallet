@@ -103,7 +103,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         userUseCases.login(email, password, tfa)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    it.fingerprintSetupRequested = true
                     liveRegistrationStatus.value = SgViewState(it)
                 }, {
                     liveRegistrationStatus.value = SgViewState(it as SgError)
@@ -123,6 +122,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         userUseCases.login(email, password, tfa)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
+                    it.fingerprintSetupRequested = true
                     liveRegistrationStatus.value = SgViewState(it)
                 }, {
                     liveRegistrationStatus.value = SgViewState(it as SgError)

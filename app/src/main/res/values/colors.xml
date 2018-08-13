@@ -16,4 +16,5 @@
     <color name="text_light">#e2e2e2</color>
     <color name="transparent">#00000000</color>
     <color name="red">#FF0000</color>
+    <color name="yellow">#d6de02</color>
 </resources>

@@ -64,6 +64,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/welcome_text" />
 
+                <!--Credentials not saved tabs-->
                 <LinearLayout
                     android:id="@+id/login_step_1_tabs"
                     android:layout_width="match_parent"
@@ -113,15 +114,17 @@
                         app:tab_text="@string/more" />
 
                 </LinearLayout>
+                <!--Credentials not saved tabs-->
 
+                <!--Credentials saved tabs-->
                 <LinearLayout
                     android:id="@+id/login_step_2_tabs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/welcome_user_email_text"
-                    android:visibility="gone">
+                    app:layout_constraintTop_toBottomOf="@+id/welcome_user_email_text">
 
                     <com.soneso.lumenshine.presentation.customViews.SgTabView
                         android:id="@+id/tab_logout"
@@ -165,6 +168,28 @@
                         app:tab_text="@string/setup_fingerprint" />
 
                 </LinearLayout>
+                <!--Credentials saved tabs-->
+
+                <!--Setup view-->
+                <LinearLayout
+                    android:id="@+id/set_up_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="85dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/welcome_user_email_text">
+
+                    <com.soneso.lumenshine.presentation.customViews.SgTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setup_wallet"
+                        android:textSize="@dimen/text_size_30"
+                        android:textColor="@color/yellow"/>
+
+                </LinearLayout>
+                <!--Setup view-->
 
 
             </android.support.constraint.ConstraintLayout>

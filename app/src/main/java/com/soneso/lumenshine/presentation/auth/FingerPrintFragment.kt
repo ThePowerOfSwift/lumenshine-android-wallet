@@ -94,7 +94,7 @@ class FingerPrintFragment : AuthFragment() {
         val credentials = authViewModel.liveLastCredentials.value?.data ?: return
         val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret) ?: return
 
-        authViewModel.login(credentials.username, password.trimmedText, tfaCode)
+        authViewModel.loginAndFingerprintSetup(credentials.username, password.trimmedText, tfaCode)
     }
 
     companion object {

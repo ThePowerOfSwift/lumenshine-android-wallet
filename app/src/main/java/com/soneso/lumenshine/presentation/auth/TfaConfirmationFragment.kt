@@ -29,7 +29,6 @@ class TfaConfirmationFragment : AuthFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         authViewModel.fetchTfaSecret()
         subscribeForLiveData()
         setupListeners()
@@ -83,7 +82,7 @@ class TfaConfirmationFragment : AuthFragment() {
             qr_code_view.setImageBitmap(BitmapFactory.decodeByteArray(tfaSecret.imageData, 0, tfaSecret.imageData.size))
         }
         token_view.keyListener = null
-        token_view.setText(tfaSecret.secretCode)
+        token_view.text = tfaSecret.secretCode
         copy_button.setOnClickListener {
 
             val clipboard = context?.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager

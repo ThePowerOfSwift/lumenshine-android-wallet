@@ -65,10 +65,12 @@
     <string name="mnemonic_next_button">Done</string>
     <string name="mnemonic_question">What\'s the word at the position %d in your mnemonic?</string>
 
-    <string name="mail_confirmation_description">You have to confirm your mail.</string>
+    <string name="mail_confirmation_description">In order to be able continue the setup process, you need to confirm your
+        email address first. A mail with a confirmation link has been sent to your inbox. Please follow the instructions
+        from the received mail to confirm your email-address.</string>
     <string name="open_mail">Open Mail</string>
-    <string name="resend_mail">Resend mail</string>
-    <string name="already_confirmed">Already confirmed</string>
+    <string name="resend_mail">Resend confirmation mail</string>
+    <string name="already_confirmed">Continue</string>
 
     <!-- cristi.paval, 5/16/18 Settings screen -->
     <string name="change_password_label">Change your password:</string>
@@ -109,7 +111,43 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="password_info_text">Your new password must have at least 9 characters.
     \n
     \n
-    It must contain numbers, small letters and capitals...</string>
+    It must contain numbers, small letters and capitals…</string>
     <string name="password_requirements">Password requirements</string>
     <string name="password_not_match">Passwords don\'t match</string>
+    <string name="setup_step_1">Step 1 of 3</string>
+    <string name="tfa_authentication_title">2 Factor Authentication (2FA)</string>
+    <string name="your_2fa_secret">Your 2FA Secret:</string>
+    <string name="next">Next</string>
+    <string name="tfa_code">2FA Code</string>
+    <string name="tfa_reason">For security reasons, your wallet will be protected by 2 Factor Authentication (2FA).</string>
+    <string name="tfa_setup_steps">
+        To setup 2FA, please:\n
+        \n
+        1. download a two-factor authenticator app (like Google Authenticator)\n
+        \n
+        2. copy and enter the above displayed 2FA secret code into the authenticator app\n
+        \n
+        3. enter the generated 2FA code from the authenticator app into the 2FA Code input and press "Next"
+    </string>
+    <string name="email_confirm_title">Email confirmation required</string>
+    <string name="mail_confirmation_alert">Please confirm your email address first.</string>
+    <string name="setup_wallet">Setup Wallet</string>
+    <string name="setup_step_2">Step 2 of 3</string>
+    <string name="mnemonic_memorizing_title"><![CDATA[Note & confirm backup secret (mnemonic)]]></string>
+    <string name="mnemonic_warning">This step is very important</string>
+    <string name="mnemonic_instruction">Please write down your backup secret (mnemonic). You can use it if you lose your
+        password to recover your wallet. It can be also used in other apps / wallets that support import from mnemonic.
+        If you lose your password and the mnemonic you will not be able to access your funds any more. We can not recover
+        your account if you lose both (password and mnemonic). We do not store password and mnemonic.</string>
+    <string name="here">here</string>
+    <string name="mnemonic_read_more">Read more about mnemonics</string>
+    <string name="your_mnemonic">Your secret (24 word mnemonic):</string>
+    <string name="mnemonic_confirm">Confirm noting your mnemonic</string>
+    <string name="setup_step_3">Step 3 of 3</string>
+    <string name="mnemonic_confirm_title">Prove noting of menmonic</string>
+    <string name="mnemonic_confirm_description">To prove the noting of your mnemonic, please complete following quiz.</string>
+    <string name="mnemonic_confirm_instruction">Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</string>
+    <string name="finish_setup">Finish setup</string>
+    <string name="go_back_button_text">Go back and show mnemonic</string>
+    <string name="invalid_input">Invalid input</string>
 </resources>
