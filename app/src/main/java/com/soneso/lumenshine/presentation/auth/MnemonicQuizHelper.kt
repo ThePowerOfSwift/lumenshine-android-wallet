@@ -1,5 +1,9 @@
 package com.soneso.lumenshine.presentation.auth
 
+import java.security.SecureRandom
+import java.text.FieldPosition
+import java.util.*
+
 class MnemonicQuizHelper(mnemonic: String) {
 
     private val words = mnemonic.split(" ")
@@ -16,6 +20,16 @@ class MnemonicQuizHelper(mnemonic: String) {
         return currentPosition
     }
 
+    fun getRandomWords(): ArrayList<String> {
+        val randomWords = ArrayList<String>()
+        for (i in 0..3) {
+            val pos = availablePositions.shuffled()[0]
+            availablePositions.remove(pos)
+            randomWords.add(words[pos])
+        }
+        return randomWords
+    }
+
     fun checkCurrentWord(word: String): Boolean {
         if (currentPosition == -1) {
             currentPosition = 0
@@ -27,6 +41,17 @@ class MnemonicQuizHelper(mnemonic: String) {
             correctAnswerCount++
         }
         return isOk
+    }
+
+    fun checkWord(word: String, position: Int): Boolean {
+        if (position < words.size) {
+            val isOk = words[position - 1] == word
+            if (isOk) {
+                correctAnswerCount++
+            }
+            return isOk
+        }
+        return false
     }
 
     fun isCompleted() = correctAnswerCount >= ANSWER_TARGET

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_90"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/size_10">
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_5"
+                android:text="@string/setup_step_3"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mnemonic_confirm_title"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_dark" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/size_15">
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/mnemonic_confirm_description"
+                android:textColor="@color/text_dark"
+                android:textSize="@dimen/text_size_14" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_dark" />
+
+        <com.soneso.lumenshine.presentation.customViews.SgTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_15"
+            android:gravity="center"
+            android:text="@string/mnemonic_confirm_instruction"
+            android:textColor="@color/text_dark"
+            android:textSize="@dimen/text_size_14" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_2"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <com.soneso.lumenshine.presentation.customViews.SgTextView
+                    android:id="@+id/mnemonic_word_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="word"
+                    android:textColor="@color/text_dark"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+                <com.soneso.lumenshine.presentation.customViews.SgEditText
+                    android:id="@+id/mnemonic_position_1"
+                    android:layout_width="@dimen/size_50"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:inputType="number"
+                    android:padding="@dimen/size_3"
+                    android:textSize="@dimen/text_size_14"
+                    app:bordered="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_2"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <com.soneso.lumenshine.presentation.customViews.SgTextView
+                    android:id="@+id/mnemonic_word_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="word"
+                    android:textColor="@color/text_dark"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+                <com.soneso.lumenshine.presentation.customViews.SgEditText
+                    android:id="@+id/mnemonic_position_2"
+                    android:layout_width="@dimen/size_50"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:inputType="number"
+                    android:padding="@dimen/size_3"
+                    android:textSize="@dimen/text_size_14"
+                    app:bordered="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_2"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <com.soneso.lumenshine.presentation.customViews.SgTextView
+                    android:id="@+id/mnemonic_word_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="word"
+                    android:textColor="@color/text_dark"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+                <com.soneso.lumenshine.presentation.customViews.SgEditText
+                    android:id="@+id/mnemonic_position_3"
+                    android:layout_width="@dimen/size_50"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:inputType="number"
+                    android:padding="@dimen/size_3"
+                    android:textSize="@dimen/text_size_14"
+                    app:bordered="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_2"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <com.soneso.lumenshine.presentation.customViews.SgTextView
+                    android:id="@+id/mnemonic_word_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="word"
+                    android:textColor="@color/text_dark"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold"
+                    android:gravity="start"/>
+
+                <com.soneso.lumenshine.presentation.customViews.SgEditText
+                    android:id="@+id/mnemonic_position_4"
+                    android:layout_width="@dimen/size_50"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:inputType="number"
+                    android:padding="@dimen/size_3"
+                    android:textSize="@dimen/text_size_14"
+                    app:bordered="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.soneso.lumenshine.presentation.customViews.SgTextView
+            android:id="@+id/mnemonic_error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_25"
+            android:textColor="@color/red"
+            android:textSize="@dimen/text_size_14"
+            android:visibility="invisible"
+            android:text="@string/invalid_input"/>
+
+        <Button
+            android:id="@+id/finish_setup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_15"
+            android:text="@string/finish_setup"
+            android:textColor="@color/text_light"
+            android:textSize="@dimen/text_size_14"
+            android:theme="@style/MyButton" />
+
+        <Button
+            android:id="@+id/go_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_25"
+            android:text="@string/go_back_button_text"
+            android:textColor="@color/text_dark"
+            android:textSize="@dimen/text_size_14"
+            android:theme="@style/YellowButton" />
+
+    </LinearLayout>
+
+</ScrollView>
