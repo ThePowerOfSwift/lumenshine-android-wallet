@@ -40,6 +40,7 @@
     <dimen name="login_appbar_height">150dp</dimen>
     <dimen name="avatar_image_size">60dp</dimen>
     <dimen name="size_35">35dp</dimen>
+    <dimen name="settings_item_height">80dp</dimen>
     <dimen name="size_85">85dp</dimen>
     <dimen name="size_90">90dp</dimen>
     <dimen name="text_size_30">30sp</dimen>
