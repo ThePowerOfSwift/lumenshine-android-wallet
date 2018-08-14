@@ -15,7 +15,9 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.Country
+import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.RegistrationStatus
+import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
 import com.soneso.lumenshine.presentation.util.showInfoDialog
@@ -129,11 +131,27 @@ class RegistrationFragment : AuthFragment() {
             State.ERROR -> {
 
                 showLoadingButton(false)
-                showErrorSnackbar(viewState.error)
+                handleError(viewState.error)
             }
             else -> {
 
                 showLoadingButton(false)
+            }
+        }
+    }
+
+    /**
+     * handling login response errors
+     */
+    private fun handleError(e: SgError?) {
+        val error = e ?: return
+
+        when (error.errorCode) {
+            ErrorCodes.SIGNUP_EMAIL_ALREADY_EXIST -> {
+                email.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+            }
+            else -> {
+                showErrorSnackbar(error)
             }
         }
     }

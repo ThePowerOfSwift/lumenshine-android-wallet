@@ -11,7 +11,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.google.authenticator.OtpProvider
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.RegistrationStatus
+import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.domain.data.UserCredentials
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
@@ -139,11 +141,33 @@ class LoginFragment : AuthFragment() {
             State.ERROR -> {
 
                 showLoadingButton(false)
-                showErrorSnackbar(viewState.error)
+                handleError(viewState.error)
             }
             else -> {
 
                 showLoadingButton(false)
+            }
+        }
+    }
+
+    /**
+     * handling login response errors
+     */
+    private fun handleError(e: SgError?) {
+        val error = e ?: return
+
+        when (error.errorCode) {
+            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
+                email.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+            }
+            ErrorCodes.LOGIN_INVALID_2FA -> {
+                two_factor_code.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+            }
+            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
+                password.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+            }
+            else -> {
+                showErrorSnackbar(error)
             }
         }
     }

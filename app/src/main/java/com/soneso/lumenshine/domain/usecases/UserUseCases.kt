@@ -56,7 +56,7 @@ class UserUseCases(private val userRepo: UserRepository) {
 
                     val helper = UserSecurityHelper(password.toCharArray())
                     val publicKeyIndex188 = helper.decipherUserSecurity(it)
-                            ?: return@flatMap Single.error<RegistrationStatus>(SgError(R.string.login_password_wrong))
+                            ?: return@flatMap Single.error<RegistrationStatus>(SgError(R.string.login_password_wrong,ErrorCodes.LOGIN_WRONG_PASSWORD))
                     it.publicKeyIndex188 = publicKeyIndex188
                     userRepo.loginStep2(it)
                 }
