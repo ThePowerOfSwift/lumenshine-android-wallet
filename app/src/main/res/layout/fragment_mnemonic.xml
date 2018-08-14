@@ -3,15 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/size_10"
     tools:context=".presentation.auth.MnemonicFragment">
+
+    <LinearLayout
+        android:id="@+id/mnemonic_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/view_mnemonic_words" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mnemonic_confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/view_mnemonic_confirm" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/mnemonic_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/cyan_800"
-        android:textSize="@dimen/text_size_16" />
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/question_layout"
@@ -40,6 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_45"
         android:layout_gravity="bottom"
-        android:text="@string/mnemonic_next_button" />
+        android:text="@string/mnemonic_next_button"
+        android:visibility="gone"/>
 
 </FrameLayout>

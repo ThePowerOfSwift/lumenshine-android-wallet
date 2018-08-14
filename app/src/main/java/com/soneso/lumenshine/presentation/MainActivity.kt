@@ -16,6 +16,7 @@ import com.soneso.lumenshine.presentation.accounts.WalletsFragment
 import com.soneso.lumenshine.presentation.general.SgActivity
 import com.soneso.lumenshine.presentation.general.SgFragment
 import com.soneso.lumenshine.presentation.home.HomeFragment
+import com.soneso.lumenshine.presentation.settings.FingerPrintSetupActivity
 import com.soneso.lumenshine.presentation.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -50,6 +51,10 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         val homeItem = nav_view.menu.getItem(0)
         homeItem.isChecked = true
         onNavigationItemSelected(homeItem)
+        if (intent.hasExtra(EXTRA_FINGERPRINT_SETUP)) {
+            if (intent.getBooleanExtra(EXTRA_FINGERPRINT_SETUP, false))
+                startActivity(Intent(this, FingerPrintSetupActivity::class.java))
+        }
     }
 
     private fun shareFcmId() {
@@ -133,5 +138,13 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         fun startInstance(context: Context) {
             context.startActivity(Intent(context, MainActivity::class.java))
         }
+
+        fun startInstanceWithFingerprintSetup(context: Context) {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(EXTRA_FINGERPRINT_SETUP, true)
+            context.startActivity(intent)
+        }
+
+        const val EXTRA_FINGERPRINT_SETUP = "fingerpirnt_setup"
     }
 }

@@ -30,7 +30,7 @@
         android:layout_marginRight="@dimen/size_20"/>
 
 
-    <com.soneso.lumenshine.presentation.customViews.FormInputView
+    <com.soneso.lumenshine.presentation.customViews.PasswordInputView
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

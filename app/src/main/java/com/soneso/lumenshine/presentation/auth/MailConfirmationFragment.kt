@@ -43,13 +43,16 @@ class MailConfirmationFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        open_mail.setOnClickListener {
-            openEmailApp()
-        }
+//        open_mail.setOnClickListener {
+//            openEmailApp()
+//        }
+
         resend_mail.setOnClickListener {
             authViewModel.resendConfirmationMail()
         }
         already_confirmed.setOnClickListener {
+            mail_confirmation_error_text.text=""
+            mail_confirmation_error_text.visibility = View.VISIBLE
             authViewModel.refreshRegistrationStatus()
         }
     }
@@ -71,7 +74,6 @@ class MailConfirmationFragment : AuthFragment() {
                 showSnackbar("Mail sent!")
             }
             State.ERROR -> {
-
                 showErrorSnackbar(viewState.error)
             }
         }
@@ -82,14 +84,28 @@ class MailConfirmationFragment : AuthFragment() {
         when (viewState.state) {
             State.LOADING -> {
                 // cristi.paval, 5/3/18 - show here loading in ui
+                showLoadingButton(true)
+
             }
             State.ERROR -> {
-
+                showLoadingButton(false)
                 showErrorSnackbar(viewState.error)
             }
             else -> {
                 // cristi.paval, 5/3/18 - stop loading in ui
+                mail_confirmation_error_text.text = getString(R.string.mail_confirmation_alert)
+                showLoadingButton(false)
             }
+        }
+    }
+
+    private fun showLoadingButton(loading: Boolean) {
+        if (loading) {
+            progress_bar.visibility = View.VISIBLE
+            already_confirmed.visibility = View.INVISIBLE
+        } else {
+            progress_bar.visibility = View.GONE
+            already_confirmed.visibility = View.VISIBLE
         }
     }
 

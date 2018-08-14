@@ -1,6 +1,7 @@
 package com.soneso.lumenshine.presentation.customViews
 
 import android.content.Context
+import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -82,7 +83,6 @@ open class FormInputView @JvmOverloads constructor(
     }
 
 
-
     fun setOnEditorActionListener(listener: TextView.OnEditorActionListener) {
         input_edit_text.setOnEditorActionListener(listener)
     }
@@ -91,6 +91,11 @@ open class FormInputView @JvmOverloads constructor(
         get() = error_text.text
         set(value) {
             error_text.text = value
+        }
+
+    val text: Editable
+        get() {
+            return input_edit_text.text
         }
 
 }

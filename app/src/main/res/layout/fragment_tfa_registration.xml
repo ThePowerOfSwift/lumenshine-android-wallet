@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,12 +12,75 @@
         android:orientation="vertical"
         tools:context=".presentation.auth.TfaConfirmationFragment">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/qr_code_view"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/size_90"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/size_10">
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_5"
+                android:text="@string/setup_step_1"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tfa_authentication_title"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_dark" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_45"
             android:layout_margin="@dimen/size_15"
-            tools:ignore="ContentDescription" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_10"
+                android:text="@string/your_2fa_secret"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:id="@+id/token_view"
+                android:layout_width="@dimen/size_100"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/copy_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_10"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_content_copy"
+                android:tint="@color/colorPrimary"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_dark" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,50 +89,65 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/token_view"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/size_45"
-                android:layout_weight="1"
-                android:inputType="none"
-                tools:ignore="LabelFor,TextFields" />
+            <com.soneso.lumenshine.presentation.customViews.FormInputView
+                android:id="@+id/tfa_code_view"
+                android:layout_width="@dimen/size_125"
+                android:layout_height="wrap_content"
+                android:hint="@string/tfa_code"
+                android:inputType="number" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/copy_button"
+            <Button
+                android:id="@+id/send_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_15"
-                android:src="@drawable/ic_content_copy"
+                android:text="@string/next"
                 tools:ignore="ContentDescription" />
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_dark" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/size_15">
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/size_10"
+                android:layout_marginTop="@dimen/size_10"
+                android:text="@string/tfa_reason"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text_size_14" />
+
+            <com.soneso.lumenshine.presentation.customViews.SgTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/tfa_setup_steps"
+                android:textColor="@color/text_dark"
+                android:textSize="@dimen/text_size_14" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/qr_code_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_15"
+            android:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_15"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/tfa_code_view"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/size_45"
-                android:layout_weight="1"
-                android:inputType="number"
-                tools:ignore="LabelFor,TextFields" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/send_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_15"
-                android:src="@drawable/ic_send"
-                tools:ignore="ContentDescription" />
-        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

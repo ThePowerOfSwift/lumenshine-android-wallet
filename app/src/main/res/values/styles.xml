@@ -37,4 +37,15 @@
         <item name="colorButtonNormal">@color/colorPrimary</item>
     </style>
 
+
+    <style name="RedButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/red</item>
+    </style>
+
+    <style name="YellowButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/yellow</item>
+    </style>
+
 </resources>

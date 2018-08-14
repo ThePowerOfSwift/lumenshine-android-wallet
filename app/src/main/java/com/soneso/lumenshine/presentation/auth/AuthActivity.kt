@@ -66,6 +66,9 @@ class AuthActivity : SgActivity() {
             clearButtons()
             // Handle navigation view item clicks here.
             when (item.itemId) {
+                R.id.nav_logout -> {
+
+                }
                 R.id.nav_login -> {
                     replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
                     tab_login.isChecked = true
@@ -152,21 +155,9 @@ class AuthActivity : SgActivity() {
 
                 val credentials = viewState.data!!
                 if (credentials.username.isNotEmpty() && credentials.tfaSecret.isNotEmpty()) {
-                    login_step_1_tabs.visibility = View.GONE
-                    login_step_2_tabs.visibility = View.VISIBLE
-                    replaceFragment(PasswordFragment.newInstance(), PasswordFragment.TAG)
-                    welcome_text.setText(R.string.welcome_back)
-                    welcome_user_email_text.visibility = View.VISIBLE
-                    welcome_user_email_text.text = credentials.username
-                    setLoginScenario2Menu()
-                    nav_header_username.text = credentials.username
+                    showCredentialsSavedView(credentials)
                 } else {
-                    welcome_text.setText(R.string.welcome)
-                    welcome_user_email_text.visibility = View.INVISIBLE
-                    login_step_2_tabs.visibility = View.GONE
-                    login_step_1_tabs.visibility = View.VISIBLE
-                    setLoginScenario1Menu()
-                    nav_header_username.setText(R.string.not_logged_in)
+                    showCredentialsNotSavedView()
                 }
             }
         }
@@ -189,6 +180,40 @@ class AuthActivity : SgActivity() {
         nav_view.inflateMenu(R.menu.activity_login_drawer_scenario_1)
     }
 
+    private fun setLoginSetUpMenu() {
+        nav_view.menu.clear()
+        nav_view.inflateMenu(R.menu.activity_login_drawer_set_up)
+    }
+
+    private fun showSetUpView() {
+        set_up_view.visibility = View.VISIBLE
+        login_step_1_tabs.visibility = View.GONE
+        login_step_2_tabs.visibility = View.GONE
+        setLoginSetUpMenu()
+    }
+
+    private fun showCredentialsNotSavedView() {
+        welcome_text.setText(R.string.welcome)
+        nav_header_username.setText(R.string.not_logged_in)
+        welcome_user_email_text.visibility = View.INVISIBLE
+        login_step_2_tabs.visibility = View.GONE
+        login_step_1_tabs.visibility = View.VISIBLE
+        set_up_view.visibility = View.GONE
+        setLoginScenario1Menu()
+    }
+
+    private fun showCredentialsSavedView(credentials: UserCredentials) {
+        nav_header_username.text = credentials.username
+        welcome_text.setText(R.string.welcome_back)
+        welcome_user_email_text.visibility = View.VISIBLE
+        welcome_user_email_text.text = credentials.username
+        login_step_1_tabs.visibility = View.GONE
+        login_step_2_tabs.visibility = View.VISIBLE
+        set_up_view.visibility = View.GONE
+        replaceFragment(PasswordFragment.newInstance(), PasswordFragment.TAG)
+        setLoginScenario2Menu()
+
+    }
 
     private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
 
@@ -207,16 +232,20 @@ class AuthActivity : SgActivity() {
 
         when {
             !status.tfaConfirmed -> {
-
+                showSetUpView()
                 replaceFragment(TfaConfirmationFragment.newInstance(), TfaConfirmationFragment.TAG)
             }
             !status.emailConfirmed -> {
-
+                showSetUpView()
                 replaceFragment(MailConfirmationFragment.newInstance(), MailConfirmationFragment.TAG)
             }
             !status.mnemonicConfirmed -> {
-
+                showSetUpView()
                 replaceFragment(MnemonicFragment.newInstance(), MnemonicFragment.TAG)
+            }
+            status.fingerprintSetupRequested -> {
+                finishAffinity()
+                MainActivity.startInstanceWithFingerprintSetup(this)
             }
             else -> {
                 handleRegistrationCompleted()
@@ -247,10 +276,12 @@ class AuthActivity : SgActivity() {
     }
 
     fun replaceFragment(fragment: AuthFragment, tag: String) {
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment, tag)
-                .commit()
+        val myFragment = supportFragmentManager.findFragmentByTag(tag)
+        if (myFragment == null)
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment, tag)
+                    .commit()
     }
 
     /**
@@ -307,10 +338,12 @@ class AuthActivity : SgActivity() {
         tab_home.setOnClickListener(tabClickListener)
         tab_logout.setOnClickListener(tabClickListener)
         tab_fingerprint.setOnClickListener(tabClickListener)
+
         if (this.hasFingerPrintSensor().not())
             tab_fingerprint.visibility = View.GONE
         else
             tab_fingerprint.visibility = View.VISIBLE
+
     }
 
     companion object {
