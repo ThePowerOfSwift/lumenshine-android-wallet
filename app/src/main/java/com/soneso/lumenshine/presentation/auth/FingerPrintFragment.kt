@@ -12,10 +12,12 @@ import android.widget.TextView
 import com.google.authenticator.OtpProvider
 
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.RegistrationStatus
+import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
-import kotlinx.android.synthetic.main.fragment_password.*
+import kotlinx.android.synthetic.main.fragment_finger_print.*
 
 
 /**
@@ -75,7 +77,7 @@ class FingerPrintFragment : AuthFragment() {
             State.ERROR -> {
 
                 showLoadingButton(false)
-                showErrorSnackbar(viewState.error)
+               handleError(viewState.error)
             }
             else -> {
 
@@ -84,17 +86,35 @@ class FingerPrintFragment : AuthFragment() {
         }
     }
 
-    private fun attemptLogin() {
+    /**
+     * handling login response errors
+     */
+    private fun handleError(e: SgError?) {
+        val error = e ?: return
 
-        if (password.isValidPassword().not()) {
-            return
+        when (error.errorCode) {
+            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
+                showErrorSnackbar(error)
+            }
+            ErrorCodes.LOGIN_INVALID_2FA -> {
+                showErrorSnackbar(error)
+            }
+            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
+                password.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+            }
+            else -> {
+                showErrorSnackbar(error)
+            }
         }
+    }
 
+    private fun attemptLogin() {
 
         val credentials = authViewModel.liveLastCredentials.value?.data ?: return
         val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret) ?: return
 
         authViewModel.login(credentials.username, password.trimmedText, tfaCode)
+
     }
 
     companion object {

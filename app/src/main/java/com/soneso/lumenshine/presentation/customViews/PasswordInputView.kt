@@ -6,7 +6,7 @@ import com.soneso.lumenshine.R
 import kotlinx.android.synthetic.main.sg_input_view.view.*
 
 class PasswordInputView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FormInputView(context, attrs, defStyleAttr) {
 
     private var minPasswordLength = 9
