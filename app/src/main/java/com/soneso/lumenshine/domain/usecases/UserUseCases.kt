@@ -104,7 +104,7 @@ class UserUseCases(private val userRepo: UserRepository) {
                     if (publicKey188 != null) {
                         userRepo.changeTfaSecret(publicKey188)
                     } else {
-                        Single.error(SgError(R.string.login_password_wrong))
+                        Single.error(SgError(R.string.login_password_wrong,99))
                     }
                 }
     }

@@ -33,7 +33,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".model.push.SgFirebaseMessagingService"
             tools:ignore="ExportedService">
@@ -53,11 +52,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.settings.FingerPrintSetupActivity" />
-
         <activity
             android:name=".presentation.settings.ChangePasswordActivity"
-            android:parentActivityName=".presentation.MainActivity"
-            android:label="@string/change_password_label"/>
+            android:label="@string/change_password_label"
+            android:parentActivityName=".presentation.MainActivity" />
+        <activity android:name=".presentation.settings.ChangeTfaActivity"
+            android:label="@string/change_tfa_label"
+            android:parentActivityName=".presentation.MainActivity"/>
     </application>
 
 </manifest>
