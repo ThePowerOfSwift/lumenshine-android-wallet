@@ -3,6 +3,7 @@ package com.soneso.lumenshine.presentation.settings
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,10 @@ class SettingsFragment : SgFragment() {
 
         change_pass_button.setOnClickListener { attemptPassChange() }
         change_tfa_button.setOnClickListener { attemptTfaChange() }
+
+        settings_change_password_setting.setOnClickListener {
+            startActivity(Intent(context, ChangePasswordActivity::class.java))
+        }
     }
 
     private fun subscribeForLiveData() {
@@ -70,7 +75,7 @@ class SettingsFragment : SgFragment() {
     }
 
     private fun validPassFields() =
-                    new_pass.isValidPassword()
+            new_pass.isValidPassword()
                     && new_pass.trimmedText == pass_confirmation.trimmedText
     // TODO: if passwords don't match show error message
 

@@ -33,6 +33,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <service
             android:name=".model.push.SgFirebaseMessagingService"
             tools:ignore="ExportedService">
@@ -47,10 +48,16 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.settings.FingerPrintSetupActivity"/>
+        <activity android:name=".presentation.settings.FingerPrintSetupActivity" />
+
+        <activity
+            android:name=".presentation.settings.ChangePasswordActivity"
+            android:parentActivityName=".presentation.MainActivity"
+            android:label="@string/change_password_label"/>
     </application>
 
 </manifest>

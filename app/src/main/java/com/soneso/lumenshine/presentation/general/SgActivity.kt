@@ -2,9 +2,14 @@ package com.soneso.lumenshine.presentation.general
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import android.view.ViewGroup
+import com.soneso.lumenshine.R
 import com.soneso.lumenshine.SgApp
 import com.soneso.lumenshine.di.AppComponent
+import com.soneso.lumenshine.domain.data.SgError
 import javax.inject.Inject
 
 /**
@@ -27,5 +32,20 @@ open class SgActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         appComponent.inject(this)
+    }
+
+    fun showSnackbar(text: CharSequence) {
+        val view = findViewById<ViewGroup>(android.R.id.content).getChildAt(0) ?: return
+        Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+                .setAction(R.string.ok, null)
+                .show()
+    }
+
+    fun showErrorSnackbar(e: SgError?) {
+        val error = e ?: return
+        val view = findViewById<ViewGroup>(android.R.id.content).getChildAt(0) ?: return
+        val snackbar = if (error.errorResId > 0) Snackbar.make(view, error.errorResId, Snackbar.LENGTH_LONG) else Snackbar.make(view, error.message!!, Snackbar.LENGTH_LONG)
+        snackbar.setAction(R.string.ok, null)
+                .show()
     }
 }
