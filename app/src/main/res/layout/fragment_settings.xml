@@ -19,7 +19,8 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:padding="@dimen/size_10">
+            android:padding="@dimen/size_10"
+            android:id="@+id/settings_change_password_setting">
 
             <com.soneso.lumenshine.presentation.customViews.SgTextView
                 android:layout_width="wrap_content"
@@ -94,54 +95,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/change_password_label" />
-
-            <com.soneso.lumenshine.presentation.customViews.FormInputView
-                android:id="@+id/current_pass"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_current_password"
-                android:inputType="textPassword" />
-
-            <com.soneso.lumenshine.presentation.customViews.PasswordInputView
-                android:id="@+id/new_pass"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword" />
-
-            <com.soneso.lumenshine.presentation.customViews.FormInputView
-                android:id="@+id/pass_confirmation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_password_confirmation"
-                android:inputType="textPassword" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/change_pass_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/change_password_button"
-                    android:textStyle="bold" />
-
-                <ProgressBar
-                    android:id="@+id/change_pass_progress"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true" />
-            </FrameLayout>
 
             <TextView
                 android:layout_width="match_parent"

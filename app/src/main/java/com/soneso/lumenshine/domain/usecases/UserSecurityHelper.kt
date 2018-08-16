@@ -33,17 +33,17 @@ class UserSecurityHelper(private val pass: CharArray) {
         mnemonicChars = Wallet.generate24WordMnemonic()
         val mnemonicWords = String(mnemonicChars).split(" ")
 
-        val mnemonicIndexes = ShortArray(mnemonicWords.size, {
+        val mnemonicIndexes = ShortArray(mnemonicWords.size) {
             wordList.indexOf(mnemonicWords[it]).toShort()
-        })
+        }
         val mnemonicByteList = mnemonicIndexes.flatMap { index: Short ->
             val bytes = ByteBuffer.allocate(2)
             bytes.putShort(index)
             bytes.array().asList()
         }
-        val mnemonicBytes = ByteArray(2 * mnemonicIndexes.size, {
+        val mnemonicBytes = ByteArray(2 * mnemonicIndexes.size) {
             mnemonicByteList[it]
-        })
+        }
         val mnemonicEncryptionIv = Cryptor.generateIv()
         val encryptedMnemonic = Cryptor.encryptValue(mnemonicBytes, mnemonicMasterKey, mnemonicEncryptionIv)
 
@@ -120,10 +120,10 @@ class UserSecurityHelper(private val pass: CharArray) {
                 return null
             }
 
-            val mnemonicIndexes = ShortArray(mnemonicBytes.size / 2, { index ->
+            val mnemonicIndexes = ShortArray(mnemonicBytes.size / 2) { index ->
                 val bf = ByteBuffer.wrap(mnemonicBytes, index * 2, 2)
                 bf.short
-            })
+            }
             val mnemonicBuilder = StringBuilder()
             mnemonicIndexes.forEach { index ->
                 mnemonicBuilder.append(wordList[index.toInt()]).append(" ")
