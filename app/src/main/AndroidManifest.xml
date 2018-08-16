@@ -47,10 +47,18 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.settings.FingerPrintSetupActivity"/>
+        <activity android:name=".presentation.settings.FingerPrintSetupActivity" />
+        <activity
+            android:name=".presentation.settings.ChangePasswordActivity"
+            android:label="@string/change_password_label"
+            android:parentActivityName=".presentation.MainActivity" />
+        <activity android:name=".presentation.settings.ChangeTfaActivity"
+            android:label="@string/change_tfa_label"
+            android:parentActivityName=".presentation.MainActivity"/>
     </application>
 
 </manifest>

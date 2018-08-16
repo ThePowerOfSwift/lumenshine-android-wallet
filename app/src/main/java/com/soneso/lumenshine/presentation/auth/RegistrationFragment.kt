@@ -184,6 +184,7 @@ class RegistrationFragment : AuthFragment() {
                     && password.isValidPassword()
                     && isPasswordMatch()
 
+
     private fun isPasswordMatch(): Boolean {
         val match = password.trimmedText == password_confirmation.trimmedText
         if (!match) {

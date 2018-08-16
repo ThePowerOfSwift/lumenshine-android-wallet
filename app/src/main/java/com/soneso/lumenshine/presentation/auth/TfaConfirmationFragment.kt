@@ -39,6 +39,7 @@ class TfaConfirmationFragment : AuthFragment() {
         authViewModel.liveTfaSecret.observe(this, Observer {
             renderTfaSecret(it ?: return@Observer)
         })
+
     }
 
     private fun setupListeners() {

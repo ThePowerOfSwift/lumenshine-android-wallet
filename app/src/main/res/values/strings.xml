@@ -153,4 +153,19 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="finish_setup">Finish setup</string>
     <string name="go_back_button_text">Go back and show mnemonic</string>
     <string name="invalid_input">Invalid input</string>
+    <string name="change_password_description">To change your password please provide current and new password.</string>
+    <string name="error_invalid_current_password">Invalid current password</string>
+    <string name="hint_new_password">New password</string>
+    <string name="hint_new_password_confirmation">Repeat new password</string>
+    <string name="password_change_success">Password successfully changed</string>
+    <string name="change_tfa_password_description">To change 2FA Secret please insert your password.</string>
+    <string name="new_tfa">New 2FA Secret</string>
+    <string name="new_tfa_steps">1. copy and enter the below displayed 2FA secret code into the authenticator app\n
+    \n
+    2. enter the generated 2FA code from the authenticator app into the 2FA Code input and press "Next"</string>
+    <string name="cancel">Cancel</string>
+    <string name="tfa_cancel_description">If canceled, the 2FA secret will not be changed.</string>
+    <string name="tfa_change_success">2FA Secret successfully changed</string>
+    <string name="secret_copied">Token copied in clipboard!</string>
+    <string name="failed_to_change_tfa">Failed to change 2FA Code</string>
 </resources>
