@@ -15,7 +15,6 @@ import com.soneso.lumenshine.domain.data.BlogPostPreview
 import com.soneso.lumenshine.domain.data.InternalLink
 import com.soneso.lumenshine.domain.data.StellarAccount
 import com.soneso.lumenshine.domain.util.Mock
-import kotlinx.android.synthetic.main.item_home_account.view.*
 import kotlinx.android.synthetic.main.item_home_chart.view.*
 import kotlinx.android.synthetic.main.item_home_internal_link.view.*
 import kotlinx.android.synthetic.main.item_home_web_link.view.*
@@ -46,7 +45,7 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 InternalLinkHolder(view)
             }
             TYPE_ACCOUNT -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_account, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.view_wallet_card, parent, false)
                 AccountHolder(view)
             }
             TYPE_CHART -> {
@@ -94,7 +93,7 @@ class HomeFeedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class AccountHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private val imageView = view.account_image
+//        private val imageView = view.account_image
 
         fun fillData(account: StellarAccount) {
 
