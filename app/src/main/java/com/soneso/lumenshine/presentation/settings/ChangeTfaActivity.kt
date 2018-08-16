@@ -21,6 +21,8 @@ import com.soneso.lumenshine.presentation.general.SgViewState
 import kotlinx.android.synthetic.main.view_change_tfa_new_secret.*
 import kotlinx.android.synthetic.main.view_change_tfa_password_confirm.*
 import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.presentation.util.hideProgressDialog
+import com.soneso.lumenshine.presentation.util.showProgressDialog
 import kotlinx.android.synthetic.main.activity_change_tfa.*
 import kotlinx.android.synthetic.main.view_change_tfa_success.*
 
@@ -94,21 +96,18 @@ class ChangeTfaActivity : SgActivity() {
         when (viewState.state) {
 
             State.READY -> {
-                change_tfa_password_confirm.visibility = View.VISIBLE
-                change_tfa_pass_confirm_progress.visibility = View.GONE
+                hideProgressDialog()
                 change_tfa_password_confirm_view.visibility = View.GONE
                 change_tfa_new_secret_view.visibility = View.VISIBLE
                 setupToken(viewState.data!!)
             }
             State.LOADING -> {
 
-                change_tfa_password_confirm.visibility = View.INVISIBLE
-                change_tfa_pass_confirm_progress.visibility = View.VISIBLE
+                showProgressDialog()
             }
             State.ERROR -> {
 
-                change_tfa_password_confirm.visibility = View.VISIBLE
-                change_tfa_pass_confirm_progress.visibility = View.GONE
+               hideProgressDialog()
 
                 handleError(viewState.error)
             }
@@ -118,8 +117,7 @@ class ChangeTfaActivity : SgActivity() {
     private fun renderTfaChangeConfirmation(viewState: SgViewState<RegistrationStatus>) {
         when (viewState.state) {
             State.READY -> {
-                change_tfa_next_button.visibility = View.VISIBLE
-                change_tfa_progress.visibility = View.GONE
+                hideProgressDialog()
 
                 if (viewState.data!!.tfaConfirmed) {
 
@@ -133,13 +131,11 @@ class ChangeTfaActivity : SgActivity() {
             }
 
             State.LOADING -> {
-                change_tfa_next_button.visibility = View.INVISIBLE
-                change_tfa_progress.visibility = View.VISIBLE
+                showProgressDialog()
             }
 
             State.ERROR -> {
-                change_tfa_next_button.visibility = View.VISIBLE
-                change_tfa_progress.visibility = View.GONE
+                hideProgressDialog()
                 handleError(viewState.error)
             }
         }
