@@ -37,7 +37,8 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:padding="@dimen/size_10">
+            android:padding="@dimen/size_10"
+            android:id="@+id/settings_change_tfa_setting">
 
             <com.soneso.lumenshine.presentation.customViews.SgTextView
                 android:layout_width="wrap_content"
@@ -89,49 +90,6 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_20"
-                android:text="@string/change_tfa_label" />
-
-            <com.soneso.lumenshine.presentation.customViews.FormInputView
-                android:id="@+id/pass_for_tfa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/change_tfa_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/change_tfa_button"
-                    android:textStyle="bold" />
-
-                <ProgressBar
-                    android:id="@+id/change_tfa_progress"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true" />
-            </FrameLayout>
-
-        </LinearLayout>
 
     </LinearLayout>
 
