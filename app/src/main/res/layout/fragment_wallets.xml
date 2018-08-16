@@ -1,0 +1,40 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_300"
+    android:orientation="vertical"
+    tools:context="com.soneso.lumenshine.presentation.wallets.WalletsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/size_10"
+        android:paddingTop="@dimen/size_10">
+
+        <com.soneso.lumenshine.presentation.wallets.WalletCardView
+            android:id="@+id/emptyWalletView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_5"
+            android:layout_marginStart="@dimen/size_5" />
+
+        <com.soneso.lumenshine.presentation.wallets.WalletCardView
+            android:id="@+id/singWalletView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_5"
+            android:layout_marginStart="@dimen/size_5"
+            android:layout_marginTop="@dimen/size_10" />
+
+        <com.soneso.lumenshine.presentation.wallets.WalletCardView
+            android:id="@+id/multipleWalletView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_5"
+            android:layout_marginStart="@dimen/size_5"
+            android:layout_marginTop="@dimen/size_10" />
+    </LinearLayout>
+
+</ScrollView>

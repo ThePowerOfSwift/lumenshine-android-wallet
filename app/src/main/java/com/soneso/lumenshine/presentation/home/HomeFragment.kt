@@ -25,17 +25,17 @@ class HomeFragment : SgFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        setupFeedRecyclerView()
+        setupFeedRecyclerView()
     }
 
-//    private fun setupFeedRecyclerView() {
-//        rv_feed.layoutManager = LinearLayoutManager(context)
-//        adapter = HomeFeedAdapter()
-//        rv_feed.adapter = adapter
-//        adapter.onBlogLinkClickListener = {
-//            context?.forwardToBrowser(it.postUrl)
-//        }
-//    }
+    private fun setupFeedRecyclerView() {
+        rv_feed.layoutManager = LinearLayoutManager(context)
+        adapter = HomeFeedAdapter()
+        rv_feed.adapter = adapter
+        adapter.onBlogLinkClickListener = {
+            context?.forwardToBrowser(it.postUrl)
+        }
+    }
 
     companion object {
         const val TAG = "HomeFragment"

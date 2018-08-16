@@ -26,10 +26,36 @@
         <item name="cardUseCompatPadding">true</item>
     </style>
 
-    <style name="LsCardTitle">
+    <style name="LsCardMainTitle">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LsCardSubtitle">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LsCardSectionTitle">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LsCardText">
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="LsCardButton">
+        <item name="android:textColor">@color/text_ls_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/size_10</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">

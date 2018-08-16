@@ -12,7 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.google.firebase.iid.FirebaseInstanceId
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.accounts.WalletsFragment
+import com.soneso.lumenshine.presentation.wallets.WalletsFragment
 import com.soneso.lumenshine.presentation.general.SgActivity
 import com.soneso.lumenshine.presentation.general.SgFragment
 import com.soneso.lumenshine.presentation.home.HomeFragment

@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.accounts
+package com.soneso.lumenshine.presentation.wallets
 
 
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.general.SgFragment
+import kotlinx.android.synthetic.main.fragment_wallets.*
 
 
 /**
@@ -16,8 +17,15 @@ import com.soneso.lumenshine.presentation.general.SgFragment
 class WalletsFragment : SgFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_accounts, container, false)
+            inflater.inflate(R.layout.fragment_wallets, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        emptyWalletView.populate("", emptyList())
+        singWalletView.populate("blabla*lumenshine.com", listOf(Unit))
+        multipleWalletView.populate(null, listOf(Unit, Unit))
+    }
 
     companion object {
         const val TAG = "WalletsFragment"

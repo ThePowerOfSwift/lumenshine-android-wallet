@@ -1,6 +1,8 @@
 package com.soneso.lumenshine.presentation.util
 
 import android.animation.ObjectAnimator
+import android.os.Build
+import android.support.annotation.StyleRes
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -30,4 +32,14 @@ fun TextView.setOnTextChangeListener(listener: ((View) -> Unit)) {
             listener.invoke(this@setOnTextChangeListener)
         }
     })
+}
+
+fun TextView.setTextStyle(@StyleRes resId: Int) {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        setTextAppearance(resId)
+    } else {
+        @Suppress("DEPRECATION")
+        setTextAppearance(context, resId)
+    }
 }
