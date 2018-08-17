@@ -17,6 +17,7 @@ import com.soneso.lumenshine.domain.data.RegistrationStatus
 import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.presentation.util.decodeBase32
 import kotlinx.android.synthetic.main.fragment_finger_print.*
 
 
@@ -111,7 +112,7 @@ class FingerPrintFragment : AuthFragment() {
     private fun attemptLogin() {
 
         val credentials = authViewModel.liveLastCredentials.value?.data ?: return
-        val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret) ?: return
+        val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret.decodeBase32()) ?: return
 
         authViewModel.loginAndFingerprintSetup(credentials.username, password.trimmedText, tfaCode)
     }
