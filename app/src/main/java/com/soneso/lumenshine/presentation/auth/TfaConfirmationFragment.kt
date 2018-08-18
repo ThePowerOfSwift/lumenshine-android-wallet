@@ -17,6 +17,8 @@ import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.domain.data.TfaSecret
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.presentation.util.hideProgressDialog
+import com.soneso.lumenshine.presentation.util.showProgressDialog
 import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 
 /**
@@ -79,14 +81,14 @@ class TfaConfirmationFragment : AuthFragment() {
     private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
         when (viewState.state) {
             State.ERROR -> {
-                showLoadingButton(false)
+                hideProgressDialog()
                 handleError(viewState.error)
             }
             State.LOADING -> {
-                showLoadingButton(true)
+                context?.showProgressDialog()
             }
             State.READY -> {
-                showLoadingButton(false)
+                hideProgressDialog()
             }
         }
     }

@@ -17,7 +17,9 @@ import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.domain.data.UserCredentials
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.presentation.util.hideProgressDialog
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
+import com.soneso.lumenshine.presentation.util.showProgressDialog
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.sg_input_view.view.*
 
@@ -95,16 +97,6 @@ class LoginFragment : AuthFragment() {
         authViewModel.login(email.trimmedText, password.trimmedText, tfaCode)
     }
 
-    private fun showLoadingButton(loading: Boolean) {
-        if (loading) {
-            progress_bar.visibility = View.VISIBLE
-            email_sign_in_button.visibility = View.INVISIBLE
-        } else {
-            progress_bar.visibility = View.GONE
-            email_sign_in_button.visibility = View.VISIBLE
-        }
-    }
-
     private fun renderLastCredentials(viewState: SgViewState<UserCredentials>) {
 
         when (viewState.state) {
@@ -136,16 +128,16 @@ class LoginFragment : AuthFragment() {
         when (viewState.state) {
             State.LOADING -> {
 
-                showLoadingButton(true)
+                context?.showProgressDialog()
             }
             State.ERROR -> {
 
-                showLoadingButton(false)
+                hideProgressDialog()
                 handleError(viewState.error)
             }
             else -> {
 
-                showLoadingButton(false)
+                hideProgressDialog()
             }
         }
     }

@@ -12,6 +12,8 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.RegistrationStatus
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.presentation.util.hideProgressDialog
+import com.soneso.lumenshine.presentation.util.showProgressDialog
 import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
 
 
@@ -51,7 +53,7 @@ class MailConfirmationFragment : AuthFragment() {
             authViewModel.resendConfirmationMail()
         }
         already_confirmed.setOnClickListener {
-            mail_confirmation_error_text.text=""
+            mail_confirmation_error_text.text = ""
             mail_confirmation_error_text.visibility = View.VISIBLE
             authViewModel.refreshRegistrationStatus()
         }
@@ -84,17 +86,17 @@ class MailConfirmationFragment : AuthFragment() {
         when (viewState.state) {
             State.LOADING -> {
                 // cristi.paval, 5/3/18 - show here loading in ui
-                showLoadingButton(true)
+                context?.showProgressDialog()
 
             }
             State.ERROR -> {
-                showLoadingButton(false)
+                hideProgressDialog()
                 showErrorSnackbar(viewState.error)
             }
             else -> {
                 // cristi.paval, 5/3/18 - stop loading in ui
                 mail_confirmation_error_text.text = getString(R.string.mail_confirmation_alert)
-                showLoadingButton(false)
+                hideProgressDialog()
             }
         }
     }
