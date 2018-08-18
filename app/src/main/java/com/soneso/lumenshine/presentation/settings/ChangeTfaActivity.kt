@@ -156,7 +156,7 @@ class ChangeTfaActivity : SgActivity() {
                 change_tfa_current_pass.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
             }
             ErrorCodes.LOGIN_INVALID_2FA ->{
-                change_tfa_current_pass.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+                tfa_code_view.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
             }
             else -> {
                 showErrorSnackbar(error)
@@ -166,19 +166,19 @@ class ChangeTfaActivity : SgActivity() {
 
     private fun setupToken(tfaSecret: TfaSecret) {
 
-        qr_code_view.post {
-            val params = qr_code_view.layoutParams
-            params.height = qr_code_view.width
-            qr_code_view.requestLayout()
-
-            qr_code_view.setImageBitmap(BitmapFactory.decodeByteArray(tfaSecret.imageData, 0, tfaSecret.imageData.size))
-        }
+//        qr_code_view.post {
+//            val params = qr_code_view.layoutParams
+//            params.height = qr_code_view.width
+//            qr_code_view.requestLayout()
+//
+//            qr_code_view.setImageBitmap(BitmapFactory.decodeByteArray(tfaSecret.imageData, 0, tfaSecret.imageData.size))
+//        }
         token_view.keyListener = null
         token_view.text = tfaSecret.secretCode
         copy_button.setOnClickListener {
 
             val clipboard = getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("", OtpProvider.currentTotpCode(tfaSecret.secretCode))
+            val clip = ClipData.newPlainText("", tfaSecret.secretCode)
             clipboard.primaryClip = clip
             showSnackbar(getString(R.string.secret_copied))
         }
