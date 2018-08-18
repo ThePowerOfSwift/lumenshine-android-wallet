@@ -20,7 +20,9 @@ import com.soneso.lumenshine.domain.data.RegistrationStatus
 import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.presentation.util.hideProgressDialog
 import com.soneso.lumenshine.presentation.util.showInfoDialog
+import com.soneso.lumenshine.presentation.util.showProgressDialog
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
@@ -126,16 +128,16 @@ class RegistrationFragment : AuthFragment() {
 
             State.LOADING -> {
 
-                showLoadingButton(true)
+                context?.showProgressDialog()
             }
             State.ERROR -> {
 
-                showLoadingButton(false)
+                hideProgressDialog()
                 handleError(viewState.error)
             }
             else -> {
 
-                showLoadingButton(false)
+                hideProgressDialog()
             }
         }
     }

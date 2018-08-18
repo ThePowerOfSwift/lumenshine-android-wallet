@@ -13,7 +13,9 @@ import com.soneso.lumenshine.presentation.general.SgActivity
 import com.soneso.lumenshine.presentation.general.SgViewState
 import kotlinx.android.synthetic.main.view_change_password.*
 import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.presentation.util.hideProgressDialog
 import com.soneso.lumenshine.presentation.util.showInfoDialog
+import com.soneso.lumenshine.presentation.util.showProgressDialog
 import kotlinx.android.synthetic.main.activity_change_password.*
 import kotlinx.android.synthetic.main.view_change_password_success.*
 
@@ -60,7 +62,7 @@ class ChangePasswordActivity : SgActivity() {
     }
 
     private fun isValidForm() =
-            current_pass.isNotEmpty()
+            current_pass.text.isNotEmpty()
                     && new_pass.isValidPassword()
                     && isPasswordMatch()
 
@@ -78,23 +80,19 @@ class ChangePasswordActivity : SgActivity() {
         when (viewState.state) {
 
             State.READY -> {
-
+                hideProgressDialog()
                 change_password_view.visibility = View.GONE
                 change_password_success_view.visibility = View.VISIBLE
 
             }
             State.LOADING -> {
-
-                change_pass_button.visibility = View.INVISIBLE
-                change_pass_progress.visibility = View.VISIBLE
+                showProgressDialog()
             }
             State.ERROR -> {
-
-                change_pass_button.visibility = View.VISIBLE
-                change_pass_progress.visibility = View.GONE
+                hideProgressDialog()
                 if (viewState.error!!.errorCode != 0)
                     current_pass.error = getString(R.string.error_invalid_current_password)
-                else{
+                else {
                     showErrorSnackbar(viewState.error)
                 }
             }

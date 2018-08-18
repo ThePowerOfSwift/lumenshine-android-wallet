@@ -16,6 +16,9 @@ import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.persistence.SgPrefs
 import com.soneso.lumenshine.presentation.general.SgViewState
 import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.presentation.util.decodeBase32
+import com.soneso.lumenshine.presentation.util.hideProgressDialog
+import com.soneso.lumenshine.presentation.util.showProgressDialog
 import kotlinx.android.synthetic.main.fragment_password.*
 
 
@@ -58,31 +61,21 @@ class PasswordFragment : AuthFragment() {
         })
     }
 
-    private fun showLoadingButton(loading: Boolean) {
-        if (loading) {
-            progress_bar.visibility = View.VISIBLE
-            submit_button.visibility = View.INVISIBLE
-        } else {
-            progress_bar.visibility = View.GONE
-            submit_button.visibility = View.VISIBLE
-        }
-    }
-
     private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
 
         when (viewState.state) {
             State.LOADING -> {
 
-                showLoadingButton(true)
+                context?.showProgressDialog()
             }
             State.ERROR -> {
 
-                showLoadingButton(false)
+                hideProgressDialog()
                 handleError(viewState.error)
             }
             else -> {
 
-                showLoadingButton(false)
+                hideProgressDialog()
             }
         }
     }
@@ -112,7 +105,7 @@ class PasswordFragment : AuthFragment() {
     private fun attemptLogin() {
 
         val credentials = authViewModel.liveLastCredentials.value?.data ?: return
-        val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret) ?: return
+        val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret.decodeBase32()) ?: return
 
         authViewModel.login(credentials.username, password.trimmedText, tfaCode)
     }
