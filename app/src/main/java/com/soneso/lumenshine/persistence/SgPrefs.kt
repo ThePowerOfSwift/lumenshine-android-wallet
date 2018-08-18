@@ -24,6 +24,7 @@ object SgPrefs {
     const val KEY_JWT_TOKEN = "api-token"
     const val KEY_TFA_SECRET = "tfa-secret"
     private const val KEY_TFA_IMAGE_DATA = "tfa-image-data"
+    private const val KEY_FINGERPRINT_ENABLED = "fingerprint_enabled"
 
     private val listeners = mutableListOf<((String) -> Unit)>()
     private val prefs: SharedPreferences
@@ -111,6 +112,12 @@ object SgPrefs {
     var tfaImageData: ByteArray
         get() = decryptAndGetByteArray(KEY_TFA_IMAGE_DATA)
         set(value) = encryptAndSaveByteArray(KEY_TFA_IMAGE_DATA, value)
+
+    var isFingeprintEnabled: Boolean
+        get() = prefs.getBoolean(KEY_FINGERPRINT_ENABLED, false)
+        set(value) = prefs.edit()
+                .putBoolean(KEY_FINGERPRINT_ENABLED, value)
+                .apply()
 
     fun removeUserCrendentials() {
         username = ""

@@ -34,6 +34,7 @@ class PasswordFragment : AuthFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupListeners()
         subscribeForLiveData()
+        password.requestFocus()
     }
 
     private fun setupListeners() {
@@ -69,12 +70,12 @@ class PasswordFragment : AuthFragment() {
             }
             State.ERROR -> {
 
-               hideProgressDialog()
+                hideProgressDialog()
                 handleError(viewState.error)
             }
             else -> {
 
-              hideProgressDialog()
+                hideProgressDialog()
             }
         }
     }
