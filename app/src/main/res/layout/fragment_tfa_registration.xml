@@ -62,7 +62,7 @@
                 android:id="@+id/token_view"
                 android:layout_width="@dimen/size_100"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_16"
+                android:textSize="@dimen/text_size_14"
                 android:textStyle="bold" />
 
             <ImageButton
@@ -96,13 +96,26 @@
                 android:hint="@string/tfa_code"
                 android:inputType="number" />
 
-            <Button
-                android:id="@+id/send_button"
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_15"
-                android:text="@string/next"
-                tools:ignore="ContentDescription" />
+                android:layout_marginStart="@dimen/size_15">
+
+                <Button
+                    android:id="@+id/send_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/next"/>
+
+                <ProgressBar
+                    android:id="@+id/change_tfa_progress"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true" />
+
+            </FrameLayout>
 
         </LinearLayout>
 
@@ -134,19 +147,6 @@
                 android:textSize="@dimen/text_size_14" />
 
         </LinearLayout>
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/qr_code_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_15"
-            android:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
 
     </LinearLayout>
