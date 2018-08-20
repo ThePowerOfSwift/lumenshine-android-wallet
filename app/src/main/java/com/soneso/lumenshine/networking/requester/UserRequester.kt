@@ -9,8 +9,13 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class UserRequester(private val userApi: UserApi) {
+class UserRequester
+@Inject constructor(r: Retrofit) {
+
+    private val userApi = r.create(UserApi::class.java)
 
     fun registerUser(request: RegistrationRequest): Single<RegistrationResponse> {
 

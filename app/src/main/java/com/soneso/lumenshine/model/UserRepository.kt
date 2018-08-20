@@ -8,12 +8,14 @@ import com.soneso.lumenshine.persistence.SgPrefs
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.bouncycastle.util.encoders.Base64
+import javax.inject.Inject
 
 /**
  * Class used to user operations to server.
  * Created by cristi.paval on 3/26/18.
  */
-class UserRepository(private val userRequester: UserRequester) {
+class UserRepository
+@Inject constructor(private val userRequester: UserRequester) {
 
     fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Single<RegistrationStatus> {
 

@@ -1,7 +1,7 @@
 package com.soneso.lumenshine.di
 
-import com.soneso.lumenshine.presentation.general.SgActivity
-import com.soneso.lumenshine.presentation.general.SgFragment
+import com.soneso.lumenshine.domain.usecases.UserUseCases
+import com.soneso.lumenshine.domain.usecases.WalletsUseCase
 import dagger.Component
 import javax.inject.Singleton
 
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Component(modules = [(AppModule::class)])
 interface AppComponent {
 
-    fun inject(fragment: SgFragment)
+    val walletsUseCase: WalletsUseCase
 
-    fun inject(fragment: SgActivity)
+    val userUseCases: UserUseCases
 }

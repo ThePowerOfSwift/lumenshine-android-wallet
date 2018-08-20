@@ -6,12 +6,14 @@ import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Manager.
  * Created by cristi.paval on 3/22/18.
  */
-class UserUseCases(private val userRepo: UserRepository) {
+class UserUseCases
+@Inject constructor(private val userRepo: UserRepository) {
 
     private var password: CharSequence = ""
 
@@ -56,7 +58,7 @@ class UserUseCases(private val userRepo: UserRepository) {
 
                     val helper = UserSecurityHelper(password.toCharArray())
                     val publicKeyIndex188 = helper.decipherUserSecurity(it)
-                            ?: return@flatMap Single.error<RegistrationStatus>(SgError(R.string.login_password_wrong,ErrorCodes.LOGIN_WRONG_PASSWORD))
+                            ?: return@flatMap Single.error<RegistrationStatus>(SgError(R.string.login_password_wrong, ErrorCodes.LOGIN_WRONG_PASSWORD))
                     it.publicKeyIndex188 = publicKeyIndex188
                     userRepo.loginStep2(it)
                 }
@@ -104,7 +106,7 @@ class UserUseCases(private val userRepo: UserRepository) {
                     if (publicKey188 != null) {
                         userRepo.changeTfaSecret(publicKey188)
                     } else {
-                        Single.error(SgError(R.string.login_password_wrong,99))
+                        Single.error(SgError(R.string.login_password_wrong, 99))
                     }
                 }
     }

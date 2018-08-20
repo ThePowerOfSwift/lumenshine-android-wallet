@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.di.AppComponent
 import com.soneso.lumenshine.domain.data.SgError
 import javax.inject.Inject
 
@@ -14,20 +13,15 @@ import javax.inject.Inject
  */
 open class SgFragment : Fragment() {
 
-    @Inject
     lateinit var viewModelFactory: SgViewModelFactory
 
     private val sgActivity: SgActivity
         get() = activity as SgActivity
 
-    val appComponent: AppComponent
-        get() = sgActivity.appComponent
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appComponent.inject(this)
+        viewModelFactory = SgViewModelFactory(sgActivity.sgApp.appComponent)
     }
 
     fun showSnackbar(text: CharSequence) {

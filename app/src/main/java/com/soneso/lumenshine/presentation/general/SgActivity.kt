@@ -4,13 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.SgApp
-import com.soneso.lumenshine.di.AppComponent
 import com.soneso.lumenshine.domain.data.SgError
-import javax.inject.Inject
 
 /**
  * Base activity for class.
@@ -22,16 +19,12 @@ open class SgActivity : AppCompatActivity() {
     val sgApp: SgApp
         get() = application as SgApp
 
-    val appComponent: AppComponent
-        get() = sgApp.appComponent
-
-    @Inject
     lateinit var viewModelFactory: SgViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appComponent.inject(this)
+        viewModelFactory = SgViewModelFactory(sgApp.appComponent)
     }
 
     fun showSnackbar(text: CharSequence) {
