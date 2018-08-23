@@ -12,6 +12,7 @@ import com.soneso.lumenshine.persistence.SgDatabase
 import com.soneso.lumenshine.persistence.SgPrefs
 import dagger.Module
 import dagger.Provides
+import org.stellar.sdk.Server
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -50,5 +51,11 @@ class AppModule(private val context: Context) {
                 .openHelperFactory(factory)
                 .allowMainThreadQueries()
                 .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideStellarServer(): Server {
+        return Server("https://horizon-testnet.stellar.org")
     }
 }

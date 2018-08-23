@@ -1,20 +1,25 @@
 package com.soneso.lumenshine.model
 
+import com.soneso.lumenshine.domain.data.wallet.StellarWallet
 import com.soneso.lumenshine.domain.data.wallet.Wallet
+import com.soneso.lumenshine.domain.data.wallet.toStellarWallet
 import com.soneso.lumenshine.domain.data.wallet.toWallet
 import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.WalletApi
 import com.soneso.lumenshine.networking.asHttpResourceLoader
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.util.Resource
-import com.soneso.lumenshine.util.mapResource
+import com.soneso.lumenshine.util.*
 import io.reactivex.Flowable
+import io.reactivex.Single
+import org.stellar.sdk.Server
+import org.stellar.sdk.responses.AccountResponse
 import retrofit2.Retrofit
 import javax.inject.Inject
 
 class WalletRepository @Inject constructor(
         private val networkStateObserver: NetworkStateObserver,
-        r: Retrofit
+        r: Retrofit,
+        private val stellarServer: Server
 ) {
 
     private val walletApi = r.create(WalletApi::class.java)
@@ -30,5 +35,19 @@ class WalletRepository @Inject constructor(
                 }, {
                     it
                 })
+    }
+
+    fun loadStellarWallet(mnemonic: CharArray): Single<Resource<StellarWallet, ServerException>> {
+
+
+        return Single.create<Resource<AccountResponse, ServerException>> {
+            try {
+                val ar = stellarServer.accounts().account(KeyPairHelper.keyPair(mnemonic))
+                it.onSuccess(Success(ar))
+            } catch (e: Exception) {
+                it.onSuccess(Failure(ServerException(e)))
+            }
+        }
+                .mapResource({ it.toStellarWallet() }, { it })
     }
 }
