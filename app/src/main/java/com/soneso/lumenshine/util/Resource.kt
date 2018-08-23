@@ -36,6 +36,6 @@ class Success<SuccessType, FailureType>(data: SuccessType) : Resource<SuccessTyp
 
 class Failure<SuccessType, FailureType>(failure: FailureType) : Resource<SuccessType, FailureType>(FAILURE, null, failure)
 
-@IntDef(Resource.LOADING, Resource.SUCCESS, Resource.FAILURE)
 @Retention(AnnotationRetention.SOURCE)
+@IntDef(value = [Resource.LOADING, Resource.SUCCESS, Resource.FAILURE])
 annotation class State

@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.domain.data.wallet.Wallet
 import com.soneso.lumenshine.presentation.customViews.LsCardView
 import com.soneso.lumenshine.presentation.util.setTextStyle
 import kotlinx.android.synthetic.main.view_wallet_card.view.*
@@ -17,9 +18,12 @@ class WalletCardView @JvmOverloads constructor(
         View.inflate(context, R.layout.view_wallet_card, this)
     }
 
-    fun populate(federationName: String?, balances: List<Any>) {
+    fun populate(wallet: Wallet) {
 
-        subtitleView.text = federationName
+        subtitleView.text = wallet.federationAddress
+        // TODO: cristi.paval, 8/23/18 - integrate balances here
+        val balances = emptyList<Any>()
+
         balancesLayout.removeAllViews()
         availabilityLayout.removeAllViews()
         if (balances.isEmpty()) {
