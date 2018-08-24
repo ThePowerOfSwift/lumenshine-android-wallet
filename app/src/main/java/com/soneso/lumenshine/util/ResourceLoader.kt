@@ -1,7 +1,10 @@
-package com.soneso.lumenshine.networking
+package com.soneso.lumenshine.util
 
 import android.util.Log
-import com.soneso.lumenshine.util.Resource
+import com.soneso.lumenshine.networking.ApiFailure
+import com.soneso.lumenshine.networking.ApiResource
+import com.soneso.lumenshine.networking.ApiSuccess
+import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -61,4 +64,27 @@ private fun Throwable.isWorthRetry(): Boolean {
         is IOException -> true
         else -> false
     }
+}
+
+fun <SuccessType, FailureType> Flowable<SuccessType>.wrapInResource(): Flowable<Resource<SuccessType, FailureType>> {
+
+    return this.map { Success<SuccessType, FailureType>(it) }
+}
+
+fun <SuccessType, FailureType> Flowable<Resource<SuccessType, FailureType>>.refreshWith(
+        refresher: Flowable<Resource<SuccessType, FailureType>>,
+        cacheFunction: ((SuccessType) -> Unit)? = null
+): Flowable<Resource<SuccessType, FailureType>> {
+
+    var state = Resource.LOADING
+    return Flowable.create({ emitter ->
+
+        val d = this.subscribe {
+            // TODO: cristi.paval, 8/24/18 - combine here the stream from cache with the stream from http.
+        }
+
+        emitter.setCancellable {
+            d.dispose()
+        }
+    }, BackpressureStrategy.LATEST)
 }
