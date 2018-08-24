@@ -4,6 +4,7 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.*
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
+import com.soneso.lumenshine.model.entities.UserSecurity
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

@@ -3,8 +3,8 @@ package com.soneso.lumenshine.presentation.wallets
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.soneso.lumenshine.domain.data.wallet.Wallet
 import com.soneso.lumenshine.domain.usecases.WalletsUseCase
+import com.soneso.lumenshine.model.entities.Wallet
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers

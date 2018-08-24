@@ -1,11 +1,11 @@
-package com.soneso.lumenshine.domain.data
+package com.soneso.lumenshine.model.entities
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import com.soneso.lumenshine.persistence.DbNames
+import com.soneso.lumenshine.persistence.room.DbNames
 
-@Entity(tableName = DbNames.TABLE_USER_SECURITY)
+@Entity(tableName = DbNames.TABLE_USER_DATA)
 class UserSecurity(
 
         @PrimaryKey

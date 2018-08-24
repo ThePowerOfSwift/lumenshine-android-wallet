@@ -1,5 +1,7 @@
-package com.soneso.lumenshine.domain.data.wallet
+package com.soneso.lumenshine.model.wrapper
 
+import com.soneso.lumenshine.model.entities.StellarWallet
+import com.soneso.lumenshine.model.entities.Wallet
 import com.soneso.lumenshine.networking.dto.WalletDto
 import org.stellar.sdk.responses.AccountResponse
 

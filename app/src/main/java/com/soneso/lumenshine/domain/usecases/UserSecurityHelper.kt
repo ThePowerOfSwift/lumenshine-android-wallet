@@ -2,8 +2,8 @@ package com.soneso.lumenshine.domain.usecases
 
 import android.util.Log
 import com.soneso.lumenshine.BuildConfig
-import com.soneso.lumenshine.domain.data.UserSecurity
 import com.soneso.lumenshine.domain.util.*
+import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.mnemonic.WordList
 import org.bouncycastle.util.encoders.Base64

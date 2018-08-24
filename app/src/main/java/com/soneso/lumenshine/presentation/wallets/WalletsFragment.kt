@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.wallet.Wallet
+import com.soneso.lumenshine.model.entities.Wallet
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.general.SgFragment
 import com.soneso.lumenshine.util.Resource

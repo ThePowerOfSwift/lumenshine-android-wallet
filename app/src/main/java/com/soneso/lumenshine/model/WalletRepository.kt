@@ -1,9 +1,9 @@
 package com.soneso.lumenshine.model
 
-import com.soneso.lumenshine.domain.data.wallet.StellarWallet
-import com.soneso.lumenshine.domain.data.wallet.Wallet
-import com.soneso.lumenshine.domain.data.wallet.toStellarWallet
-import com.soneso.lumenshine.domain.data.wallet.toWallet
+import com.soneso.lumenshine.model.entities.StellarWallet
+import com.soneso.lumenshine.model.entities.Wallet
+import com.soneso.lumenshine.model.wrapper.toStellarWallet
+import com.soneso.lumenshine.model.wrapper.toWallet
 import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.WalletApi
 import com.soneso.lumenshine.networking.asHttpResourceLoader

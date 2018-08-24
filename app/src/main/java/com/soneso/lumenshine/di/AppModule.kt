@@ -7,9 +7,9 @@ import com.commonsware.cwac.saferoom.SafeHelperFactory
 import com.soneso.lumenshine.networking.NetworkUtil
 import com.soneso.lumenshine.networking.api.SgApi
 import com.soneso.lumenshine.networking.dto.Parse
-import com.soneso.lumenshine.persistence.DbNames
-import com.soneso.lumenshine.persistence.SgDatabase
 import com.soneso.lumenshine.persistence.SgPrefs
+import com.soneso.lumenshine.persistence.room.DbNames
+import com.soneso.lumenshine.persistence.room.LdDatabase
 import dagger.Module
 import dagger.Provides
 import org.stellar.sdk.Server
@@ -43,11 +43,11 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideDatabase(): SgDatabase {
+    fun provideDatabase(): LdDatabase {
 
         val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appPass))
 
-        return Room.databaseBuilder(context, SgDatabase::class.java, DbNames.DB_NAME)
+        return Room.databaseBuilder(context, LdDatabase::class.java, DbNames.DB_NAME)
                 .openHelperFactory(factory)
                 .allowMainThreadQueries()
                 .build()

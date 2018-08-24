@@ -2,6 +2,7 @@ package com.soneso.lumenshine.model
 
 import android.util.Log
 import com.soneso.lumenshine.domain.data.*
+import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.networking.dto.auth.*
 import com.soneso.lumenshine.networking.requester.UserRequester
 import com.soneso.lumenshine.persistence.SgPrefs

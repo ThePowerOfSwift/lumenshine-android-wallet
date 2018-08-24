@@ -1,11 +1,11 @@
-package com.soneso.lumenshine.persistence
+package com.soneso.lumenshine.persistence.room
 
 object DbNames {
 
     const val DB_NAME = "secure-sg-db"
 
     const val COLUMN_USERNAME = "username"
-    const val TABLE_USER_SECURITY = "user_securities"
+    const val TABLE_USER_DATA = "user_data"
     const val COLUMN_PK_0 = "public_key_index_0"
     const val COLUMN_PK_188 = "public_key_index_188"
     const val COLUMN_PASS_KDF_SALT = "ppassword_kdf_salt"
@@ -17,4 +17,12 @@ object DbNames {
     const val COLUMN_WLMK_ENCRYPTION_IV = "word_list_master_key_encryption_iv"
     const val COLUMN_ENCRYPTED_WORD_LIST = "encrypted_word_list"
     const val COLUMN_WORD_LIST_ENCRYPTION_IV = "word_list_encryption_iv"
+
+    const val TABLE_WALLETS = "wallets"
+    const val COLUMN_ID = "id"
+    const val COLUMN_NAME = "name"
+    const val COLUMN_FEDERATION_ADDRESS = "federation_address"
+    const val COLUMN_IN_HOME_SCREEN = "shown_in_home_screen"
+
+    const val TABLE_STELLAR_ACCOUNTS = "stellar_accounts"
 }

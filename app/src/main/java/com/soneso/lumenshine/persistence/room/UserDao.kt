@@ -1,0 +1,13 @@
+package com.soneso.lumenshine.persistence.room
+
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Query
+import com.soneso.lumenshine.model.entities.UserSecurity
+import io.reactivex.Flowable
+
+@Dao
+interface UserDao {
+
+    @Query("SELECT * FROM ${DbNames.TABLE_USER_DATA} WHERE ${DbNames.COLUMN_USERNAME} = :username")
+    fun getUserDataById(username: String): Flowable<UserSecurity>
+}

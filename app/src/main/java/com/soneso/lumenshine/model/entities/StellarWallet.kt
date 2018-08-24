@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.domain.data.wallet
+package com.soneso.lumenshine.model.entities
 
 import org.stellar.sdk.KeyPair
 

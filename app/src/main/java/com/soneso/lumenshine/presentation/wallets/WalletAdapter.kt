@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.wallet.Wallet
+import com.soneso.lumenshine.model.entities.Wallet
 
 class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
 
