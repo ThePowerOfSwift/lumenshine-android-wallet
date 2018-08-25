@@ -5,7 +5,6 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.SgError
-import javax.inject.Inject
 
 /**
  * Base Fragment for Lumenshine App.
@@ -21,7 +20,7 @@ open class SgFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModelFactory = SgViewModelFactory(sgActivity.sgApp.appComponent)
+        viewModelFactory = SgViewModelFactory(sgActivity.ldApp.appComponent)
     }
 
     fun showSnackbar(text: CharSequence) {

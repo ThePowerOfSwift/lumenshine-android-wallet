@@ -11,7 +11,7 @@ import java.security.Security
  * Custom App class.
  * Created by cristi.paval on 3/8/18.
  */
-class SgApp : MultiDexApplication() {
+class LdApp : MultiDexApplication() {
 
     val appComponent = DaggerAppComponent
             .builder()

@@ -28,15 +28,15 @@ class WalletRepository @Inject constructor(
 
     fun loadAllWallets(): Flowable<Resource<List<Wallet>, ServerException>> {
 
-        return walletApi.getAllWallets()
+        val refresher: Flowable<Resource<List<Wallet>, ServerException>> = walletApi.getAllWallets()
                 .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ dtoList ->
-                    dtoList.map { dto ->
-                        dto.toWallet()
-                    }
-                }, {
-                    it
-                })
+                .mapResource({ dto ->
+                    dto.map { it.toWallet() }
+                }, { it })
+
+        return walletDao.getAllWallets()
+                .map { Success<List<Wallet>, ServerException>(it) as Resource<List<Wallet>, ServerException> }
+                .refreshWith(refresher) { walletDao.insertAll(it) }
     }
 
     fun loadStellarWallet(mnemonic: CharArray): Single<Resource<StellarWallet, ServerException>> {

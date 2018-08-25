@@ -3,7 +3,7 @@ package com.soneso.lumenshine.persistence
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.soneso.lumenshine.SgApp
+import com.soneso.lumenshine.LdApp
 import com.soneso.lumenshine.domain.util.Cryptor
 import com.soneso.lumenshine.domain.util.toByteArray
 import org.bouncycastle.util.encoders.Base64
@@ -33,7 +33,7 @@ object SgPrefs {
     val appPass: String
 
     init {
-        val context = SgApp.sAppContext
+        val context = LdApp.sAppContext
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
         val keyHolder = AppKeyHolder(context, PREF_NAME)

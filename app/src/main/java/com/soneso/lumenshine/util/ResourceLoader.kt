@@ -1,9 +1,6 @@
 package com.soneso.lumenshine.util
 
 import android.util.Log
-import com.soneso.lumenshine.networking.ApiFailure
-import com.soneso.lumenshine.networking.ApiResource
-import com.soneso.lumenshine.networking.ApiSuccess
 import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import io.reactivex.BackpressureStrategy
@@ -14,9 +11,9 @@ import retrofit2.Response
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicInteger
 
-private const val TAG = "HttpResourceLoader"
+private const val TAG = "ResourceLoader"
 
-fun <ResponseType> Single<Response<ResponseType>>.asHttpResourceLoader(networkStateObserver: NetworkStateObserver, retryCount: Int = 3): Flowable<ApiResource<ResponseType>> {
+fun <ResponseType> Single<Response<ResponseType>>.asHttpResourceLoader(networkStateObserver: NetworkStateObserver, retryCount: Int = 3): Flowable<Resource<ResponseType, ServerException>> {
 
     val retryMechanism = Function<Flowable<Throwable>, Flowable<Boolean>> { networkThrowable ->
         val counter = AtomicInteger()
@@ -36,20 +33,20 @@ fun <ResponseType> Single<Response<ResponseType>>.asHttpResourceLoader(networkSt
                 .filter { it }
     }
 
-    return Flowable.create<ApiResource<ResponseType>>({ emitter ->
+    return Flowable.create<Resource<ResponseType, ServerException>>({ emitter ->
 
-        emitter.onNext(ApiResource(Resource.LOADING))
+        emitter.onNext(Resource(Resource.LOADING))
         val disposable = this.retryWhen(retryMechanism)
                 .subscribe({
                     if (it.isSuccessful) {
                         Log.d(TAG, "_______Response is success!")
-                        emitter.onNext(ApiSuccess(it.body()!!))
+                        emitter.onNext(Success(it.body()!!))
                     } else {
                         Log.d(TAG, "_______Response is errorBody!")
-                        emitter.onNext(ApiFailure(ServerException(it.errorBody())))
+                        emitter.onNext(Failure(ServerException(it.errorBody())))
                     }
                 }, {
-                    emitter.onNext(ApiFailure(ServerException(it)))
+                    emitter.onNext(Failure(ServerException(it)))
                 })
 
         emitter.setCancellable {
@@ -76,15 +73,37 @@ fun <SuccessType, FailureType> Flowable<Resource<SuccessType, FailureType>>.refr
         cacheFunction: ((SuccessType) -> Unit)? = null
 ): Flowable<Resource<SuccessType, FailureType>> {
 
-    var state = Resource.LOADING
     return Flowable.create({ emitter ->
 
-        val d = this.subscribe {
-            // TODO: cristi.paval, 8/24/18 - combine here the stream from cache with the stream from http.
+        var state = Resource.LOADING
+
+        val thisD = this.subscribe {
+            Log.d(TAG, "Emitting result from initial source...")
+            val resource = if (it.state == Resource.SUCCESS) {
+                Resource(state, it.success())
+            } else {
+                it
+            }
+            emitter.onNext(resource)
         }
+        val refresherD = refresher
+                .subscribe({
+                    Log.d(TAG, "Emitting result from refresher...")
+                    state = it.state
+                    if (it.state == Resource.SUCCESS && cacheFunction != null) {
+                        cacheFunction.invoke(it.success())
+                    } else {
+                        emitter.onNext(it)
+                    }
+                }, {
+                    Log.d(TAG, "Emitting error...")
+                    emitter.onError(it)
+                })
 
         emitter.setCancellable {
-            d.dispose()
+            Log.d(TAG, "Disposing...")
+            thisD.dispose()
+            refresherD.dispose()
         }
     }, BackpressureStrategy.LATEST)
 }
