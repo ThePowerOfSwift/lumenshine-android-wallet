@@ -1,101 +1,112 @@
 package com.soneso.lumenshine.model
 
-import android.util.Log
-import com.soneso.lumenshine.domain.data.*
-import com.soneso.lumenshine.networking.dto.auth.*
-import com.soneso.lumenshine.networking.requester.UserRequester
+import com.soneso.lumenshine.domain.data.Country
+import com.soneso.lumenshine.domain.data.UserProfile
+import com.soneso.lumenshine.domain.util.base64String
+import com.soneso.lumenshine.model.entities.RegistrationStatus
+import com.soneso.lumenshine.model.entities.UserSecurity
+import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
+import com.soneso.lumenshine.networking.LsSessionProfile
+import com.soneso.lumenshine.networking.NetworkStateObserver
+import com.soneso.lumenshine.networking.api.SgApi
+import com.soneso.lumenshine.networking.api.UserApi
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.persistence.SgPrefs
+import com.soneso.lumenshine.persistence.room.LsDatabase
+import com.soneso.lumenshine.util.*
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import org.bouncycastle.util.encoders.Base64
+import retrofit2.Retrofit
+import javax.inject.Inject
 
 /**
  * Class used to user operations to server.
  * Created by cristi.paval on 3/26/18.
  */
-class UserRepository(private val userRequester: UserRequester) {
+class UserRepository @Inject constructor(
+        private val networkStateObserver: NetworkStateObserver,
+        db: LsDatabase,
+        r: Retrofit
+) {
 
-    fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Single<RegistrationStatus> {
+    private val userApi = r.create(UserApi::class.java)
+    private val userDao = db.userDao()
 
-        val request = RegistrationRequest()
-        request.email = userProfile.email
-        request.countryCode = userProfile.country?.code
-        request.publicKeyIndex0 = userSecurity.publicKeyIndex0
-        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
+    fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
 
-        request.setPasswordKdfSalt(userSecurity.passwordKdfSalt)
-
-        request.setEncryptedMnemonicMasterKey(userSecurity.encryptedMnemonicMasterKey)
-        request.setMnemonicMasterKeyEncryptionIv(userSecurity.mnemonicMasterKeyEncryptionIv)
-
-        request.setEncryptedMnemonic(userSecurity.encryptedMnemonic)
-        request.setMnemonicEncryptionIv(userSecurity.mnemonicEncryptionIv)
-
-        request.setEncryptedWordListMasterKey(userSecurity.encryptedWordListMasterKey)
-        request.setWordListMasterKeyEncryptionIv(userSecurity.wordListMasterKeyEncryptionIv)
-
-        request.setEncryptedWordList(userSecurity.encryptedWordList)
-        request.setWordListEncryptionIv(userSecurity.wordListEncryptionIv)
-
-        return userRequester.registerUser(request)
-                .map {
-
-                    SgPrefs.jwtToken = it.jwtToken
+        return userApi.registerUser(
+                userProfile.email,
+                userSecurity.passwordKdfSalt.base64String(),
+                userSecurity.encryptedMnemonicMasterKey.base64String(),
+                userSecurity.mnemonicMasterKeyEncryptionIv.base64String(),
+                userSecurity.encryptedMnemonic.base64String(),
+                userSecurity.mnemonicEncryptionIv.base64String(),
+                userSecurity.encryptedWordListMasterKey.base64String(),
+                userSecurity.wordListMasterKeyEncryptionIv.base64String(),
+                userSecurity.encryptedWordList.base64String(),
+                userSecurity.wordListEncryptionIv.base64String(),
+                userSecurity.publicKeyIndex0,
+                userSecurity.publicKeyIndex188,
+                userProfile.country?.code
+        )
+                .doOnSuccess {
+                    if (it.isSuccessful) {
+                        SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                    }
+                }
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    SgPrefs.username = userProfile.email
                     SgPrefs.tfaSecret = it.token2fa
-                    SgPrefs.tfaImageData = Base64.decode(it.tfaImageData)
-                    SgPrefs.username = request.email
-
-                    RegistrationStatus(false, false, false)
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+                    userDao.saveRegistrationStatus(RegistrationStatus(userProfile.email, false, false, false))
+                    true
+                }, { it })
     }
 
-    fun confirmTfaRegistration(tfaCode: String): Single<RegistrationStatus> {
+    fun confirmTfaRegistration(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
 
-        return userRequester.confirmTfaRegistration(tfaCode)
-                .map {
-                    SgPrefs.jwtToken = it.jwtToken
-
-                    RegistrationStatus(
-                            it.emailConfirmed,
-                            it.mnemonicConfirmed,
-                            it.tfaConfirmed
-                    )
+        return userApi.confirmTfaRegistration(tfaCode)
+                .doOnSuccess {
+                    if (it.isSuccessful) {
+                        SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                    }
                 }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    userDao.saveRegistrationStatus(it.toRegistrationStatus(SgPrefs.username))
+                    true
+                }, { it })
     }
 
-    fun getSalutations(): Single<List<String>> {
+    fun getSalutations(): Flowable<Resource<List<String>, LsException>> {
 
-        return userRequester.fetchSalutationList()
-                .map {
-                    return@map it.salutations
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return userApi.getSalutationList()
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    it.salutations
+                }, { it })
     }
 
-    fun getCountries(): Single<List<Country>> {
+    fun getCountries(): Flowable<Resource<List<Country>, LsException>> {
 
-        return userRequester.fetchCountryList()
-                .map {
-                    it.countries
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return userApi.getCountryList()
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({ it.countries }, { it })
     }
 
-    fun loginStep1(email: String, tfaCode: String? = null): Single<UserSecurity> {
+    fun loginStep1(email: String, tfaCode: String? = null): Flowable<Resource<Boolean, ServerException>> {
 
-        val request = LoginStep1Request()
-        request.email = email
-        request.tfaCode = tfaCode
-
-        return userRequester.loginStep1(request)
-                .map {
-
-                    SgPrefs.jwtToken = it.jwtToken
-                    SgPrefs.username = email
-
-                    UserSecurity(
+        return userApi.loginStep1(email, tfaCode)
+                .doOnSuccess {
+                    if (it.isSuccessful) {
+                        SgPrefs.username = email
+                        SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                    }
+                }
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    val us = UserSecurity(
                             email,
                             it.publicKeyIndex0,
                             "",
@@ -109,187 +120,144 @@ class UserRepository(private val userRequester: UserRequester) {
                             it.encryptedWordList(),
                             it.wordListEncryptionIv()
                     )
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+                    userDao.saveUserData(us)
+                    true
+                }, { it })
     }
 
-    fun loginStep2(userSecurity: UserSecurity): Single<RegistrationStatus> {
+    fun loginStep2(username: String, publicKey188: String): Flowable<Resource<Boolean, ServerException>> {
 
-        val request = LoginStep2Request()
-        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
-
-        return userRequester.loginStep2(request)
-                .map {
-                    SgPrefs.jwtToken = it.jwtToken
-                    if (it.tfaSecret.isNotEmpty()) {
-                        SgPrefs.tfaSecret = it.tfaSecret
-                        SgPrefs.tfaImageData = Base64.decode(it.tfaImageData)
-                    } else {
-                        refreshTfaSecret(userSecurity.publicKeyIndex188)
+        return userApi.loginStep2(publicKey188)
+                .doOnSuccess {
+                    if (it.isSuccessful) {
+                        SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
-
-                    RegistrationStatus(
-                            it.emailConfirmed,
-                            it.mnemonicConfirmed,
-                            it.tfaConfirmed
-                    )
                 }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    SgPrefs.tfaSecret = it.tfaSecret
+                    userDao.saveRegistrationStatus(it.toRegistrationStatus(username))
+                    !it.tfaConfirmed || it.tfaSecret.isNotEmpty()
+                }, { it })
+                .flatMap {
+                    return@flatMap if (it.isSuccessful && !it.success()) {
+                        refreshTfaSecret(publicKey188)
+                    } else {
+                        Flowable.just(it)
+                    }
+                }
     }
 
-    fun getCurrentUserSecurity(): Single<UserSecurity> {
+    fun getUserData() = userDao.getUserDataById(SgPrefs.username)
 
-        return userRequester.fetchUserSecurity()
-                .map {
-                    UserSecurity(
-                            SgPrefs.username,
-                            it.publicKeyIndex0,
-                            "",
-                            it.passwordKdfSalt(),
-                            it.encryptedMnemonicMasterKey(),
-                            it.mnemonicMasterKeyEncryptionIv(),
-                            it.encryptedMnemonic(),
-                            it.mnemonicEncryptionIv(),
-                            it.encryptedWordListMasterKey(),
-                            it.wordListMasterKeyEncryptionIv(),
-                            it.encryptedWordList(),
-                            it.wordListEncryptionIv()
-                    )
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+    fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
+
+        return userApi.confirmMnemonic()
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    userDao.saveRegistrationStatus(RegistrationStatus(SgPrefs.username, true, true, true))
+                    true
+                }, { it })
     }
 
-    fun confirmMnemonic(): Single<RegistrationStatus> {
+    fun resendConfirmationMail(): Flowable<Resource<Boolean, LsException>> {
 
-        return userRequester.confirmMnemonic()
-                .map {
-                    RegistrationStatus(true, true, true)
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return userApi.resendConfirmationMail(SgPrefs.username)
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({ true }, { it })
     }
 
-    fun resendConfirmationMail(): Single<Unit> {
+    fun refreshRegistrationStatus(): Flowable<Resource<Boolean, ServerException>> {
 
-        val request = ResendConfirmationMailRequest()
-        request.email = SgPrefs.username
-        return userRequester.resendConfirmationMail(request)
-                .map {
-                    Unit
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return userApi.getRegistrationStatus()
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    userDao.saveRegistrationStatus(it.toRegistrationStatus(SgPrefs.username))
+                    true
+                }, { it })
     }
 
-    fun getRegistrationStatus(): Single<RegistrationStatus> {
+    fun loadTfaSecret(): Flowable<Resource<String, ServerException>> {
 
-        return userRequester.fetchRegistrationStatus()
-                .map {
-                    RegistrationStatus(
-                            it.mailConfirmed,
-                            it.mnemonicConfirmed,
-                            it.tfaConfirmed
-                    )
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return Flowable.create({ emitter ->
+            emitter.onNext(Success(SgPrefs.tfaSecret))
+            emitter.onComplete()
+        }, BackpressureStrategy.LATEST)
     }
 
-    fun getTfaSecret(): Single<TfaSecret> {
+    fun requestEmailForPasswordReset(email: String): Flowable<Resource<Boolean, LsException>> {
 
-        return Single
-                .create<TfaSecret> {
-                    it.onSuccess(
-                            TfaSecret(SgPrefs.tfaSecret, SgPrefs.tfaImageData)
-                    )
-                }
-                .subscribeOn(Schedulers.newThread())
+        return userApi.requestResetPasswordEmail(email)
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({ true }, { it })
     }
 
-    fun requestEmailForPasswordReset(email: String): Single<Unit> {
+    fun requestEmailForTfaReset(email: String): Flowable<Resource<Boolean, LsException>> {
 
-        return userRequester.requestEmailForPasswordReset(email)
-                .map {
-                    Unit
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return userApi.requestResetTfaEmail(email)
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({ true }, { it })
     }
 
-    fun requestEmailForTfaReset(email: String): Single<Unit> {
+    private fun refreshTfaSecret(publicKey188: String): Flowable<Resource<Boolean, ServerException>> {
 
-        return userRequester.requestEmailForTfaReset(email)
-                .map {
-                    Unit
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return userApi.getTfaSecret(publicKey188)
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    SgPrefs.tfaSecret = it.tfaSecret
+                    true
+                }, { it })
     }
 
-    private fun refreshTfaSecret(publicKey188: String) {
+    fun getLastUsername(): Single<String> {
 
-        val request = GetTfaSecretRequest()
-        request.publicKey188 = publicKey188
-        userRequester.fetchTfaSecret(request)
-                .map {
+        return Single.create<String> {
+            it.onSuccess(SgPrefs.username)
+        }
+    }
+
+    fun changeUserPassword(userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
+
+        return userApi.changePassword(
+                userSecurity.passwordKdfSalt.base64String(),
+                userSecurity.encryptedMnemonicMasterKey.base64String(),
+                userSecurity.mnemonicMasterKeyEncryptionIv.base64String(),
+                userSecurity.encryptedWordListMasterKey.base64String(),
+                userSecurity.wordListMasterKeyEncryptionIv.base64String(),
+                userSecurity.publicKeyIndex188
+        )
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({ true }, { it })
+    }
+
+    fun changeTfaSecret(publicKey188: String): Flowable<Resource<String, ServerException>> {
+
+        return userApi.changeTfaSecret(publicKey188)
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    SgPrefs.tfaSecret = it.tfaSecret
                     it.tfaSecret
-                }
-                .subscribe({
-                    SgPrefs.tfaSecret = it
-                }, {
-                    Log.e(TAG, "Error", it)
-                })
+                }, { it })
     }
 
-    fun getLastUserCredentials(): Single<UserCredentials> {
-        return Single
-                .create<UserCredentials> {
-                    val uc = UserCredentials(SgPrefs.username, SgPrefs.tfaSecret)
-                    it.onSuccess(uc)
-                }
-                .subscribeOn(Schedulers.newThread())
+    fun confirmTfaSecretChange(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
+
+        return userApi.confirmTfaSecretChange(tfaCode)
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({
+                    userDao.saveRegistrationStatus(it.toRegistrationStatus(SgPrefs.username))
+                    true
+                }, { it })
     }
 
-    fun changeUserPassword(userSecurity: UserSecurity): Single<Unit> {
+    fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        val request = ChangePasswordRequest()
-        request.setPasswordKdfSalt(userSecurity.passwordKdfSalt)
-        request.setEncryptedMnemonicMasterKey(userSecurity.encryptedMnemonicMasterKey)
-        request.setMnemonicMasterKeyEncryptionIv(userSecurity.mnemonicMasterKeyEncryptionIv)
-        request.setEncryptedWordListMasterKey(userSecurity.encryptedWordListMasterKey)
-        request.setWordListMasterKeyEncryptionIv(userSecurity.wordListMasterKeyEncryptionIv)
-        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
-        return userRequester.changeUserPassword(request)
-                .map {
-                    Unit
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
-    }
-
-    fun changeTfaSecret(publicKey188: String): Single<TfaSecret> {
-
-        val request = ChangeTfaSecretRequest()
-        request.publicKeyIndex188 = publicKey188
-        return userRequester.changeTfaSecret(request)
-                .map {
-                    SgPrefs.tfaSecret= it.tfaSecret
-                    SgPrefs.tfaImageData = Base64.decode(it.tfaImageData)
-                    TfaSecret(it.tfaSecret, Base64.decode(it.tfaImageData))
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
-    }
-
-    fun confirmTfaSecretChange(tfaCode: String): Single<RegistrationStatus> {
-
-        val request = ConfirmTfaSecretChangeRequest()
-        request.tfaCode = tfaCode
-        return userRequester.confirmTfaSecretChange(request)
-                .map {
-                    RegistrationStatus(
-                            it.mailConfirmed,
-                            it.mnemonicConfirmed,
-                            it.tfaConfirmed
-                    )
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return LsSessionProfile.observeUsername()
+                .flatMap { userDao.getRegistrationStatus(it) }
     }
 
     companion object {
+
         const val TAG = "UserRepository"
     }
 }

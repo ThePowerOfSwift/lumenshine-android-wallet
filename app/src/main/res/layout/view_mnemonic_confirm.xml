@@ -80,14 +80,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_2"
-                android:orientation="horizontal"
-                android:gravity="end">
+                android:gravity="end"
+                android:orientation="horizontal">
 
                 <com.soneso.lumenshine.presentation.customViews.SgTextView
                     android:id="@+id/mnemonic_word_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="word"
                     android:textColor="@color/text_dark"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
@@ -108,14 +107,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_2"
-                android:orientation="horizontal"
-                android:gravity="end">
+                android:gravity="end"
+                android:orientation="horizontal">
 
                 <com.soneso.lumenshine.presentation.customViews.SgTextView
                     android:id="@+id/mnemonic_word_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="word"
                     android:textColor="@color/text_dark"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
@@ -136,14 +134,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_2"
-                android:orientation="horizontal"
-                android:gravity="end">
+                android:gravity="end"
+                android:orientation="horizontal">
 
                 <com.soneso.lumenshine.presentation.customViews.SgTextView
                     android:id="@+id/mnemonic_word_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="word"
                     android:textColor="@color/text_dark"
                     android:textSize="@dimen/text_size_14"
                     android:textStyle="bold" />
@@ -171,11 +168,10 @@
                     android:id="@+id/mnemonic_word_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="word"
+                    android:gravity="start"
                     android:textColor="@color/text_dark"
                     android:textSize="@dimen/text_size_14"
-                    android:textStyle="bold"
-                    android:gravity="start"/>
+                    android:textStyle="bold" />
 
                 <com.soneso.lumenshine.presentation.customViews.SgEditText
                     android:id="@+id/mnemonic_position_4"
@@ -196,10 +192,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_25"
+            android:text="@string/invalid_input"
             android:textColor="@color/red"
             android:textSize="@dimen/text_size_14"
-            android:visibility="invisible"
-            android:text="@string/invalid_input"/>
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/finish_setup"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_85"
     android:gravity="center_horizontal"
@@ -12,7 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_home"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="ContentDescription" />
 
     <com.soneso.lumenshine.presentation.customViews.SgTextView
         android:id="@+id/tab_text"
@@ -22,6 +24,6 @@
         android:text="@string/setup_fingerprint"
         android:lines="2"
         android:gravity="center_horizontal"
-        android:textSize="@dimen/text_size_14"/>
+        android:textSize="@dimen/text_size_14" />
 
 </LinearLayout>

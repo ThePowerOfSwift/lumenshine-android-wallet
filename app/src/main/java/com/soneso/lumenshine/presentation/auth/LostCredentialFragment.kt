@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.util.LsException
+import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_lost_credential.*
 
 /**
@@ -58,20 +58,20 @@ class LostCredentialFragment : AuthFragment() {
         })
     }
 
-    private fun renderCredentialReset(viewState: SgViewState<Unit>) {
+    private fun renderCredentialReset(resource: Resource<Boolean, LsException>) {
 
-        when (viewState.state) {
+        when (resource.state) {
 
-            State.LOADING -> {
+            Resource.LOADING -> {
             }
-            State.READY -> {
+            Resource.SUCCESS -> {
 
                 showSnackbar("Mail sent!")
                 replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
             }
-            State.ERROR -> {
+            Resource.FAILURE -> {
 
-                showErrorSnackbar(viewState.error)
+                showErrorSnackbar(resource.failure())
             }
         }
     }

@@ -3,12 +3,16 @@ package com.soneso.lumenshine.presentation.auth
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.*
+import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.usecases.UserUseCases
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
+import com.soneso.lumenshine.model.entities.RegistrationStatus
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.presentation.util.putValue
+import com.soneso.lumenshine.util.LsException
+import com.soneso.lumenshine.util.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * View model.
@@ -16,233 +20,220 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  */
 class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
-    val liveLastCredentials: LiveData<SgViewState<UserCredentials>> = MutableLiveData()
+    val liveLastUsername: LiveData<String> = MutableLiveData()
 
-    val liveSalutations: LiveData<SgViewState<List<String>>> = MutableLiveData()
+    @Suppress("MemberVisibilityCanBePrivate")
+    val liveSalutations: LiveData<Resource<List<String>, LsException>> = MutableLiveData()
 
-    val liveTfaSecret: LiveData<SgViewState<TfaSecret>> = MutableLiveData()
+    val liveTfaSecret: LiveData<Resource<String, ServerException>> = MutableLiveData()
 
-    val liveCountries: LiveData<SgViewState<List<Country>>> = MutableLiveData()
+    val liveTfaConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
-    val liveRegistrationStatus: LiveData<SgViewState<RegistrationStatus>> = MutableLiveData()
+    val liveTfaChangeConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
-    val liveMnemonic: LiveData<SgViewState<String>> = MutableLiveData()
+    val liveMnemonicConfirmation: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
 
-    val liveConfirmationMail: LiveData<SgViewState<Unit>> = MutableLiveData()
+    @Suppress("MemberVisibilityCanBePrivate")
+    val liveCountries: LiveData<Resource<List<Country>, LsException>> = MutableLiveData()
 
-    val liveCredentialResetEmail: LiveData<SgViewState<Unit>> = MutableLiveData()
+    val liveMnemonic: LiveData<Resource<String, LsException>> = MutableLiveData()
+
+    val liveConfirmationMail: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
+
+    val liveCredentialResetEmail: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
+
+    val liveRegistrationStatus: LiveData<RegistrationStatus?> = MutableLiveData()
+
+    val liveRegistrationRefresh: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
+
+    val liveRegistration: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
+
+    val liveLogin: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
+
+    var isFingerprintFlow = false
+
+    private val compositeDisposable = CompositeDisposable()
+
+    init {
+        userUseCases.setNewSession()
+        initLastUsername()
+        initRegistrationStatus()
+    }
+
+    private fun initRegistrationStatus() {
+
+        val d = userUseCases.provideRegistrationStatus()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    liveRegistrationStatus.putValue(it)
+                }
+        compositeDisposable.add(d)
+    }
 
     fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int) {
 
         val country = try {
-            liveCountries.value?.data?.get(countryPosition)
+            liveCountries.value?.success()?.get(countryPosition)
         } catch (ignored: Exception) {
             null
         }
 
-        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.registerAccount(email, password, country)
+        val d = userUseCases.registerAccount(email, password, country)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveRegistrationStatus.value = SgViewState(it)
-                }, {
-                    liveRegistrationStatus.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveRegistration.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun confirmTfaRegistration(tfaCode: String) {
 
-        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.confirmTfaRegistration(tfaCode)
+        val d = userUseCases.confirmTfaRegistration(tfaCode)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveRegistrationStatus.value = SgViewState(it)
-                }, {
-                    liveRegistrationStatus.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveTfaConfirmation.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
+    @Suppress("unused")
     fun refreshSalutations() {
 
-        (liveSalutations as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.provideSalutations()
+        val d = userUseCases.provideSalutations()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveSalutations.value = SgViewState(it)
-                }, {
-                    liveSalutations.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveSalutations.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
+    @Suppress("unused")
     fun refreshCountries() {
 
-        (liveCountries as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.provideCountries()
+        val d = userUseCases.provideCountries()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveCountries.value = SgViewState(it)
-                }, {
-                    liveCountries.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveCountries.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
-    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence) {
+    fun login(email: CharSequence, password: CharSequence, tfa: CharSequence? = null) {
 
-        val tfa = if (tfaCode.isBlank()) {
-            null
-        } else {
-            tfaCode
-        }
-
-        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.login(email, password, tfa)
+        val d = userUseCases.login(email, password, tfa)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveRegistrationStatus.value = SgViewState(it)
-                }, {
-                    liveRegistrationStatus.value = SgViewState(it as SgError)
-                })
-    }
-
-    fun loginAndFingerprintSetup(email: CharSequence, password: CharSequence, tfaCode: CharSequence) {
-
-        val tfa = if (tfaCode.isBlank()) {
-            null
-        } else {
-            tfaCode
-        }
-
-        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.login(email, password, tfa)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    it.fingerprintSetupRequested = true
-                    liveRegistrationStatus.value = SgViewState(it)
-                }, {
-                    liveRegistrationStatus.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveLogin.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun fetchMnemonic() {
 
-        (liveMnemonic as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.provideMnemonicForCurrentUser()
+        val d = userUseCases.provideMnemonicForCurrentUser()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveMnemonic.value = SgViewState(it)
-                }, {
-                    liveMnemonic.value = SgViewState(SgError(R.string.unknown_error))
-                })
+                .subscribe {
+                    liveMnemonic.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun confirmMnemonic() {
 
-        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.confirmMnemonic()
+        val d = userUseCases.confirmMnemonic()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveRegistrationStatus.value = SgViewState(it)
-                }, {
-                    liveRegistrationStatus.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveMnemonicConfirmation.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun resendConfirmationMail() {
 
-        (liveConfirmationMail as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.resendConfirmationMail()
+        val d = userUseCases.resendConfirmationMail()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveConfirmationMail.value = SgViewState(Unit)
-                }, {
-                    liveConfirmationMail.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveConfirmationMail.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun refreshRegistrationStatus() {
 
-        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.provideRegistrationStatus()
+        val d = userUseCases.refreshRegistrationStatus()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveRegistrationStatus.value = SgViewState(it)
-                }, {
-                    liveRegistrationStatus.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveRegistrationRefresh.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun fetchTfaSecret() {
 
-        (liveTfaSecret as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.provideTfaSecret()
+        val d = userUseCases.provideTfaSecret()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveTfaSecret.value = SgViewState(it)
-                }, {
-                    liveTfaSecret.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveTfaSecret.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun requestPasswordResetEmail(email: CharSequence) {
 
-        (liveCredentialResetEmail as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.requestPasswordReset(email.toString())
+        val d = userUseCases.requestPasswordReset(email.toString())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveCredentialResetEmail.value = SgViewState(Unit)
-                }, {
-                    liveCredentialResetEmail.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveCredentialResetEmail.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun requestTfaResetEmail(email: CharSequence) {
 
-        (liveCredentialResetEmail as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.requestTfaReset(email.toString())
+        val d = userUseCases.requestTfaReset(email.toString())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveCredentialResetEmail.value = SgViewState(Unit)
-                }, {
-                    liveCredentialResetEmail.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveCredentialResetEmail.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
-    fun refreshLastUserCredentials() {
+    private fun initLastUsername() {
 
-        (liveLastCredentials as MutableLiveData).value = SgViewState(State.LOADING)
-
-        userUseCases.provideLastUserCredentials()
+        val d = userUseCases.provideLastUsername()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveLastCredentials.value = SgViewState(it)
-                }, {
-                    liveLastCredentials.value = SgViewState(it as SgError)
-                })
+                .subscribe { it: String ->
+                    liveLastUsername.putValue(it)
+                }
+        compositeDisposable.add(d)
     }
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) {
 
-        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
-
         userUseCases.confirmTfaSecretChange(tfaCode)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveRegistrationStatus.value = SgViewState(it)
-                }, {
-                    liveRegistrationStatus.value = SgViewState(it as SgError)
-                })
+                .subscribe {
+                    liveTfaChangeConfirmation.putValue(it)
+                }
+    }
+
+    override fun onCleared() {
+
+        compositeDisposable.dispose()
+        super.onCleared()
     }
 }

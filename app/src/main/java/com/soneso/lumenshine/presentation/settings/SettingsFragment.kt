@@ -46,7 +46,6 @@ class SettingsFragment : SgFragment() {
 
     }
 
-
     companion object {
 
         const val TAG = "SettingsFragment"

@@ -1,0 +1,8 @@
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/walletRecyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_300"
+    android:orientation="vertical"
+    tools:context="com.soneso.lumenshine.presentation.wallets.WalletsFragment" />

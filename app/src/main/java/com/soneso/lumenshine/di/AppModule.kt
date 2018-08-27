@@ -4,19 +4,15 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import android.text.SpannableStringBuilder
 import com.commonsware.cwac.saferoom.SafeHelperFactory
-import com.soneso.lumenshine.domain.usecases.UserUseCases
-import com.soneso.lumenshine.model.UserRepository
 import com.soneso.lumenshine.networking.NetworkUtil
 import com.soneso.lumenshine.networking.api.SgApi
-import com.soneso.lumenshine.networking.api.UserApi
 import com.soneso.lumenshine.networking.dto.Parse
-import com.soneso.lumenshine.networking.requester.UserRequester
-import com.soneso.lumenshine.persistence.DbNames
-import com.soneso.lumenshine.persistence.SgDatabase
 import com.soneso.lumenshine.persistence.SgPrefs
-import com.soneso.lumenshine.presentation.general.SgViewModelFactory
+import com.soneso.lumenshine.persistence.room.DbNames
+import com.soneso.lumenshine.persistence.room.LsDatabase
 import dagger.Module
 import dagger.Provides
+import org.stellar.sdk.Server
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -30,19 +26,7 @@ import javax.inject.Singleton
 class AppModule(private val context: Context) {
 
     @Provides
-    fun provideAuthRequester(r: Retrofit) = UserRequester(r.create(UserApi::class.java))
-
-    @Provides
-    @Singleton
-    fun provideUserRepository(r: UserRequester) = UserRepository(r)
-
-    @Provides
-    @Singleton
-    fun provideAuthUseCases(ur: UserRepository) = UserUseCases(ur)
-
-    @Provides
-    @Singleton
-    fun provideSgViewModelFactory(userUC: UserUseCases) = SgViewModelFactory(userUC)
+    fun provideContext() = context
 
     @Provides
     @Singleton
@@ -59,13 +43,19 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideDatabase(): SgDatabase {
+    fun provideDatabase(): LsDatabase {
 
         val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appPass))
 
-        return Room.databaseBuilder(context, SgDatabase::class.java, DbNames.DB_NAME)
+        return Room.databaseBuilder(context, LsDatabase::class.java, DbNames.DB_NAME)
                 .openHelperFactory(factory)
                 .allowMainThreadQueries()
                 .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideStellarServer(): Server {
+        return Server("https://horizon-testnet.stellar.org")
     }
 }

@@ -2,6 +2,7 @@ package com.soneso.lumenshine.domain.util
 
 import android.util.Log
 import com.soneso.lumenshine.domain.usecases.UserSecurityHelper
+import org.bouncycastle.util.encoders.Base64
 import java.nio.CharBuffer
 import java.nio.charset.Charset
 import java.util.*
@@ -44,4 +45,8 @@ fun logLongString(string: String) {
         end = if (end > string.length) string.length else end
         Log.v(UserSecurityHelper.TAG, string.substring(start, end))
     }
+}
+
+fun ByteArray.base64String(): String {
+    return Base64.toBase64String(this)
 }

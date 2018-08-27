@@ -4,26 +4,18 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.graphics.BitmapFactory
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
-import androidx.core.view.isNotEmpty
-import com.google.authenticator.OtpProvider
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
-import com.soneso.lumenshine.domain.data.RegistrationStatus
-import com.soneso.lumenshine.domain.data.SgError
-import com.soneso.lumenshine.domain.data.TfaSecret
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.SgActivity
-import com.soneso.lumenshine.presentation.general.SgViewState
+import com.soneso.lumenshine.util.Resource
+import kotlinx.android.synthetic.main.activity_change_tfa.*
 import kotlinx.android.synthetic.main.view_change_tfa_new_secret.*
 import kotlinx.android.synthetic.main.view_change_tfa_password_confirm.*
-import com.soneso.lumenshine.presentation.general.State
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
-import kotlinx.android.synthetic.main.activity_change_tfa.*
 import kotlinx.android.synthetic.main.view_change_tfa_success.*
 
 class ChangeTfaActivity : SgActivity() {
@@ -70,7 +62,7 @@ class ChangeTfaActivity : SgActivity() {
             renderTfaChange(it ?: return@Observer)
         })
 
-        viewModel.liveRegistrationStatus.observe(this, Observer {
+        viewModel.liveTfaChangeConfirmation.observe(this, Observer {
             renderTfaChangeConfirmation(it ?: return@Observer)
         })
 
@@ -91,52 +83,43 @@ class ChangeTfaActivity : SgActivity() {
     }
 
 
-    private fun renderTfaChange(viewState: SgViewState<TfaSecret>) {
+    private fun renderTfaChange(resource: Resource<String, ServerException>) {
 
-        when (viewState.state) {
-
-            State.READY -> {
-                hideProgressDialog()
+        when (resource.state) {
+            Resource.SUCCESS -> {
+//                hideProgressDialog()
                 change_tfa_password_confirm_view.visibility = View.GONE
                 change_tfa_new_secret_view.visibility = View.VISIBLE
-                setupToken(viewState.data!!)
+                setupToken(resource.success())
             }
-            State.LOADING -> {
+            Resource.LOADING -> {
 
-                showProgressDialog()
+//                showProgressDialog()
             }
-            State.ERROR -> {
+            Resource.FAILURE -> {
 
-               hideProgressDialog()
-
-                handleError(viewState.error)
+//                hideProgressDialog()
+                handleError(resource.failure())
             }
         }
     }
 
-    private fun renderTfaChangeConfirmation(viewState: SgViewState<RegistrationStatus>) {
-        when (viewState.state) {
-            State.READY -> {
-                hideProgressDialog()
+    private fun renderTfaChangeConfirmation(resource: Resource<Boolean, ServerException>) {
+        when (resource.state) {
+            Resource.SUCCESS -> {
+//                hideProgressDialog()
 
-                if (viewState.data!!.tfaConfirmed) {
-
-                    change_tfa_new_secret_view.visibility = View.GONE
-                    change_tfa_success_view.visibility = View.VISIBLE
-
-                } else {
-                    showSnackbar(getString(R.string.failed_to_change_tfa))
-                }
-
+                change_tfa_new_secret_view.visibility = View.GONE
+                change_tfa_success_view.visibility = View.VISIBLE
             }
 
-            State.LOADING -> {
-                showProgressDialog()
+            Resource.LOADING -> {
+//                showProgressDialog()
             }
 
-            State.ERROR -> {
-                hideProgressDialog()
-                handleError(viewState.error)
+            Resource.FAILURE -> {
+//                hideProgressDialog()
+                handleError(resource.failure())
             }
         }
     }
@@ -144,15 +127,14 @@ class ChangeTfaActivity : SgActivity() {
     /**
      * handling response errors
      */
-    private fun handleError(e: SgError?) {
-        val error = e ?: return
+    private fun handleError(error: ServerException) {
 
-        when (error.errorCode) {
+        when (error.code) {
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                change_tfa_current_pass.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+                change_tfa_current_pass.error = error.message
             }
-            ErrorCodes.LOGIN_INVALID_2FA ->{
-                tfa_code_view.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+            ErrorCodes.LOGIN_INVALID_2FA -> {
+                tfa_code_view.error = error.message
             }
             else -> {
                 showErrorSnackbar(error)
@@ -160,7 +142,7 @@ class ChangeTfaActivity : SgActivity() {
         }
     }
 
-    private fun setupToken(tfaSecret: TfaSecret) {
+    private fun setupToken(tfaSecret: String) {
 
 //        qr_code_view.post {
 //            val params = qr_code_view.layoutParams
@@ -170,11 +152,11 @@ class ChangeTfaActivity : SgActivity() {
 //            qr_code_view.setImageBitmap(BitmapFactory.decodeByteArray(tfaSecret.imageData, 0, tfaSecret.imageData.size))
 //        }
         token_view.keyListener = null
-        token_view.text = tfaSecret.secretCode
+        token_view.text = tfaSecret
         copy_button.setOnClickListener {
 
             val clipboard = getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("", tfaSecret.secretCode)
+            val clip = ClipData.newPlainText("", tfaSecret)
             clipboard.primaryClip = clip
             showSnackbar(getString(R.string.secret_copied))
         }
