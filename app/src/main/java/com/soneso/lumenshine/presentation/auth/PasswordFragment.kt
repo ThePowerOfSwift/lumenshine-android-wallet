@@ -28,6 +28,7 @@ class PasswordFragment : AuthFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupListeners()
         subscribeForLiveData()
+        password.requestFocus()
     }
 
     private fun setupListeners() {
