@@ -12,12 +12,12 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.google.firebase.iid.FirebaseInstanceId
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.wallets.WalletsFragment
 import com.soneso.lumenshine.presentation.general.SgActivity
 import com.soneso.lumenshine.presentation.general.SgFragment
 import com.soneso.lumenshine.presentation.home.HomeFragment
 import com.soneso.lumenshine.presentation.settings.FingerPrintSetupActivity
 import com.soneso.lumenshine.presentation.settings.SettingsFragment
+import com.soneso.lumenshine.presentation.wallets.WalletsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 

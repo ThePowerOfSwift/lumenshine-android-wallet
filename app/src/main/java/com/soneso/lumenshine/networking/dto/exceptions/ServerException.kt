@@ -1,7 +1,7 @@
 package com.soneso.lumenshine.networking.dto.exceptions
 
 import com.soneso.lumenshine.domain.data.ErrorCodes
-import com.soneso.lumenshine.networking.dto.ResponseMapper
+import com.soneso.lumenshine.networking.dto.Parse
 import com.soneso.lumenshine.util.LsException
 import okhttp3.ResponseBody
 
@@ -29,8 +29,8 @@ class ServerException(private val errorBody: ResponseBody?, throwable: Throwable
     private fun parseBody(): List<ValidationError>? {
 
         return try {
-            val javaType = ResponseMapper.OBJECT_MAPPER.typeFactory.constructCollectionType(List::class.java, ValidationError::class.java)
-            val list = ResponseMapper.OBJECT_MAPPER.readValue<List<ValidationError>>(errorBody?.string(), javaType)
+            val javaType = OBJECT_MAPPER.typeFactory.constructCollectionType(List::class.java, ValidationError::class.java)
+            val list = OBJECT_MAPPER.readValue<List<ValidationError>>(errorBody?.string(), javaType)
             if (list.isEmpty()) {
                 return null
             }
@@ -38,5 +38,10 @@ class ServerException(private val errorBody: ResponseBody?, throwable: Throwable
         } catch (e: Exception) {
             null
         }
+    }
+
+    companion object {
+        const val TAG = "ServerException"
+        val OBJECT_MAPPER = Parse.createMapper()
     }
 }

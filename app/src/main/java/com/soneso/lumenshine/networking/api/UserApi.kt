@@ -120,7 +120,7 @@ interface UserApi {
             @Field("wordlist_master_iv") wordListMasterKeyEncryptionIv: String,
 
             @Field("public_key_188") publicKey188: String
-    ): Single<Result<Any>>
+    ): Single<Response<Any>>
 
     @FormUrlEncoded
     @POST("/portal/user/dashboard/new_2fa_secret")

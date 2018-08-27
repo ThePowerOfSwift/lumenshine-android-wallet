@@ -4,7 +4,7 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import com.soneso.lumenshine.model.entities.RegistrationInfo
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import io.reactivex.Flowable
 
@@ -15,10 +15,10 @@ interface UserDao {
     fun getUserDataById(username: String): Flowable<UserSecurity>
 
     @Query("SELECT * FROM ${DbNames.TABLE_REGISTRATION_STATUS} WHERE ${DbNames.COLUMN_USERNAME} = :username")
-    fun getRegistrationStatus(username: String): Flowable<RegistrationInfo>
+    fun getRegistrationStatus(username: String): Flowable<RegistrationStatus>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveRegistrationStatus(status: RegistrationInfo)
+    fun saveRegistrationStatus(status: RegistrationStatus)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveUserData(userData: UserSecurity)

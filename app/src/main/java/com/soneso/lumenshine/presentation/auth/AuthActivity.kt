@@ -11,7 +11,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.View
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.model.entities.RegistrationInfo
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.SgActivity
 import com.soneso.lumenshine.presentation.util.hasFingerPrintSensor
@@ -204,7 +204,7 @@ class AuthActivity : SgActivity() {
 
     }
 
-    private fun renderRegistrationStatus(s: RegistrationInfo?) {
+    private fun renderRegistrationStatus(s: RegistrationStatus?) {
 
         val status = s ?: return
         when {
@@ -220,10 +220,10 @@ class AuthActivity : SgActivity() {
                 showSetUpView()
                 replaceFragment(MnemonicFragment.newInstance(), MnemonicFragment.TAG)
             }
-//            status.fingerprintSetupRequested -> {
-//                finishAffinity()
-//                MainActivity.startInstanceWithFingerprintSetup(this)
-//            }
+            authViewModel.isFingerprintFlow -> {
+                finishAffinity()
+                MainActivity.startInstanceWithFingerprintSetup(this)
+            }
             else -> {
                 handleRegistrationCompleted()
             }

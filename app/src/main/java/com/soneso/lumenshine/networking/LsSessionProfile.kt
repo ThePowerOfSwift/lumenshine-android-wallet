@@ -1,6 +1,9 @@
 package com.soneso.lumenshine.networking
 
 import com.soneso.lumenshine.persistence.SgPrefs
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Object holding key data needed for getting the user data from server. Some data such as password are kept in RAM memory.
@@ -11,8 +14,7 @@ object LsSessionProfile {
 
     var password: CharSequence = ""
 
-    var username: String = SgPrefs.username
-        private set
+    private val usernameSubject = PublishSubject.create<String>()
 
     var jwtToken: String = SgPrefs.jwtToken
         private set
@@ -27,7 +29,7 @@ object LsSessionProfile {
 
             when (key) {
                 SgPrefs.KEY_USERNAME -> {
-                    username = SgPrefs.username
+                    usernameSubject.onNext(SgPrefs.username)
                 }
                 SgPrefs.KEY_JWT_TOKEN -> {
                     jwtToken = SgPrefs.jwtToken
@@ -37,5 +39,12 @@ object LsSessionProfile {
                 }
             }
         }
+    }
+
+    fun observeUsername(): Flowable<String> {
+
+        return usernameSubject.toFlowable(BackpressureStrategy.LATEST)
+                .startWith(SgPrefs.username)
+                .distinctUntilChanged()
     }
 }

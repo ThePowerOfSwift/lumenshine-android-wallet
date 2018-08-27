@@ -48,9 +48,10 @@
             android:name=".presentation.settings.ChangePasswordActivity"
             android:label="@string/change_password_label"
             android:parentActivityName=".presentation.MainActivity" />
-        <activity android:name=".presentation.settings.ChangeTfaActivity"
+        <activity
+            android:name=".presentation.settings.ChangeTfaActivity"
             android:label="@string/change_tfa_label"
-            android:parentActivityName=".presentation.MainActivity"/>
+            android:parentActivityName=".presentation.MainActivity" />
     </application>
 
 </manifest>

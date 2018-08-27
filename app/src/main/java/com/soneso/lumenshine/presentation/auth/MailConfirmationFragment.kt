@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
@@ -58,7 +56,7 @@ class MailConfirmationFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                context?.showProgressDialog()
+                showProgressDialog()
             }
             Resource.SUCCESS -> {
                 hideProgressDialog()
@@ -74,7 +72,7 @@ class MailConfirmationFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                context?.showProgressDialog()
+                showProgressDialog()
             }
             Resource.SUCCESS -> {
                 hideProgressDialog()

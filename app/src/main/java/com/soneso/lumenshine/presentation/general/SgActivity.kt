@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.SgError
+import com.soneso.lumenshine.util.LsException
 
 /**
  * Base activity for class.
@@ -28,17 +28,16 @@ open class SgActivity : AppCompatActivity() {
     }
 
     fun showSnackbar(text: CharSequence) {
+
         val view = findViewById<ViewGroup>(android.R.id.content).getChildAt(0) ?: return
         Snackbar.make(view, text, Snackbar.LENGTH_LONG)
                 .setAction(R.string.ok, null)
                 .show()
     }
 
-    fun showErrorSnackbar(e: SgError?) {
-        val error = e ?: return
-        val view = findViewById<ViewGroup>(android.R.id.content).getChildAt(0) ?: return
-        val snackbar = if (error.errorResId > 0) Snackbar.make(view, error.errorResId, Snackbar.LENGTH_LONG) else Snackbar.make(view, error.message!!, Snackbar.LENGTH_LONG)
-        snackbar.setAction(R.string.ok, null)
-                .show()
+    fun showErrorSnackbar(e: LsException?) {
+
+        val message = e?.throwable?.message ?: getString(R.string.unknown_error)
+        showSnackbar(message)
     }
 }

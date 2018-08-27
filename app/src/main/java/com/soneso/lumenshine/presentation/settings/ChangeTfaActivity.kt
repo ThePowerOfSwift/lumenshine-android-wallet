@@ -8,11 +8,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.domain.data.ErrorCodes
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.SgActivity
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
-import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.activity_change_tfa.*
 import kotlinx.android.synthetic.main.view_change_tfa_new_secret.*
@@ -84,42 +83,42 @@ class ChangeTfaActivity : SgActivity() {
     }
 
 
-    private fun renderTfaChange(resource: Resource<String, LsException>) {
+    private fun renderTfaChange(resource: Resource<String, ServerException>) {
 
         when (resource.state) {
             Resource.SUCCESS -> {
-                hideProgressDialog()
+//                hideProgressDialog()
                 change_tfa_password_confirm_view.visibility = View.GONE
                 change_tfa_new_secret_view.visibility = View.VISIBLE
                 setupToken(resource.success())
             }
             Resource.LOADING -> {
 
-                showProgressDialog()
+//                showProgressDialog()
             }
             Resource.FAILURE -> {
 
-                hideProgressDialog()
+//                hideProgressDialog()
                 handleError(resource.failure())
             }
         }
     }
 
-    private fun renderTfaChangeConfirmation(resource: Resource<Boolean, LsException>) {
+    private fun renderTfaChangeConfirmation(resource: Resource<Boolean, ServerException>) {
         when (resource.state) {
             Resource.SUCCESS -> {
-                hideProgressDialog()
+//                hideProgressDialog()
 
                 change_tfa_new_secret_view.visibility = View.GONE
                 change_tfa_success_view.visibility = View.VISIBLE
             }
 
             Resource.LOADING -> {
-                showProgressDialog()
+//                showProgressDialog()
             }
 
             Resource.FAILURE -> {
-                hideProgressDialog()
+//                hideProgressDialog()
                 handleError(resource.failure())
             }
         }
@@ -128,21 +127,19 @@ class ChangeTfaActivity : SgActivity() {
     /**
      * handling response errors
      */
-    private fun handleError(e: LsException?) {
-        // TODO: cristi.paval, 8/25/18 -  handle errors here
-//        val error = e ?: return
-//
-//        when (error.errorCode) {
-//            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-//                change_tfa_current_pass.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
-//            }
-//            ErrorCodes.LOGIN_INVALID_2FA -> {
-//                tfa_code_view.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
-//            }
-//            else -> {
-//                showErrorSnackbar(error)
-//            }
-//        }
+    private fun handleError(error: ServerException) {
+
+        when (error.code) {
+            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
+                change_tfa_current_pass.error = error.message
+            }
+            ErrorCodes.LOGIN_INVALID_2FA -> {
+                tfa_code_view.error = error.message
+            }
+            else -> {
+                showErrorSnackbar(error)
+            }
+        }
     }
 
     private fun setupToken(tfaSecret: String) {

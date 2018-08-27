@@ -44,9 +44,29 @@ class MnemonicFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
+
         authViewModel.liveMnemonic.observe(this, Observer {
             renderMnemonic(it ?: return@Observer)
         })
+        authViewModel.liveMnemonicConfirmation.observe(this, Observer {
+            renderMnemonicConfirmation(it ?: return@Observer)
+        })
+    }
+
+    private fun renderMnemonicConfirmation(resource: Resource<Boolean, LsException>) {
+
+        when (resource.state) {
+            Resource.FAILURE -> {
+                hideProgressDialog()
+                showErrorSnackbar(resource.failure())
+            }
+            Resource.LOADING -> {
+                showProgressDialog()
+            }
+            Resource.SUCCESS -> {
+                hideProgressDialog()
+            }
+        }
     }
 
     private fun setupListeners() {

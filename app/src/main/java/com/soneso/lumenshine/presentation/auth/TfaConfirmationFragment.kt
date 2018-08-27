@@ -11,9 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
-import com.soneso.lumenshine.util.LsException
+import com.soneso.lumenshine.domain.data.ErrorCodes
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 
@@ -42,7 +41,9 @@ class TfaConfirmationFragment : AuthFragment() {
         authViewModel.liveTfaConfirmation.observe(this, Observer {
             renderTfaConfirmation(it ?: return@Observer)
         })
-
+        authViewModel.liveTfaChangeConfirmation.observe(this, Observer {
+            renderTfaConfirmation(it ?: return@Observer)
+        })
     }
 
     private fun setupListeners() {
@@ -60,7 +61,7 @@ class TfaConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun renderTfaSecret(resource: Resource<String, LsException>) {
+    private fun renderTfaSecret(resource: Resource<String, ServerException>) {
 
         when (resource.state) {
             Resource.FAILURE -> {
@@ -74,14 +75,14 @@ class TfaConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun renderTfaConfirmation(resource: Resource<Boolean, LsException>) {
+    private fun renderTfaConfirmation(resource: Resource<Boolean, ServerException>) {
         when (resource.state) {
             Resource.FAILURE -> {
                 hideProgressDialog()
                 handleError(resource.failure())
             }
             Resource.LOADING -> {
-                context?.showProgressDialog()
+                showProgressDialog()
             }
             Resource.SUCCESS -> {
                 hideProgressDialog()
@@ -102,18 +103,16 @@ class TfaConfirmationFragment : AuthFragment() {
     /**
      * handling response errors
      */
-    private fun handleError(e: LsException) {
-        // TODO: cristi.paval, 8/25/18 - handle errors
-//        val error = e ?: return
-//
-//        when (error.errorCode) {
-//            ErrorCodes.LOGIN_INVALID_2FA -> {
-//                tfa_code_view.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
-//            }
-//            else -> {
-//                showErrorSnackbar(error)
-//            }
-//        }
+    private fun handleError(error: ServerException) {
+
+        when (error.code) {
+            ErrorCodes.LOGIN_INVALID_2FA -> {
+                tfa_code_view.error = error.message
+            }
+            else -> {
+                showErrorSnackbar(error)
+            }
+        }
     }
 
     private fun setupToken(tfaSecret: String) {

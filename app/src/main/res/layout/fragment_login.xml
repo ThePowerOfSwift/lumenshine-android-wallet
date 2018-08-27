@@ -14,7 +14,7 @@
         android:text="@string/login"
         android:textSize="@dimen/text_size_20"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
 
     <com.soneso.lumenshine.presentation.customViews.FormInputView
@@ -27,7 +27,7 @@
         app:input_level="@integer/input_mandatory"
         app:regex="@string/email_regex"
         android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20"/>
+        android:layout_marginRight="@dimen/size_20" />
 
 
     <com.soneso.lumenshine.presentation.customViews.PasswordInputView
@@ -38,7 +38,7 @@
         android:inputType="textPassword"
         app:input_level="@integer/input_mandatory"
         android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20"/>
+        android:layout_marginRight="@dimen/size_20" />
 
     <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/two_factor_code"
@@ -51,7 +51,7 @@
         android:inputType="number"
         app:input_level="@integer/input_optional"
         android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20"/>
+        android:layout_marginRight="@dimen/size_20" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             android:text="@string/action_sign_in"
             android:textStyle="bold"
             android:textColor="@color/text_dark"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

@@ -11,8 +11,6 @@ import android.widget.TextView
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_password.*
 
@@ -61,15 +59,27 @@ class PasswordFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                context?.showProgressDialog()
+                showLoading(true)
             }
             Resource.FAILURE -> {
-                hideProgressDialog()
+                showLoading(false)
                 handleError(resource.failure())
             }
             else -> {
-                hideProgressDialog()
+                showLoading(false)
             }
+        }
+    }
+
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            password.isEnabled = false
+            progress_bar.visibility = View.VISIBLE
+            submit_button.visibility = View.INVISIBLE
+        } else {
+            password.isEnabled = true
+            progress_bar.visibility = View.GONE
+            submit_button.visibility = View.VISIBLE
         }
     }
 

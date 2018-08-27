@@ -12,8 +12,6 @@ import android.widget.TextView
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -68,7 +66,7 @@ class LoginFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                context?.showProgressDialog()
+                showProgressDialog()
             }
             Resource.FAILURE -> {
                 hideProgressDialog()
@@ -83,7 +81,6 @@ class LoginFragment : AuthFragment() {
     /**
      * handling login response errors
      */
-
     private fun handleError(e: ServerException) {
 
         when (e.code) {

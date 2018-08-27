@@ -1,6 +1,7 @@
 package com.soneso.lumenshine.presentation.auth
 
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -9,7 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.model.entities.RegistrationInfo
+import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_finger_print.*
@@ -28,8 +29,16 @@ class FingerPrintFragment : AuthFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        authViewModel.isFingerprintFlow = true
         setupListeners()
         subscribeForLiveData()
+    }
+
+    override fun onDestroyView() {
+
+        authViewModel.isFingerprintFlow = false
+        super.onDestroyView()
     }
 
     private fun setupListeners() {
@@ -45,7 +54,10 @@ class FingerPrintFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-        // TODO: cristi.paval, 8/27/18 - subscribe here accordingly
+
+        authViewModel.liveLogin.observe(this, Observer {
+            renderLoginStatus(it ?: return@Observer)
+        })
     }
 
     private fun showLoadingButton(loading: Boolean) {
@@ -58,11 +70,10 @@ class FingerPrintFragment : AuthFragment() {
         }
     }
 
-    private fun renderRegistrationStatus(resource: Resource<RegistrationInfo, ServerException>) {
+    private fun renderLoginStatus(resource: Resource<Boolean, ServerException>) {
 
         when (resource.state) {
             Resource.LOADING -> {
-
                 showLoadingButton(true)
             }
             Resource.FAILURE -> {
@@ -71,7 +82,6 @@ class FingerPrintFragment : AuthFragment() {
                 handleError(resource.failure())
             }
             else -> {
-
                 showLoadingButton(false)
             }
         }
@@ -81,31 +91,22 @@ class FingerPrintFragment : AuthFragment() {
      * handling login response errors
      */
     private fun handleError(e: ServerException) {
-        // TODO: cristi.paval, 8/25/18 - error handling here
-//        val error = e ?: return
-//
-//        when (error.errorCode) {
-//            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
-//                showErrorSnackbar(error)
-//            }
-//            ErrorCodes.LOGIN_INVALID_2FA -> {
-//                showErrorSnackbar(error)
-//            }
-//            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-//                password.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
-//            }
-//            else -> {
-//                showErrorSnackbar(error)
-//            }
-//        }
+
+        when (e.code) {
+            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
+                password.error = e.message
+            }
+            else -> {
+                showErrorSnackbar(e)
+            }
+        }
     }
 
     private fun attemptLogin() {
 
-//        val username = authViewModel.liveLastUsername.value ?: return
-//        val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret.decodeBase32()) ?: return
-//
-//        authViewModel.loginAndFingerprintSetup(credentials.username, password.trimmedText, tfaCode)
+        val username = authViewModel.liveLastUsername.value ?: return
+
+        authViewModel.login(username, password.trimmedText)
     }
 
     companion object {

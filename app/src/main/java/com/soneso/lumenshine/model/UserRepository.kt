@@ -1,19 +1,16 @@
 package com.soneso.lumenshine.model
 
 import com.soneso.lumenshine.domain.data.Country
-import com.soneso.lumenshine.domain.data.SgError
 import com.soneso.lumenshine.domain.data.UserProfile
-import com.soneso.lumenshine.domain.data.singleFromNetworkException
 import com.soneso.lumenshine.domain.util.base64String
-import com.soneso.lumenshine.model.entities.RegistrationInfo
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
+import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.SgApi
 import com.soneso.lumenshine.networking.api.UserApi
-import com.soneso.lumenshine.networking.dto.auth.ChangePasswordRequest
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.networking.requester.UserRequester
 import com.soneso.lumenshine.persistence.SgPrefs
 import com.soneso.lumenshine.persistence.room.LsDatabase
 import com.soneso.lumenshine.util.*
@@ -29,7 +26,6 @@ import javax.inject.Inject
  */
 class UserRepository @Inject constructor(
         private val networkStateObserver: NetworkStateObserver,
-        private val userRequester: UserRequester,
         db: LsDatabase,
         r: Retrofit
 ) {
@@ -61,13 +57,14 @@ class UserRepository @Inject constructor(
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
+                    SgPrefs.username = userProfile.email
                     SgPrefs.tfaSecret = it.token2fa
-                    userDao.saveRegistrationStatus(RegistrationInfo(userProfile.email, false, false, false))
+                    userDao.saveRegistrationStatus(RegistrationStatus(userProfile.email, false, false, false))
                     true
                 }, { it })
     }
 
-    fun confirmTfaRegistration(tfaCode: String): Flowable<Resource<Boolean, LsException>> {
+    fun confirmTfaRegistration(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
 
         return userApi.confirmTfaRegistration(tfaCode)
                 .doOnSuccess {
@@ -128,7 +125,7 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun loginStep2(publicKey188: String): Flowable<Resource<Boolean, ServerException>> {
+    fun loginStep2(username: String, publicKey188: String): Flowable<Resource<Boolean, ServerException>> {
 
         return userApi.loginStep2(publicKey188)
                 .doOnSuccess {
@@ -139,8 +136,8 @@ class UserRepository @Inject constructor(
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
                     SgPrefs.tfaSecret = it.tfaSecret
-                    userDao.saveRegistrationStatus(it.toRegistrationStatus(SgPrefs.username))
-                    it.tfaSecret.isNotEmpty()
+                    userDao.saveRegistrationStatus(it.toRegistrationStatus(username))
+                    !it.tfaConfirmed || it.tfaSecret.isNotEmpty()
                 }, { it })
                 .flatMap {
                     return@flatMap if (it.isSuccessful && !it.success()) {
@@ -153,34 +150,12 @@ class UserRepository @Inject constructor(
 
     fun getUserData() = userDao.getUserDataById(SgPrefs.username)
 
-    fun getCurrentUserSecurity(): Single<UserSecurity> {
-
-        return userRequester.fetchUserSecurity()
-                .map {
-                    UserSecurity(
-                            SgPrefs.username,
-                            it.publicKeyIndex0,
-                            "",
-                            it.passwordKdfSalt(),
-                            it.encryptedMnemonicMasterKey(),
-                            it.mnemonicMasterKeyEncryptionIv(),
-                            it.encryptedMnemonic(),
-                            it.mnemonicEncryptionIv(),
-                            it.encryptedWordListMasterKey(),
-                            it.wordListMasterKeyEncryptionIv(),
-                            it.encryptedWordList(),
-                            it.wordListEncryptionIv()
-                    )
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
-    }
-
     fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
 
         return userApi.confirmMnemonic()
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    userDao.saveRegistrationStatus(RegistrationInfo(SgPrefs.username, true, true, true))
+                    userDao.saveRegistrationStatus(RegistrationStatus(SgPrefs.username, true, true, true))
                     true
                 }, { it })
     }
@@ -202,7 +177,7 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun loadTfaSecret(): Flowable<Resource<String, LsException>> {
+    fun loadTfaSecret(): Flowable<Resource<String, ServerException>> {
 
         return Flowable.create({ emitter ->
             emitter.onNext(Success(SgPrefs.tfaSecret))
@@ -241,23 +216,21 @@ class UserRepository @Inject constructor(
         }
     }
 
-    fun changeUserPassword(userSecurity: UserSecurity): Single<Unit> {
+    fun changeUserPassword(userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
 
-        val request = ChangePasswordRequest()
-        request.setPasswordKdfSalt(userSecurity.passwordKdfSalt)
-        request.setEncryptedMnemonicMasterKey(userSecurity.encryptedMnemonicMasterKey)
-        request.setMnemonicMasterKeyEncryptionIv(userSecurity.mnemonicMasterKeyEncryptionIv)
-        request.setEncryptedWordListMasterKey(userSecurity.encryptedWordListMasterKey)
-        request.setWordListMasterKeyEncryptionIv(userSecurity.wordListMasterKeyEncryptionIv)
-        request.publicKeyIndex188 = userSecurity.publicKeyIndex188
-        return userRequester.changeUserPassword(request)
-                .map {
-                    Unit
-                }
-                .onErrorResumeNext(SgError.singleFromNetworkException())
+        return userApi.changePassword(
+                userSecurity.passwordKdfSalt.base64String(),
+                userSecurity.encryptedMnemonicMasterKey.base64String(),
+                userSecurity.mnemonicMasterKeyEncryptionIv.base64String(),
+                userSecurity.encryptedWordListMasterKey.base64String(),
+                userSecurity.wordListMasterKeyEncryptionIv.base64String(),
+                userSecurity.publicKeyIndex188
+        )
+                .asHttpResourceLoader(networkStateObserver)
+                .mapResource({ true }, { it })
     }
 
-    fun changeTfaSecret(publicKey188: String): Flowable<Resource<String, LsException>> {
+    fun changeTfaSecret(publicKey188: String): Flowable<Resource<String, ServerException>> {
 
         return userApi.changeTfaSecret(publicKey188)
                 .asHttpResourceLoader(networkStateObserver)
@@ -267,7 +240,7 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun confirmTfaSecretChange(tfaCode: String): Flowable<Resource<Boolean, LsException>> {
+    fun confirmTfaSecretChange(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
 
         return userApi.confirmTfaSecretChange(tfaCode)
                 .asHttpResourceLoader(networkStateObserver)
@@ -277,9 +250,10 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun getRegistrationStatus(): Flowable<RegistrationInfo> {
+    fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        return userDao.getRegistrationStatus(SgPrefs.username)
+        return LsSessionProfile.observeUsername()
+                .flatMap { userDao.getRegistrationStatus(it) }
     }
 
     companion object {

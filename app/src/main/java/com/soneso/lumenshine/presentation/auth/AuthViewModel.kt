@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.usecases.UserUseCases
-import com.soneso.lumenshine.model.entities.RegistrationInfo
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.util.putValue
 import com.soneso.lumenshine.util.LsException
@@ -22,16 +22,18 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveLastUsername: LiveData<String> = MutableLiveData()
 
+    @Suppress("MemberVisibilityCanBePrivate")
     val liveSalutations: LiveData<Resource<List<String>, LsException>> = MutableLiveData()
 
-    val liveTfaSecret: LiveData<Resource<String, LsException>> = MutableLiveData()
+    val liveTfaSecret: LiveData<Resource<String, ServerException>> = MutableLiveData()
 
-    val liveTfaConfirmation: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
+    val liveTfaConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
-    val liveTfaChangeConfirmation: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
+    val liveTfaChangeConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
     val liveMnemonicConfirmation: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
 
+    @Suppress("MemberVisibilityCanBePrivate")
     val liveCountries: LiveData<Resource<List<Country>, LsException>> = MutableLiveData()
 
     val liveMnemonic: LiveData<Resource<String, LsException>> = MutableLiveData()
@@ -40,13 +42,15 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveCredentialResetEmail: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
 
-    val liveRegistrationStatus: LiveData<RegistrationInfo?> = MutableLiveData()
+    val liveRegistrationStatus: LiveData<RegistrationStatus?> = MutableLiveData()
 
     val liveRegistrationRefresh: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
     val liveRegistration: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
     val liveLogin: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
+
+    var isFingerprintFlow = false
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -95,6 +99,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
+    @Suppress("unused")
     fun refreshSalutations() {
 
         val d = userUseCases.provideSalutations()
@@ -106,6 +111,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
+    @Suppress("unused")
     fun refreshCountries() {
 
         val d = userUseCases.provideCountries()
@@ -126,26 +132,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                     liveLogin.putValue(it)
                 }
         compositeDisposable.add(d)
-    }
-
-    fun loginAndFingerprintSetup(email: CharSequence, password: CharSequence, tfaCode: CharSequence) {
-
-//        val tfa = if (tfaCode.isBlank()) {
-//            null
-//        } else {
-//            tfaCode
-//        }
-//
-//        (liveRegistrationStatus as MutableLiveData).value = SgViewState(State.LOADING)
-//
-//        userUseCases.login(email, password, tfa)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({
-//                    it.fingerprintSetupRequested = true
-//                    liveRegistrationStatus.value = SgViewState(it)
-//                }, {
-//                    liveRegistrationStatus.value = SgViewState(it as SgError)
-//                })
     }
 
     fun fetchMnemonic() {

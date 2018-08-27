@@ -6,7 +6,7 @@ import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
-import com.soneso.lumenshine.model.entities.RegistrationInfo
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -54,6 +54,7 @@ class UserUseCases
         LsSessionProfile.password = password.toString()
         val tfa = tfaCode?.toString()
                 ?: OtpProvider.currentTotpCode(LsSessionProfile.tfaSecret.decodeBase32())
+        val username = email.toString()
 
         return userRepo.loginStep1(email.toString(), tfa)
                 .flatMap {
@@ -64,7 +65,7 @@ class UserUseCases
                             if (publicKeyIndex188 == null) {
                                 Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
                             } else {
-                                userRepo.loginStep2(publicKeyIndex188)
+                                userRepo.loginStep2(username, publicKeyIndex188)
                             }
                         }
 
@@ -98,9 +99,9 @@ class UserUseCases
 
     fun provideLastUsername() = userRepo.getLastUsername()
 
-    fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Single<Unit> {
+    fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 
-        return userRepo.getCurrentUserSecurity()
+        return userRepo.getUserData()
                 .flatMap {
                     val helper = UserSecurityHelper(currentPass.toCharArray())
                     val us = helper.changePassword(it, newPass.toCharArray())
@@ -108,7 +109,7 @@ class UserUseCases
                 }
     }
 
-    fun changeTfaPassword(pass: CharSequence): Flowable<Resource<String, LsException>> {
+    fun changeTfaPassword(pass: CharSequence): Flowable<Resource<String, ServerException>> {
 
         return userRepo.getUserData()
                 .flatMap {
@@ -117,20 +118,19 @@ class UserUseCases
                     if (publicKey188 != null) {
                         userRepo.changeTfaSecret(publicKey188)
                     } else {
-                        Flowable.just(Failure<String, LsException>(LsException()))
+                        Flowable.just(Failure<String, ServerException>(ServerException(ErrorCodes.UNKNOWN)))
                     }
                 }
     }
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
 
-    fun provideRegistrationStatus(): Flowable<RegistrationInfo> {
+    fun provideRegistrationStatus(): Flowable<RegistrationStatus> {
 
         return Flowable.create(
                 { emitter ->
                     val d = userRepo.getRegistrationStatus()
                             .subscribe {
-                                // TODO: cristi.paval, 8/27/18 -  do something here
                                 if (LsSessionProfile.password.isNotEmpty()) {
                                     emitter.onNext(it)
                                 }
