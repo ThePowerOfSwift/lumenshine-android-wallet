@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/setup_wallet"
                         android:textSize="@dimen/text_size_30"
-                        android:textColor="@color/yellow"/>
+                        android:textColor="@color/yellow" />
 
                 </LinearLayout>
                 <!--Setup view-->

@@ -2,6 +2,7 @@ package com.soneso.lumenshine.networking.api
 
 import com.soneso.lumenshine.networking.dto.auth.*
 import io.reactivex.Single
+import retrofit2.Response
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -39,22 +40,22 @@ interface UserApi {
             @Field("public_key_188") publicKey188: String,
             @Field("country_code") countryCode: String?
 
-    ): Single<Result<RegistrationResponse>>
+    ): Single<Response<RegistrationResponse>>
 
 
     @FormUrlEncoded
     @POST("/portal/user/auth/confirm_tfa_registration")
     fun confirmTfaRegistration(
             @Field("tfa_code") tfaCode: String
-    ): Single<Result<ConfirmTfaResponse>>
+    ): Single<Response<ConfirmTfaResponse>>
 
 
     @GET("/portal/user/salutation_list")
-    fun getSalutationList(): Single<Result<GetSalutationListResponse>>
+    fun getSalutationList(): Single<Response<GetSalutationListResponse>>
 
 
     @GET("/portal/user/country_list")
-    fun getCountryList(): Single<Result<GetCountryListResponse>>
+    fun getCountryList(): Single<Response<GetCountryListResponse>>
 
 
     @FormUrlEncoded
@@ -62,47 +63,47 @@ interface UserApi {
     fun loginStep1(
             @Field("email") email: String,
             @Field("tfa_code") tfaCode: String?
-    ): Single<Result<LoginStep1Response>>
+    ): Single<Response<LoginStep1Response>>
 
 
     @FormUrlEncoded
     @POST("/portal/user/auth/login_step2")
     fun loginStep2(
             @Field("key") publicKey188: String
-    ): Single<Result<LoginStep2Response>>
+    ): Single<Response<LoginStep2Response>>
 
 
     @POST("/portal/user/dashboard/confirm_mnemonic")
-    fun confirmMnemonic(): Single<Result<Any>>
+    fun confirmMnemonic(): Single<Response<Any>>
 
 
     @FormUrlEncoded
     @POST("/portal/user/resend_confirmation_mail")
     fun resendConfirmationMail(
             @Field("email") email: String
-    ): Single<Result<Any>>
+    ): Single<Response<Any>>
 
 
     @GET("/portal/user/dashboard/get_user_registration_status")
-    fun getRegistrationStatus(): Single<Result<GetRegistrationStatusResponse>>
+    fun getRegistrationStatus(): Single<Response<GetRegistrationStatusResponse>>
 
     @FormUrlEncoded
     @POST("/portal/user/lost_password")
     fun requestResetPasswordEmail(
             @Field("email") email: String
-    ): Single<Result<Any>>
+    ): Single<Response<Any>>
 
     @FormUrlEncoded
     @POST("/portal/user/lost_tfa")
     fun requestResetTfaEmail(
             @Field("email") email: String
-    ): Single<Result<Any>>
+    ): Single<Response<Any>>
 
     @FormUrlEncoded
     @POST("/portal/user/dashboard/tfa_secret")
     fun getTfaSecret(
             @Field("key") publicKey188: String
-    ): Single<Result<GetTfaRequestResponse>>
+    ): Single<Response<GetTfaRequestResponse>>
 
     @GET("/portal/user/dashboard/user_auth_data")
     fun getUserAuthData(): Single<Result<GetUserAuthDataResponse>>
@@ -119,17 +120,17 @@ interface UserApi {
             @Field("wordlist_master_iv") wordListMasterKeyEncryptionIv: String,
 
             @Field("public_key_188") publicKey188: String
-    ): Single<Result<Any>>
+    ): Single<Response<Any>>
 
     @FormUrlEncoded
     @POST("/portal/user/dashboard/new_2fa_secret")
     fun changeTfaSecret(
             @Field("public_key_188") publicKey188: String
-    ): Single<Result<ChangeTfaSecretResponse>>
+    ): Single<Response<ChangeTfaSecretResponse>>
 
     @FormUrlEncoded
     @POST("/portal/user/dashboard/confirm_new_2fa_secret")
     fun confirmTfaSecretChange(
             @Field("tfa_code") tfaCode: String
-    ): Single<Result<ConfirmTfaSecretChangeResponse>>
+    ): Single<Response<ConfirmTfaSecretChangeResponse>>
 }

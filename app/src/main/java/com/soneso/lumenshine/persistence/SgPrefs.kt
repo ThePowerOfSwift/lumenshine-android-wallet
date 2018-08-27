@@ -3,7 +3,7 @@ package com.soneso.lumenshine.persistence
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.soneso.lumenshine.SgApp
+import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.domain.util.Cryptor
 import com.soneso.lumenshine.domain.util.toByteArray
 import org.bouncycastle.util.encoders.Base64
@@ -23,7 +23,6 @@ object SgPrefs {
     const val KEY_USERNAME = "username"
     const val KEY_JWT_TOKEN = "api-token"
     const val KEY_TFA_SECRET = "tfa-secret"
-    private const val KEY_TFA_IMAGE_DATA = "tfa-image-data"
 
     private val listeners = mutableListOf<((String) -> Unit)>()
     private val prefs: SharedPreferences
@@ -33,7 +32,7 @@ object SgPrefs {
     val appPass: String
 
     init {
-        val context = SgApp.sAppContext
+        val context = LsApp.sAppContext
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
         val keyHolder = AppKeyHolder(context, PREF_NAME)
@@ -107,10 +106,6 @@ object SgPrefs {
     var tfaSecret: String
         get() = decryptAndGetString(KEY_TFA_SECRET)
         set(value) = encryptAndSaveString(KEY_TFA_SECRET, value)
-
-    var tfaImageData: ByteArray
-        get() = decryptAndGetByteArray(KEY_TFA_IMAGE_DATA)
-        set(value) = encryptAndSaveByteArray(KEY_TFA_IMAGE_DATA, value)
 
     fun removeUserCrendentials() {
         username = ""

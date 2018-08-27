@@ -95,7 +95,7 @@
                     android:textStyle="bold"
                     android:clickable="true"
                     android:focusable="true"
-                    android:id="@+id/mnemonic_more_info_button"/>
+                    android:id="@+id/mnemonic_more_info_button" />
 
             </LinearLayout>
 
@@ -132,7 +132,7 @@
             android:theme="@style/RedButton"
             android:layout_marginBottom="@dimen/size_25"
             android:layout_marginTop="@dimen/size_25"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
     </LinearLayout>
 

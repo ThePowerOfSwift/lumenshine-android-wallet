@@ -1,7 +1,5 @@
 package com.soneso.lumenshine.presentation.auth
 
-import java.security.SecureRandom
-import java.text.FieldPosition
 import java.util.*
 
 class MnemonicQuizHelper(mnemonic: String) {

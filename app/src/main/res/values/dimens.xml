@@ -6,27 +6,33 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="text_size_20">20sp</dimen>
-    <dimen name="text_size_18">18sp</dimen>
-    <dimen name="text_size_16">16sp</dimen>
-    <dimen name="text_size_14">14sp</dimen>
-    <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_8">8sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_30">30sp</dimen>
 
+    <dimen name="size_10_negative">-10dp</dimen>
     <dimen name="size_05">0.5dp</dimen>
     <dimen name="size_1">1dp</dimen>
     <dimen name="size_1_5">1.5dp</dimen>
     <dimen name="size_2">2dp</dimen>
     <dimen name="size_3">3dp</dimen>
+    <dimen name="size_4">4dp</dimen>
     <dimen name="size_5">5dp</dimen>
     <dimen name="size_10">10dp</dimen>
     <dimen name="size_15">15dp</dimen>
     <dimen name="size_20">20dp</dimen>
     <dimen name="size_25">25dp</dimen>
     <dimen name="size_30">30dp</dimen>
+    <dimen name="size_35">35dp</dimen>
     <dimen name="size_45">45dp</dimen>
     <dimen name="size_50">50dp</dimen>
     <dimen name="size_75">75dp</dimen>
+    <dimen name="size_85">85dp</dimen>
+    <dimen name="size_90">90dp</dimen>
     <dimen name="size_100">100dp</dimen>
     <dimen name="size_125">125dp</dimen>
     <dimen name="size_150">150dp</dimen>
@@ -39,11 +45,6 @@
     <dimen name="dialog_info_header">56dp</dimen>
     <dimen name="login_appbar_height">150dp</dimen>
     <dimen name="avatar_image_size">60dp</dimen>
-    <dimen name="size_35">35dp</dimen>
     <dimen name="settings_item_height">80dp</dimen>
-    <dimen name="size_85">85dp</dimen>
-    <dimen name="size_90">90dp</dimen>
-    <dimen name="text_size_30">30sp</dimen>
-    <dimen name="size_4">4dp</dimen>
 
 </resources>

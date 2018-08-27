@@ -2,18 +2,15 @@ package com.soneso.lumenshine.presentation.auth
 
 
 import android.arch.lifecycle.Observer
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.RegistrationStatus
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.util.LsException
+import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
 
 
@@ -35,8 +32,8 @@ class MailConfirmationFragment : AuthFragment() {
 
     private fun subscribeForLiveData() {
 
-        authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it ?: return@Observer)
+        authViewModel.liveRegistrationRefresh.observe(this, Observer {
+            renderRegistrationRefresh(it ?: return@Observer)
         })
         authViewModel.liveConfirmationMail.observe(this, Observer {
             renderConfirmationMail(it ?: return@Observer)
@@ -44,10 +41,6 @@ class MailConfirmationFragment : AuthFragment() {
     }
 
     private fun setupListeners() {
-
-//        open_mail.setOnClickListener {
-//            openEmailApp()
-//        }
 
         resend_mail.setOnClickListener {
             authViewModel.resendConfirmationMail()
@@ -59,55 +52,36 @@ class MailConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun openEmailApp() {
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.addCategory(Intent.CATEGORY_APP_EMAIL)
-        if (intent.resolveActivity(context?.packageManager) != null) {
-            startActivity(Intent.createChooser(intent, null))
+    private fun renderRegistrationRefresh(resource: Resource<Boolean, ServerException>) {
+
+        when (resource.state) {
+            Resource.LOADING -> {
+                showProgressDialog()
+            }
+            Resource.SUCCESS -> {
+                hideProgressDialog()
+            }
+            Resource.FAILURE -> {
+                hideProgressDialog()
+                showErrorSnackbar(resource.failure())
+            }
         }
     }
 
-    private fun renderConfirmationMail(viewState: SgViewState<Unit>) {
-        when (viewState.state) {
-            State.LOADING -> {
-            }
-            State.READY -> {
+    private fun renderConfirmationMail(resource: Resource<Boolean, LsException>) {
 
+        when (resource.state) {
+            Resource.LOADING -> {
+                showProgressDialog()
+            }
+            Resource.SUCCESS -> {
+                hideProgressDialog()
                 showSnackbar("Mail sent!")
             }
-            State.ERROR -> {
-                showErrorSnackbar(viewState.error)
-            }
-        }
-    }
-
-    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
-
-        when (viewState.state) {
-            State.LOADING -> {
-                // cristi.paval, 5/3/18 - show here loading in ui
-                context?.showProgressDialog()
-
-            }
-            State.ERROR -> {
+            Resource.FAILURE -> {
                 hideProgressDialog()
-                showErrorSnackbar(viewState.error)
+                showErrorSnackbar(resource.failure())
             }
-            else -> {
-                // cristi.paval, 5/3/18 - stop loading in ui
-                mail_confirmation_error_text.text = getString(R.string.mail_confirmation_alert)
-                hideProgressDialog()
-            }
-        }
-    }
-
-    private fun showLoadingButton(loading: Boolean) {
-        if (loading) {
-            progress_bar.visibility = View.VISIBLE
-            already_confirmed.visibility = View.INVISIBLE
-        } else {
-            progress_bar.visibility = View.GONE
-            already_confirmed.visibility = View.VISIBLE
         }
     }
 

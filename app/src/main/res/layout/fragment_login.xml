@@ -14,7 +14,7 @@
         android:text="@string/login"
         android:textSize="@dimen/text_size_20"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
 
     <com.soneso.lumenshine.presentation.customViews.FormInputView
@@ -27,7 +27,7 @@
         app:input_level="@integer/input_mandatory"
         app:regex="@string/email_regex"
         android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20"/>
+        android:layout_marginRight="@dimen/size_20" />
 
 
     <com.soneso.lumenshine.presentation.customViews.PasswordInputView
@@ -38,7 +38,7 @@
         android:inputType="textPassword"
         app:input_level="@integer/input_mandatory"
         android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20"/>
+        android:layout_marginRight="@dimen/size_20" />
 
     <com.soneso.lumenshine.presentation.customViews.FormInputView
         android:id="@+id/two_factor_code"
@@ -51,7 +51,7 @@
         android:inputType="number"
         app:input_level="@integer/input_optional"
         android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20"/>
+        android:layout_marginRight="@dimen/size_20" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             android:text="@string/action_sign_in"
             android:textStyle="bold"
             android:textColor="@color/text_dark"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -76,67 +76,5 @@
             android:layout_gravity="center"
             android:indeterminate="true" />
     </FrameLayout>
-
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="@dimen/size_25"-->
-        <!--android:gravity="center"-->
-        <!--android:text="@string/no_account" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/create_account_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/create_account"-->
-        <!--android:textColor="@color/cyan_500" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="@dimen/size_25"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginEnd="@dimen/size_15"-->
-            <!--android:text="@string/lost_password" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/lost_pass_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/reset"-->
-            <!--android:textColor="@color/cyan_500" />-->
-
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="@dimen/size_25"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginEnd="@dimen/size_15"-->
-            <!--android:text="@string/lost_tfa" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/lost_tfa_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/reset"-->
-            <!--android:textColor="@color/cyan_500" />-->
-
-    <!--</LinearLayout>-->
-
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="show dialog"-->
-        <!--android:id="@+id/show_dialog"/>-->
 
 </LinearLayout>

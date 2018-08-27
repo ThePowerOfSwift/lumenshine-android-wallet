@@ -5,19 +5,16 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.customViews.SgEditText
 import com.soneso.lumenshine.presentation.customViews.SgTextView
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
-import com.soneso.lumenshine.presentation.util.fadeIn
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import com.soneso.lumenshine.presentation.util.showInfoDialog
+import com.soneso.lumenshine.util.LsException
+import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_mnemonic.*
 import kotlinx.android.synthetic.main.list_item_mnemonic.view.*
 import kotlinx.android.synthetic.main.view_mnemonic_confirm.*
@@ -47,9 +44,29 @@ class MnemonicFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
+
         authViewModel.liveMnemonic.observe(this, Observer {
             renderMnemonic(it ?: return@Observer)
         })
+        authViewModel.liveMnemonicConfirmation.observe(this, Observer {
+            renderMnemonicConfirmation(it ?: return@Observer)
+        })
+    }
+
+    private fun renderMnemonicConfirmation(resource: Resource<Boolean, LsException>) {
+
+        when (resource.state) {
+            Resource.FAILURE -> {
+                hideProgressDialog()
+                showErrorSnackbar(resource.failure())
+            }
+            Resource.LOADING -> {
+                showProgressDialog()
+            }
+            Resource.SUCCESS -> {
+                hideProgressDialog()
+            }
+        }
     }
 
     private fun setupListeners() {
@@ -76,12 +93,12 @@ class MnemonicFragment : AuthFragment() {
         }
     }
 
-    private fun renderMnemonic(viewState: SgViewState<String>) {
+    private fun renderMnemonic(resource: Resource<String, LsException>) {
 
-        when (viewState.state) {
-            State.READY -> {
+        when (resource.state) {
+            Resource.SUCCESS -> {
 
-                val mnemonic = viewState.data ?: return
+                val mnemonic = resource.success()
                 quizHelper = MnemonicQuizHelper(mnemonic)
                 mnemonic_view.text = getString(R.string.mnemonic_description, mnemonic)
                 val mnemonics = mnemonic.split(" ")
@@ -94,11 +111,11 @@ class MnemonicFragment : AuthFragment() {
                 }
                 mnemonic_confirm.visibility = View.VISIBLE
             }
-            State.LOADING -> {
+            Resource.LOADING -> {
             }
-            State.ERROR -> {
+            Resource.FAILURE -> {
 
-                showErrorSnackbar(viewState.error)
+                showErrorSnackbar(resource.failure())
             }
         }
     }
@@ -172,8 +189,7 @@ class MnemonicFragment : AuthFragment() {
     }
 
     private fun resetQuiz() {
-        for(e in editTexts)
-        {
+        for (e in editTexts) {
             e.text.clear()
         }
         quizHelper.reset()

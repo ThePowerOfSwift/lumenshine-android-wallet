@@ -11,18 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.data.ErrorCodes
-import com.soneso.lumenshine.domain.data.RegistrationStatus
-import com.soneso.lumenshine.domain.data.SgError
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.util.showInfoDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
+import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
@@ -39,9 +33,6 @@ class RegistrationFragment : AuthFragment() {
 
         subscribeForLiveData()
 
-//        authViewModel.refreshSalutations()
-//        authViewModel.refreshCountries()
-
         setupListeners()
         password_info_button.setOnClickListener {
             (activity as Activity).showInfoDialog(R.string.password_requirements, R.layout.info_password)
@@ -49,17 +40,11 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-//        authViewModel.liveSalutations.observe(this, Observer {
-//            renderSalutations(it ?: return@Observer)
-//        })
-//
-//        authViewModel.liveCountries.observe(this, Observer {
-//            renderCountries(it ?: return@Observer)
-//        })
 
-        authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it ?: return@Observer)
-        })
+        authViewModel.liveRegistration
+                .observe(this, Observer {
+                    renderRegistration(it ?: return@Observer)
+                })
     }
 
     private fun setupListeners() {
@@ -78,65 +63,19 @@ class RegistrationFragment : AuthFragment() {
         }
     }
 
-    private fun renderSalutations(viewState: SgViewState<List<String>>) {
-        when (viewState.state) {
-            State.LOADING -> {
+    private fun renderRegistration(resource: Resource<Boolean, ServerException>) {
 
+        when (resource.state) {
+
+            Resource.LOADING -> {
+                showProgressDialog()
             }
-            State.READY -> {
-                val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
-                adapter.clear()
-                adapter.addAll(viewState.data!!)
-                salutation_spinner.adapter = adapter
-            }
-            State.ERROR -> {
-                showErrorSnackbar(viewState.error)
-            }
-        }
-    }
-
-    private fun renderCountries(viewState: SgViewState<List<Country>>) {
-        when (viewState.state) {
-
-            State.LOADING -> {
-
-                showLoadingButton(true)
-            }
-            State.READY -> {
-
-                showLoadingButton(false)
-
-                val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
-                adapter.clear()
-                for (country in viewState.data!!) {
-                    adapter.add(country.name)
-                }
-                country_spinner.adapter = adapter
-            }
-
-            State.ERROR -> {
-
-                showLoadingButton(false)
-                showErrorSnackbar(viewState.error)
-            }
-        }
-    }
-
-    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
-
-        when (viewState.state) {
-
-            State.LOADING -> {
-
-                context?.showProgressDialog()
-            }
-            State.ERROR -> {
+            Resource.FAILURE -> {
 
                 hideProgressDialog()
-                handleError(viewState.error)
+                handleError(resource.failure())
             }
             else -> {
-
                 hideProgressDialog()
             }
         }
@@ -145,26 +84,15 @@ class RegistrationFragment : AuthFragment() {
     /**
      * handling login response errors
      */
-    private fun handleError(e: SgError?) {
-        val error = e ?: return
+    private fun handleError(e: ServerException) {
 
-        when (error.errorCode) {
+        when (e.code) {
             ErrorCodes.SIGNUP_EMAIL_ALREADY_EXIST -> {
-                email.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+                email.error = e.message
             }
             else -> {
-                showErrorSnackbar(error)
+                showErrorSnackbar(e)
             }
-        }
-    }
-
-    private fun showLoadingButton(loading: Boolean) {
-        if (loading) {
-            progress_bar.visibility = View.VISIBLE
-            email_registration_button.visibility = View.INVISIBLE
-        } else {
-            progress_bar.visibility = View.GONE
-            email_registration_button.visibility = View.VISIBLE
         }
     }
 

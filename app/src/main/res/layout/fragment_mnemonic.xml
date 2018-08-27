@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/cyan_800"
         android:textSize="@dimen/text_size_16"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/question_layout"
@@ -62,6 +62,6 @@
         android:layout_height="@dimen/size_45"
         android:layout_gravity="bottom"
         android:text="@string/mnemonic_next_button"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </FrameLayout>

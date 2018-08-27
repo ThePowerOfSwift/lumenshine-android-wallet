@@ -1,22 +1,17 @@
 package com.soneso.lumenshine.presentation.settings
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isNotEmpty
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.SgActivity
-import com.soneso.lumenshine.presentation.general.SgViewState
-import kotlinx.android.synthetic.main.view_change_password.*
-import com.soneso.lumenshine.presentation.general.State
-import com.soneso.lumenshine.presentation.util.hideProgressDialog
 import com.soneso.lumenshine.presentation.util.showInfoDialog
-import com.soneso.lumenshine.presentation.util.showProgressDialog
+import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.activity_change_password.*
+import kotlinx.android.synthetic.main.view_change_password.*
 import kotlinx.android.synthetic.main.view_change_password_success.*
 
 class ChangePasswordActivity : SgActivity() {
@@ -75,26 +70,21 @@ class ChangePasswordActivity : SgActivity() {
         return match
     }
 
-    private fun renderPassChange(viewState: SgViewState<Unit>) {
+    private fun renderPassChange(resource: Resource<Boolean, ServerException>) {
 
-        when (viewState.state) {
+        when (resource.state) {
 
-            State.READY -> {
-                hideProgressDialog()
+            Resource.SUCCESS -> {
+//                hideProgressDialog()
                 change_password_view.visibility = View.GONE
                 change_password_success_view.visibility = View.VISIBLE
 
             }
-            State.LOADING -> {
-                showProgressDialog()
+            Resource.LOADING -> {
+//                showProgressDialog()
             }
-            State.ERROR -> {
-                hideProgressDialog()
-                if (viewState.error!!.errorCode != 0)
-                    current_pass.error = getString(R.string.error_invalid_current_password)
-                else {
-                    showErrorSnackbar(viewState.error)
-                }
+            Resource.FAILURE -> {
+                showErrorSnackbar(resource.failure())
             }
         }
     }

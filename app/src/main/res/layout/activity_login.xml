@@ -23,6 +23,6 @@
         app:itemIconTint="@color/text_light"
         app:itemTextColor="@color/text_light"
         app:menu="@menu/activity_login_drawer_scenario_1"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary" />
 
 </android.support.v4.widget.DrawerLayout>
