@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class LoginStep2Response {
 
-    var jwtToken = ""
-
     @JsonProperty("mail_confirmed")
     var emailConfirmed = false
 
@@ -14,9 +12,6 @@ class LoginStep2Response {
 
     @JsonProperty("tfa_secret")
     var tfaSecret = ""
-
-    @JsonProperty("tfa_qr_image")
-    var tfaImageData = ""
 
     @JsonProperty("tfa_confirmed")
     var tfaConfirmed = false

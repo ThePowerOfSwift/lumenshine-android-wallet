@@ -54,18 +54,18 @@ object NetworkUtil {
             }
 
             if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_AUTHORIZATION))) {
-                requestBuilder.addHeader(SgApi.HEADER_NAME_AUTHORIZATION, LdSessionProfile.jwtToken)
+                requestBuilder.addHeader(SgApi.HEADER_NAME_AUTHORIZATION, LsSessionProfile.jwtToken)
 
                 if (BuildConfig.DEBUG) {
-                    Log.d("OkHttp", "${SgApi.HEADER_NAME_AUTHORIZATION}:${LdSessionProfile.jwtToken}")
+                    Log.d("OkHttp", "${SgApi.HEADER_NAME_AUTHORIZATION}:${LsSessionProfile.jwtToken}")
                 }
             }
 
             if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_LANGUAGE))) {
-                requestBuilder.addHeader(SgApi.HEADER_NAME_LANGUAGE, LdSessionProfile.langKey)
+                requestBuilder.addHeader(SgApi.HEADER_NAME_LANGUAGE, LsSessionProfile.langKey)
 
                 if (BuildConfig.DEBUG) {
-                    Log.d("OkHttp", "${SgApi.HEADER_NAME_LANGUAGE}:${LdSessionProfile.langKey}")
+                    Log.d("OkHttp", "${SgApi.HEADER_NAME_LANGUAGE}:${LsSessionProfile.langKey}")
                 }
             }
 

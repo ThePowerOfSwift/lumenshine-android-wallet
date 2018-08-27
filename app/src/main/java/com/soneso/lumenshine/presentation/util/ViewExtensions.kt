@@ -1,6 +1,8 @@
 package com.soneso.lumenshine.presentation.util
 
 import android.animation.ObjectAnimator
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.os.Build
 import android.support.annotation.StyleRes
 import android.text.Editable
@@ -42,4 +44,8 @@ fun TextView.setTextStyle(@StyleRes resId: Int) {
         @Suppress("DEPRECATION")
         setTextAppearance(context, resId)
     }
+}
+
+fun <T> LiveData<T>.putValue(value: T) {
+    (this as MutableLiveData).value = value
 }

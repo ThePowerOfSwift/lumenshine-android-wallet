@@ -11,13 +11,9 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.View
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.RegistrationStatus
-import com.soneso.lumenshine.domain.data.UserCredentials
-import com.soneso.lumenshine.persistence.SgPrefs
+import com.soneso.lumenshine.model.entities.RegistrationInfo
 import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.SgActivity
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
 import com.soneso.lumenshine.presentation.util.hasFingerPrintSensor
 import com.soneso.lumenshine.presentation.util.showInfoDialog
 import kotlinx.android.synthetic.main.activity_login.*
@@ -51,13 +47,15 @@ class AuthActivity : SgActivity() {
         setupNavigationView()
 
         authViewModel = ViewModelProviders.of(this, viewModelFactory)[AuthViewModel::class.java]
-        subscribeForLiveData()
         useCase = intent?.getSerializableExtra(EXTRA_USE_CASE) as? UseCase ?: UseCase.AUTH
-        authViewModel.refreshLastUserCredentials()
 
         startPage()
         setupMoreDialog()
         initTabView()
+
+        drawer_layout.post {
+            subscribeForLiveData()
+        }
     }
 
     private fun setupNavigationView() {
@@ -136,30 +134,21 @@ class AuthActivity : SgActivity() {
     private fun subscribeForLiveData() {
 
         authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it ?: return@Observer)
+            renderRegistrationStatus(it)
         })
 
-        authViewModel.liveLastCredentials.observe(this, Observer {
-            renderLastCredentials(it ?: return@Observer)
+        authViewModel.liveLastUsername.observe(this, Observer {
+            renderLastUser(it ?: return@Observer)
         })
     }
 
-    private fun renderLastCredentials(viewState: SgViewState<UserCredentials>) {
+    private fun renderLastUser(username: String) {
 
-        when (viewState.state) {
-            State.LOADING -> {
-            }
-            State.ERROR -> {
-            }
-            State.READY -> {
-
-                val credentials = viewState.data!!
-                if (credentials.username.isNotEmpty() && credentials.tfaSecret.isNotEmpty()) {
-                    showCredentialsSavedView(credentials)
-                } else {
-                    showCredentialsNotSavedView()
-                }
-            }
+        if (username.isNotEmpty()) {
+            showUserSavedView(username)
+        } else {
+            // TODO: cristi.paval, 8/25/18 - this is not working.
+            showUserNotSavedView()
         }
     }
 
@@ -192,7 +181,7 @@ class AuthActivity : SgActivity() {
         setLoginSetUpMenu()
     }
 
-    private fun showCredentialsNotSavedView() {
+    private fun showUserNotSavedView() {
         welcome_text.setText(R.string.welcome)
         nav_header_username.setText(R.string.not_logged_in)
         welcome_user_email_text.visibility = View.INVISIBLE
@@ -202,11 +191,11 @@ class AuthActivity : SgActivity() {
         setLoginScenario1Menu()
     }
 
-    private fun showCredentialsSavedView(credentials: UserCredentials) {
-        nav_header_username.text = credentials.username
+    private fun showUserSavedView(username: String) {
+        nav_header_username.text = username
         welcome_text.setText(R.string.welcome_back)
         welcome_user_email_text.visibility = View.VISIBLE
-        welcome_user_email_text.text = credentials.username
+        welcome_user_email_text.text = username
         login_step_1_tabs.visibility = View.GONE
         login_step_2_tabs.visibility = View.VISIBLE
         set_up_view.visibility = View.GONE
@@ -215,27 +204,15 @@ class AuthActivity : SgActivity() {
 
     }
 
-    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
+    private fun renderRegistrationStatus(s: RegistrationInfo?) {
 
-        when (viewState.state) {
-            State.READY -> {
-
-                handleRegistrationStatus(viewState.data!!)
-            }
-            else -> {
-                // cristi.paval, 5/3/18 - this should be rendered in subclasses
-            }
-        }
-    }
-
-    private fun handleRegistrationStatus(status: RegistrationStatus) {
-
+        val status = s ?: return
         when {
             !status.tfaConfirmed -> {
                 showSetUpView()
                 replaceFragment(TfaConfirmationFragment.newInstance(), TfaConfirmationFragment.TAG)
             }
-            !status.emailConfirmed -> {
+            !status.mailConfirmed -> {
                 showSetUpView()
                 replaceFragment(MailConfirmationFragment.newInstance(), MailConfirmationFragment.TAG)
             }
@@ -243,10 +220,10 @@ class AuthActivity : SgActivity() {
                 showSetUpView()
                 replaceFragment(MnemonicFragment.newInstance(), MnemonicFragment.TAG)
             }
-            status.fingerprintSetupRequested -> {
-                finishAffinity()
-                MainActivity.startInstanceWithFingerprintSetup(this)
-            }
+//            status.fingerprintSetupRequested -> {
+//                finishAffinity()
+//                MainActivity.startInstanceWithFingerprintSetup(this)
+//            }
             else -> {
                 handleRegistrationCompleted()
             }
@@ -311,9 +288,10 @@ class AuthActivity : SgActivity() {
                     tab_login.isChecked = true
                     tab_sign_up.isChecked = false
                     tab_more.isChecked = false
-                    SgPrefs.removeUserCrendentials()
-                    authViewModel.refreshLastUserCredentials()
-                    replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
+                    // TODO: cristi.paval, 8/25/18 - implement logout accordingly
+//                    SgPrefs.removeUserCrendentials()
+//                    authViewModel.refreshLastUserCredentials()
+//                    replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
                 }
                 tab_fingerprint -> {
                     tab_logout.isChecked = false

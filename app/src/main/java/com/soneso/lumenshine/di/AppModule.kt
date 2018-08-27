@@ -9,7 +9,7 @@ import com.soneso.lumenshine.networking.api.SgApi
 import com.soneso.lumenshine.networking.dto.Parse
 import com.soneso.lumenshine.persistence.SgPrefs
 import com.soneso.lumenshine.persistence.room.DbNames
-import com.soneso.lumenshine.persistence.room.LdDatabase
+import com.soneso.lumenshine.persistence.room.LsDatabase
 import dagger.Module
 import dagger.Provides
 import org.stellar.sdk.Server
@@ -43,11 +43,11 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideDatabase(): LdDatabase {
+    fun provideDatabase(): LsDatabase {
 
         val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appPass))
 
-        return Room.databaseBuilder(context, LdDatabase::class.java, DbNames.DB_NAME)
+        return Room.databaseBuilder(context, LsDatabase::class.java, DbNames.DB_NAME)
                 .openHelperFactory(factory)
                 .allowMainThreadQueries()
                 .build()

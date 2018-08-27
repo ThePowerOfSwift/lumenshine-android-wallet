@@ -177,5 +177,20 @@ class UserSecurityHelper(private val pass: CharArray) {
     companion object {
 
         const val TAG = "UserSecurityHelper"
+
+        fun mockUserSecurity() = UserSecurity(
+                "",
+                "",
+                "",
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0),
+                ByteArray(0)
+        )
     }
 }

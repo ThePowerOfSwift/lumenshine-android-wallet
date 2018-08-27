@@ -18,6 +18,6 @@ fun WalletDto.toWallet(): Wallet {
 fun AccountResponse.toStellarWallet(): StellarWallet {
 
     return StellarWallet(
-            keypair
+            String(keypair.publicKey)
     )
 }

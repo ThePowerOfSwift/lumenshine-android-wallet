@@ -7,7 +7,7 @@ import com.soneso.lumenshine.model.wrapper.toWallet
 import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.WalletApi
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.persistence.room.LdDatabase
+import com.soneso.lumenshine.persistence.room.LsDatabase
 import com.soneso.lumenshine.util.*
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -20,7 +20,7 @@ class WalletRepository @Inject constructor(
         private val networkStateObserver: NetworkStateObserver,
         r: Retrofit,
         private val stellarServer: Server,
-        db: LdDatabase
+        db: LsDatabase
 ) {
 
     private val walletApi = r.create(WalletApi::class.java)

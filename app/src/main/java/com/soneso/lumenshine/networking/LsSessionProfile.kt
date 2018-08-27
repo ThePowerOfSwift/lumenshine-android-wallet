@@ -5,9 +5,9 @@ import com.soneso.lumenshine.persistence.SgPrefs
 /**
  * Object holding key data needed for getting the user data from server. Some data such as password are kept in RAM memory.
  */
-object LdSessionProfile {
+object LsSessionProfile {
 
-    const val TAG = "LdSessionProfile"
+    const val TAG = "LsSessionProfile"
 
     var password: CharSequence = ""
 

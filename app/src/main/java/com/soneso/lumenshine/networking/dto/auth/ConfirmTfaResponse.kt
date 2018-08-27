@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class ConfirmTfaResponse {
 
-    var jwtToken = ""
-
     @JsonProperty("mail_confirmed")
     var emailConfirmed = false
 

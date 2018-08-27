@@ -11,14 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.ErrorCodes
-import com.soneso.lumenshine.domain.data.RegistrationStatus
-import com.soneso.lumenshine.domain.data.SgError
-import com.soneso.lumenshine.domain.data.TfaSecret
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
 import com.soneso.lumenshine.presentation.util.hideProgressDialog
 import com.soneso.lumenshine.presentation.util.showProgressDialog
+import com.soneso.lumenshine.util.LsException
+import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 
 /**
@@ -43,8 +39,8 @@ class TfaConfirmationFragment : AuthFragment() {
             renderTfaSecret(it ?: return@Observer)
         })
 
-        authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it ?: return@Observer)
+        authViewModel.liveTfaConfirmation.observe(this, Observer {
+            renderTfaConfirmation(it ?: return@Observer)
         })
 
     }
@@ -64,30 +60,30 @@ class TfaConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun renderTfaSecret(viewState: SgViewState<TfaSecret>) {
+    private fun renderTfaSecret(resource: Resource<String, LsException>) {
 
-        when (viewState.state) {
-            State.ERROR -> {
-                handleError(viewState.error)
+        when (resource.state) {
+            Resource.FAILURE -> {
+                handleError(resource.failure())
             }
-            State.LOADING -> {
+            Resource.LOADING -> {
             }
-            State.READY -> {
-                setupToken(viewState.data!!)
+            Resource.SUCCESS -> {
+                setupToken(resource.success())
             }
         }
     }
 
-    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
-        when (viewState.state) {
-            State.ERROR -> {
+    private fun renderTfaConfirmation(resource: Resource<Boolean, LsException>) {
+        when (resource.state) {
+            Resource.FAILURE -> {
                 hideProgressDialog()
-                handleError(viewState.error)
+                handleError(resource.failure())
             }
-            State.LOADING -> {
+            Resource.LOADING -> {
                 context?.showProgressDialog()
             }
-            State.READY -> {
+            Resource.SUCCESS -> {
                 hideProgressDialog()
             }
         }
@@ -106,34 +102,28 @@ class TfaConfirmationFragment : AuthFragment() {
     /**
      * handling response errors
      */
-    private fun handleError(e: SgError?) {
-        val error = e ?: return
-
-        when (error.errorCode) {
-            ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfa_code_view.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
-            }
-            else -> {
-                showErrorSnackbar(error)
-            }
-        }
+    private fun handleError(e: LsException) {
+        // TODO: cristi.paval, 8/25/18 - handle errors
+//        val error = e ?: return
+//
+//        when (error.errorCode) {
+//            ErrorCodes.LOGIN_INVALID_2FA -> {
+//                tfa_code_view.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+//            }
+//            else -> {
+//                showErrorSnackbar(error)
+//            }
+//        }
     }
 
-    private fun setupToken(tfaSecret: TfaSecret) {
+    private fun setupToken(tfaSecret: String) {
 
-//        qr_code_view.post {
-//            val params = qr_code_view.layoutParams
-//            params.height = qr_code_view.width
-//            qr_code_view.requestLayout()
-//
-//            qr_code_view.setImageBitmap(BitmapFactory.decodeByteArray(tfaSecret.imageData, 0, tfaSecret.imageData.size))
-//        }
         token_view.keyListener = null
-        token_view.text = tfaSecret.secretCode
+        token_view.text = tfaSecret
         copy_button.setOnClickListener {
 
             val clipboard = context?.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("", tfaSecret.secretCode)
+            val clip = ClipData.newPlainText("", tfaSecret)
             clipboard.primaryClip = clip
             showSnackbar(getString(R.string.secret_copied))
         }

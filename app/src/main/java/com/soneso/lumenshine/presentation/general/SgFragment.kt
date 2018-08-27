@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.SgError
+import com.soneso.lumenshine.util.LsException
 
 /**
  * Base Fragment for Lumenshine App.
@@ -20,7 +20,7 @@ open class SgFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModelFactory = SgViewModelFactory(sgActivity.ldApp.appComponent)
+        viewModelFactory = SgViewModelFactory(sgActivity.lsApp.appComponent)
     }
 
     fun showSnackbar(text: CharSequence) {
@@ -30,11 +30,12 @@ open class SgFragment : Fragment() {
                 .show()
     }
 
-    fun showErrorSnackbar(e: SgError?) {
-        val error = e ?: return
+    fun showErrorSnackbar(e: LsException?) {
+
         val view = view ?: return
-        val snackbar = if (error.errorResId > 0) Snackbar.make(view, error.errorResId, Snackbar.LENGTH_LONG) else Snackbar.make(view, error.message!!, Snackbar.LENGTH_LONG)
-        snackbar.setAction(R.string.ok, null)
+        val message = e?.throwable?.message ?: getString(R.string.unknown_error)
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                .setAction(R.string.ok, null)
                 .show()
     }
 }

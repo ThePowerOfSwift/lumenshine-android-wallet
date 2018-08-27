@@ -12,6 +12,9 @@ open class Resource<SuccessType, FailureType>(
 
     fun success() = data!!
 
+    val isSuccessful: Boolean
+        get() = state == SUCCESS
+
     fun <NewSuccessType, NewFailureType> map(
             successMapper: ((SuccessType) -> NewSuccessType),
             failureMapper: ((FailureType) -> NewFailureType)

@@ -76,12 +76,6 @@
 
         </FrameLayout>
 
-        <!--<Button-->
-        <!--android:id="@+id/open_mail"-->
-        <!--android:layout_width="@dimen/size_200"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/open_mail" />-->
-
         <Button
             android:id="@+id/resend_mail"
             android:layout_width="wrap_content"

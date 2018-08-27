@@ -1,7 +1,6 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -9,15 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import com.google.authenticator.OtpProvider
-
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.ErrorCodes
-import com.soneso.lumenshine.domain.data.RegistrationStatus
-import com.soneso.lumenshine.domain.data.SgError
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
-import com.soneso.lumenshine.presentation.util.decodeBase32
+import com.soneso.lumenshine.model.entities.RegistrationInfo
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_finger_print.*
 
 
@@ -27,8 +21,7 @@ import kotlinx.android.synthetic.main.fragment_finger_print.*
  */
 class FingerPrintFragment : AuthFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_finger_print, container, false)
     }
@@ -52,10 +45,7 @@ class FingerPrintFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-
-        authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it ?: return@Observer)
-        })
+        // TODO: cristi.paval, 8/27/18 - subscribe here accordingly
     }
 
     private fun showLoadingButton(loading: Boolean) {
@@ -68,17 +58,17 @@ class FingerPrintFragment : AuthFragment() {
         }
     }
 
-    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
+    private fun renderRegistrationStatus(resource: Resource<RegistrationInfo, ServerException>) {
 
-        when (viewState.state) {
-            State.LOADING -> {
+        when (resource.state) {
+            Resource.LOADING -> {
 
                 showLoadingButton(true)
             }
-            State.ERROR -> {
+            Resource.FAILURE -> {
 
                 showLoadingButton(false)
-               handleError(viewState.error)
+                handleError(resource.failure())
             }
             else -> {
 
@@ -90,31 +80,32 @@ class FingerPrintFragment : AuthFragment() {
     /**
      * handling login response errors
      */
-    private fun handleError(e: SgError?) {
-        val error = e ?: return
-
-        when (error.errorCode) {
-            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
-                showErrorSnackbar(error)
-            }
-            ErrorCodes.LOGIN_INVALID_2FA -> {
-                showErrorSnackbar(error)
-            }
-            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                password.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
-            }
-            else -> {
-                showErrorSnackbar(error)
-            }
-        }
+    private fun handleError(e: ServerException) {
+        // TODO: cristi.paval, 8/25/18 - error handling here
+//        val error = e ?: return
+//
+//        when (error.errorCode) {
+//            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
+//                showErrorSnackbar(error)
+//            }
+//            ErrorCodes.LOGIN_INVALID_2FA -> {
+//                showErrorSnackbar(error)
+//            }
+//            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
+//                password.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+//            }
+//            else -> {
+//                showErrorSnackbar(error)
+//            }
+//        }
     }
 
     private fun attemptLogin() {
 
-        val credentials = authViewModel.liveLastCredentials.value?.data ?: return
-        val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret.decodeBase32()) ?: return
-
-        authViewModel.loginAndFingerprintSetup(credentials.username, password.trimmedText, tfaCode)
+//        val username = authViewModel.liveLastUsername.value ?: return
+//        val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret.decodeBase32()) ?: return
+//
+//        authViewModel.loginAndFingerprintSetup(credentials.username, password.trimmedText, tfaCode)
     }
 
     companion object {

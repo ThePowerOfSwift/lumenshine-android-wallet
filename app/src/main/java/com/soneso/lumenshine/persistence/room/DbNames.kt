@@ -25,4 +25,13 @@ object DbNames {
     const val COLUMN_IN_HOME_SCREEN = "shown_in_home_screen"
 
     const val TABLE_STELLAR_ACCOUNTS = "stellar_accounts"
+
+    const val TABLE_REGISTRATION_STATUS = "registration_status"
+    const val COLUMN_MAIL_CONFIRMATION = "mail_confirmation"
+    const val COLUMN_TFA_CONFIRMATION = "tfa_confirmation"
+    const val COLUMN_MNEMONIC_CONFIRMATION = "mnemonic_confirmation"
+
+    const val TABLE_TFA_DATA = "tfa_data"
+    const val COLUMN_TFA_SECRET = "tfa_secret"
+    const val COLUMN_TFA_IMAGE = "tfa_image"
 }

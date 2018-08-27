@@ -8,17 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import com.google.authenticator.OtpProvider
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
-import com.soneso.lumenshine.domain.data.RegistrationStatus
-import com.soneso.lumenshine.domain.data.SgError
-import com.soneso.lumenshine.persistence.SgPrefs
-import com.soneso.lumenshine.presentation.general.SgViewState
-import com.soneso.lumenshine.presentation.general.State
-import com.soneso.lumenshine.presentation.util.decodeBase32
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.util.hideProgressDialog
 import com.soneso.lumenshine.presentation.util.showProgressDialog
+import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_password.*
 
 
@@ -48,33 +43,31 @@ class PasswordFragment : AuthFragment() {
         })
         submit_button.setOnClickListener { attemptLogin() }
         lost_password_button.setOnClickListener {
-            SgPrefs.removeUserCrendentials()
-            authViewModel.refreshLastUserCredentials()
-            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.PASSWORD), LostCredentialFragment.TAG)
+            // TODO: cristi.paval, 8/25/18 - this anti pattern. Implement it accordingly.
+//            SgPrefs.removeUserCrendentials()
+//            authViewModel.refreshLastUserCredentials()
+//            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.PASSWORD), LostCredentialFragment.TAG)
         }
     }
 
     private fun subscribeForLiveData() {
 
-        authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it ?: return@Observer)
+        authViewModel.liveLogin.observe(this, Observer {
+            renderLoginStatus(it ?: return@Observer)
         })
     }
 
-    private fun renderRegistrationStatus(viewState: SgViewState<RegistrationStatus>) {
+    private fun renderLoginStatus(resource: Resource<Boolean, ServerException>) {
 
-        when (viewState.state) {
-            State.LOADING -> {
-
+        when (resource.state) {
+            Resource.LOADING -> {
                 context?.showProgressDialog()
             }
-            State.ERROR -> {
-
+            Resource.FAILURE -> {
                 hideProgressDialog()
-                handleError(viewState.error)
+                handleError(resource.failure())
             }
             else -> {
-
                 hideProgressDialog()
             }
         }
@@ -83,31 +76,23 @@ class PasswordFragment : AuthFragment() {
     /**
      * handling login response errors
      */
-    private fun handleError(e: SgError?) {
-        val error = e ?: return
+    private fun handleError(e: ServerException) {
 
-        when (error.errorCode) {
-            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
-                showErrorSnackbar(error)
-            }
-            ErrorCodes.LOGIN_INVALID_2FA -> {
-                showErrorSnackbar(error)
-            }
+        when (e.code) {
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                password.error = if (error.errorResId == 0) error.message!! else getString(error.errorResId)
+                password.error = e.message
             }
             else -> {
-                showErrorSnackbar(error)
+                showErrorSnackbar(e)
             }
         }
     }
 
     private fun attemptLogin() {
 
-        val credentials = authViewModel.liveLastCredentials.value?.data ?: return
-        val tfaCode = OtpProvider.currentTotpCode(credentials.tfaSecret.decodeBase32()) ?: return
+        val username = authViewModel.liveLastUsername.value ?: return
 
-        authViewModel.login(credentials.username, password.trimmedText, tfaCode)
+        authViewModel.login(username, password.trimmedText)
     }
 
     companion object {

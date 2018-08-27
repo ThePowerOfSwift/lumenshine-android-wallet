@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.networking.dto
+package com.soneso.lumenshine.networking.dto.exceptions
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
