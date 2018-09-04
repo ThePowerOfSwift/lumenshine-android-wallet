@@ -102,7 +102,7 @@ interface UserApi {
     @FormUrlEncoded
     @POST("/portal/user/dashboard/tfa_secret")
     fun getTfaSecret(
-            @Field("key") publicKey188: String
+            @Field("public_key_188") publicKey188: String
     ): Single<Response<GetTfaRequestResponse>>
 
     @GET("/portal/user/dashboard/user_auth_data")
