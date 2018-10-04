@@ -1,9 +1,9 @@
 package com.soneso.lumenshine.presentation.settings
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.MainActivity

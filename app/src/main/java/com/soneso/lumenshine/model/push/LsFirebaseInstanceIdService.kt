@@ -6,9 +6,6 @@ import com.google.firebase.iid.FirebaseInstanceIdService
  * Firebase instance id service.
  * Created by cristi.paval on 3/12/18.
  */
-class SgFirebaseInstanceIdService : FirebaseInstanceIdService() {
+class LsFirebaseInstanceIdService : FirebaseInstanceIdService() {
 
-    override fun onTokenRefresh() {
-        super.onTokenRefresh()
-    }
 }

@@ -1,12 +1,12 @@
 package com.soneso.lumenshine.presentation.settings
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException

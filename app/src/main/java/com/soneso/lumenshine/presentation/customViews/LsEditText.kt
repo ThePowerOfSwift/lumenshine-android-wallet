@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.widget.EditText
 import com.soneso.lumenshine.R
 
-open class SgEditText @JvmOverloads constructor(
+open class LsEditText @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle
 ) : EditText(context, attrs, defStyleAttr) {
     init {
@@ -15,21 +15,15 @@ open class SgEditText @JvmOverloads constructor(
 
     private fun applyAttrs(attrs: AttributeSet?) {
         val attributeSet = attrs ?: return
-        val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.SgEditText)
-        val bordered = typedArray.getBoolean(R.styleable.SgEditText_bordered, false)
+        val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.LsEditText)
+        val bordered = typedArray.getBoolean(R.styleable.LsEditText_bordered, false)
         if (bordered) {
-            background = resources.getDrawable(R.drawable.edittext_border_normal)
-        } else {
-
+            setBackgroundResource(R.drawable.edittext_border_normal)
         }
         typedArray.recycle()
     }
 
     fun showError(show: Boolean) {
-        background = if (show) {
-            resources.getDrawable(R.drawable.edittext_border_error)
-        } else {
-            resources.getDrawable(R.drawable.edittext_border_normal)
-        }
+        setBackgroundResource(if (show) R.drawable.edittext_border_error else R.drawable.edittext_border_normal)
     }
 }

@@ -2,17 +2,17 @@ package com.soneso.lumenshine.presentation.auth
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.general.SgFragment
+import com.soneso.lumenshine.presentation.general.LsFragment
 
 /**
  * Fragment.
  * Created by cristi.paval on 3/21/18.
  */
-open class AuthFragment : SgFragment() {
+open class AuthFragment : LsFragment() {
 
     protected val authViewModel: AuthViewModel
         get() = authActivity.authViewModel

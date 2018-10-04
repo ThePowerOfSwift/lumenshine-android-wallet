@@ -12,7 +12,7 @@
         <attr name="android:imeActionLabel" />
     </declare-styleable>
 
-    <declare-styleable name="SgTabView">
+    <declare-styleable name="LsTabView">
         <attr name="tab_text" format="reference" />
         <attr name="tab_icon" format="reference" />
         <attr name="tab_checked_color" format="reference" />
@@ -20,7 +20,7 @@
         <attr name="tab_checked" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="SgEditText">
+    <declare-styleable name="LsEditText">
         <attr name="bordered" format="boolean" />
     </declare-styleable>
 

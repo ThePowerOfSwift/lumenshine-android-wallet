@@ -1,13 +1,13 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException

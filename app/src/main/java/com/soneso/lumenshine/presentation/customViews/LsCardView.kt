@@ -2,13 +2,12 @@ package com.soneso.lumenshine.presentation.customViews
 
 import android.content.Context
 import android.graphics.Color
-import android.support.v7.widget.CardView
 import android.util.AttributeSet
 import com.soneso.lumenshine.R
 
 open class LsCardView
 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : CardView(context, attrs, defStyleAttr) {
+    : androidx.cardview.widget.CardView(context, attrs, defStyleAttr) {
 
     init {
         radius = resources.getDimension(R.dimen.size_5)

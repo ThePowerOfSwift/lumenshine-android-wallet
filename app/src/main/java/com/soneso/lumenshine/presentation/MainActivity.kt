@@ -3,14 +3,12 @@ package com.soneso.lumenshine.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.general.LsActivity
-import com.soneso.lumenshine.presentation.general.SgFragment
+import com.soneso.lumenshine.presentation.general.LsFragment
 import com.soneso.lumenshine.presentation.home.HomeFragment
 import com.soneso.lumenshine.presentation.settings.FingerPrintSetupActivity
 import com.soneso.lumenshine.presentation.settings.SettingsFragment
@@ -19,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
-class MainActivity : LsActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : LsActivity(), com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +26,7 @@ class MainActivity : LsActivity(), NavigationView.OnNavigationItemSelectedListen
 
         fab.setOnClickListener { view ->
 
-            Snackbar.make(view, "No action set on this button!", Snackbar.LENGTH_LONG)
+            com.google.android.material.snackbar.Snackbar.make(view, "No action set on this button!", com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
@@ -101,7 +99,7 @@ class MainActivity : LsActivity(), NavigationView.OnNavigationItemSelectedListen
         return true
     }
 
-    private fun replaceFragment(fragment: SgFragment, tag: String) {
+    private fun replaceFragment(fragment: LsFragment, tag: String) {
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, tag)

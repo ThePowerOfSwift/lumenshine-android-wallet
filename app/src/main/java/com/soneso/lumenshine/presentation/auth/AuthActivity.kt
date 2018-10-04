@@ -1,20 +1,17 @@
 package com.soneso.lumenshine.presentation.auth
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
 import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.LsActivity
-import com.soneso.lumenshine.presentation.util.hasFingerPrintSensor
 import com.soneso.lumenshine.presentation.util.showInfoDialog
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.app_bar_login.*
@@ -31,7 +28,7 @@ class AuthActivity : LsActivity() {
     lateinit var useCase: UseCase
         private set
 
-    private lateinit var moreDialog: BottomSheetDialog
+    private lateinit var moreDialog: com.google.android.material.bottomsheet.BottomSheetDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +57,7 @@ class AuthActivity : LsActivity() {
 
     private fun setupNavigationView() {
 
-        val navItemListener = NavigationView.OnNavigationItemSelectedListener { item ->
+        val navItemListener = com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener { item ->
             clearButtons()
             // Handle navigation view item clicks here.
             when (item.itemId) {
@@ -247,7 +244,7 @@ class AuthActivity : LsActivity() {
      * setting up the More BottomSheetDialog
      */
     private fun setupMoreDialog() {
-        moreDialog = BottomSheetDialog(this)
+        moreDialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.dialog_more, null)
         moreDialog.setContentView(view)
     }
@@ -317,10 +314,10 @@ class AuthActivity : LsActivity() {
         tab_logout.setOnClickListener(tabClickListener)
         tab_fingerprint.setOnClickListener(tabClickListener)
 
-        if (this.hasFingerPrintSensor().not())
-            tab_fingerprint.visibility = View.GONE
-        else
-            tab_fingerprint.visibility = View.VISIBLE
+//        if (this.hasFingerPrintSensor().not())
+//            tab_fingerprint.visibility = View.GONE
+//        else
+//            tab_fingerprint.visibility = View.VISIBLE
 
     }
 

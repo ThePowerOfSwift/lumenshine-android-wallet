@@ -2,9 +2,8 @@ package com.soneso.lumenshine.presentation.general
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.util.LsException
@@ -19,18 +18,18 @@ open class LsActivity : AppCompatActivity() {
     val lsApp: LsApp
         get() = application as LsApp
 
-    lateinit var viewModelFactory: SgViewModelFactory
+    lateinit var viewModelFactory: LsViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModelFactory = SgViewModelFactory(lsApp.appComponent)
+        viewModelFactory = LsViewModelFactory(lsApp.appComponent)
     }
 
     fun showSnackbar(text: CharSequence) {
 
         val view = findViewById<ViewGroup>(android.R.id.content).getChildAt(0) ?: return
-        Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+        com.google.android.material.snackbar.Snackbar.make(view, text, com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
                 .setAction(R.string.ok, null)
                 .show()
     }

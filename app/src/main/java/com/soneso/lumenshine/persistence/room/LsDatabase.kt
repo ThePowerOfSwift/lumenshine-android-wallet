@@ -1,7 +1,7 @@
 package com.soneso.lumenshine.persistence.room
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.entities.Wallet

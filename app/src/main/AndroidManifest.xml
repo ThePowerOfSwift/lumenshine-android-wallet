@@ -19,7 +19,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".model.push.SgFirebaseInstanceIdService"
+            android:name=".model.push.LsFirebaseInstanceIdService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

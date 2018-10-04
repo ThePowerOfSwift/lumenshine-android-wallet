@@ -1,15 +1,15 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException

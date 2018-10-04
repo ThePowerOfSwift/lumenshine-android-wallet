@@ -1,8 +1,6 @@
 package com.soneso.lumenshine.presentation.general
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.util.LsException
 
@@ -10,9 +8,9 @@ import com.soneso.lumenshine.util.LsException
  * Base Fragment for Lumenshine App.
  * Created by cristi.paval on 3/8/18.
  */
-open class SgFragment : Fragment() {
+open class LsFragment : androidx.fragment.app.Fragment() {
 
-    lateinit var viewModelFactory: SgViewModelFactory
+    lateinit var viewModelFactory: LsViewModelFactory
 
     private val lsActivity: LsActivity
         get() = activity as LsActivity
@@ -20,12 +18,12 @@ open class SgFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModelFactory = SgViewModelFactory(lsActivity.lsApp.appComponent)
+        viewModelFactory = LsViewModelFactory(lsActivity.lsApp.appComponent)
     }
 
     fun showSnackbar(text: CharSequence) {
         val view = view ?: return
-        Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+        com.google.android.material.snackbar.Snackbar.make(view, text, com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
                 .setAction(R.string.ok, null)
                 .show()
     }
@@ -34,7 +32,7 @@ open class SgFragment : Fragment() {
 
         val view = view ?: return
         val message = e?.throwable?.message ?: getString(R.string.unknown_error)
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+        com.google.android.material.snackbar.Snackbar.make(view, message, com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
                 .setAction(R.string.ok, null)
                 .show()
     }

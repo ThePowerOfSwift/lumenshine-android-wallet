@@ -1,15 +1,15 @@
 package com.soneso.lumenshine.presentation.customViews
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.Checkable
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.soneso.lumenshine.R
 import kotlinx.android.synthetic.main.sg_tab_view.view.*
 
-class SgTabView @JvmOverloads constructor(
+class LsTabView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyle: Int = 0
@@ -41,16 +41,16 @@ class SgTabView @JvmOverloads constructor(
 
         attrs.let {
             val typedArray = context.obtainStyledAttributes(it,
-                    R.styleable.SgTabView, 0, 0)
+                    R.styleable.LsTabView, 0, 0)
             val title = resources.getText(typedArray
                     .getResourceId(R.styleable
-                            .SgTabView_tab_text,
+                            .LsTabView_tab_text,
                             R.string.menu_item_home))
-            val iconResourceId = typedArray.getResourceId(R.styleable.SgTabView_tab_icon, R.drawable.ic_action_home)
+            val iconResourceId = typedArray.getResourceId(R.styleable.LsTabView_tab_icon, R.drawable.ic_action_home)
             tab_icon.setImageResource(iconResourceId)
-            checkedColor = ContextCompat.getColor(context, typedArray.getResourceId(R.styleable.SgTabView_tab_checked_color, R.color.colorAccent))
-            uncheckedColor = ContextCompat.getColor(context, typedArray.getResourceId(R.styleable.SgTabView_tab_unchecked_color, R.color.text_light))
-            this.checked = typedArray.getBoolean(R.styleable.SgTabView_tab_checked, false)
+            checkedColor = ContextCompat.getColor(context, typedArray.getResourceId(R.styleable.LsTabView_tab_checked_color, R.color.colorAccent))
+            uncheckedColor = ContextCompat.getColor(context, typedArray.getResourceId(R.styleable.LsTabView_tab_unchecked_color, R.color.text_light))
+            this.checked = typedArray.getBoolean(R.styleable.LsTabView_tab_checked, false)
 
             tab_text.text = title
 

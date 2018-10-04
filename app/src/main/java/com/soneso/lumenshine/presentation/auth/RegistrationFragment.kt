@@ -1,17 +1,16 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -35,7 +34,7 @@ class RegistrationFragment : AuthFragment() {
 
         setupListeners()
         password_info_button.setOnClickListener {
-            (activity as Activity).showInfoDialog(R.string.password_requirements, R.layout.info_password)
+            activity?.showInfoDialog(R.string.password_requirements, R.layout.info_password)
         }
     }
 

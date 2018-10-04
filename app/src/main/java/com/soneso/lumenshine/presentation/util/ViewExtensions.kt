@@ -1,14 +1,14 @@
 package com.soneso.lumenshine.presentation.util
 
 import android.animation.ObjectAnimator
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.os.Build
-import android.support.annotation.StyleRes
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.StyleRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 /**
  * Extensions.

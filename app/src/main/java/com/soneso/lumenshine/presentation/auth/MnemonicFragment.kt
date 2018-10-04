@@ -1,16 +1,16 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.customViews.SgEditText
-import com.soneso.lumenshine.presentation.customViews.SgTextView
+import com.soneso.lumenshine.presentation.customViews.LsEditText
+import com.soneso.lumenshine.presentation.customViews.LsTextView
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import com.soneso.lumenshine.presentation.util.showInfoDialog
 import com.soneso.lumenshine.util.LsException
@@ -28,8 +28,8 @@ import kotlinx.android.synthetic.main.view_mnemonic_words.*
 class MnemonicFragment : AuthFragment() {
 
     private lateinit var quizHelper: MnemonicQuizHelper
-    private val editTexts = ArrayList<SgEditText>()
-    private val wordTexts = ArrayList<SgTextView>()
+    private val editTexts = ArrayList<LsEditText>()
+    private val wordTexts = ArrayList<LsTextView>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_mnemonic, container, false)

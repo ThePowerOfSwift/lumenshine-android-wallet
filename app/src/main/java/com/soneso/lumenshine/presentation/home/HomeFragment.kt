@@ -2,13 +2,12 @@ package com.soneso.lumenshine.presentation.home
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.general.SgFragment
+import com.soneso.lumenshine.presentation.general.LsFragment
 import com.soneso.lumenshine.presentation.util.forwardToBrowser
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -16,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 /**
  * A simple [Fragment] subclass.
  */
-class HomeFragment : SgFragment() {
+class HomeFragment : LsFragment() {
 
     private lateinit var adapter: HomeFeedAdapter
 
@@ -29,7 +28,7 @@ class HomeFragment : SgFragment() {
     }
 
     private fun setupFeedRecyclerView() {
-        rv_feed.layoutManager = LinearLayoutManager(context)
+        rv_feed.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         adapter = HomeFeedAdapter()
         rv_feed.adapter = adapter
         adapter.onBlogLinkClickListener = {

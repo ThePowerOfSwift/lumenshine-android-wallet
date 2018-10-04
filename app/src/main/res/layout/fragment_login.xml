@@ -8,7 +8,7 @@
     android:padding="@dimen/size_25"
     tools:context="com.soneso.lumenshine.presentation.auth.LoginFragment">
 
-    <com.soneso.lumenshine.presentation.customViews.SgTextView
+    <com.soneso.lumenshine.presentation.customViews.LsTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"

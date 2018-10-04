@@ -1,7 +1,7 @@
 package com.soneso.lumenshine
 
 import android.content.Context
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.soneso.lumenshine.di.AppModule
 import com.soneso.lumenshine.di.DaggerAppComponent
 import org.bouncycastle.jce.provider.BouncyCastleProvider

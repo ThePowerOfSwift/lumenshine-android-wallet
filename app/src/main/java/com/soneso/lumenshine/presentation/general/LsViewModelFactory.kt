@@ -1,13 +1,13 @@
 package com.soneso.lumenshine.presentation.general
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.soneso.lumenshine.di.AppComponent
 import com.soneso.lumenshine.presentation.auth.AuthViewModel
 import com.soneso.lumenshine.presentation.settings.SettingsViewModel
 import com.soneso.lumenshine.presentation.wallets.WalletsViewModel
 
-class SgViewModelFactory(
+class LsViewModelFactory(
         private val appComponent: AppComponent
 ) : ViewModelProvider.Factory {
 
