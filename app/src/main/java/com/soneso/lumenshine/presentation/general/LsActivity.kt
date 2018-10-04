@@ -14,7 +14,7 @@ import com.soneso.lumenshine.util.LsException
  * Created by cristi.paval on 3/12/18.
  */
 @SuppressLint("Registered")
-open class SgActivity : AppCompatActivity() {
+open class LsActivity : AppCompatActivity() {
 
     val lsApp: LsApp
         get() = application as LsApp

@@ -18,11 +18,11 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/colorPrimary"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:itemIconTint="@color/text_light"
         app:itemTextColor="@color/text_light"
-        app:menu="@menu/activity_login_drawer_scenario_1"
-        android:background="@color/colorPrimary" />
+        app:menu="@menu/activity_login_drawer_scenario_1" />
 
 </android.support.v4.widget.DrawerLayout>

@@ -14,13 +14,13 @@ open class SgFragment : Fragment() {
 
     lateinit var viewModelFactory: SgViewModelFactory
 
-    private val sgActivity: SgActivity
-        get() = activity as SgActivity
+    private val lsActivity: LsActivity
+        get() = activity as LsActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModelFactory = SgViewModelFactory(sgActivity.lsApp.appComponent)
+        viewModelFactory = SgViewModelFactory(lsActivity.lsApp.appComponent)
     }
 
     fun showSnackbar(text: CharSequence) {

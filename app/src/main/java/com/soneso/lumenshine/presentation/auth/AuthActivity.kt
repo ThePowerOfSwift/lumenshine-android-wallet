@@ -13,7 +13,7 @@ import android.view.View
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.presentation.MainActivity
-import com.soneso.lumenshine.presentation.general.SgActivity
+import com.soneso.lumenshine.presentation.general.LsActivity
 import com.soneso.lumenshine.presentation.util.hasFingerPrintSensor
 import com.soneso.lumenshine.presentation.util.showInfoDialog
 import kotlinx.android.synthetic.main.activity_login.*
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 /**
  * A login screen that offers login via email/password.
  */
-class AuthActivity : SgActivity() {
+class AuthActivity : LsActivity() {
 
 
     lateinit var authViewModel: AuthViewModel

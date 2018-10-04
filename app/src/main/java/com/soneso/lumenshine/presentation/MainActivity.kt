@@ -1,7 +1,5 @@
 package com.soneso.lumenshine.presentation
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +8,8 @@ import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
-import com.google.firebase.iid.FirebaseInstanceId
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.general.SgActivity
+import com.soneso.lumenshine.presentation.general.LsActivity
 import com.soneso.lumenshine.presentation.general.SgFragment
 import com.soneso.lumenshine.presentation.home.HomeFragment
 import com.soneso.lumenshine.presentation.settings.FingerPrintSetupActivity
@@ -22,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
-class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : LsActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +28,7 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
 
         fab.setOnClickListener { view ->
 
-            copyFcmIdToClipboard()
-
-            shareFcmId()
-
-            Snackbar.make(view, "Your FCM device id was copied to clipboard!", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "No action set on this button!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
@@ -55,20 +48,6 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
             if (intent.getBooleanExtra(EXTRA_FINGERPRINT_SETUP, false))
                 startActivity(Intent(this, FingerPrintSetupActivity::class.java))
         }
-    }
-
-    private fun shareFcmId() {
-        val shareBody = FirebaseInstanceId.getInstance().token
-        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
-        sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
-        startActivity(Intent.createChooser(sharingIntent, null))
-    }
-
-    private fun copyFcmIdToClipboard() {
-        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("FCM_ID", FirebaseInstanceId.getInstance().token)
-        clipboard.primaryClip = clip
     }
 
     override fun onBackPressed() {
@@ -122,7 +101,7 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         return true
     }
 
-    fun replaceFragment(fragment: SgFragment, tag: String) {
+    private fun replaceFragment(fragment: SgFragment, tag: String) {
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, tag)

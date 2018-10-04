@@ -11,14 +11,14 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.MainActivity
-import com.soneso.lumenshine.presentation.general.SgActivity
+import com.soneso.lumenshine.presentation.general.LsActivity
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.activity_change_tfa.*
 import kotlinx.android.synthetic.main.view_change_tfa_new_secret.*
 import kotlinx.android.synthetic.main.view_change_tfa_password_confirm.*
 import kotlinx.android.synthetic.main.view_change_tfa_success.*
 
-class ChangeTfaActivity : SgActivity() {
+class ChangeTfaActivity : LsActivity() {
 
     private lateinit var viewModel: SettingsViewModel
 

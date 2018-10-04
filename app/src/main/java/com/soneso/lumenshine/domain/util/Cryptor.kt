@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec
  */
 object Cryptor {
 
-    val TAG = Cryptor::class.java.simpleName!!
+    const val TAG = "Cryptor"
     private const val KEY_LENGTH = 256
     private const val BITS_IN_BYTES = 8
     private const val SALT_LENGTH = KEY_LENGTH / BITS_IN_BYTES
