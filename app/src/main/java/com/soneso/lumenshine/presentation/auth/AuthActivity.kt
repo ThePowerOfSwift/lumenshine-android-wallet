@@ -8,6 +8,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.presentation.MainActivity
@@ -22,6 +24,7 @@ import kotlinx.android.synthetic.main.nav_header_main.*
  */
 class AuthActivity : LsActivity() {
 
+    private lateinit var navController: NavController
 
     lateinit var authViewModel: AuthViewModel
         private set
@@ -33,29 +36,40 @@ class AuthActivity : LsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        setSupportActionBar(login_toolbar)
-        title = ""
 
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, login_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        setupNavigationView()
+        setupActionBar()
+        setupDrawer()
+        setupTabViews()
+        setupNavigation()
 
         authViewModel = ViewModelProviders.of(this, viewModelFactory)[AuthViewModel::class.java]
         useCase = intent?.getSerializableExtra(EXTRA_USE_CASE) as? UseCase ?: UseCase.AUTH
 
-        startPage()
+//        startPage()
         setupMoreDialog()
         initTabView()
 
-        drawer_layout.post {
+        drawerLayout.post {
             subscribeForLiveData()
         }
     }
 
-    private fun setupNavigationView() {
+    private fun setupNavigation() {
+        navController = NavHostFragment.findNavController(navHostFragment)
+    }
+
+    private fun setupActionBar() {
+        setSupportActionBar(authToolbar)
+        title = ""
+    }
+
+    private fun setupDrawer() {
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, authToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+    }
+
+    private fun setupTabViews() {
 
         val navItemListener = com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener { item ->
             clearButtons()
@@ -89,12 +103,12 @@ class AuthActivity : LsActivity() {
                 }
             }
 
-            drawer_layout.closeDrawer(GravityCompat.START)
+            drawerLayout.closeDrawer(GravityCompat.START)
             return@OnNavigationItemSelectedListener true
         }
-        nav_view.setNavigationItemSelectedListener(navItemListener)
+        drawerView.setNavigationItemSelectedListener(navItemListener)
 
-        val homeItem = nav_view.menu.getItem(0)
+        val homeItem = drawerView.menu.getItem(0)
         homeItem.isChecked = true
         navItemListener.onNavigationItemSelected(homeItem)
     }
@@ -112,7 +126,7 @@ class AuthActivity : LsActivity() {
      * checks one menu item in navigationDrawer
      */
     private fun selectMenuItem(menuItem: Int) {
-        val item = nav_view.menu.findItem(menuItem)
+        val item = drawerView.menu.findItem(menuItem)
         item.isChecked = true
     }
 
@@ -153,8 +167,8 @@ class AuthActivity : LsActivity() {
      * sets menu for navigation drawer when the user credentials are saved(login scenario 2)
      */
     private fun setLoginScenario2Menu() {
-        nav_view.menu.clear()
-        nav_view.inflateMenu(R.menu.activity_login_drawer_scenario_2)
+        drawerView.menu.clear()
+        drawerView.inflateMenu(R.menu.activity_login_drawer_scenario_2)
         selectMenuItem(R.id.nav_home)
     }
 
@@ -162,13 +176,13 @@ class AuthActivity : LsActivity() {
      * sets menu for navigation drawer when nothing is saved(login scenario 1)
      */
     private fun setLoginScenario1Menu() {
-        nav_view.menu.clear()
-        nav_view.inflateMenu(R.menu.activity_login_drawer_scenario_1)
+        drawerView.menu.clear()
+        drawerView.inflateMenu(R.menu.activity_login_drawer_scenario_1)
     }
 
     private fun setLoginSetUpMenu() {
-        nav_view.menu.clear()
-        nav_view.inflateMenu(R.menu.activity_login_drawer_set_up)
+        drawerView.menu.clear()
+        drawerView.inflateMenu(R.menu.activity_login_drawer_set_up)
     }
 
     private fun showSetUpView() {
@@ -250,12 +264,12 @@ class AuthActivity : LsActivity() {
     }
 
     fun replaceFragment(fragment: AuthFragment, tag: String) {
-        val myFragment = supportFragmentManager.findFragmentByTag(tag)
-        if (myFragment == null)
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment, tag)
-                    .commit()
+//        val myFragment = supportFragmentManager.findFragmentByTag(tag)
+//        if (myFragment == null)
+//            supportFragmentManager
+//                    .beginTransaction()
+//                    .replace(R.id.fragment_container, fragment, tag)
+//                    .commit()
     }
 
     /**

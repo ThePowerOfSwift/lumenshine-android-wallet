@@ -31,15 +31,15 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
         }
 
         val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         collapsing_toolbar.isTitleEnabled = false
         changeTitle(R.string.app_name)
 
-        nav_view.setNavigationItemSelectedListener(this)
+        drawerView.setNavigationItemSelectedListener(this)
 
-        val homeItem = nav_view.menu.getItem(0)
+        val homeItem = drawerView.menu.getItem(0)
         homeItem.isChecked = true
         onNavigationItemSelected(homeItem)
         if (intent.hasExtra(EXTRA_FINGERPRINT_SETUP)) {
@@ -49,8 +49,8 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
     }
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -95,7 +95,7 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
             }
         }
 
-        drawer_layout.closeDrawer(GravityCompat.START)
+        drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 

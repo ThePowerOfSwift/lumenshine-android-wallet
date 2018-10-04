@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.customViews
+package com.soneso.lumenshine.presentation.widgets
 
 import android.content.Context
 import android.util.AttributeSet

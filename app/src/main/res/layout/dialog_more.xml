@@ -15,7 +15,7 @@
         android:paddingStart="@dimen/size_10"
         android:paddingTop="@dimen/size_5">
 
-        <com.soneso.lumenshine.presentation.customViews.LsTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/more"
@@ -36,7 +36,7 @@
         android:paddingTop="@dimen/size_5"
         android:id="@+id/more_lost_password">
 
-        <com.soneso.lumenshine.presentation.customViews.LsTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lost_password"
@@ -57,7 +57,7 @@
         android:paddingTop="@dimen/size_5"
         android:id="@+id/more_lost_2fa_secret">
 
-        <com.soneso.lumenshine.presentation.customViews.LsTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lost_tfa_secret"
@@ -78,7 +78,7 @@
         android:paddingTop="@dimen/size_5"
         android:id="@+id/more_import_mnemonic">
 
-        <com.soneso.lumenshine.presentation.customViews.LsTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/import_mnemonic"
@@ -99,7 +99,7 @@
         android:paddingTop="@dimen/size_5"
         android:id="@+id/more_about">
 
-        <com.soneso.lumenshine.presentation.customViews.LsTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/about"
@@ -120,7 +120,7 @@
         android:paddingTop="@dimen/size_5"
         android:id="@+id/more_help">
 
-        <com.soneso.lumenshine.presentation.customViews.LsTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/help"

@@ -9,10 +9,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.customViews.LsEditText
-import com.soneso.lumenshine.presentation.customViews.LsTextView
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import com.soneso.lumenshine.presentation.util.showInfoDialog
+import com.soneso.lumenshine.presentation.widgets.LsEditText
+import com.soneso.lumenshine.presentation.widgets.LsTextView
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_mnemonic.*

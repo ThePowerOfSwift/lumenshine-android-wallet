@@ -16,7 +16,7 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="ContentDescription" />
 
-    <com.soneso.lumenshine.presentation.customViews.LsTextView
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
         android:id="@+id/tab_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
