@@ -1,80 +1,86 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.LsCardView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="@dimen/size_25"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/size_7"
     tools:context="com.soneso.lumenshine.presentation.auth.LoginFragment">
 
-    <com.soneso.lumenshine.presentation.widgets.LsTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:textSize="@dimen/text_size_20"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold" />
-
-
-    <com.soneso.lumenshine.presentation.widgets.FormInputView
-        android:id="@+id/email"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_email"
-        android:inputType="textEmailAddress"
-        app:error_text="@string/error_invalid_email"
-        app:input_level="@integer/input_mandatory"
-        app:regex="@string/email_regex"
-        android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20" />
+        android:orientation="vertical"
+        android:padding="@dimen/size_10">
 
-
-    <com.soneso.lumenshine.presentation.widgets.PasswordInputView
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_password"
-        android:inputType="textPassword"
-        app:input_level="@integer/input_mandatory"
-        android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20" />
-
-    <com.soneso.lumenshine.presentation.widgets.FormInputView
-        android:id="@+id/two_factor_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_two_factor"
-        android:imeActionId="6"
-        android:imeActionLabel="@string/action_sign_in"
-        android:imeOptions="actionUnspecified"
-        android:inputType="number"
-        app:input_level="@integer/input_optional"
-        android:layout_marginLeft="@dimen/size_20"
-        android:layout_marginRight="@dimen/size_20" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/email_sign_in_button"
-            style="?android:textAppearanceSmall"
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/action_sign_in"
-            android:textStyle="bold"
-            android:textColor="@color/text_dark"
-            android:layout_gravity="center_horizontal" />
+            android:fontFamily="@font/encodesans_semibold"
+            android:text="@string/login_continue"
+            android:textAllCaps="true"
+            android:textColor="@color/darkBlue"
+            android:textSize="@dimen/text_size_17" />
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="?android:attr/progressBarStyleSmall"
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true" />
-    </FrameLayout>
+            android:fontFamily="@font/encodesans_regular"
+            android:text="@string/login_fill"
+            android:textColor="@color/lightBlack"
+            android:textSize="@dimen/text_size_13" />
 
-</LinearLayout>
+        <com.soneso.lumenshine.presentation.widgets.FormInputView
+            android:id="@+id/emailView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            app:error_text="@string/error_invalid_email"
+            app:input_level="@integer/input_mandatory"
+            app:regex="@string/email_regex" />
+
+
+        <com.soneso.lumenshine.presentation.widgets.PasswordInputView
+            android:id="@+id/passwordView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            app:input_level="@integer/input_mandatory" />
+
+        <com.soneso.lumenshine.presentation.widgets.FormInputView
+            android:id="@+id/two_factor_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/tfa_code_configured"
+            android:imeActionId="6"
+            android:imeActionLabel="@string/action_sign_in"
+            android:imeOptions="actionUnspecified"
+            android:inputType="number"
+            app:input_level="@integer/input_optional" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/email_sign_in_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/action_sign_in"
+                android:textColor="@color/text_dark"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+        </FrameLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

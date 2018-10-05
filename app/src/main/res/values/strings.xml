@@ -1,8 +1,6 @@
 <resources>
 
     <!-- General strings -->
-    <string name="app_name">Lumenshine</string>
-    <string name="ok">OK</string>
     <string name="unknown_error">Unexpected error!</string>
     <string name="no_internet_error">No Internet! Please check phone connection.</string>
     <string name="invalid">Invalid!</string>
@@ -52,7 +50,6 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="no_account">Don\'t have an account?</string>
-    <string name="lost_password">Lost password</string>
     <string name="lost_tfa">Lost your tfa?</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="create_account"><u>Create one!</u></string>
@@ -93,20 +90,13 @@ Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots 
 \n\n
 The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
     </string>
+
     <!--attila.janosi  7/16/18 Login screen-->
-    <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
     <string name="lost_tfa_secret">Lost 2FA Secret</string>
-    <string name="import_mnemonic">Import mnemonic</string>
-    <string name="about">About</string>
-    <string name="welcome">Welcome</string>
-    <string name="more">More</string>
-    <string name="help">Help</string>
-    <string name="home">Home</string>
     <string name="sign_out">Sign out</string>
     <string name="setup_fingerprint">Setup Fingerprint</string>
     <string name="welcome_back">Welcome back</string>
-    <string name="not_logged_in">Not logged in</string>
     <string name="setup_fingerprint_detail">If you setup fingerprint, the app will request your fingerprint instead on password when opened. Entering the password will not be required each time you open the app. To setup fingerprint please first insert your password below.</string>
     <string name="password_info_text">Your new password must have at least 9 characters.
     \n
@@ -114,14 +104,11 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     It must contain numbers, small letters and capitals…</string>
     <string name="password_requirements">Password requirements</string>
     <string name="password_not_match">Passwords don\'t match</string>
-    <string name="settings">Settings</string>
     <string name="change_fingerprint_label">Fingerprint / Face recognition</string>
     <string name="change_avatar_label">Avatar</string>
     <string name="setup_step_1">Step 1 of 3</string>
     <string name="tfa_authentication_title">2 Factor Authentication (2FA)</string>
     <string name="your_2fa_secret">Your 2FA Secret:</string>
-    <string name="next">Next</string>
-    <string name="tfa_code">2FA Code</string>
     <string name="tfa_reason">For security reasons, your wallet will be protected by 2 Factor Authentication (2FA).</string>
     <string name="tfa_setup_steps">
         To setup 2FA, please:\n
@@ -134,7 +121,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     </string>
     <string name="email_confirm_title">Email confirmation required</string>
     <string name="mail_confirmation_alert">Please confirm your email address first.</string>
-    <string name="setup_wallet">Setup Wallet</string>
     <string name="setup_step_2">Step 2 of 3</string>
     <string name="mnemonic_memorizing_title"><![CDATA[Note & confirm backup secret (mnemonic)]]></string>
     <string name="mnemonic_warning">This step is very important</string>
@@ -142,7 +128,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
         password to recover your wallet. It can be also used in other apps / wallets that support import from mnemonic.
         If you lose your password and the mnemonic you will not be able to access your funds any more. We can not recover
         your account if you lose both (password and mnemonic). We do not store password and mnemonic.</string>
-    <string name="here">here</string>
     <string name="mnemonic_read_more">Read more about mnemonics</string>
     <string name="your_mnemonic">Your secret (24 word mnemonic):</string>
     <string name="mnemonic_confirm">Confirm noting your mnemonic</string>
@@ -150,9 +135,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="mnemonic_confirm_title">Prove noting of menmonic</string>
     <string name="mnemonic_confirm_description">To prove the noting of your mnemonic, please complete following quiz.</string>
     <string name="mnemonic_confirm_instruction">Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</string>
-    <string name="finish_setup">Finish setup</string>
     <string name="go_back_button_text">Go back and show mnemonic</string>
-    <string name="invalid_input">Invalid input</string>
     <string name="change_password_description">To change your password please provide current and new password.</string>
     <string name="error_invalid_current_password">Invalid current password</string>
     <string name="hint_new_password">New password</string>
@@ -163,7 +146,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="new_tfa_steps">1. copy and enter the below displayed 2FA secret code into the authenticator app\n
     \n
     2. enter the generated 2FA code from the authenticator app into the 2FA Code input and press "Next"</string>
-    <string name="cancel">Cancel</string>
     <string name="tfa_cancel_description">If canceled, the 2FA secret will not be changed.</string>
     <string name="tfa_change_success">2FA Secret successfully changed</string>
     <string name="secret_copied">Token copied in clipboard!</string>
@@ -177,5 +159,464 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="wallet_button_receive">Receive</string>
     <string name="wallet_button_details">Details</string>
     <string name="wallet_button_fund_wallet">Fund Wallet</string>
+
+
+    <string name="error">Error</string>
+
+    <string name="ok">OK</string>
+
+    <string name="done">Done</string>
+
+    <string name="info">Info</string>
+
+    <string name="next">Next</string>
+
+    <string name="_continue">Continue</string>
+
+    <string name="save">Save</string>
+
+    <string name="reveal">Reveal</string>
+
+    <string name="close">Close</string>
+
+    <string name="open">Open</string>
+
+    <string name="updated">Updated %@</string>
+
+    <string name="delete">Delete</string>
+
+    <string name="remove">Remove</string>
+
+    <string name="refresh">Refresh</string>
+
+    <string name="send">Send</string>
+
+    <string name="login">Login</string>
+
+    <string name="register">Register</string>
+
+    <string name="login_continue">Login to continue</string>
+
+    <string name="unlock_app">Unlock app</string>
+
+    <string name="unlock_button">Unlock</string>
+
+    <string name="login_fill">Please fill in the form below with valid information</string>
+
+    <string name="logout">Log Out</string>
+
+    <string name="signout">Sign Out</string>
+
+    <string name="signup">Sign up</string>
+
+    <string name="lost_password">Lost Password</string>
+
+    <string name="forgot_password">Forgot password</string>
+
+    <string name="reset_password">Reset password</string>
+
+    <string name="tfa_secret">2FA Secret</string>
+
+    <string name="lost_2fa">Lost 2FA Secret</string>
+
+    <string name="reset_2fa">Reset 2fa</string>
+
+    <string name="import_mnemonic">Import mnemonic</string>
+
+    <string name="step_3">step %@ of 3</string>
+
+    <string name="email">Email</string>
+
+    <string name="cancel">Cancel</string>
+
+    <string name="submit">Submit</string>
+
+    <string name="back">Back</string>
+
+    <string name="sell">Sell</string>
+
+    <string name="scan">Scan</string>
+
+    <string name="receive">Receive</string>
+
+    <string name="details">Details</string>
+
+    <string name="fund_wallet">Fund Wallet</string>
+
+    <string name="setup_wallet">Setup Wallet</string>
+
+    <string name="tfa_secret_copy">2FA secret copied to clipboard</string>
+
+    <string name="more">More</string>
+
+    <string name="here">here</string>
+
+    <string name="username">Username</string>
+
+    <string name="password">Password</string>
+
+    <string name="repeat_password">Repeat Password</string>
+
+    <string name="forename">Forename</string>
+
+    <string name="lastname">Lastname</string>
+
+    <string name="company_name">Company name</string>
+
+    <string name="salutation">Salutation</string>
+
+    <string name="title">Title</string>
+
+    <string name="app_name">Lumenshine</string>
+
+    <string name="chart_card_title">Stellar Lumens (XLM)</string>
+
+    <string name="welcome">Welcome</string>
+
+    <string name="street_address">Street address</string>
+
+    <string name="street_number">Street number</string>
+
+    <string name="zip_code">Zip code</string>
+
+    <string name="city">City</string>
+
+    <string name="state">State</string>
+
+    <string name="country">Country</string>
+
+    <string name="nationality">Nationality</string>
+
+    <string name="mobile_phone">Mobile phone</string>
+
+    <string name="birthday">Birth day</string>
+
+    <string name="birthplace">Birth place</string>
+
+    <string name="home">Home</string>
+
+    <string name="basics">Basics</string>
+
+    <string name="security">Security</string>
+
+    <string name="stellar">Stellar</string>
+
+    <string name="wallets">Wallets</string>
+
+    <string name="transactions">Transactions</string>
+
+    <string name="currencies">Currencies</string>
+
+    <string name="icos">ICOs</string>
+
+    <string name="ico">ICO</string>
+
+    <string name="my_orders">My Orders</string>
+
+    <string name="contacts">Contacts</string>
+
+    <string name="extras">Extras</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="help">Help</string>
+
+    <string name="about">About</string>
+
+    <string name="activate">Activate</string>
+
+    <string name="fingerprint">Fingerprint</string>
+
+    <string name="face_recognition">Face Recognition</string>
+
+    <string name="hint_face_fingerprint">If you activate, the app will request your %@ instead of password when opened. Entering the password will not be required each time you open the app. To activate %@ please first insert your password below.</string>
+
+    <string name="enabled">Enabled</string>
+
+    <string name="disabled">Disabled</string>
+
+    <string name="account_data_title">Account specific data</string>
+
+    <string name="user_data_title">User specific data</string>
+
+    <string name="lbl_tfa">2 Factor Authentication (2FA)</string>
+
+    <string name="lbl_tfa_code">2 Factor Authentication Code</string>
+
+    <string name="lbl_tfa_secret">Your 2FA secret: %@</string>
+
+    <string name="lbl_tfa_hint">For security reasons, your wallet will be protected by 2FA</string>
+
+    <string name="lbl_tfa_setup">To setup 2FA, please:\n\n1. Download a two-factor authenticator app (like Google Authenticator)\n\n2. Copy and enter the above displayed 2FA secret code into the authenticator app\n\n3. Enter the generated 2FA code from the authenticator app and press \"Next\"</string>
+
+    <string name="tfa_code">2FA Code</string>
+
+    <string name="tfa_code_configured">2FA CODE (if configured)</string>
+
+    <string name="lbl_email_confirmation">Email confirmation required</string>
+
+    <string name="email_confirmation_hint">In order to be able continue the setup process, you need to confirm your email address first. An email with a confirmation link has been sent to your inbox. Please follow the instructions from the mail to confirm your email address.</string>
+
+    <string name="email_confirmation_hint2">An email has been sent to your email account. Please check your inbox and confirm your email address first. After doing so, please come back and press the \"Continue\" button to continue.</string>
+
+    <string name="lbl_email_confirmation2">Your email address is not confirmed.</string>
+
+    <string name="lbl_please_confirm">Please confirm your email address first.</string>
+
+    <string name="email_already_confirmed">Already confirmed</string>
+
+    <string name="email_resend_confirmation">Resend confirmation mail</string>
+
+    <string name="resend_email">Resend email</string>
+
+    <string name="lost_security_email_sent">%@ email sent</string>
+
+    <string name="lost_security_email_hint">For resetting your %@, an email has been sent to your email account. Please check your inbox and follow the instructions in the received email to reset your %@.</string>
+
+    <string name="confirmation_mail_resent">Confirmation mail resent</string>
+
+    <string name="email_resent">Email resent</string>
+
+    <string name="mnemonic_title">Note &amp; confirm backup secret (mnemonic)</string>
+
+    <string name="mnemonic_hint_title">This step is very important</string>
+
+    <string name="mnemonic_hint_lbl">Please write down your backup secret (mnemonic). You can use it if you lose your password to recover your wallet. It can be also used in other apps / wallets that support import from mnemonic. If you lose your password and the mnemonic you will not be able to access your funds any more. We can not recover your account if you lose both (password and mnemonic). We do not store password and mnemonic.</string>
+
+    <string name="mnemonic_more_lbl">Read more about mnemonics</string>
+
+    <string name="mnemonic_words_title">Your Secret (24 words mnemonic):</string>
+
+    <string name="mnemonic_words_button_lbl">Confirm noting of your mnemonic</string>
+
+    <string name="verify_mnemonic_title">Prove noting of mnemonic</string>
+
+    <string name="verify_mnemonic_hint">To prove the noting of your mnemonic, please complete following quiz.</string>
+
+    <string name="verify_mnemonic_words_title">Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</string>
+
+    <string name="position">Position</string>
+
+    <string name="finish">Finish</string>
+
+    <string name="finish_setup">Finish setup</string>
+
+    <string name="back_mnemonic">Go back and show mnemonic</string>
+
+    <string name="deposit">Deposit money</string>
+
+    <string name="withdraw">Withdraw money</string>
+
+    <string name="lbl_moment_year_count">one year ago</string>
+
+    <string name="x_moment_years">%1$d years ago</string>
+
+    <string name="lbl_moment_month_count">one month ago</string>
+
+    <string name="x_moment_months">%1$d months ago</string>
+
+    <string name="lbl_moment_week_count">one week ago</string>
+
+    <string name="x_moment_weeks">%1$d weeks ago</string>
+
+    <string name="lbl_moment_day_count">one day ago</string>
+
+    <string name="x_moment_days">%1$d days ago</string>
+
+    <string name="lbl_moment_hour_count">one hour ago</string>
+
+    <string name="x_moment_hours">%1$d hours ago</string>
+
+    <string name="lbl_moment_minute_count">one minute ago</string>
+
+    <string name="x_moment_minutes">%1$d minutes ago</string>
+
+    <string name="lbl_moment_second_count">one second ago</string>
+
+    <string name="x_moment_seconds">%1$d seconds ago</string>
+
+    <string name="lbl_year_suffix">y</string>
+
+    <string name="lbl_month_suffix">M</string>
+
+    <string name="lbl_week_suffix">W</string>
+
+    <string name="lbl_day_suffix">d</string>
+
+    <string name="lbl_hour_suffix">h</string>
+
+    <string name="lbl_minute_suffix">m</string>
+
+    <string name="lbl_now_suffix">Just now</string>
+
+    <string name="lbl_today">Today</string>
+
+    <string name="hour">hour</string>
+
+    <string name="hours">hours</string>
+
+    <string name="day">day</string>
+
+    <string name="days">days</string>
+
+    <string name="week">week</string>
+
+    <string name="weeks">weeks</string>
+
+    <string name="month">month</string>
+
+    <string name="months">months</string>
+
+    <string name="year">year</string>
+
+    <string name="years">years</string>
+
+    <string name="user_not_logged_in">User is not logged in</string>
+
+    <string name="not_logged_in">Not logged in</string>
+
+    <string name="unexpected_data_type">Unexpected data type</string>
+
+    <string name="invalid_request">Invalid request</string>
+
+    <string name="invalid_email">Invalid email.</string>
+
+    <string name="invalid_password">Invalid password.</string>
+
+    <string name="empty_password">Empty password.</string>
+
+    <string name="invalid_repassword">Repetition do not match with password.</string>
+
+    <string name="missing_password">No stored password.</string>
+
+    <string name="invalid_phone">Invalid mobile phone number.</string>
+
+    <string name="invalid_input">Invalid input</string>
+
+    <string name="bad_credentials">Wrong account or password</string>
+
+    <string name="home_screen_title">Lumenshine</string>
+
+    <string name="home_screen_found_wallet">Found your wallet</string>
+
+    <string name="password_hint1_prefix">9 characters</string>
+
+    <string name="password_hint1">*The password must have at least 9 characters</string>
+
+    <string name="password_hint2_prefix">one small letter</string>
+
+    <string name="password_hint2">*It must contain at least one small letter</string>
+
+    <string name="password_hint3_prefix">one capital letter</string>
+
+    <string name="password_hint3">*It must contain at least one capital letter</string>
+
+    <string name="password_hint4_prefix">one number</string>
+
+    <string name="password_hint4">*It must contain at least one number</string>
+
+    <string name="password_hint_title">Password requirements</string>
+
+    <string name="change_password">Change Password</string>
+
+    <string name="change_password_hint">To change your password please provide current and new password.</string>
+
+    <string name="current_password">Current password</string>
+
+    <string name="new_password">New password</string>
+
+    <string name="repeat_new_password">Repeat new password</string>
+
+    <string name="password_changed">Password successfully changed</string>
+
+    <string name="new_2fa_secret">New 2FA Secret</string>
+
+    <string name="lbl_new_2fa_secret">Your new 2FA secret: %@</string>
+
+    <string name="lbl_cancel_2fa_secret">If you cancel, the 2FA secret will not be changed</string>
+
+    <string name="lbl_2fa_hint">1. Copy and enter the below displayed 2FA secret code into the authenticator app\n\n2. Enter the generated 2FA code from the authenticator app and press \"Next\"</string>
+
+    <string name="change_2fa">Change 2FA Secret</string>
+
+    <string name="change_2fa_hint">To change your 2FA Secret please insert your password.</string>
+
+    <string name="tfa_secret_changed">2FA Secret successfully changed</string>
+
+    <string name="fingerprint_recognition">Fingerprint/Face recognition</string>
+
+    <string name="avatar">Avatar</string>
+
+    <string name="backup_mnemonic">Backup Secret (Mnemonic)</string>
+
+    <string name="reveal_backup_mnemonic">To reveal your backup secret/mnemonic please provide your password.</string>
+
+    <string name="loading">loading</string>
+
+    <string name="read_more">Read more</string>
+
+    <string name="learn_more">Learn more</string>
+
+    <string name="issuer_pk">Issuer public key:</string>
+
+    <string name="send_other">Send other</string>
+
+    <string name="print">Print</string>
+
+    <string name="edit">Edit</string>
+
+    <string name="success">Success</string>
+
+    <string name="status">Status</string>
+
+    <string name="message">Message</string>
+
+    <string name="currency">Currency</string>
+
+    <string name="amount">Amount</string>
+
+    <string name="recipient">Recipient</string>
+
+    <string name="memo">Memo</string>
+
+    <string name="operation_id">Operation ID</string>
+
+    <string name="transaction_fee">Transaction fee</string>
+
+    <string name="transaction_result">Transaction result</string>
+
+    <string name="help_feedback">Help &amp; Feedback</string>
+
+    <string name="help_hint">Need help or have a suggestion?\n\nThe Lumenshine support team is just a quick tap away. Take a look at our FAQ or send us a message.</string>
+
+    <string name="send_feedback">Send Feedback</string>
+
+    <string name="view_faq">View FAQ</string>
+
+    <string name="help_center">Help Center</string>
+
+    <string name="support_inbox">Support inbox</string>
+
+    <string name="faq">FAQ</string>
+
+    <string name="faq_1">How can I fund my wallet?</string>
+
+    <string name="faq_2">How can I setup the inflation destination for my wallet?</string>
+
+    <string name="faq_3">How can I receive other currencies than lumens?</string>
+
+    <string name="faq_4">How can I send lumens and other currencies?</string>
+
+    <string name="topics">Topics</string>
+
+    <string name="basics_detail">Guide to getting started with Lumenshine</string>
+
+    <string name="security_detail">Learn how to keep your Wallets save</string>
+
+    <string name="wallets_detail">Learn to master all Wallet features</string>
+
+    <string name="stellar_detail">Learn more about Stellar</string>
+
+    <string name="ico_detail">Learn how to participate in an ICO</string>
 
 </resources>

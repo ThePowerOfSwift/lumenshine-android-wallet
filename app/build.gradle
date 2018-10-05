@@ -97,6 +97,9 @@ dependencies {
     //attila.janosi, 7/17/18
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
+
+    // library to see logs in console
+    implementation 'com.jakewharton.timber:timber:4.6.1'
 }
 
 

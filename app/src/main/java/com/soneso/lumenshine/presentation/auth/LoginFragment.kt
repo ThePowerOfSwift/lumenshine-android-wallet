@@ -40,14 +40,17 @@ class LoginFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+        passwordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
                 return@OnEditorActionListener true
             }
             false
         })
-        email_sign_in_button.setOnClickListener { attemptLogin() }
+        email_sign_in_button.setOnClickListener {
+            //          context?.convertLabels()
+            attemptLogin()
+        }
     }
 
     private fun attemptLogin() {
@@ -56,8 +59,8 @@ class LoginFragment : AuthFragment() {
             return
         }
         authViewModel.login(
-                email.trimmedText,
-                password.trimmedText,
+                emailView.trimmedText,
+                passwordView.trimmedText,
                 two_factor_code.trimmedText
         )
     }
@@ -85,13 +88,13 @@ class LoginFragment : AuthFragment() {
 
         when (e.code) {
             ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
-                email.error = e.message
+                emailView.error = e.message
             }
             ErrorCodes.LOGIN_INVALID_2FA -> {
                 two_factor_code.error = e.message
             }
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                password.error = e.message
+                passwordView.error = e.message
             }
             else -> {
                 showErrorSnackbar(e)
@@ -99,7 +102,7 @@ class LoginFragment : AuthFragment() {
         }
     }
 
-    private fun isValidForm() = email.hasValidInput()
+    private fun isValidForm() = emailView.hasValidInput()
 
     companion object {
 

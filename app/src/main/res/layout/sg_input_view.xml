@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
+
+    <com.soneso.lumenshine.presentation.widgets.LsEditText
+        android:id="@+id/input_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Widget.AppCompat.EditText" />
 
     <TextView
         android:id="@+id/error_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/size_4"
-        android:layout_marginRight="@dimen/size_4"
-        android:singleLine="true"
+        android:fontFamily="@font/encodesans_regular"
         android:textColor="@color/red"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_13" />
 
-    <EditText
-        android:id="@+id/input_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_password"
-        android:theme="@style/Widget.AppCompat.EditText" />
-
-</LinearLayout>
+</merge>

@@ -29,8 +29,8 @@ open class FormInputView @JvmOverloads constructor(
         }
 
     init {
-        LayoutInflater.from(context)
-                .inflate(R.layout.sg_input_view, this, true)
+        LayoutInflater.from(context).inflate(R.layout.sg_input_view, this, true)
+        orientation = VERTICAL
         applyAttrs(attrs)
         input_edit_text.maxLines = 1
 

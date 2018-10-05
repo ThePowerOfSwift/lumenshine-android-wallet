@@ -37,7 +37,7 @@ class AuthActivity : LsActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        setupActionBar()
+        setSupportActionBar(authToolbar.apply { title = "" })
         setupDrawer()
         setupTabViews()
         setupNavigation()
@@ -58,11 +58,6 @@ class AuthActivity : LsActivity() {
         navController = NavHostFragment.findNavController(navHostFragment)
     }
 
-    private fun setupActionBar() {
-        setSupportActionBar(authToolbar)
-        title = ""
-    }
-
     private fun setupDrawer() {
         val toggle = ActionBarDrawerToggle(this, drawerLayout, authToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
@@ -80,11 +75,11 @@ class AuthActivity : LsActivity() {
                 }
                 R.id.nav_login -> {
                     replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
-                    tab_login.isChecked = true
+                    loginTab.isSelected = true
                 }
                 R.id.nav_sign_up -> {
                     replaceFragment(RegistrationFragment.newInstance(), RegistrationFragment.TAG)
-                    tab_sign_up.isChecked = true
+                    signUpTab.isSelected = true
                 }
                 R.id.nav_lost_password -> {
                     replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.PASSWORD), LostCredentialFragment.TAG)
@@ -117,9 +112,9 @@ class AuthActivity : LsActivity() {
      * unchecks all the "tab" buttons
      */
     private fun clearButtons() {
-        tab_login.isChecked = false
-        tab_sign_up.isChecked = false
-        tab_more.isChecked = false
+        loginTab.isSelected = false
+        signUpTab.isSelected = false
+        moreTab.isSelected = false
     }
 
     /**
@@ -193,9 +188,9 @@ class AuthActivity : LsActivity() {
     }
 
     private fun showUserNotSavedView() {
-        welcome_text.setText(R.string.welcome)
+        welcomeView.setText(R.string.welcome)
         nav_header_username.setText(R.string.not_logged_in)
-        welcome_user_email_text.visibility = View.INVISIBLE
+        usernameView.visibility = View.INVISIBLE
         login_step_2_tabs.visibility = View.GONE
         login_step_1_tabs.visibility = View.VISIBLE
         set_up_view.visibility = View.GONE
@@ -204,9 +199,9 @@ class AuthActivity : LsActivity() {
 
     private fun showUserSavedView(username: String) {
         nav_header_username.text = username
-        welcome_text.setText(R.string.welcome_back)
-        welcome_user_email_text.visibility = View.VISIBLE
-        welcome_user_email_text.text = username
+        welcomeView.setText(R.string.welcome_back)
+        usernameView.visibility = View.VISIBLE
+        usernameView.text = username
         login_step_1_tabs.visibility = View.GONE
         login_step_2_tabs.visibility = View.VISIBLE
         set_up_view.visibility = View.GONE
@@ -278,27 +273,27 @@ class AuthActivity : LsActivity() {
     private fun initTabView() {
         val tabClickListener = View.OnClickListener { view ->
             when (view) {
-                tab_login -> {
-                    tab_login.isChecked = true
-                    tab_sign_up.isChecked = false
-                    tab_more.isChecked = false
+                loginTab -> {
+                    loginTab.isSelected = true
+                    signUpTab.isSelected = false
+                    moreTab.isSelected = false
                     replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
                     selectMenuItem(R.id.nav_login)
                 }
-                tab_sign_up -> {
-                    tab_login.isChecked = false
-                    tab_sign_up.isChecked = true
-                    tab_more.isChecked = false
+                signUpTab -> {
+                    loginTab.isSelected = false
+                    signUpTab.isSelected = true
+                    moreTab.isSelected = false
                     replaceFragment(RegistrationFragment.newInstance(), RegistrationFragment.TAG)
                     selectMenuItem(R.id.nav_sign_up)
                 }
-                tab_more -> {
+                moreTab -> {
                     moreDialog.show()
                 }
                 tab_logout -> {
-                    tab_login.isChecked = true
-                    tab_sign_up.isChecked = false
-                    tab_more.isChecked = false
+                    loginTab.isSelected = true
+                    signUpTab.isSelected = false
+                    moreTab.isSelected = false
                     // TODO: cristi.paval, 8/25/18 - implement logout accordingly
 //                    SgPrefs.removeUserCrendentials()
 //                    authViewModel.refreshLastUserCredentials()
@@ -320,10 +315,10 @@ class AuthActivity : LsActivity() {
                 }
             }
         }
-        tab_login.setOnClickListener(tabClickListener)
-        tab_sign_up.setOnClickListener(tabClickListener)
-        tab_more.setOnClickListener(tabClickListener)
-        tab_login.isChecked = true
+        loginTab.setOnClickListener(tabClickListener)
+        signUpTab.setOnClickListener(tabClickListener)
+        moreTab.setOnClickListener(tabClickListener)
+        loginTab.isSelected = true
         tab_home.setOnClickListener(tabClickListener)
         tab_logout.setOnClickListener(tabClickListener)
         tab_fingerprint.setOnClickListener(tabClickListener)
