@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <layer-list>
+            <item android:left="@dimen/size_1_negative" android:right="@dimen/size_1_negative" android:top="@dimen/size_1_negative">
+                <shape android:shape="rectangle">
+                    <stroke android:width="@dimen/size_1" android:color="@color/lightBlack" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item android:left="@dimen/size_1_negative" android:right="@dimen/size_1_negative" android:top="@dimen/size_1_negative">
+                <shape android:shape="rectangle">
+                    <stroke android:width="@dimen/size_05" android:color="@color/lightBlack" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

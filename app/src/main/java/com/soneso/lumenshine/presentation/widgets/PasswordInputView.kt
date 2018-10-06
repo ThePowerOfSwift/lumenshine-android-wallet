@@ -3,7 +3,7 @@ package com.soneso.lumenshine.presentation.widgets
 import android.content.Context
 import android.util.AttributeSet
 import com.soneso.lumenshine.R
-import kotlinx.android.synthetic.main.sg_input_view.view.*
+import kotlinx.android.synthetic.main.ls_input_view.view.*
 
 class PasswordInputView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

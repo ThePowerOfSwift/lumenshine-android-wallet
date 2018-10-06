@@ -6,12 +6,12 @@ import android.widget.EditText
 import com.soneso.lumenshine.R
 
 open class LsEditText @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = R.attr.editTextStyle
 ) : EditText(context, attrs, defStyleAttr) {
+
     init {
         applyAttrs(attrs)
     }
-
 
     private fun applyAttrs(attrs: AttributeSet?) {
         val attributeSet = attrs ?: return

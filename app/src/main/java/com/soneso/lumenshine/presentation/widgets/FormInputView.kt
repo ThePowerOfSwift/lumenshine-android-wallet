@@ -11,7 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
-import kotlinx.android.synthetic.main.sg_input_view.view.*
+import kotlinx.android.synthetic.main.ls_input_view.view.*
 
 
 open class FormInputView @JvmOverloads constructor(
@@ -29,7 +29,7 @@ open class FormInputView @JvmOverloads constructor(
         }
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.sg_input_view, this, true)
+        LayoutInflater.from(context).inflate(R.layout.ls_input_view, this, true)
         orientation = VERTICAL
         applyAttrs(attrs)
         input_edit_text.maxLines = 1

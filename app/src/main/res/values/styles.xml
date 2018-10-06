@@ -10,6 +10,7 @@
         <item name="android:textColor">@color/lightBlack</item>
         <item name="android:textColorHint">@color/lightBlack</item>
         <item name="android:fontFamily">@font/encodesans_semibold</item>
+        <item name="editTextStyle">@style/AppTheme.LsEditText</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -20,6 +21,10 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.LsEditText" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/lsedittext_background</item>
+    </style>
 
     <style name="AppTheme.LsCardView">
         <item name="cardBackgroundColor">@android:color/white</item>
