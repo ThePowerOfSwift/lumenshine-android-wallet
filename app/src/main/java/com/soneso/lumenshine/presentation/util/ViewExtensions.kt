@@ -1,6 +1,7 @@
 package com.soneso.lumenshine.presentation.util
 
 import android.animation.ObjectAnimator
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
@@ -48,4 +49,8 @@ fun TextView.setTextStyle(@StyleRes resId: Int) {
 
 fun <T> LiveData<T>.putValue(value: T) {
     (this as MutableLiveData).value = value
+}
+
+fun TextView.setDrawableEnd(drawable: Drawable?) {
+    setCompoundDrawablesWithIntrinsicBounds(compoundDrawables[0], compoundDrawables[1], drawable, compoundDrawables[3])
 }

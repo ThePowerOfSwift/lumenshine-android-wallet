@@ -71,7 +71,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
-    fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int) {
+    fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int = 0) {
 
         val country = try {
             liveCountries.value?.success()?.get(countryPosition)
@@ -224,11 +224,12 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) {
 
-        userUseCases.confirmTfaSecretChange(tfaCode)
+        val d = userUseCases.confirmTfaSecretChange(tfaCode)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     liveTfaChangeConfirmation.putValue(it)
                 }
+        compositeDisposable.add(d)
     }
 
     override fun onCleared() {

@@ -12,21 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="440dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical1_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="33.33" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical2_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="66.66" />
+        app:layout_constraintGuide_begin="@dimen/size_200" />
 
     <com.soneso.lumenshine.presentation.widgets.LsImageView
         android:layout_width="0dp"
@@ -129,31 +115,32 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline">
 
-        <com.soneso.lumenshine.presentation.widgets.LsTabView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:id="@+id/tab_logout"
+            style="@style/LsTabView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:tab_icon="@drawable/ic_log_out"
-            app:tab_text="@string/sign_out" />
+            android:drawableTop="@drawable/ic_log_out"
+            android:text="@string/sign_out" />
 
-        <com.soneso.lumenshine.presentation.widgets.LsTabView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:id="@+id/tab_home"
+            style="@style/LsTabView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:tab_checked="true"
-            app:tab_icon="@drawable/ic_home"
-            app:tab_text="@string/home" />
+            android:drawableTop="@drawable/ic_home"
+            android:text="@string/home" />
 
-        <com.soneso.lumenshine.presentation.widgets.LsTabView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:id="@+id/tab_fingerprint"
+            style="@style/LsTabView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:tab_checked="false"
-            app:tab_icon="@drawable/ic_fingerprint"
-            app:tab_text="@string/setup_fingerprint" />
+            android:drawableTop="@drawable/ic_fingerprint"
+            android:text="@string/setup_fingerprint" />
 
     </LinearLayout>
     <!--Credentials saved tabs-->

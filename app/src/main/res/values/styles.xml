@@ -25,6 +25,7 @@
 
     <style name="AppTheme.LsEditText" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/lsedittext_background</item>
+        <item name="android:drawableTint">@color/gray</item>
     </style>
 
     <style name="AppTheme.LsCardView">
@@ -42,6 +43,19 @@
         <item name="android:minWidth">@dimen/size_160</item>
         <item name="android:background">@drawable/lsbutton_background</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="LsCardTitle">
+        <item name="android:textColor">@color/darkBlue</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="LsCardTitleDetail">
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
     </style>
 
     <style name="LsCardMainTitle">

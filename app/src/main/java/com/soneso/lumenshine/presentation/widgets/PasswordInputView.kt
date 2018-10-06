@@ -13,7 +13,7 @@ class PasswordInputView @JvmOverloads constructor(
 
     fun isValidPassword(): Boolean {
         when {
-            inputLevel == resources.getInteger(R.integer.input_mandatory) && input_edit_text.text.isNullOrBlank() -> {
+            inputLevel == resources.getInteger(R.integer.input_mandatory) && editTextView.text.isNullOrBlank() -> {
                 error = resources.getText(R.string.error_field_required)
                 return false
             }

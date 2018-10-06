@@ -5,11 +5,14 @@ import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.presentation.util.setDrawableEnd
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import kotlinx.android.synthetic.main.ls_input_view.view.*
 
@@ -21,21 +24,36 @@ open class FormInputView @JvmOverloads constructor(
     protected var inputLevel = 0
     private var errorText: CharSequence = ""
     private var regexToMatch = ""
+    var onDrawableEndClickListener: (() -> Unit)? = null
 
     var trimmedText: CharSequence
-        get() = input_edit_text.text?.trim() ?: ""
+        get() = editTextView.text?.trim() ?: ""
         set(value) {
-            input_edit_text.text = SpannableStringBuilder(value)
+            editTextView.text = SpannableStringBuilder(value)
         }
 
     init {
         LayoutInflater.from(context).inflate(R.layout.ls_input_view, this, true)
         orientation = VERTICAL
         applyAttrs(attrs)
-        input_edit_text.maxLines = 1
+        editTextView.maxLines = 1
 
         setupInputLevel()
-        input_edit_text.setOnTextChangeListener { error_text.text = "" }
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        editTextView.setOnTextChangeListener { errorTextView.text = "" }
+        editTextView.setOnTouchListener(OnTouchListener { v, event ->
+
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX >= editTextView.right - editTextView.compoundDrawables[2].bounds.width()) {
+                    onDrawableEndClickListener?.invoke()
+                    return@OnTouchListener true
+                }
+            }
+            false
+        })
     }
 
 
@@ -47,15 +65,16 @@ open class FormInputView @JvmOverloads constructor(
         errorText = typedArray.getString(R.styleable.FormInputView_error_text) ?: resources.getText(R.string.invalid)
         val inputType = typedArray.getInt(R.styleable.FormInputView_android_inputType, EditorInfo.TYPE_NULL)
         if (inputType != EditorInfo.TYPE_NULL) {
-            input_edit_text.inputType = inputType
+            editTextView.inputType = inputType
         }
         val hint = typedArray.getString(R.styleable.FormInputView_android_hint)
-        input_edit_text.hint = hint
+        editTextView.hint = hint
 
-        input_edit_text.imeOptions = typedArray.getInt(R.styleable.FormInputView_android_imeOptions, EditorInfo.IME_ACTION_UNSPECIFIED)
+        editTextView.imeOptions = typedArray.getInt(R.styleable.FormInputView_android_imeOptions, EditorInfo.IME_ACTION_UNSPECIFIED)
+        editTextView.setDrawableEnd(typedArray.getDrawable(R.styleable.FormInputView_android_drawableEnd))
 
         val imeActionId = typedArray.getInt(R.styleable.FormInputView_android_imeActionId, 0)
-        input_edit_text.setImeActionLabel(typedArray.getString(R.styleable.FormInputView_android_imeActionLabel), imeActionId)
+        editTextView.setImeActionLabel(typedArray.getString(R.styleable.FormInputView_android_imeActionLabel), imeActionId)
         typedArray.recycle()
     }
 
@@ -67,16 +86,16 @@ open class FormInputView @JvmOverloads constructor(
 
     fun hasValidInput(): Boolean {
         when {
-            inputLevel == resources.getInteger(R.integer.input_mandatory) && input_edit_text.text.isNullOrBlank() -> {
-                error_text.text = resources.getText(R.string.error_field_required)
+            inputLevel == resources.getInteger(R.integer.input_mandatory) && editTextView.text.isNullOrBlank() -> {
+                errorTextView.text = resources.getText(R.string.error_field_required)
                 return false
             }
-            inputLevel == resources.getInteger(R.integer.input_optional) && input_edit_text.text.isNullOrBlank() -> {
+            inputLevel == resources.getInteger(R.integer.input_optional) && editTextView.text.isNullOrBlank() -> {
                 return true
             }
 
             regexToMatch.isNotEmpty() && !trimmedText.matches(Regex(regexToMatch)) -> {
-                error_text.text = errorText
+                errorTextView.text = errorText
             }
         }
         return true
@@ -84,18 +103,18 @@ open class FormInputView @JvmOverloads constructor(
 
 
     fun setOnEditorActionListener(listener: TextView.OnEditorActionListener) {
-        input_edit_text.setOnEditorActionListener(listener)
+        editTextView.setOnEditorActionListener(listener)
     }
 
     var error: CharSequence
-        get() = error_text.text
+        get() = errorTextView.text
         set(value) {
-            error_text.text = value
+            errorTextView.text = value
         }
 
     val text: Editable
         get() {
-            return input_edit_text.text
+            return editTextView.text
         }
 
 }

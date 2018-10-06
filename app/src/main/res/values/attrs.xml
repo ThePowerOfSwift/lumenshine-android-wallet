@@ -10,14 +10,7 @@
         <attr name="android:hint" />
         <attr name="android:imeActionId" />
         <attr name="android:imeActionLabel" />
-    </declare-styleable>
-
-    <declare-styleable name="LsTabView">
-        <attr name="tab_text" format="reference" />
-        <attr name="tab_icon" format="reference" />
-        <attr name="tab_checked_color" format="reference" />
-        <attr name="tab_unchecked_color" format="reference" />
-        <attr name="tab_checked" format="boolean" />
+        <attr name="android:drawableEnd" />
     </declare-styleable>
 
     <declare-styleable name="LsEditText">

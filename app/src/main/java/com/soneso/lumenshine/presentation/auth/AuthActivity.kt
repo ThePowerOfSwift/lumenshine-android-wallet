@@ -300,16 +300,16 @@ class AuthActivity : LsActivity() {
 //                    replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
                 }
                 tab_fingerprint -> {
-                    tab_logout.isChecked = false
-                    tab_home.isChecked = false
-                    tab_fingerprint.isChecked = true
+                    tab_logout.isSelected = false
+                    tab_home.isSelected = false
+                    tab_fingerprint.isSelected = true
                     replaceFragment(FingerPrintFragment.newInstance(FingerPrintFragment.FingerprintFragmentType.FINGERPRINT), FingerPrintFragment.TAG)
                     selectMenuItem(R.id.nav_fingerprit)
                 }
                 tab_home -> {
-                    tab_logout.isChecked = false
-                    tab_home.isChecked = true
-                    tab_fingerprint.isChecked = false
+                    tab_logout.isSelected = false
+                    tab_home.isSelected = true
+                    tab_fingerprint.isSelected = false
                     replaceFragment(PasswordFragment.newInstance(), PasswordFragment.TAG)
                     selectMenuItem(R.id.nav_fingerprit)
                 }
