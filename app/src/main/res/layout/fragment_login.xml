@@ -63,27 +63,13 @@
             android:inputType="number"
             app:input_level="@integer/input_optional" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <com.soneso.lumenshine.presentation.widgets.LsButton
+            android:id="@+id/email_sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_30"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_5"
+            android:text="@string/login" />
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/action_sign_in"
-                android:textColor="@color/text_dark"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true" />
-        </FrameLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

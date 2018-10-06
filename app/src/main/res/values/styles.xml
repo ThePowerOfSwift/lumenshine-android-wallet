@@ -11,6 +11,7 @@
         <item name="android:textColorHint">@color/lightBlack</item>
         <item name="android:fontFamily">@font/encodesans_semibold</item>
         <item name="editTextStyle">@style/AppTheme.LsEditText</item>
+        <item name="buttonStyle">@style/AppTheme.LsButton</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -33,6 +34,14 @@
         <item name="android:minWidth">@dimen/size_infinite</item>
         <item name="cardPreventCornerOverlap">false</item>
         <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="AppTheme.LsButton" parent="@android:style/Widget.Button">
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:minWidth">@dimen/size_160</item>
+        <item name="android:background">@drawable/lsbutton_background</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="LsCardMainTitle">
