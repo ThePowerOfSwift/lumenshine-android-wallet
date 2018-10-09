@@ -2,14 +2,32 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/auth_graph"
-    app:startDestination="@id/register_screen">
+    app:startDestination="@id/login_screen">
+
+    <action
+        android:id="@+id/to_login"
+        app:destination="@id/login_screen" />
 
     <fragment
         android:id="@+id/login_screen"
         android:name="com.soneso.lumenshine.presentation.auth.LoginFragment" />
 
+
+    <action
+        android:id="@+id/to_register"
+        app:destination="@id/register_screen" />
+
     <fragment
         android:id="@+id/register_screen"
         android:name="com.soneso.lumenshine.presentation.auth.RegistrationFragment" />
+
+
+    <action
+        android:id="@+id/to_lost_credential"
+        app:destination="@id/lost_credential_screen" />
+
+    <fragment
+        android:id="@+id/lost_credential_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.LostCredentialFragment" />
 
 </navigation>

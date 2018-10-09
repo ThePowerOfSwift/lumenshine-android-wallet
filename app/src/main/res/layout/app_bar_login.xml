@@ -29,8 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.soneso.lumenshine.presentation.widgets.LsImageView
         android:id="@+id/appIconView"

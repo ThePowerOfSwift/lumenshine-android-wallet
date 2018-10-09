@@ -50,14 +50,14 @@ class TfaConfirmationFragment : AuthFragment() {
 
         send_button.setOnClickListener {
 
-            when (authActivity.useCase) {
-                AuthActivity.UseCase.AUTH -> {
-                    authViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
-                }
-                AuthActivity.UseCase.CONFIRM_TFA_SECRET_CHANGE -> {
-                    authViewModel.confirmTfaSecretChange(tfa_code_view.text.toString())
-                }
-            }
+            //            when (authActivity.useCase) {
+//                AuthActivity.UseCase.AUTH -> {
+//                    authViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
+//                }
+//                AuthActivity.UseCase.CONFIRM_TFA_SECRET_CHANGE -> {
+//                    authViewModel.confirmTfaSecretChange(tfa_code_view.text.toString())
+//                }
+//            }
         }
     }
 

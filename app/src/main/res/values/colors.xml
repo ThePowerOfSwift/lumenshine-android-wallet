@@ -18,6 +18,7 @@
 
     <color name="lightBlue">#b2e7ff</color>
     <color name="darkBlue">#337abd</color>
+    <color name="darkBlue_pressed">#245280</color>
     <color name="lightGray">#e1e1e1</color>
     <color name="lightBlack">#555555</color>
     <color name="red">#ec1c23</color>

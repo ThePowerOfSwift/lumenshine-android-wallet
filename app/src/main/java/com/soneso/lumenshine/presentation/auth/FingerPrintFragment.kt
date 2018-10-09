@@ -50,7 +50,7 @@ class FingerPrintFragment : AuthFragment() {
             }
             false
         })
-        submit_button.setOnClickListener { attemptLogin() }
+        nextButton.setOnClickListener { attemptLogin() }
     }
 
     private fun subscribeForLiveData() {
@@ -63,10 +63,10 @@ class FingerPrintFragment : AuthFragment() {
     private fun showLoadingButton(loading: Boolean) {
         if (loading) {
             progress_bar.visibility = View.VISIBLE
-            submit_button.visibility = View.INVISIBLE
+            nextButton.visibility = View.INVISIBLE
         } else {
             progress_bar.visibility = View.GONE
-            submit_button.visibility = View.VISIBLE
+            nextButton.visibility = View.VISIBLE
         }
     }
 

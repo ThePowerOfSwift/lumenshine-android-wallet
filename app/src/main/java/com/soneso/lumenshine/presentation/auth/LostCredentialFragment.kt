@@ -31,21 +31,30 @@ class LostCredentialFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        populateViews()
         setupListeners()
         subscribeForLiveData()
     }
 
+    private fun populateViews() {
+
+        when (credential) {
+            Credential.PASSWORD -> titleView.setText(R.string.lost_password)
+            Credential.TFA -> titleView.setText(R.string.lost_tfa_secret)
+        }
+    }
+
     private fun setupListeners() {
 
-        submit_button.setOnClickListener {
+        nextButton.setOnClickListener {
 
             when (credential) {
 
                 Credential.PASSWORD -> {
-                    authViewModel.requestPasswordResetEmail(email_input.trimmedText)
+                    authViewModel.requestPasswordResetEmail(emailView.trimmedText)
                 }
                 Credential.TFA -> {
-                    authViewModel.requestTfaResetEmail(email_input.trimmedText)
+                    authViewModel.requestTfaResetEmail(emailView.trimmedText)
                 }
             }
         }
@@ -81,17 +90,16 @@ class LostCredentialFragment : AuthFragment() {
         const val TAG = "LostCredentialFragment"
         private const val ARG_CREDENTIAL = "$TAG.ARG_CREDENTIAL"
 
-        fun newInstance(credential: Credential): LostCredentialFragment {
+        fun argForPassword() = Bundle().apply {
+            putSerializable(ARG_CREDENTIAL, Credential.PASSWORD)
+        }
 
-            val instance = LostCredentialFragment()
-            val args = Bundle()
-            args.putSerializable(ARG_CREDENTIAL, credential)
-            instance.arguments = args
-            return instance
+        fun argForTfa() = Bundle().apply {
+            putSerializable(ARG_CREDENTIAL, Credential.TFA)
         }
     }
 
-    enum class Credential {
+    private enum class Credential {
         PASSWORD, TFA
     }
 }

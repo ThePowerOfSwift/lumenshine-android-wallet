@@ -1,4 +1,0 @@
-05/14/2018
-
-- implement get tfa secret call and cache it, after first login. Generate it automatically at the next login attempts. Documentation 4.7.3
-- implement change tfa secret and change password, from dashboard

@@ -40,7 +40,7 @@ class PasswordFragment : AuthFragment() {
             }
             false
         })
-        submit_button.setOnClickListener { attemptLogin() }
+        nextButton.setOnClickListener { attemptLogin() }
         lost_password_button.setOnClickListener {
             // TODO: cristi.paval, 8/25/18 - this anti pattern. Implement it accordingly.
 //            SgPrefs.removeUserCrendentials()
@@ -76,11 +76,11 @@ class PasswordFragment : AuthFragment() {
         if (loading) {
             password.isEnabled = false
             progress_bar.visibility = View.VISIBLE
-            submit_button.visibility = View.INVISIBLE
+            nextButton.visibility = View.INVISIBLE
         } else {
             password.isEnabled = true
             progress_bar.visibility = View.GONE
-            submit_button.visibility = View.VISIBLE
+            nextButton.visibility = View.VISIBLE
         }
     }
 

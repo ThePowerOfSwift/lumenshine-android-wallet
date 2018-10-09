@@ -59,7 +59,7 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_home -> {
+            R.id.home_item -> {
                 fab.show()
                 changeTitle(R.string.app_name)
                 app_bar_layout.setExpanded(true)

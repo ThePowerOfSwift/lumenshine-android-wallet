@@ -22,7 +22,7 @@ open class AuthFragment : LsFragment() {
 
     fun replaceFragment(fragment: AuthFragment, tag: String) {
 
-        authActivity.replaceFragment(fragment, tag)
+//        authActivity.replaceFragment(fragment, tag)
     }
 
     override fun onDestroyView() {

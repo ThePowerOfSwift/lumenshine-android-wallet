@@ -17,9 +17,6 @@ import kotlinx.android.synthetic.main.dialog_info.view.*
  * Created by attila.janosi on 7/10/18.
  */
 
-private val ICON_RESOURCE = "icon_resource"
-private val TITLE_RESOURCE = "title_resource"
-
 class InfoDialog : DialogFragment() {
 
     private var viewBuilder: ViewBuilder? = null
@@ -98,6 +95,8 @@ class InfoDialog : DialogFragment() {
                 }
 
         const val TAG = "InfoDialog"
+        private const val ICON_RESOURCE = "icon_resource"
+        private const val TITLE_RESOURCE = "title_resource"
     }
 
 }

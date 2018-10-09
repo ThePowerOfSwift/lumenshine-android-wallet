@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/size_10"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/size_10">
 
         <com.soneso.lumenshine.presentation.widgets.LsTextView
             style="@style/LsCardTitle"
@@ -60,6 +60,7 @@
 
         <com.soneso.lumenshine.presentation.widgets.LsButton
             android:id="@+id/email_sign_in_button"
+            style="@style/GreenButton"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size_30"
             android:layout_gravity="center_horizontal"
