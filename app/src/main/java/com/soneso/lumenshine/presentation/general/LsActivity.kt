@@ -2,11 +2,13 @@ package com.soneso.lumenshine.presentation.general
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.util.LsException
+
 
 /**
  * Base activity for class.
@@ -23,6 +25,7 @@ open class LsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         viewModelFactory = LsViewModelFactory(lsApp.appComponent)
     }
 
