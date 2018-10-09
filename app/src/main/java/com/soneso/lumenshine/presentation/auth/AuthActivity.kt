@@ -1,5 +1,7 @@
 package com.soneso.lumenshine.presentation.auth
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.IdRes
@@ -238,6 +240,14 @@ class AuthActivity : LsActivity() {
                 finishAffinity()
                 MainActivity.startInstanceWithFingerprintSetup(this)
             }
+        }
+    }
+
+    companion object {
+        const val TAG = "AuthActivity"
+
+        fun startInstance(context: Context, loggedInUser: Boolean) {
+            context.startActivity(Intent(context, AuthActivity::class.java))
         }
     }
 }
