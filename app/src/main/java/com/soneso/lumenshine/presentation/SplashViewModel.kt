@@ -8,6 +8,7 @@ import com.soneso.lumenshine.presentation.util.putValue
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class SplashViewModel(userUseCase: UserUseCases) : ViewModel() {
 
@@ -17,6 +18,7 @@ class SplashViewModel(userUseCase: UserUseCases) : ViewModel() {
     init {
         val d = userUseCase.isUserLoggedIn()
                 .subscribeOn(Schedulers.io())
+                .delay(2, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { it ->
                     liveIsUserLoggedIn.putValue(it)
