@@ -17,8 +17,8 @@ open class AuthFragment : LsFragment() {
     protected val authViewModel: AuthViewModel
         get() = authActivity.authViewModel
 
-    protected val authActivity: AuthActivity
-        get() = activity as AuthActivity
+    private val authActivity: BaseAuthActivity
+        get() = activity as BaseAuthActivity
 
     fun replaceFragment(fragment: AuthFragment, tag: String) {
 

@@ -47,7 +47,8 @@ open class FormInputView @JvmOverloads constructor(
         editTextView.setOnTouchListener(OnTouchListener { v, event ->
 
             if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= editTextView.right - editTextView.compoundDrawables[2].bounds.width()) {
+                if (editTextView.compoundDrawables[2] != null
+                        && event.rawX >= editTextView.right - editTextView.compoundDrawables[2].bounds.width()) {
                     onDrawableEndClickListener?.invoke()
                     return@OnTouchListener true
                 }

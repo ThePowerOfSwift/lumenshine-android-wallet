@@ -8,20 +8,18 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_login"
+        layout="@layout/layout_auth_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawerView"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/size_175"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorPrimary"
-        android:fitsSystemWindows="true"
+        android:background="@color/blue"
         app:headerLayout="@layout/nav_header_main"
-        app:itemIconTint="@color/text_light"
-        app:itemTextColor="@color/text_light"
-        app:menu="@menu/activity_login_drawer_scenario_1" />
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

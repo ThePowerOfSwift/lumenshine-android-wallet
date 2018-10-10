@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/lightGray"
-    tools:context="com.soneso.lumenshine.presentation.MainActivity">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontal_guideline"
@@ -15,6 +13,7 @@
         app:layout_constraintGuide_begin="@dimen/size_220" />
 
     <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/backgroundView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -24,12 +23,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/authToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="@dimen/size_20"
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/drawerIconView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_5"
+        android:layout_marginTop="@dimen/size_15"
         android:gravity="center"
+        android:padding="@dimen/size_10"
+        android:src="@drawable/button_drawer"
+        android:tint="@color/blue"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.soneso.lumenshine.presentation.widgets.LsImageView
@@ -48,7 +52,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/encodesans_semibold"
         android:text="@string/welcome"
-        android:textColor="@color/text_light"
+        android:textColor="@color/blue"
         android:textSize="@dimen/text_size_19"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -59,91 +63,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/welcome"
-        android:textColor="@color/text_light"
         android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeView" />
-
-    <!--Credentials not saved tabs-->
-    <LinearLayout
-        android:id="@+id/login_step_1_tabs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            android:id="@+id/loginTab"
-            style="@style/LsTabView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/icon_login"
-            android:text="@string/login" />
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            android:id="@+id/signUpTab"
-            style="@style/LsTabView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/icon_pencil"
-            android:text="@string/sign_up" />
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            android:id="@+id/moreTab"
-            style="@style/LsTabView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/icon_more"
-            android:text="@string/more" />
-
-    </LinearLayout>
-    <!--Credentials not saved tabs-->
-
-    <!--Credentials saved tabs-->
-    <LinearLayout
-        android:id="@+id/login_step_2_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline">
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            android:id="@+id/tab_logout"
-            style="@style/LsTabView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_log_out"
-            android:text="@string/sign_out" />
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            android:id="@+id/tab_home"
-            style="@style/LsTabView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_home"
-            android:text="@string/home" />
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            android:id="@+id/tab_fingerprint"
-            style="@style/LsTabView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_fingerprint"
-            android:text="@string/setup_fingerprint" />
-
-    </LinearLayout>
-    <!--Credentials saved tabs-->
 
     <!--Setup view-->
     <LinearLayout

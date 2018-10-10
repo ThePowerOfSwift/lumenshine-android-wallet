@@ -14,15 +14,15 @@
             android:title="@string/signup" />
         <item
             android:id="@+id/lostpass_item"
-            android:icon="@drawable/ic_lock"
+            android:icon="@drawable/icon_link"
             android:title="@string/lost_password" />
         <item
             android:id="@+id/losttfa_item"
-            android:icon="@drawable/ic_grid"
+            android:icon="@drawable/icon_2fa"
             android:title="@string/lost_tfa_secret" />
         <item
             android:id="@+id/mnemonic_item"
-            android:icon="@drawable/ic_user"
+            android:icon="@drawable/icon_user"
             android:title="@string/import_mnemonic" />
     </group>
 
@@ -31,11 +31,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_star"
+            android:icon="@drawable/icon_star"
             android:title="@string/about" />
         <item
             android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help"
+            android:icon="@drawable/icon_help32"
             android:title="@string/menu_item_help" />
     </group>
 
