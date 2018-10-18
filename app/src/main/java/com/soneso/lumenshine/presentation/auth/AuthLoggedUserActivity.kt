@@ -36,6 +36,10 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
                 homeTab.isSelected = true
                 selectMenuItem(R.id.home_item)
             }
+            R.id.fingerprint_screen -> {
+                fingerprintTab.isSelected = true
+                selectMenuItem(R.id.fingerprit_item)
+            }
         }
     }
 
@@ -46,7 +50,8 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
                     navigate(R.id.to_lost_credential, LostCredentialFragment.argForPassword())
                     selectMenuItem(R.id.lostpass_item)
                 }
-                R.id.homeTab -> navigate(R.id.pass_screen)
+                R.id.homeTab -> navigate(R.id.to_pass_screen)
+                R.id.fingerprintTab -> navigate(R.id.to_fingerprint_screen)
             }
         }
         homeTab.setOnClickListener(tabClickListener)

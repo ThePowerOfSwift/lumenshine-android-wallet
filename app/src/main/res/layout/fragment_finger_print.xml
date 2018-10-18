@@ -1,65 +1,47 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.soneso.lumenshine.presentation.widgets.LsCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="@dimen/size_25"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/size_7"
     tools:context="com.soneso.lumenshine.presentation.auth.LoginFragment">
 
-    <com.soneso.lumenshine.presentation.widgets.LsTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_5"
-        android:text="@string/setup_fingerprint_detail"
-        android:gravity="center"
-        android:textSize="@dimen/text_size_16" />
-
-    <com.soneso.lumenshine.presentation.widgets.LsTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hint_password"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/text_size_20"
-        android:textStyle="bold"
-        android:layout_margin="@dimen/size_10" />
-
-
-    <com.soneso.lumenshine.presentation.widgets.PasswordInputView
-        android:id="@+id/password"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_password"
-        android:inputType="textPassword"
-        app:input_level="@integer/input_mandatory"
-        app:error_text="@string/error_incorrect_password" />
+        android:orientation="vertical"
+        android:padding="@dimen/size_10">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitleDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hint_face_fingerprint" />
 
-        <Button
-            android:id="@+id/nextButton"
-            style="?android:textAppearanceSmall"
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_15"
+            android:text="@string/hint_password" />
+
+        <com.soneso.lumenshine.presentation.widgets.PasswordInputView
+            android:id="@+id/passwordView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_5"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            app:error_text="@string/error_incorrect_password"
+            app:input_level="@integer/input_mandatory" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsButton
+            android:id="@+id/activateButton"
+            style="@style/GreenButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_30"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="@string/action_submit"
-            android:textColor="@color/text_light"
-            android:textStyle="bold"
-            android:theme="@style/MyButton" />
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true" />
-
-    </FrameLayout>
-
-</LinearLayout>
+            android:layout_marginTop="@dimen/size_5"
+            android:text="@string/activate" />
+    </LinearLayout>
+</com.soneso.lumenshine.presentation.widgets.LsCardView>
