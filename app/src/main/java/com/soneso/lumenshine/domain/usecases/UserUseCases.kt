@@ -15,10 +15,10 @@ import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import com.soneso.lumenshine.util.Success
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.functions.BiFunction
+import io.reactivex.processors.BehaviorProcessor
 import javax.inject.Inject
 
 /**
@@ -28,7 +28,7 @@ import javax.inject.Inject
 class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
 
-    private val passSubject = BehaviorSubject.create<String>()
+    private val passSubject = BehaviorProcessor.create<String>()
 
     fun registerAccount(email: CharSequence, password: CharSequence, country: Country?): Flowable<Resource<Boolean, ServerException>> {
 
@@ -134,26 +134,20 @@ class UserUseCases
 
     fun provideRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        return Flowable.create(
-                { emitter ->
-                    val d = userRepo.getRegistrationStatus()
-                            .subscribe {
-                                if (LsSessionProfile.password.isNotEmpty()) {
-                                    emitter.onNext(it)
-                                }
-                            }
-                    emitter.setCancellable {
-                        d.dispose()
-                    }
-                },
-                BackpressureStrategy.LATEST
+        return Flowable.combineLatest(
+                // cristi.paval, 10/20/18 - provide registration status after login only. When the App has the password in RAM.
+                passSubject,
+                userRepo.getRegistrationStatus(),
+                BiFunction<String, RegistrationStatus, RegistrationStatus> { _, status -> status }
         )
     }
 
     fun setNewSession() {
 
-        LsSessionProfile.password = ""
+        // TODO: cristi.paval, 10/20/18 - clean the session somehow
     }
+
+    fun logout() = userRepo.logout()
 
     companion object {
 

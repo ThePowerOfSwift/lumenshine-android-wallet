@@ -35,6 +35,7 @@
     <dimen name="size_40">40dp</dimen>
     <dimen name="size_45">45dp</dimen>
     <dimen name="size_50">50dp</dimen>
+    <dimen name="size_60">60dp</dimen>
     <dimen name="size_75">75dp</dimen>
     <dimen name="size_85">85dp</dimen>
     <dimen name="size_90">90dp</dimen>

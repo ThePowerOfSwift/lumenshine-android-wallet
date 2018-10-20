@@ -114,11 +114,6 @@ object SgPrefs {
                 .putBoolean(KEY_FINGERPRINT_ENABLED, value)
                 .apply()
 
-    fun removeUserCrendentials() {
-        username = ""
-        tfaSecret = ""
-    }
-
     private fun encryptAndSaveString(key: String, value: String) {
 
         if (value.isBlank()) {

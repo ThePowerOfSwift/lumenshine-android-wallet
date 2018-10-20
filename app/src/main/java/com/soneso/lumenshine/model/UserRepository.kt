@@ -15,6 +15,7 @@ import com.soneso.lumenshine.persistence.SgPrefs
 import com.soneso.lumenshine.persistence.room.LsDatabase
 import com.soneso.lumenshine.util.*
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import retrofit2.Retrofit
@@ -57,7 +58,6 @@ class UserRepository @Inject constructor(
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    SgPrefs.username = userProfile.email
                     SgPrefs.tfaSecret = it.token2fa
                     userDao.saveRegistrationStatus(RegistrationStatus(userProfile.email, false, false, false))
                     true
@@ -254,6 +254,15 @@ class UserRepository @Inject constructor(
 
         return LsSessionProfile.observeUsername()
                 .flatMap { userDao.getRegistrationStatus(it) }
+    }
+
+    fun logout(): Completable {
+        return Completable.create {
+            val username = SgPrefs.username
+            SgPrefs.username = ""
+            userDao.removeRegistrationStatus(username)
+            it.onComplete()
+        }
     }
 
     companion object {

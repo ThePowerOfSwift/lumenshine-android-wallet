@@ -48,4 +48,22 @@
         android:id="@+id/fingerprint_screen"
         android:name="com.soneso.lumenshine.presentation.auth.FingerPrintFragment" />
 
+
+    <action
+        android:id="@+id/to_mnemonic_screen"
+        app:destination="@id/mnemonic_screen" />
+
+    <fragment
+        android:id="@+id/mnemonic_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.MnemonicFragment" />
+
+
+    <action
+        android:id="@+id/to_confirm_tfa_screen"
+        app:destination="@id/confirm_tfa_screen" />
+
+    <fragment
+        android:id="@+id/confirm_tfa_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.TfaConfirmationFragment" />
+
 </navigation>

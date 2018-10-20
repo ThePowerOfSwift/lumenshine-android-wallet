@@ -98,6 +98,9 @@ abstract class BaseAuthActivity : LsActivity() {
         authViewModel.liveRegistrationStatus.observe(this, Observer {
             renderRegistrationStatus(it)
         })
+        authViewModel.liveLastUsername.observe(this, Observer {
+            // TODO: cristi.paval, 10/20/18 - continue logout operation here.
+        })
     }
 
     private fun renderRegistrationStatus(s: RegistrationStatus?) {
@@ -105,10 +108,12 @@ abstract class BaseAuthActivity : LsActivity() {
         val status = s ?: return
         when {
             !status.tfaConfirmed -> {
+                navigate(R.id.to_confirm_tfa_screen)
             }
             !status.mailConfirmed -> {
             }
             !status.mnemonicConfirmed -> {
+                navigate(R.id.to_mnemonic_screen)
             }
             authViewModel.isFingerprintFlow -> {
                 finishAffinity()

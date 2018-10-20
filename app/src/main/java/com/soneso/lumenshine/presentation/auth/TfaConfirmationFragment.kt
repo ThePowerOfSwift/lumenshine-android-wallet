@@ -27,6 +27,7 @@ class TfaConfirmationFragment : AuthFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         authViewModel.fetchTfaSecret()
         subscribeForLiveData()
         setupListeners()
@@ -87,16 +88,6 @@ class TfaConfirmationFragment : AuthFragment() {
             Resource.SUCCESS -> {
                 hideLoadingView()
             }
-        }
-    }
-
-    private fun showLoadingButton(loading: Boolean) {
-        if (loading) {
-            change_tfa_progress.visibility = View.VISIBLE
-            send_button.visibility = View.INVISIBLE
-        } else {
-            change_tfa_progress.visibility = View.GONE
-            send_button.visibility = View.VISIBLE
         }
     }
 

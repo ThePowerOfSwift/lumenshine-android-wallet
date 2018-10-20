@@ -232,6 +232,16 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
+    fun logout() {
+        val d = userUseCases.logout()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    liveLastUsername.putValue("")
+                }
+        compositeDisposable.add(d)
+    }
+
     override fun onCleared() {
 
         compositeDisposable.dispose()

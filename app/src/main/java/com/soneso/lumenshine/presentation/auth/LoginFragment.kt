@@ -47,7 +47,7 @@ class LoginFragment : AuthFragment() {
             }
             false
         })
-        email_sign_in_button.setOnClickListener {
+        loginButton.setOnClickListener {
             //          context?.convertLabels()
             attemptLogin()
         }
@@ -61,7 +61,7 @@ class LoginFragment : AuthFragment() {
         authViewModel.login(
                 emailView.trimmedText,
                 passwordView.trimmedText,
-                two_factor_code.trimmedText
+                tfaCodeView.trimmedText
         )
     }
 
@@ -91,7 +91,7 @@ class LoginFragment : AuthFragment() {
                 emailView.error = e.message
             }
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                two_factor_code.error = e.message
+                tfaCodeView.error = e.message
             }
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
                 passwordView.error = e.message

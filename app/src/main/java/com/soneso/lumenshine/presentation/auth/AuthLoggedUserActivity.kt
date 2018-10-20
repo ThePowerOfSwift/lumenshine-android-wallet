@@ -46,6 +46,7 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
     private fun setupTabs() {
         tabClickListener = View.OnClickListener { view ->
             when (view.id) {
+                R.id.signOutTab -> authViewModel.logout()
                 R.id.lostPassTab -> {
                     navigate(R.id.to_lost_credential, LostCredentialFragment.argForPassword())
                     selectMenuItem(R.id.lostpass_item)

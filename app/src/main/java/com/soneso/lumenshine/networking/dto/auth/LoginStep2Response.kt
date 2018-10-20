@@ -2,17 +2,17 @@ package com.soneso.lumenshine.networking.dto.auth
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class LoginStep2Response {
+data class LoginStep2Response(
 
-    @JsonProperty("mail_confirmed")
-    var emailConfirmed = false
+        @JsonProperty("mail_confirmed")
+        var emailConfirmed: Boolean = false,
 
-    @JsonProperty("mnemonic_confirmed")
-    var mnemonicConfirmed = false
+        @JsonProperty("mnemonic_confirmed")
+        var mnemonicConfirmed: Boolean = false,
 
-    @JsonProperty("tfa_secret")
-    var tfaSecret = ""
+        @JsonProperty("tfa_secret")
+        var tfaSecret: String = "",
 
-    @JsonProperty("tfa_confirmed")
-    var tfaConfirmed = false
-}
+        @JsonProperty("tfa_confirmed")
+        var tfaConfirmed: Boolean = false
+)

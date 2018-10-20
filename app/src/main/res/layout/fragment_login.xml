@@ -47,7 +47,7 @@
             app:input_level="@integer/input_mandatory" />
 
         <com.soneso.lumenshine.presentation.widgets.FormInputView
-            android:id="@+id/two_factor_code"
+            android:id="@+id/tfaCodeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_5"
@@ -59,7 +59,7 @@
             app:input_level="@integer/input_optional" />
 
         <com.soneso.lumenshine.presentation.widgets.LsButton
-            android:id="@+id/email_sign_in_button"
+            android:id="@+id/loginButton"
             style="@style/GreenButton"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size_30"

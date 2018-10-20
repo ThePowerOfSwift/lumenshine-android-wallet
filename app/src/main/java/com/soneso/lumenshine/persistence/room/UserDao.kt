@@ -22,4 +22,7 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveUserData(userData: UserSecurity)
+
+    @Query("DELETE FROM ${DbNames.TABLE_REGISTRATION_STATUS} WHERE ${DbNames.COLUMN_USERNAME} = :username")
+    fun removeRegistrationStatus(username: String)
 }
