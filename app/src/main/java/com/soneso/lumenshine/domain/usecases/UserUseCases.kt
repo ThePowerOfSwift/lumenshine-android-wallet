@@ -18,6 +18,7 @@ import com.soneso.lumenshine.util.Success
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 /**
@@ -26,6 +27,8 @@ import javax.inject.Inject
  */
 class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
+
+    private val passSubject = BehaviorSubject.create<String>()
 
     fun registerAccount(email: CharSequence, password: CharSequence, country: Country?): Flowable<Resource<Boolean, ServerException>> {
 
@@ -51,12 +54,14 @@ class UserUseCases
 
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Flowable<Resource<Boolean, ServerException>> {
 
-        LsSessionProfile.password = password.toString()
+        passSubject.onNext(password.toString())
+
         val tfa = tfaCode?.toString()
                 ?: OtpProvider.currentTotpCode(LsSessionProfile.tfaSecret.decodeBase32())
+
         val username = email.toString()
 
-        return userRepo.loginStep1(email.toString(), tfa)
+        return userRepo.loginStep1(username, tfa)
                 .flatMap {
                     if (it.isSuccessful) {
                         userRepo.getUserData().flatMap { userData ->

@@ -116,4 +116,12 @@ abstract class BaseAuthActivity : LsActivity() {
             }
         }
     }
+
+    fun showLoading(loading: Boolean) {
+        if (loading) {
+            loadingView.visibility = View.VISIBLE
+        } else {
+            loadingView.visibility = View.GONE
+        }
+    }
 }

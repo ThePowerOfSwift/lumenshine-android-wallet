@@ -48,15 +48,15 @@ class RegistrationFragment : AuthFragment() {
         when (resource.state) {
 
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.FAILURE -> {
 
-                hideProgressDialog()
+                hideLoadingView()
                 handleError(resource.failure())
             }
             else -> {
-                hideProgressDialog()
+                hideLoadingView()
             }
         }
     }

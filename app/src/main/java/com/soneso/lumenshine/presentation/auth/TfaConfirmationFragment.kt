@@ -78,14 +78,14 @@ class TfaConfirmationFragment : AuthFragment() {
     private fun renderTfaConfirmation(resource: Resource<Boolean, ServerException>) {
         when (resource.state) {
             Resource.FAILURE -> {
-                hideProgressDialog()
+                hideLoadingView()
                 handleError(resource.failure())
             }
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.SUCCESS -> {
-                hideProgressDialog()
+                hideLoadingView()
             }
         }
     }

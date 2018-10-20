@@ -57,14 +57,14 @@ class MnemonicFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.FAILURE -> {
-                hideProgressDialog()
+                hideLoadingView()
                 showErrorSnackbar(resource.failure())
             }
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.SUCCESS -> {
-                hideProgressDialog()
+                hideLoadingView()
             }
         }
     }

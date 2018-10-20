@@ -15,6 +15,7 @@
     <color name="text_dark">#1b1b1b</color>
     <color name="text_light">#e2e2e2</color>
     <color name="yellow">#d6de02</color>
+    <color name="black_75opacity">#BF000000</color>
 
     <color name="lightBlue">#b2e7ff</color>
     <color name="blue">#39ACE1</color>

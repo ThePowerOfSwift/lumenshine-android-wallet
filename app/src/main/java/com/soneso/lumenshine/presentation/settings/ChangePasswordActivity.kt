@@ -75,13 +75,11 @@ class ChangePasswordActivity : LsActivity() {
         when (resource.state) {
 
             Resource.SUCCESS -> {
-//                hideProgressDialog()
                 change_password_view.visibility = View.GONE
                 change_password_success_view.visibility = View.VISIBLE
 
             }
             Resource.LOADING -> {
-//                showProgressDialog()
             }
             Resource.FAILURE -> {
                 showErrorSnackbar(resource.failure())

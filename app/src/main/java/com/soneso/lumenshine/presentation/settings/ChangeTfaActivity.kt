@@ -87,18 +87,15 @@ class ChangeTfaActivity : LsActivity() {
 
         when (resource.state) {
             Resource.SUCCESS -> {
-//                hideProgressDialog()
                 change_tfa_password_confirm_view.visibility = View.GONE
                 change_tfa_new_secret_view.visibility = View.VISIBLE
                 setupToken(resource.success())
             }
             Resource.LOADING -> {
 
-//                showProgressDialog()
             }
             Resource.FAILURE -> {
 
-//                hideProgressDialog()
                 handleError(resource.failure())
             }
         }
@@ -107,18 +104,15 @@ class ChangeTfaActivity : LsActivity() {
     private fun renderTfaChangeConfirmation(resource: Resource<Boolean, ServerException>) {
         when (resource.state) {
             Resource.SUCCESS -> {
-//                hideProgressDialog()
 
                 change_tfa_new_secret_view.visibility = View.GONE
                 change_tfa_success_view.visibility = View.VISIBLE
             }
 
             Resource.LOADING -> {
-//                showProgressDialog()
             }
 
             Resource.FAILURE -> {
-//                hideProgressDialog()
                 handleError(resource.failure())
             }
         }

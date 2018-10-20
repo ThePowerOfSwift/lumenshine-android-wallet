@@ -56,13 +56,13 @@ class MailConfirmationFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.SUCCESS -> {
-                hideProgressDialog()
+                hideLoadingView()
             }
             Resource.FAILURE -> {
-                hideProgressDialog()
+                hideLoadingView()
                 showErrorSnackbar(resource.failure())
             }
         }
@@ -72,14 +72,14 @@ class MailConfirmationFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.SUCCESS -> {
-                hideProgressDialog()
+                hideLoadingView()
                 showSnackbar("Mail sent!")
             }
             Resource.FAILURE -> {
-                hideProgressDialog()
+                hideLoadingView()
                 showErrorSnackbar(resource.failure())
             }
         }

@@ -1,6 +1,7 @@
 package com.soneso.lumenshine.presentation.general
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.util.LsException
 
@@ -8,7 +9,7 @@ import com.soneso.lumenshine.util.LsException
  * Base Fragment for Lumenshine App.
  * Created by cristi.paval on 3/8/18.
  */
-open class LsFragment : androidx.fragment.app.Fragment() {
+open class LsFragment : Fragment() {
 
     lateinit var viewModelFactory: LsViewModelFactory
 
