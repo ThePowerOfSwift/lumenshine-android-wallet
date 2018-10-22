@@ -39,8 +39,8 @@ class LostCredentialFragment : AuthFragment() {
     private fun populateViews() {
 
         when (credential) {
-            Credential.PASSWORD -> titleView.setText(R.string.lost_password)
-            Credential.TFA -> titleView.setText(R.string.lost_tfa_secret)
+            Credential.PASSWORD -> titleView.setText(R.string.reset_password)
+            Credential.TFA -> titleView.setText(R.string.reset_2fa)
         }
     }
 

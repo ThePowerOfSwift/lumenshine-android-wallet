@@ -225,7 +225,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="step_3">step %@ of 3</string>
 
-    <string name="email">Email</string>
+    <string name="email">EMAIL</string>
 
     <string name="cancel">Cancel</string>
 
@@ -618,5 +618,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="stellar_detail">Learn more about Stellar</string>
 
     <string name="ico_detail">Learn how to participate in an ICO</string>
+    <string name="enter_email_address_description">Enter the email address you used to signup.</string>
 
 </resources>
