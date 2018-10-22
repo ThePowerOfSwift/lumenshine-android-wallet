@@ -13,6 +13,7 @@ import com.soneso.lumenshine.util.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * View model.
@@ -57,7 +58,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        userUseCases.setNewSession()
         initLastUsername()
         initRegistrationStatus()
     }
@@ -68,6 +68,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
+                    Timber.d("Registration status just published.")
                     liveRegistrationStatus.putValue(it)
                 }
         compositeDisposable.add(d)
@@ -132,9 +133,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     liveLogin.putValue(it)
-                    if (it.isSuccessful) {
-                        liveIsUserLoggedIn.putValue(it.success())
-                    }
                 }
         compositeDisposable.add(d)
     }

@@ -6,6 +6,8 @@ import android.util.Log
 import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.domain.util.Cryptor
 import com.soneso.lumenshine.domain.util.toByteArray
+import io.reactivex.Flowable
+import io.reactivex.processors.BehaviorProcessor
 import org.bouncycastle.util.encoders.Base64
 import java.util.*
 
@@ -30,6 +32,8 @@ object SgPrefs {
     private val encryptionIv: ByteArray
     private val derivedPass: ByteArray
 
+    private val usernameProcessor = BehaviorProcessor.create<String>()
+
     val appPass: String
 
     init {
@@ -41,6 +45,8 @@ object SgPrefs {
         val salt = initializePassSalt(keyHolder)
         derivedPass = Cryptor.deriveKeyPbkdf2(salt, appPass.toCharArray())
         encryptionIv = initializeEncryptionIv(keyHolder)
+
+        usernameProcessor.onNext(username)
     }
 
     private fun initializeAppPass(keyHolder: AppKeyHolder): String {
@@ -98,6 +104,7 @@ object SgPrefs {
         get() = decryptAndGetString(KEY_USERNAME)
         set(value) {
             encryptAndSaveString(KEY_USERNAME, value)
+            usernameProcessor.onNext(value)
         }
 
     var jwtToken: String
@@ -136,7 +143,7 @@ object SgPrefs {
         }
     }
 
-    private fun getString(key: String) = prefs.getString(key, "")
+    private fun getString(key: String): String = prefs.getString(key, "") ?: ""
 
     private fun decryptAndGetString(key: String): String {
 
@@ -173,4 +180,6 @@ object SgPrefs {
     fun registerListener(listener: ((String) -> Unit)) {
         listeners.add(listener)
     }
+
+    fun observeUsername(): Flowable<String> = usernameProcessor
 }

@@ -6,7 +6,6 @@ import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
-import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -63,7 +62,7 @@ class UserUseCases
         return userRepo.loginStep1(username, tfa)
                 .flatMap {
                     if (it.isSuccessful) {
-                        userRepo.getUserData().flatMap { userData ->
+                        userRepo.getUserData(username).flatMap { userData ->
                             val helper = UserSecurityHelper(password.toCharArray())
                             val publicKeyIndex188 = helper.decipherUserSecurity(userData)
                             if (publicKeyIndex188 == null) {
@@ -106,7 +105,10 @@ class UserUseCases
 
     fun provideLastUsername() = userRepo.getLastUsername()
 
-    fun isUserLoggedIn(): Single<Boolean> = userRepo.getLastUsername().map { it.isNotBlank() }
+    fun isUserLoggedIn(): Single<Boolean> =
+            userRepo.getRegistrationStatus()
+                    .firstOrError()
+                    .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
 
     fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 
@@ -134,22 +136,13 @@ class UserUseCases
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
 
-    fun provideRegistrationStatus(): Flowable<RegistrationStatus> {
-
-        return Flowable.combineLatest(
-                // cristi.paval, 10/20/18 - provide registration status after login only. When the App has the password in RAM.
-                passSubject.filter { it.isNotBlank() },
-                userRepo.getRegistrationStatus(),
-                BiFunction<String, RegistrationStatus, RegistrationStatus> { _, status -> status }
-        )
-    }
-
-    fun setNewSession() {
-
-        passSubject.onNext("")
-    }
+    fun provideRegistrationStatus() = userRepo.getRegistrationStatus()
 
     fun logout() = userRepo.logout()
+
+    fun setNewSession() {
+        passSubject.onNext("")
+    }
 
     companion object {
 

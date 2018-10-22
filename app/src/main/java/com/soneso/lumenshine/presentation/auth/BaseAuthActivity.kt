@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.LsActivity
 import kotlinx.android.synthetic.main.activity_base_auth.*
 import kotlinx.android.synthetic.main.layout_auth_activity.*
@@ -116,5 +117,15 @@ abstract class BaseAuthActivity : LsActivity() {
         } else {
             loadingView.visibility = View.GONE
         }
+    }
+
+    fun goToMain() {
+        finishAffinity()
+        MainActivity.startInstance(this)
+    }
+
+    fun goToSetup() {
+        finishAffinity()
+        AuthSetupActivity.startInstance(this)
     }
 }
