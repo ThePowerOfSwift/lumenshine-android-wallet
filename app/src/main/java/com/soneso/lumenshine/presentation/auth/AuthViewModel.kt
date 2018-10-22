@@ -132,6 +132,9 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     liveLogin.putValue(it)
+                    if (it.isSuccessful) {
+                        liveIsUserLoggedIn.putValue(it.success())
+                    }
                 }
         compositeDisposable.add(d)
     }

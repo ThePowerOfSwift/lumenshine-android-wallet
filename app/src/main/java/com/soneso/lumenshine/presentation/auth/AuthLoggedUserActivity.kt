@@ -64,6 +64,7 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
         drawerView.inflateMenu(R.menu.drawer_auth_logged_user)
         val navItemListener = NavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.logout_item -> authViewModel.logout()
                 R.id.lostpass_item -> {
                     navigate(R.id.to_lost_credential, LostCredentialFragment.argForPassword())
                     selectMenuItem(R.id.lostpass_item)

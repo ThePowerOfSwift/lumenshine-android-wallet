@@ -12,8 +12,6 @@ object LsSessionProfile {
 
     const val TAG = "LsSessionProfile"
 
-    var password: CharSequence = ""
-
     private val usernameSubject = PublishSubject.create<String>()
 
     var jwtToken: String = SgPrefs.jwtToken

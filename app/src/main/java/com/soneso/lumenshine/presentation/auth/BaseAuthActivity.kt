@@ -13,8 +13,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.model.entities.RegistrationStatus
-import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.LsActivity
 import kotlinx.android.synthetic.main.activity_base_auth.*
 import kotlinx.android.synthetic.main.layout_auth_activity.*
@@ -66,7 +64,9 @@ abstract class BaseAuthActivity : LsActivity() {
     }
 
     private fun setupTabBar() {
-
+        if (tabLayoutId == 0) {
+            return
+        }
         val view = LayoutInflater.from(this).inflate(tabLayoutId, appBarLayout, false)
         appBarLayout.addView(view)
         val set = ConstraintSet()
@@ -83,7 +83,8 @@ abstract class BaseAuthActivity : LsActivity() {
         }
     }
 
-    abstract fun invalidateCurrentSelection(destination: NavDestination)
+    protected open fun invalidateCurrentSelection(destination: NavDestination) {
+    }
 
     fun navigate(@IdRes resId: Int, args: Bundle? = null) {
         navController.navigate(resId, args)
@@ -95,34 +96,18 @@ abstract class BaseAuthActivity : LsActivity() {
 
     private fun subscribeForLiveData() {
 
-        authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it)
-        })
         authViewModel.liveIsUserLoggedIn.observe(this, Observer { loggedIn ->
-            if (!loggedIn && this@BaseAuthActivity is AuthLoggedUserActivity) {
-                finishAffinity()
-                AuthNewUserActivity.startInstance(this)
+            when {
+                !loggedIn && this@BaseAuthActivity is AuthLoggedUserActivity -> {
+                    finishAffinity()
+                    AuthNewUserActivity.startInstance(this)
+                }
+                loggedIn && this@BaseAuthActivity is AuthNewUserActivity -> {
+                    finishAffinity()
+                    AuthLoggedUserActivity.startInstance(this)
+                }
             }
         })
-    }
-
-    private fun renderRegistrationStatus(s: RegistrationStatus?) {
-
-        val status = s ?: return
-        when {
-            !status.tfaConfirmed -> {
-                navigate(R.id.to_confirm_tfa_screen)
-            }
-            !status.mailConfirmed -> {
-            }
-            !status.mnemonicConfirmed -> {
-                navigate(R.id.to_mnemonic_screen)
-            }
-            authViewModel.isFingerprintFlow -> {
-                finishAffinity()
-                MainActivity.startInstanceWithFingerprintSetup(this)
-            }
-        }
     }
 
     fun showLoading(loading: Boolean) {

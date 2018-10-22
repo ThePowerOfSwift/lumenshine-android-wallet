@@ -100,7 +100,6 @@ class UserRepository @Inject constructor(
         return userApi.loginStep1(email, tfaCode)
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        SgPrefs.username = email
                         SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
@@ -137,7 +136,7 @@ class UserRepository @Inject constructor(
                 .mapResource({
                     SgPrefs.tfaSecret = it.tfaSecret
                     userDao.saveRegistrationStatus(it.toRegistrationStatus(username))
-                    !it.tfaConfirmed || it.tfaSecret.isNotEmpty()
+                    it.tfaConfirmed && it.emailConfirmed && it.mnemonicConfirmed
                 }, { it })
                 .flatMap {
                     return@flatMap if (it.isSuccessful && !it.success()) {

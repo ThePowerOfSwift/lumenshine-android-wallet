@@ -32,7 +32,6 @@ class UserUseCases
 
     fun registerAccount(email: CharSequence, password: CharSequence, country: Country?): Flowable<Resource<Boolean, ServerException>> {
 
-        LsSessionProfile.password = password
         val userProfile = UserProfile()
         userProfile.email = email.toString()
         userProfile.country = country
@@ -82,12 +81,15 @@ class UserUseCases
 
     fun provideMnemonicForCurrentUser(): Flowable<Resource<String, LsException>> {
 
-        return userRepo.getUserData()
-                .map {
-                    val helper = UserSecurityHelper(LsSessionProfile.password.toCharArray())
-                    helper.decipherUserSecurity(it)
-                    Success<String, LsException>(String(helper.mnemonicChars))
+        return Flowable.combineLatest(
+                passSubject,
+                userRepo.getUserData(),
+                BiFunction { pass, userSecurity ->
+                    val helper = UserSecurityHelper(pass.toCharArray())
+                    helper.decipherUserSecurity(userSecurity)
+                    Success(String(helper.mnemonicChars))
                 }
+        )
     }
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()
@@ -136,7 +138,7 @@ class UserUseCases
 
         return Flowable.combineLatest(
                 // cristi.paval, 10/20/18 - provide registration status after login only. When the App has the password in RAM.
-                passSubject,
+                passSubject.filter { it.isNotBlank() },
                 userRepo.getRegistrationStatus(),
                 BiFunction<String, RegistrationStatus, RegistrationStatus> { _, status -> status }
         )
@@ -144,7 +146,7 @@ class UserUseCases
 
     fun setNewSession() {
 
-        // TODO: cristi.paval, 10/20/18 - clean the session somehow
+        passSubject.onNext("")
     }
 
     fun logout() = userRepo.logout()
