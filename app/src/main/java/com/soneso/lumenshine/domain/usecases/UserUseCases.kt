@@ -104,7 +104,7 @@ class UserUseCases
 
     fun provideLastUsername() = userRepo.getLastUsername()
 
-    fun isUserLoggedIn() = userRepo.getLastUsername().map { it.isNotBlank() }
+    fun isUserLoggedIn(): Single<Boolean> = userRepo.getLastUsername().map { it.isNotBlank() }
 
     fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 

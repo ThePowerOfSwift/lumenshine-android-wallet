@@ -98,8 +98,11 @@ abstract class BaseAuthActivity : LsActivity() {
         authViewModel.liveRegistrationStatus.observe(this, Observer {
             renderRegistrationStatus(it)
         })
-        authViewModel.liveLastUsername.observe(this, Observer {
-            // TODO: cristi.paval, 10/20/18 - continue logout operation here.
+        authViewModel.liveIsUserLoggedIn.observe(this, Observer { loggedIn ->
+            if (!loggedIn && this@BaseAuthActivity is AuthLoggedUserActivity) {
+                finishAffinity()
+                AuthNewUserActivity.startInstance(this)
+            }
         })
     }
 

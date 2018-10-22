@@ -50,6 +50,8 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveLogin: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
+    val liveIsUserLoggedIn: LiveData<Boolean> = MutableLiveData()
+
     var isFingerprintFlow = false
 
     private val compositeDisposable = CompositeDisposable()
@@ -237,7 +239,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    liveLastUsername.putValue("")
+                    liveIsUserLoggedIn.putValue(false)
                 }
         compositeDisposable.add(d)
     }
