@@ -48,7 +48,6 @@ class LoginFragment : AuthFragment() {
             false
         })
         loginButton.setOnClickListener {
-            //          context?.convertLabels()
             attemptLogin()
         }
     }
@@ -77,6 +76,11 @@ class LoginFragment : AuthFragment() {
             }
             else -> {
                 hideLoadingView()
+                if (resource.success()) {
+                    authActivity.goToMain()
+                } else {
+                    authActivity.goToSetup()
+                }
             }
         }
     }

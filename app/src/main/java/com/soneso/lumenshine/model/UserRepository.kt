@@ -6,7 +6,6 @@ import com.soneso.lumenshine.domain.util.base64String
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
-import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.SgApi
 import com.soneso.lumenshine.networking.api.UserApi
@@ -139,7 +138,8 @@ class UserRepository @Inject constructor(
                     it.tfaConfirmed && it.emailConfirmed && it.mnemonicConfirmed
                 }, { it })
                 .flatMap {
-                    return@flatMap if (it.isSuccessful && !it.success()) {
+                    SgPrefs.username = username
+                    return@flatMap if (it.isSuccessful && it.success()) {
                         refreshTfaSecret(publicKey188)
                     } else {
                         Flowable.just(it)
@@ -147,7 +147,7 @@ class UserRepository @Inject constructor(
                 }
     }
 
-    fun getUserData() = userDao.getUserDataById(SgPrefs.username)
+    fun getUserData(username: String = SgPrefs.username) = userDao.getUserDataById(username)
 
     fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
 
@@ -251,7 +251,7 @@ class UserRepository @Inject constructor(
 
     fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        return LsSessionProfile.observeUsername()
+        return SgPrefs.observeUsername().filter { it.isNotBlank() }
                 .flatMap { userDao.getRegistrationStatus(it) }
     }
 

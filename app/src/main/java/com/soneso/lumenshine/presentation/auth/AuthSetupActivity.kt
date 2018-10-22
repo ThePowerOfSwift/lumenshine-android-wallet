@@ -1,5 +1,7 @@
 package com.soneso.lumenshine.presentation.auth
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
@@ -8,6 +10,7 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.presentation.MainActivity
 import kotlinx.android.synthetic.main.activity_base_auth.*
+import timber.log.Timber
 
 class AuthSetupActivity : BaseAuthActivity() {
 
@@ -19,17 +22,17 @@ class AuthSetupActivity : BaseAuthActivity() {
 
         setupDrawer()
         subscribeToLiveData()
+        Timber.d("Auth setup activity created.")
     }
 
     private fun subscribeToLiveData() {
         authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it)
+            renderRegistrationStatus(it ?: return@Observer)
         })
     }
 
-    private fun renderRegistrationStatus(s: RegistrationStatus?) {
+    private fun renderRegistrationStatus(status: RegistrationStatus) {
 
-        val status = s ?: return
         when {
             !status.tfaConfirmed -> {
                 navigate(R.id.to_confirm_tfa_screen)
@@ -56,5 +59,14 @@ class AuthSetupActivity : BaseAuthActivity() {
             return@OnNavigationItemSelectedListener true
         }
         drawerView.setNavigationItemSelectedListener(navItemListener)
+    }
+
+    companion object {
+        const val TAG = "AuthSetupActivity"
+
+        fun startInstance(context: Context) {
+            val intent = Intent(context, AuthSetupActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 }
