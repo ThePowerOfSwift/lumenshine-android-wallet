@@ -343,7 +343,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="lbl_tfa_code">2 Factor Authentication Code</string>
 
-    <string name="lbl_tfa_secret">Your 2FA secret: %@</string>
+    <string name="lbl_tfa_secret">Your 2FA secret: %s</string>
 
     <string name="lbl_tfa_hint">For security reasons, your wallet will be protected by 2FA</string>
 

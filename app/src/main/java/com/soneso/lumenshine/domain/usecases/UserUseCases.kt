@@ -106,9 +106,16 @@ class UserUseCases
     fun provideLastUsername() = userRepo.getLastUsername()
 
     fun isUserLoggedIn(): Single<Boolean> =
-            userRepo.getRegistrationStatus()
-                    .firstOrError()
-                    .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
+            userRepo.getLastUsername()
+                    .flatMap { username ->
+                        if (username.isNotBlank()) {
+                            userRepo.getRegistrationStatus()
+                                    .firstOrError()
+                                    .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
+                        } else {
+                            Single.just(false)
+                        }
+                    }
 
     fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 

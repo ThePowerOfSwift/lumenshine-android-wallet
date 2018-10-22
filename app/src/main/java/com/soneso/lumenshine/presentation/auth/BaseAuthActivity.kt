@@ -97,17 +97,9 @@ abstract class BaseAuthActivity : LsActivity() {
 
     private fun subscribeForLiveData() {
 
-        authViewModel.liveIsUserLoggedIn.observe(this, Observer { loggedIn ->
-            when {
-                !loggedIn && this@BaseAuthActivity is AuthLoggedUserActivity -> {
-                    finishAffinity()
-                    AuthNewUserActivity.startInstance(this)
-                }
-                loggedIn && this@BaseAuthActivity is AuthNewUserActivity -> {
-                    finishAffinity()
-                    AuthLoggedUserActivity.startInstance(this)
-                }
-            }
+        authViewModel.liveLogout.observe(this, Observer {
+            finishAffinity()
+            AuthNewUserActivity.startInstance(this)
         })
     }
 

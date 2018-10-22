@@ -75,10 +75,10 @@ class ChangeTfaActivity : LsActivity() {
     }
 
     private fun attemptTfaChangeConfirm() {
-        if (tfa_code_view.text.isNotEmpty()) {
-            viewModel.confirmTfaSecretChange(tfa_code_view.text.toString())
+        if (tfaInputVoew.text.isNotEmpty()) {
+            viewModel.confirmTfaSecretChange(tfaInputVoew.text.toString())
         } else {
-            tfa_code_view.error = getString(R.string.error_field_required)
+            tfaInputVoew.error = getString(R.string.error_field_required)
         }
     }
 
@@ -128,7 +128,7 @@ class ChangeTfaActivity : LsActivity() {
                 change_tfa_current_pass.error = error.message
             }
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfa_code_view.error = error.message
+                tfaInputVoew.error = error.message
             }
             else -> {
                 showErrorSnackbar(error)

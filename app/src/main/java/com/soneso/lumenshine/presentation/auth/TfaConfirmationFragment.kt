@@ -49,7 +49,7 @@ class TfaConfirmationFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        send_button.setOnClickListener {
+        nextButton.setOnClickListener {
 
             //            when (authActivity.useCase) {
 //                AuthNewUserActivity.UseCase.AUTH -> {
@@ -98,7 +98,7 @@ class TfaConfirmationFragment : AuthFragment() {
 
         when (error.code) {
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfa_code_view.error = error.message
+                tfaInputVoew.error = error.message
             }
             else -> {
                 showErrorSnackbar(error)
@@ -108,14 +108,13 @@ class TfaConfirmationFragment : AuthFragment() {
 
     private fun setupToken(tfaSecret: String) {
 
-        token_view.keyListener = null
-        token_view.text = tfaSecret
-        copy_button.setOnClickListener {
+        tfaSecretView.text = getString(R.string.lbl_tfa_secret, tfaSecret)
+        copyButton.setOnClickListener {
 
             val clipboard = context?.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("", tfaSecret)
+            val clip = ClipData.newPlainText("2FA secret", tfaSecret)
             clipboard.primaryClip = clip
-            showSnackbar(getString(R.string.secret_copied))
+            showSnackbar(getString(R.string.tfa_secret_copy))
         }
     }
 
