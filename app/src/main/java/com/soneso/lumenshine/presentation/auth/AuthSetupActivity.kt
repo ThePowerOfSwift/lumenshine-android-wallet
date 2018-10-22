@@ -38,6 +38,7 @@ class AuthSetupActivity : BaseAuthActivity() {
                 navigate(R.id.to_confirm_tfa_screen)
             }
             !status.mailConfirmed -> {
+                navigate(R.id.to_confirm_mail_screen)
             }
             !status.mnemonicConfirmed -> {
                 navigate(R.id.to_mnemonic_screen)

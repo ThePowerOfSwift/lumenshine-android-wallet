@@ -66,4 +66,13 @@
         android:id="@+id/confirm_tfa_screen"
         android:name="com.soneso.lumenshine.presentation.auth.TfaConfirmationFragment" />
 
+
+    <action
+        android:id="@+id/to_confirm_mail_screen"
+        app:destination="@id/confirm_mail_screen" />
+
+    <fragment
+        android:id="@+id/confirm_mail_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.MailConfirmationFragment" />
+
 </navigation>

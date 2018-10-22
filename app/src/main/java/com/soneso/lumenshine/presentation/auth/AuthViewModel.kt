@@ -91,9 +91,9 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
-    fun confirmTfaRegistration(tfaCode: String) {
+    fun confirmTfaRegistration(tfaCode: CharSequence) {
 
-        val d = userUseCases.confirmTfaRegistration(tfaCode)
+        val d = userUseCases.confirmTfaRegistration(tfaCode.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

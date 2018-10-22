@@ -77,7 +77,7 @@
                     android:background="@color/lightGray" />
 
                 <com.soneso.lumenshine.presentation.widgets.FormInputView
-                    android:id="@+id/tfaInputVoew"
+                    android:id="@+id/tfaInputView"
                     android:layout_width="@dimen/size_160"
                     android:layout_height="wrap_content"
                     android:hint="@string/tfa_code"

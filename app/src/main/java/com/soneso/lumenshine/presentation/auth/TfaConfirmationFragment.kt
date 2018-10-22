@@ -48,17 +48,10 @@ class TfaConfirmationFragment : AuthFragment() {
     }
 
     private fun setupListeners() {
-
         nextButton.setOnClickListener {
-
-            //            when (authActivity.useCase) {
-//                AuthNewUserActivity.UseCase.AUTH -> {
-//                    authViewModel.confirmTfaRegistration(tfa_code_view.text.toString())
-//                }
-//                AuthNewUserActivity.UseCase.CONFIRM_TFA_SECRET_CHANGE -> {
-//                    authViewModel.confirmTfaSecretChange(tfa_code_view.text.toString())
-//                }
-//            }
+            if (tfaInputView.hasValidInput()) {
+                authViewModel.confirmTfaRegistration(tfaInputView.trimmedText)
+            }
         }
     }
 
@@ -98,7 +91,7 @@ class TfaConfirmationFragment : AuthFragment() {
 
         when (error.code) {
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfaInputVoew.error = error.message
+                tfaInputView.error = error.message
             }
             else -> {
                 showErrorSnackbar(error)
