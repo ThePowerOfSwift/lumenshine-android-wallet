@@ -1,14 +1,15 @@
 package com.soneso.lumenshine.presentation.util
 
 import android.animation.ObjectAnimator
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import android.graphics.drawable.Drawable
 import android.os.Build
-import android.support.annotation.StyleRes
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.StyleRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 /**
  * Extensions.
@@ -48,4 +49,8 @@ fun TextView.setTextStyle(@StyleRes resId: Int) {
 
 fun <T> LiveData<T>.putValue(value: T) {
     (this as MutableLiveData).value = value
+}
+
+fun TextView.setDrawableEnd(drawable: Drawable?) {
+    setCompoundDrawablesWithIntrinsicBounds(compoundDrawables[0], compoundDrawables[1], drawable, compoundDrawables[3])
 }

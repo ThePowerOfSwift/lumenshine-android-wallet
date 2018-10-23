@@ -1,165 +1,67 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.LsCardView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/size_7"
     tools:context="com.soneso.lumenshine.presentation.auth.RegistrationFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/size_10">
 
-
-        <com.soneso.lumenshine.presentation.customViews.SgTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_25"
-            android:text="@string/sign_up"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/text_size_20"
-            android:textStyle="bold" />
+            android:text="@string/signup" />
 
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_fill" />
 
-        <com.soneso.lumenshine.presentation.customViews.FormInputView
-            android:id="@+id/email"
+        <com.soneso.lumenshine.presentation.widgets.FormInputView
+            android:id="@+id/emailView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_45"
-            android:layout_marginRight="@dimen/size_45"
-            android:hint="@string/hint_email"
+            android:layout_marginTop="@dimen/size_5"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             app:error_text="@string/error_invalid_email"
             app:input_level="@integer/email_input_level"
             app:regex="@string/email_regex" />
 
-        <RelativeLayout
+        <com.soneso.lumenshine.presentation.widgets.PasswordInputView
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/size_5"
+            android:drawableEnd="@drawable/icon_help"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            app:input_level="@integer/password_input_level" />
 
-
-            <com.soneso.lumenshine.presentation.customViews.PasswordInputView
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_45"
-                android:layout_toStartOf="@+id/info_button_container"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword"
-                app:input_level="@integer/password_input_level" />
-
-            <LinearLayout
-                android:id="@+id/info_button_container"
-                android:layout_width="@dimen/size_45"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/password_info_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:padding="3dp"
-                    android:src="@drawable/ic_help_circle"
-                    tools:ignore="ContentDescription" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-
-        <com.soneso.lumenshine.presentation.customViews.PasswordInputView
-            android:id="@+id/password_confirmation"
+        <com.soneso.lumenshine.presentation.widgets.PasswordInputView
+            android:id="@+id/passConfirmationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_45"
-            android:layout_marginRight="@dimen/size_45"
+            android:layout_marginTop="@dimen/size_5"
             android:hint="@string/hint_password_confirmation"
             android:inputType="textPassword"
             app:input_level="@integer/password_confirmation_input_level" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <Spinner
-                android:id="@+id/salutation_spinner"
-                android:layout_width="@dimen/size_75"
-                android:layout_height="wrap_content"
-                android:background="@android:color/background_light" />
-
-            <com.soneso.lumenshine.presentation.customViews.FormInputView
-                android:id="@+id/first_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_first_name"
-                android:inputType="textPersonName"
-                app:input_level="@integer/first_name_input_level" />
-        </LinearLayout>
-
-        <com.soneso.lumenshine.presentation.customViews.FormInputView
-            android:id="@+id/last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_last_name"
-            android:inputType="textPersonName"
-            android:visibility="gone"
-            app:input_level="@integer/last_name_input_level" />
-
-        <Spinner
-            android:id="@+id/country_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_45"
-            android:background="@android:color/background_light"
-            android:visibility="gone" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/email_registration_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_register"
-                android:textColor="@color/text_dark"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true" />
-        </FrameLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_25"
-            android:gravity="center"
-            android:text="@string/already_have_account"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/sign_in_button"
+        <com.soneso.lumenshine.presentation.widgets.LsButton
+            android:id="@+id/registerButton"
+            style="@style/GreenButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sign_in_underlined"
-            android:textColor="@color/cyan_500"
-            android:visibility="gone" />
-
+            android:layout_height="@dimen/size_30"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_5"
+            android:text="@string/action_register" />
     </LinearLayout>
-
-</ScrollView>
+</androidx.cardview.widget.CardView>

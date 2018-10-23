@@ -1,24 +1,24 @@
 package com.soneso.lumenshine.presentation.settings
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.MainActivity
-import com.soneso.lumenshine.presentation.general.SgActivity
+import com.soneso.lumenshine.presentation.general.LsActivity
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.activity_change_tfa.*
 import kotlinx.android.synthetic.main.view_change_tfa_new_secret.*
 import kotlinx.android.synthetic.main.view_change_tfa_password_confirm.*
 import kotlinx.android.synthetic.main.view_change_tfa_success.*
 
-class ChangeTfaActivity : SgActivity() {
+class ChangeTfaActivity : LsActivity() {
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -75,10 +75,10 @@ class ChangeTfaActivity : SgActivity() {
     }
 
     private fun attemptTfaChangeConfirm() {
-        if (tfa_code_view.text.isNotEmpty()) {
-            viewModel.confirmTfaSecretChange(tfa_code_view.text.toString())
+        if (tfaInputVoew.text.isNotEmpty()) {
+            viewModel.confirmTfaSecretChange(tfaInputVoew.text.toString())
         } else {
-            tfa_code_view.error = getString(R.string.error_field_required)
+            tfaInputVoew.error = getString(R.string.error_field_required)
         }
     }
 
@@ -87,18 +87,15 @@ class ChangeTfaActivity : SgActivity() {
 
         when (resource.state) {
             Resource.SUCCESS -> {
-//                hideProgressDialog()
                 change_tfa_password_confirm_view.visibility = View.GONE
                 change_tfa_new_secret_view.visibility = View.VISIBLE
                 setupToken(resource.success())
             }
             Resource.LOADING -> {
 
-//                showProgressDialog()
             }
             Resource.FAILURE -> {
 
-//                hideProgressDialog()
                 handleError(resource.failure())
             }
         }
@@ -107,18 +104,15 @@ class ChangeTfaActivity : SgActivity() {
     private fun renderTfaChangeConfirmation(resource: Resource<Boolean, ServerException>) {
         when (resource.state) {
             Resource.SUCCESS -> {
-//                hideProgressDialog()
 
                 change_tfa_new_secret_view.visibility = View.GONE
                 change_tfa_success_view.visibility = View.VISIBLE
             }
 
             Resource.LOADING -> {
-//                showProgressDialog()
             }
 
             Resource.FAILURE -> {
-//                hideProgressDialog()
                 handleError(resource.failure())
             }
         }
@@ -134,7 +128,7 @@ class ChangeTfaActivity : SgActivity() {
                 change_tfa_current_pass.error = error.message
             }
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfa_code_view.error = error.message
+                tfaInputVoew.error = error.message
             }
             else -> {
                 showErrorSnackbar(error)

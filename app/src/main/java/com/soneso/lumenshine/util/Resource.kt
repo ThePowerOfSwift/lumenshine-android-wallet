@@ -1,6 +1,6 @@
 package com.soneso.lumenshine.util
 
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 
 open class Resource<SuccessType, FailureType>(
         @State val state: Int,

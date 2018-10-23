@@ -20,7 +20,7 @@
             android:padding="@dimen/size_10">
 
 
-            <com.soneso.lumenshine.presentation.customViews.SgTextView
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/email_confirm_title"
@@ -35,7 +35,7 @@
             android:layout_height="1px"
             android:background="@color/text_dark" />
 
-        <com.soneso.lumenshine.presentation.customViews.SgTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_15"
@@ -46,7 +46,7 @@
             android:textColor="@color/text_dark"
             android:textSize="@dimen/text_size_16" />
 
-        <com.soneso.lumenshine.presentation.customViews.SgTextView
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:id="@+id/mail_confirmation_error_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

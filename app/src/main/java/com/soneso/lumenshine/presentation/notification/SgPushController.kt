@@ -1,8 +1,8 @@
 package com.soneso.lumenshine.presentation.notification
 
 import android.content.Context
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.soneso.lumenshine.R
 
 /**

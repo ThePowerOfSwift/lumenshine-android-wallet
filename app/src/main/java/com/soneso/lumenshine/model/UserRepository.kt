@@ -6,7 +6,6 @@ import com.soneso.lumenshine.domain.util.base64String
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
-import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.SgApi
 import com.soneso.lumenshine.networking.api.UserApi
@@ -15,6 +14,7 @@ import com.soneso.lumenshine.persistence.SgPrefs
 import com.soneso.lumenshine.persistence.room.LsDatabase
 import com.soneso.lumenshine.util.*
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import retrofit2.Retrofit
@@ -57,7 +57,6 @@ class UserRepository @Inject constructor(
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    SgPrefs.username = userProfile.email
                     SgPrefs.tfaSecret = it.token2fa
                     userDao.saveRegistrationStatus(RegistrationStatus(userProfile.email, false, false, false))
                     true
@@ -100,7 +99,6 @@ class UserRepository @Inject constructor(
         return userApi.loginStep1(email, tfaCode)
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        SgPrefs.username = email
                         SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
@@ -137,10 +135,11 @@ class UserRepository @Inject constructor(
                 .mapResource({
                     SgPrefs.tfaSecret = it.tfaSecret
                     userDao.saveRegistrationStatus(it.toRegistrationStatus(username))
-                    !it.tfaConfirmed || it.tfaSecret.isNotEmpty()
+                    it.tfaConfirmed && it.emailConfirmed && it.mnemonicConfirmed
                 }, { it })
                 .flatMap {
-                    return@flatMap if (it.isSuccessful && !it.success()) {
+                    SgPrefs.username = username
+                    return@flatMap if (it.isSuccessful && it.success()) {
                         refreshTfaSecret(publicKey188)
                     } else {
                         Flowable.just(it)
@@ -148,7 +147,7 @@ class UserRepository @Inject constructor(
                 }
     }
 
-    fun getUserData() = userDao.getUserDataById(SgPrefs.username)
+    fun getUserData(username: String = SgPrefs.username) = userDao.getUserDataById(username)
 
     fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
 
@@ -252,8 +251,17 @@ class UserRepository @Inject constructor(
 
     fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        return LsSessionProfile.observeUsername()
+        return SgPrefs.observeUsername().filter { it.isNotBlank() }
                 .flatMap { userDao.getRegistrationStatus(it) }
+    }
+
+    fun logout(): Completable {
+        return Completable.create {
+            val username = SgPrefs.username
+            SgPrefs.username = ""
+            userDao.removeRegistrationStatus(username)
+            it.onComplete()
+        }
     }
 
     companion object {

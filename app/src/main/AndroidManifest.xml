@@ -13,18 +13,41 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".presentation.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.auth.AuthNewUserActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.auth.AuthSetupActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".presentation.auth.AuthLoggedUserActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".presentation.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name=".model.push.SgFirebaseInstanceIdService"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
         <service
             android:name=".model.push.SgFirebaseMessagingService"
             tools:ignore="ExportedService">
@@ -33,25 +56,29 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".presentation.auth.AuthActivity"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar">
+        <service
+            android:name=".model.push.LsFirebaseInstanceIdService"
+            tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-        </activity>
+        </service>
+
         <activity android:name=".presentation.settings.FingerPrintSetupActivity" />
+
         <activity
             android:name=".presentation.settings.ChangePasswordActivity"
             android:label="@string/change_password_label"
             android:parentActivityName=".presentation.MainActivity" />
+
         <activity
             android:name=".presentation.settings.ChangeTfaActivity"
             android:label="@string/change_tfa_label"
             android:parentActivityName=".presentation.MainActivity" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

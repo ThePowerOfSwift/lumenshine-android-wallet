@@ -1,14 +1,14 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -22,10 +22,8 @@ import kotlinx.android.synthetic.main.fragment_finger_print.*
  */
 class FingerPrintFragment : AuthFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_finger_print, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.fragment_finger_print, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,14 +41,14 @@ class FingerPrintFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+        passwordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
                 return@OnEditorActionListener true
             }
             false
         })
-        submit_button.setOnClickListener { attemptLogin() }
+        activateButton.setOnClickListener { attemptLogin() }
     }
 
     private fun subscribeForLiveData() {
@@ -61,13 +59,6 @@ class FingerPrintFragment : AuthFragment() {
     }
 
     private fun showLoadingButton(loading: Boolean) {
-        if (loading) {
-            progress_bar.visibility = View.VISIBLE
-            submit_button.visibility = View.INVISIBLE
-        } else {
-            progress_bar.visibility = View.GONE
-            submit_button.visibility = View.VISIBLE
-        }
     }
 
     private fun renderLoginStatus(resource: Resource<Boolean, ServerException>) {
@@ -94,7 +85,7 @@ class FingerPrintFragment : AuthFragment() {
 
         when (e.code) {
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                password.error = e.message
+                passwordView.error = e.message
             }
             else -> {
                 showErrorSnackbar(e)
@@ -106,7 +97,7 @@ class FingerPrintFragment : AuthFragment() {
 
         val username = authViewModel.liveLastUsername.value ?: return
 
-        authViewModel.login(username, password.trimmedText)
+        authViewModel.login(username, passwordView.trimmedText)
     }
 
     companion object {

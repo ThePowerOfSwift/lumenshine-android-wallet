@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/auth_graph"
+    app:startDestination="@id/login_screen">
+
+    <action
+        android:id="@+id/to_login"
+        app:destination="@id/login_screen" />
+
+    <fragment
+        android:id="@+id/login_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.LoginFragment" />
+
+
+    <action
+        android:id="@+id/to_register"
+        app:destination="@id/register_screen" />
+
+    <fragment
+        android:id="@+id/register_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.RegistrationFragment" />
+
+
+    <action
+        android:id="@+id/to_lost_credential"
+        app:destination="@id/lost_credential_screen" />
+
+    <fragment
+        android:id="@+id/lost_credential_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.LostCredentialFragment" />
+
+
+    <action
+        android:id="@+id/to_pass_screen"
+        app:destination="@id/pass_screen" />
+
+    <fragment
+        android:id="@+id/pass_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.PasswordFragment" />
+
+
+    <action
+        android:id="@+id/to_fingerprint_screen"
+        app:destination="@id/fingerprint_screen" />
+
+    <fragment
+        android:id="@+id/fingerprint_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.FingerPrintFragment" />
+
+
+    <action
+        android:id="@+id/to_mnemonic_screen"
+        app:destination="@id/mnemonic_screen" />
+
+    <fragment
+        android:id="@+id/mnemonic_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.MnemonicFragment" />
+
+
+    <action
+        android:id="@+id/to_confirm_tfa_screen"
+        app:destination="@id/confirm_tfa_screen" />
+
+    <fragment
+        android:id="@+id/confirm_tfa_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.TfaConfirmationFragment" />
+
+
+    <action
+        android:id="@+id/to_confirm_mail_screen"
+        app:destination="@id/confirm_mail_screen" />
+
+    <fragment
+        android:id="@+id/confirm_mail_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.MailConfirmationFragment" />
+
+</navigation>

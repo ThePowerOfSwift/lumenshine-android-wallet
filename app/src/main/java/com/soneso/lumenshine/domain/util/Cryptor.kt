@@ -27,11 +27,11 @@ import javax.crypto.spec.SecretKeySpec
  */
 object Cryptor {
 
-    val TAG = Cryptor::class.java.simpleName!!
+    const val TAG = "Cryptor"
     private const val KEY_LENGTH = 256
     private const val BITS_IN_BYTES = 8
     private const val SALT_LENGTH = KEY_LENGTH / BITS_IN_BYTES
-    private const val PBE_ITERATION_COUNT = 20000
+    private const val PBE_ITERATION_COUNT = 65000
     private const val PBKDF2_DERIVATION_ALGORITHM = "PBKDF2WithHmacSHA1"
     private const val CIPHER_ALGORITHM = "AES/CBC/NoPadding"
 

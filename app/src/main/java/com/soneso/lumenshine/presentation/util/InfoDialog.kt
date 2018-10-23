@@ -1,13 +1,13 @@
 package com.soneso.lumenshine.presentation.util
 
 import android.app.Dialog
-import android.app.DialogFragment
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.fragment.app.DialogFragment
 import com.soneso.lumenshine.R
 import kotlinx.android.synthetic.main.dialog_info.view.*
 
@@ -16,9 +16,6 @@ import kotlinx.android.synthetic.main.dialog_info.view.*
  * general info dialog.
  * Created by attila.janosi on 7/10/18.
  */
-
-private val ICON_RESOURCE = "icon_resource"
-private val TITLE_RESOURCE = "title_resource"
 
 class InfoDialog : DialogFragment() {
 
@@ -45,8 +42,8 @@ class InfoDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle)
-        iconId = arguments.getInt(ICON_RESOURCE)
-        titleId = arguments.getInt(TITLE_RESOURCE)
+        iconId = arguments?.getInt(ICON_RESOURCE) ?: 0
+        titleId = arguments?.getInt(TITLE_RESOURCE) ?: 0
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -61,9 +58,9 @@ class InfoDialog : DialogFragment() {
             mView.info_dialog_title_icon.visibility = View.GONE
         }
         mView.info_dialog_title_text.setText(titleId)
-        dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
-        val content = viewBuilder!!.createView(activity, LayoutInflater.from(activity))
+        val content = viewBuilder!!.createView(activity!!, LayoutInflater.from(activity))
         mView.container.addView(content)
 
         dialog.setContentView(mView)
@@ -98,6 +95,8 @@ class InfoDialog : DialogFragment() {
                 }
 
         const val TAG = "InfoDialog"
+        private const val ICON_RESOURCE = "icon_resource"
+        private const val TITLE_RESOURCE = "title_resource"
     }
 
 }

@@ -1,19 +1,14 @@
 package com.soneso.lumenshine.presentation
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
-import com.google.firebase.iid.FirebaseInstanceId
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.general.SgActivity
-import com.soneso.lumenshine.presentation.general.SgFragment
+import com.soneso.lumenshine.presentation.general.LsActivity
+import com.soneso.lumenshine.presentation.general.LsFragment
 import com.soneso.lumenshine.presentation.home.HomeFragment
 import com.soneso.lumenshine.presentation.settings.FingerPrintSetupActivity
 import com.soneso.lumenshine.presentation.settings.SettingsFragment
@@ -22,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
-class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : LsActivity(), com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,24 +26,20 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
 
         fab.setOnClickListener { view ->
 
-            copyFcmIdToClipboard()
-
-            shareFcmId()
-
-            Snackbar.make(view, "Your FCM device id was copied to clipboard!", Snackbar.LENGTH_LONG)
+            com.google.android.material.snackbar.Snackbar.make(view, "No action set on this button!", com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
         val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         collapsing_toolbar.isTitleEnabled = false
         changeTitle(R.string.app_name)
 
-        nav_view.setNavigationItemSelectedListener(this)
+        drawerView.setNavigationItemSelectedListener(this)
 
-        val homeItem = nav_view.menu.getItem(0)
+        val homeItem = drawerView.menu.getItem(0)
         homeItem.isChecked = true
         onNavigationItemSelected(homeItem)
         if (intent.hasExtra(EXTRA_FINGERPRINT_SETUP)) {
@@ -57,23 +48,9 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
         }
     }
 
-    private fun shareFcmId() {
-        val shareBody = FirebaseInstanceId.getInstance().token
-        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
-        sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
-        startActivity(Intent.createChooser(sharingIntent, null))
-    }
-
-    private fun copyFcmIdToClipboard() {
-        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("FCM_ID", FirebaseInstanceId.getInstance().token)
-        clipboard.primaryClip = clip
-    }
-
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -82,7 +59,7 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_home -> {
+            R.id.home_item -> {
                 fab.show()
                 changeTitle(R.string.app_name)
                 app_bar_layout.setExpanded(true)
@@ -118,11 +95,11 @@ class MainActivity : SgActivity(), NavigationView.OnNavigationItemSelectedListen
             }
         }
 
-        drawer_layout.closeDrawer(GravityCompat.START)
+        drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    fun replaceFragment(fragment: SgFragment, tag: String) {
+    private fun replaceFragment(fragment: LsFragment, tag: String) {
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, tag)

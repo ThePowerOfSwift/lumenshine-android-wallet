@@ -1,12 +1,12 @@
 package com.soneso.lumenshine.presentation.util
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
+import androidx.fragment.app.FragmentActivity
 import com.soneso.lumenshine.R
 
 
@@ -28,8 +28,8 @@ fun Context.isIntentSafe(intent: Intent): Boolean {
     return activities.size > 0
 }
 
-fun Activity.showInfoDialog() {
-    val fragmentTransaction = this.fragmentManager.beginTransaction()
+fun FragmentActivity.showInfoDialog() {
+    val fragmentTransaction = this.supportFragmentManager.beginTransaction()
     val infoDialog = InfoDialog.newInstance(R.string.info_dialog, R.drawable.ic_error_outline)
     infoDialog.setViewBuilder(object : InfoDialog.ViewBuilder {
         override fun createView(context: Context, inflater: LayoutInflater): View {
@@ -46,8 +46,8 @@ fun Activity.showInfoDialog() {
  * @param contentResId hte content layout resource id
  * @param (optional) the dialog icon id
  */
-fun Activity.showInfoDialog(titleResId: Int, contentResId: Int, iconResId: Int = 0) {
-    val fragmentTransaction = this.fragmentManager.beginTransaction()
+fun FragmentActivity.showInfoDialog(titleResId: Int, contentResId: Int, iconResId: Int = 0) {
+    val fragmentTransaction = this.supportFragmentManager.beginTransaction()
     val infoDialog = InfoDialog.newInstance(titleResId, iconResId)
     infoDialog.setViewBuilder(object : InfoDialog.ViewBuilder {
         override fun createView(context: Context, inflater: LayoutInflater): View {

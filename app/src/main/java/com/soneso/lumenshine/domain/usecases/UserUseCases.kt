@@ -6,7 +6,6 @@ import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
-import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -15,9 +14,10 @@ import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import com.soneso.lumenshine.util.Success
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
+import io.reactivex.processors.BehaviorProcessor
 import javax.inject.Inject
 
 /**
@@ -27,9 +27,10 @@ import javax.inject.Inject
 class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
 
+    private val passSubject = BehaviorProcessor.create<String>()
+
     fun registerAccount(email: CharSequence, password: CharSequence, country: Country?): Flowable<Resource<Boolean, ServerException>> {
 
-        LsSessionProfile.password = password
         val userProfile = UserProfile()
         userProfile.email = email.toString()
         userProfile.country = country
@@ -51,15 +52,17 @@ class UserUseCases
 
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Flowable<Resource<Boolean, ServerException>> {
 
-        LsSessionProfile.password = password.toString()
+        passSubject.onNext(password.toString())
+
         val tfa = tfaCode?.toString()
                 ?: OtpProvider.currentTotpCode(LsSessionProfile.tfaSecret.decodeBase32())
+
         val username = email.toString()
 
-        return userRepo.loginStep1(email.toString(), tfa)
+        return userRepo.loginStep1(username, tfa)
                 .flatMap {
                     if (it.isSuccessful) {
-                        userRepo.getUserData().flatMap { userData ->
+                        userRepo.getUserData(username).flatMap { userData ->
                             val helper = UserSecurityHelper(password.toCharArray())
                             val publicKeyIndex188 = helper.decipherUserSecurity(userData)
                             if (publicKeyIndex188 == null) {
@@ -77,12 +80,15 @@ class UserUseCases
 
     fun provideMnemonicForCurrentUser(): Flowable<Resource<String, LsException>> {
 
-        return userRepo.getUserData()
-                .map {
-                    val helper = UserSecurityHelper(LsSessionProfile.password.toCharArray())
-                    helper.decipherUserSecurity(it)
-                    Success<String, LsException>(String(helper.mnemonicChars))
+        return Flowable.combineLatest(
+                passSubject,
+                userRepo.getUserData(),
+                BiFunction { pass, userSecurity ->
+                    val helper = UserSecurityHelper(pass.toCharArray())
+                    helper.decipherUserSecurity(userSecurity)
+                    Success(String(helper.mnemonicChars))
                 }
+        )
     }
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()
@@ -98,6 +104,18 @@ class UserUseCases
     fun requestTfaReset(email: String) = userRepo.requestEmailForTfaReset(email)
 
     fun provideLastUsername() = userRepo.getLastUsername()
+
+    fun isUserLoggedIn(): Single<Boolean> =
+            userRepo.getLastUsername()
+                    .flatMap { username ->
+                        if (username.isNotBlank()) {
+                            userRepo.getRegistrationStatus()
+                                    .firstOrError()
+                                    .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
+                        } else {
+                            Single.just(false)
+                        }
+                    }
 
     fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 
@@ -125,27 +143,12 @@ class UserUseCases
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
 
-    fun provideRegistrationStatus(): Flowable<RegistrationStatus> {
+    fun provideRegistrationStatus() = userRepo.getRegistrationStatus()
 
-        return Flowable.create(
-                { emitter ->
-                    val d = userRepo.getRegistrationStatus()
-                            .subscribe {
-                                if (LsSessionProfile.password.isNotEmpty()) {
-                                    emitter.onNext(it)
-                                }
-                            }
-                    emitter.setCancellable {
-                        d.dispose()
-                    }
-                },
-                BackpressureStrategy.LATEST
-        )
-    }
+    fun logout() = userRepo.logout()
 
     fun setNewSession() {
-
-        LsSessionProfile.password = ""
+        passSubject.onNext("")
     }
 
     companion object {

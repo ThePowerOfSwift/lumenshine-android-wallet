@@ -1,21 +1,15 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.presentation.util.showInfoDialog
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_registration.*
 
@@ -34,9 +28,6 @@ class RegistrationFragment : AuthFragment() {
         subscribeForLiveData()
 
         setupListeners()
-        password_info_button.setOnClickListener {
-            (activity as Activity).showInfoDialog(R.string.password_requirements, R.layout.info_password)
-        }
     }
 
     private fun subscribeForLiveData() {
@@ -49,18 +40,7 @@ class RegistrationFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        sign_in_button.setOnClickListener { replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG) }
-        email_registration_button.setOnClickListener { attemptRegistration() }
-        salutation_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d(TAG, "Selected position: nothing")
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val textView = view as? TextView ?: return
-                textView.setTextColor(Color.BLACK)
-            }
-        }
+        registerButton.setOnClickListener { attemptRegistration() }
     }
 
     private fun renderRegistration(resource: Resource<Boolean, ServerException>) {
@@ -68,15 +48,15 @@ class RegistrationFragment : AuthFragment() {
         when (resource.state) {
 
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.FAILURE -> {
 
-                hideProgressDialog()
+                hideLoadingView()
                 handleError(resource.failure())
             }
             else -> {
-                hideProgressDialog()
+                hideLoadingView()
             }
         }
     }
@@ -88,7 +68,7 @@ class RegistrationFragment : AuthFragment() {
 
         when (e.code) {
             ErrorCodes.SIGNUP_EMAIL_ALREADY_EXIST -> {
-                email.error = e.message
+                emailView.error = e.message
             }
             else -> {
                 showErrorSnackbar(e)
@@ -103,23 +83,22 @@ class RegistrationFragment : AuthFragment() {
         }
 
         authViewModel.createAccount(
-                email.trimmedText,
-                password.trimmedText,
-                country_spinner.selectedItemPosition
+                emailView.trimmedText,
+                password.trimmedText
         )
     }
 
     private fun isValidForm() =
-            email.hasValidInput()
+            emailView.hasValidInput()
                     && password.isValidPassword()
                     && isPasswordMatch()
 
 
     private fun isPasswordMatch(): Boolean {
-        val match = password.trimmedText == password_confirmation.trimmedText
+        val match = password.trimmedText == passConfirmationView.trimmedText
         if (!match) {
             password.error = getString(R.string.password_not_match)
-            password_confirmation.error = getString(R.string.password_not_match)
+            passConfirmationView.error = getString(R.string.password_not_match)
         }
         return match
     }

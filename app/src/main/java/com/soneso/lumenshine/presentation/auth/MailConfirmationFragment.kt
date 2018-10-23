@@ -1,12 +1,12 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.LsException
@@ -56,13 +56,13 @@ class MailConfirmationFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.SUCCESS -> {
-                hideProgressDialog()
+                hideLoadingView()
             }
             Resource.FAILURE -> {
-                hideProgressDialog()
+                hideLoadingView()
                 showErrorSnackbar(resource.failure())
             }
         }
@@ -72,14 +72,14 @@ class MailConfirmationFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.SUCCESS -> {
-                hideProgressDialog()
+                hideLoadingView()
                 showSnackbar("Mail sent!")
             }
             Resource.FAILURE -> {
-                hideProgressDialog()
+                hideLoadingView()
                 showErrorSnackbar(resource.failure())
             }
         }

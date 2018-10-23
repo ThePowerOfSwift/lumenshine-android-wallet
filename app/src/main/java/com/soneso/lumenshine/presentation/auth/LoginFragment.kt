@@ -1,14 +1,14 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -40,14 +40,16 @@ class LoginFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+        passwordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
                 return@OnEditorActionListener true
             }
             false
         })
-        email_sign_in_button.setOnClickListener { attemptLogin() }
+        loginButton.setOnClickListener {
+            attemptLogin()
+        }
     }
 
     private fun attemptLogin() {
@@ -56,9 +58,9 @@ class LoginFragment : AuthFragment() {
             return
         }
         authViewModel.login(
-                email.trimmedText,
-                password.trimmedText,
-                two_factor_code.trimmedText
+                emailView.trimmedText,
+                passwordView.trimmedText,
+                tfaCodeView.trimmedText
         )
     }
 
@@ -66,14 +68,19 @@ class LoginFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showProgressDialog()
+                showLoadingView()
             }
             Resource.FAILURE -> {
-                hideProgressDialog()
+                hideLoadingView()
                 handleError(resource.failure())
             }
             else -> {
-                hideProgressDialog()
+                hideLoadingView()
+                if (resource.success()) {
+                    authActivity.goToMain()
+                } else {
+                    authActivity.goToSetup()
+                }
             }
         }
     }
@@ -85,13 +92,13 @@ class LoginFragment : AuthFragment() {
 
         when (e.code) {
             ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
-                email.error = e.message
+                emailView.error = e.message
             }
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                two_factor_code.error = e.message
+                tfaCodeView.error = e.message
             }
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                password.error = e.message
+                passwordView.error = e.message
             }
             else -> {
                 showErrorSnackbar(e)
@@ -99,7 +106,7 @@ class LoginFragment : AuthFragment() {
         }
     }
 
-    private fun isValidForm() = email.hasValidInput()
+    private fun isValidForm() = emailView.hasValidInput()
 
     companion object {
 

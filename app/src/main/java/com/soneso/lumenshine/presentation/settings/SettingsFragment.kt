@@ -8,14 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.persistence.SgPrefs
-import com.soneso.lumenshine.presentation.general.SgFragment
+import com.soneso.lumenshine.presentation.general.LsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 /**
- * A simple [SgFragment] subclass.
+ * A simple [LsFragment] subclass.
  *
  */
-class SettingsFragment : SgFragment() {
+class SettingsFragment : LsFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_settings, container, false)

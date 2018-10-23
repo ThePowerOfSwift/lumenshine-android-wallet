@@ -1,13 +1,13 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -18,30 +18,27 @@ import kotlinx.android.synthetic.main.fragment_password.*
 class PasswordFragment : AuthFragment() {
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_password, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.fragment_password, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupListeners()
         subscribeForLiveData()
-        password.requestFocus()
     }
 
     private fun setupListeners() {
 
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+        passwordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin()
                 return@OnEditorActionListener true
             }
             false
         })
-        submit_button.setOnClickListener { attemptLogin() }
-        lost_password_button.setOnClickListener {
+        unlockButton.setOnClickListener { attemptLogin() }
+        lostPassButton.setOnClickListener {
             // TODO: cristi.paval, 8/25/18 - this anti pattern. Implement it accordingly.
 //            SgPrefs.removeUserCrendentials()
 //            authViewModel.refreshLastUserCredentials()
@@ -74,13 +71,9 @@ class PasswordFragment : AuthFragment() {
 
     private fun showLoading(loading: Boolean) {
         if (loading) {
-            password.isEnabled = false
-            progress_bar.visibility = View.VISIBLE
-            submit_button.visibility = View.INVISIBLE
+//            unlockButton.visibility = View.INVISIBLE
         } else {
-            password.isEnabled = true
-            progress_bar.visibility = View.GONE
-            submit_button.visibility = View.VISIBLE
+//            unlockButton.visibility = View.VISIBLE
         }
     }
 
@@ -91,7 +84,7 @@ class PasswordFragment : AuthFragment() {
 
         when (e.code) {
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                password.error = e.message
+                passwordView.error = e.message
             }
             else -> {
                 showErrorSnackbar(e)
@@ -102,8 +95,7 @@ class PasswordFragment : AuthFragment() {
     private fun attemptLogin() {
 
         val username = authViewModel.liveLastUsername.value ?: return
-
-        authViewModel.login(username, password.trimmedText)
+        authViewModel.login(username, passwordView.trimmedText)
     }
 
     companion object {
@@ -111,6 +103,4 @@ class PasswordFragment : AuthFragment() {
 
         fun newInstance() = PasswordFragment()
     }
-
-
 }

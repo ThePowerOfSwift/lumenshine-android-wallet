@@ -1,8 +1,8 @@
 package com.soneso.lumenshine.di
 
-import android.arch.persistence.room.Room
 import android.content.Context
 import android.text.SpannableStringBuilder
+import androidx.room.Room
 import com.commonsware.cwac.saferoom.SafeHelperFactory
 import com.soneso.lumenshine.networking.NetworkUtil
 import com.soneso.lumenshine.networking.api.SgApi

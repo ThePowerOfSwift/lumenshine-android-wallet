@@ -1,8 +1,8 @@
 package com.soneso.lumenshine.presentation.auth
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.usecases.UserUseCases
 import com.soneso.lumenshine.model.entities.RegistrationStatus
@@ -13,6 +13,7 @@ import com.soneso.lumenshine.util.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * View model.
@@ -50,12 +51,13 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveLogin: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
+    val liveLogout: LiveData<Unit> = MutableLiveData()
+
     var isFingerprintFlow = false
 
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        userUseCases.setNewSession()
         initLastUsername()
         initRegistrationStatus()
     }
@@ -66,12 +68,13 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
+                    Timber.d("Registration status just published.")
                     liveRegistrationStatus.putValue(it)
                 }
         compositeDisposable.add(d)
     }
 
-    fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int) {
+    fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int = 0) {
 
         val country = try {
             liveCountries.value?.success()?.get(countryPosition)
@@ -88,9 +91,9 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
-    fun confirmTfaRegistration(tfaCode: String) {
+    fun confirmTfaRegistration(tfaCode: CharSequence) {
 
-        val d = userUseCases.confirmTfaRegistration(tfaCode)
+        val d = userUseCases.confirmTfaRegistration(tfaCode.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -224,11 +227,22 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) {
 
-        userUseCases.confirmTfaSecretChange(tfaCode)
+        val d = userUseCases.confirmTfaSecretChange(tfaCode)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     liveTfaChangeConfirmation.putValue(it)
                 }
+        compositeDisposable.add(d)
+    }
+
+    fun logout() {
+        val d = userUseCases.logout()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    liveLogout.putValue(Unit)
+                }
+        compositeDisposable.add(d)
     }
 
     override fun onCleared() {

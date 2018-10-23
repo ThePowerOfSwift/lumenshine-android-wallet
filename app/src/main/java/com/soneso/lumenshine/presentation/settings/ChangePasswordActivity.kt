@@ -1,20 +1,20 @@
 package com.soneso.lumenshine.presentation.settings
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.MainActivity
-import com.soneso.lumenshine.presentation.general.SgActivity
+import com.soneso.lumenshine.presentation.general.LsActivity
 import com.soneso.lumenshine.presentation.util.showInfoDialog
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.activity_change_password.*
 import kotlinx.android.synthetic.main.view_change_password.*
 import kotlinx.android.synthetic.main.view_change_password_success.*
 
-class ChangePasswordActivity : SgActivity() {
+class ChangePasswordActivity : LsActivity() {
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -75,13 +75,11 @@ class ChangePasswordActivity : SgActivity() {
         when (resource.state) {
 
             Resource.SUCCESS -> {
-//                hideProgressDialog()
                 change_password_view.visibility = View.GONE
                 change_password_success_view.visibility = View.VISIBLE
 
             }
             Resource.LOADING -> {
-//                showProgressDialog()
             }
             Resource.FAILURE -> {
                 showErrorSnackbar(resource.failure())

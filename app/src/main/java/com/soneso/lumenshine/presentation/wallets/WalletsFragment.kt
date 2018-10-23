@@ -1,18 +1,17 @@
 package com.soneso.lumenshine.presentation.wallets
 
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.Wallet
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.presentation.general.SgFragment
+import com.soneso.lumenshine.presentation.general.LsFragment
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_wallets.*
 
@@ -20,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_wallets.*
 /**
  * A simple [Fragment] subclass.
  */
-class WalletsFragment : SgFragment() {
+class WalletsFragment : LsFragment() {
 
     private lateinit var walletsViewModel: WalletsViewModel
     private lateinit var walletAdapter: WalletAdapter
@@ -67,7 +66,7 @@ class WalletsFragment : SgFragment() {
     private fun setupRecyclerView() {
 
         walletAdapter = WalletAdapter()
-        walletRecyclerView.layoutManager = LinearLayoutManager(context)
+        walletRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         walletRecyclerView.setHasFixedSize(true)
         walletRecyclerView.adapter = walletAdapter
     }

@@ -6,6 +6,7 @@
     <color name="grey_800">#424242</color>
     <color name="grey_700">#616161</color>
     <color name="grey_600">#757575</color>
+    <color name="cyan">#47AFDE</color>
     <color name="cyan_800">#00838f</color>
     <color name="cyan_500">#00bcd4</color>
     <color name="cyan_400">#26c6da</color>
@@ -14,8 +15,18 @@
     <color name="white">#ffffff</color>
     <color name="text_dark">#1b1b1b</color>
     <color name="text_light">#e2e2e2</color>
-    <color name="transparent">#00000000</color>
-    <color name="red">#FF0000</color>
     <color name="yellow">#d6de02</color>
-    <color name="green">#1db41d</color>
+    <color name="black_75opacity">#BF000000</color>
+
+    <color name="lightBlue">#b2e7ff</color>
+    <color name="blue">#39ACE1</color>
+    <color name="darkBlue">#337abd</color>
+    <color name="lightBlack">#555555</color>
+    <color name="red">#ec1c23</color>
+    <color name="green">#91c74a</color>
+    <color name="green_pressed">#7BA83E</color>
+    <color name="lightGray">#e1e1e1</color>
+    <color name="gray">#a8a8a8</color>
+    <color name="darkGray">#898989</color>
+    <color name="darkerGray">#333333</color>
 </resources>
