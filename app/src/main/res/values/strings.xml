@@ -353,7 +353,11 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="tfa_code_configured">2FA CODE (if configured)</string>
 
-    <string name="lbl_email_confirmation">Email confirmation required</string>
+    <string name="lbl_email_confirmation">Verify your email address</string>
+
+    <string name="email_confirmation_prehint">We sent a verification message to</string>
+
+    <string name="email_confirmation_posthint">Click the link to verify your email address.</string>
 
     <string name="email_confirmation_hint">In order to be able continue the setup process, you need to confirm your email address first. An email with a confirmation link has been sent to your inbox. Please follow the instructions from the mail to confirm your email address.</string>
 

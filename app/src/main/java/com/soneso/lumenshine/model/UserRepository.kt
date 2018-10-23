@@ -159,12 +159,14 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun resendConfirmationMail(): Flowable<Resource<Boolean, LsException>> {
+    fun resendConfirmationMail(): Flowable<Resource<Boolean, ServerException>> =
+            SgPrefs.observeUsername()
+                    .flatMap { username ->
+                        userApi.resendConfirmationMail(username)
+                                .asHttpResourceLoader(networkStateObserver)
+                                .mapResource({ true }, { it })
+                    }
 
-        return userApi.resendConfirmationMail(SgPrefs.username)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ true }, { it })
-    }
 
     fun refreshRegistrationStatus(): Flowable<Resource<Boolean, ServerException>> {
 

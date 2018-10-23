@@ -39,7 +39,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveMnemonic: LiveData<Resource<String, LsException>> = MutableLiveData()
 
-    val liveConfirmationMail: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
+    val liveConfirmationMail: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
     val liveCredentialResetEmail: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
 
@@ -164,7 +164,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         val d = userUseCases.resendConfirmationMail()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe { it ->
                     liveConfirmationMail.putValue(it)
                 }
         compositeDisposable.add(d)

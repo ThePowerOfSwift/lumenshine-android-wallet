@@ -24,9 +24,11 @@
     <color name="lightBlack">#555555</color>
     <color name="red">#ec1c23</color>
     <color name="green">#91c74a</color>
-    <color name="green_pressed">#7BA83E</color>
+    <color name="darkGreen">#7BA83E</color>
     <color name="lightGray">#e1e1e1</color>
     <color name="gray">#a8a8a8</color>
     <color name="darkGray">#898989</color>
     <color name="darkerGray">#333333</color>
+    <color name="orange">#FAAF3A</color>
+    <color name="darkOrange">#D39432</color>
 </resources>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.LsCardView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/size_12"
     android:orientation="vertical"
     tools:context=".presentation.auth.MailConfirmationFragment">
 
@@ -10,78 +12,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/size_15">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_90"
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/size_10">
-
-
-            <com.soneso.lumenshine.presentation.widgets.LsTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/email_confirm_title"
-                android:textColor="@color/red"
-                android:textSize="@dimen/text_size_16"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/text_dark" />
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_15"
-            android:layout_marginBottom="@dimen/size_45"
-            android:layout_marginTop="@dimen/size_30"
-            android:gravity="center_horizontal"
-            android:text="@string/mail_confirmation_description"
-            android:textColor="@color/text_dark"
-            android:textSize="@dimen/text_size_16" />
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            android:id="@+id/mail_confirmation_error_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:text="@string/lbl_email_confirmation"
+            android:textAllCaps="true"
             android:textColor="@color/red"
-            android:textSize="@dimen/text_size_14"
-            android:visibility="invisible" />
+            android:textSize="@dimen/text_size_17" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/descriptionView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginBottom="@dimen/size_20"
+            android:fontFamily="@font/encodesans_regular"
+            android:gravity="center"
+            android:text="@string/email_confirmation_prehint"
+            android:textColor="@color/lightBlack"
+            android:textSize="@dimen/text_size_15" />
 
-            <Button
-                android:id="@+id/already_confirmed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/already_confirmed" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true" />
-
-        </FrameLayout>
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/errorView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_40"
+            android:fontFamily="@font/encodesans_regular"
+            android:textColor="@color/red"
+            android:textSize="@dimen/text_size_14" />
 
         <Button
-            android:id="@+id/resend_mail"
+            android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/already_confirmed" />
+
+        <Button
+            android:id="@+id/resendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_25"
+            android:background="@drawable/bg_orange_button"
             android:text="@string/resend_mail" />
-
     </LinearLayout>
-</ScrollView>
+</androidx.cardview.widget.CardView>

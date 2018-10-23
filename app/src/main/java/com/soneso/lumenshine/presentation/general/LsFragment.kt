@@ -1,7 +1,9 @@
 package com.soneso.lumenshine.presentation.general
 
 import android.os.Bundle
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.util.LsException
 
@@ -24,7 +26,14 @@ open class LsFragment : Fragment() {
 
     fun showSnackbar(text: CharSequence) {
         val view = view ?: return
-        com.google.android.material.snackbar.Snackbar.make(view, text, com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+        Snackbar.make(view, text, com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+                .setAction(R.string.ok, null)
+                .show()
+    }
+
+    fun showSnackbar(@StringRes textId: Int) {
+        val view = view ?: return
+        Snackbar.make(view, textId, Snackbar.LENGTH_LONG)
                 .setAction(R.string.ok, null)
                 .show()
     }
