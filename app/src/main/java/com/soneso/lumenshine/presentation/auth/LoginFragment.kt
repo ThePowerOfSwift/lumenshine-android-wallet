@@ -91,18 +91,11 @@ class LoginFragment : AuthFragment() {
     private fun handleError(e: ServerException) {
 
         when (e.code) {
-            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> {
-                emailView.error = e.message
-            }
-            ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfaCodeView.error = e.message
-            }
-            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                passwordView.error = e.message
-            }
-            else -> {
-                showErrorSnackbar(e)
-            }
+            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> emailView.error = e.message
+            ErrorCodes.LOGIN_INVALID_2FA -> tfaCodeView.error = e.message
+            ErrorCodes.LOGIN_WRONG_PASSWORD -> passwordView.error = e.message
+            ErrorCodes.MISSING_TFA -> tfaCodeView.error = e.message
+            else -> showErrorSnackbar(e)
         }
     }
 
