@@ -2,18 +2,18 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
         <layer-list>
-            <item android:left="@dimen/size_1_negative" android:right="@dimen/size_1_negative" android:top="@dimen/size_1_negative">
+            <item android:left="@dimen/size_2_negative" android:right="@dimen/size_2_negative" android:top="@dimen/size_2_negative">
                 <shape android:shape="rectangle">
-                    <stroke android:width="@dimen/size_1" android:color="@color/lightBlack" />
+                    <stroke android:width="@dimen/size_2" android:color="@color/gray" />
                 </shape>
             </item>
         </layer-list>
     </item>
     <item>
         <layer-list>
-            <item android:left="@dimen/size_1_negative" android:right="@dimen/size_1_negative" android:top="@dimen/size_1_negative">
+            <item android:left="@dimen/size_2_negative" android:right="@dimen/size_2_negative" android:top="@dimen/size_2_negative">
                 <shape android:shape="rectangle">
-                    <stroke android:width="@dimen/size_05" android:color="@color/gray" />
+                    <stroke android:width="@dimen/size_1" android:color="@color/gray" />
                 </shape>
             </item>
         </layer-list>

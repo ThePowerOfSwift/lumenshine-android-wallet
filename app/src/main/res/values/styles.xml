@@ -25,7 +25,12 @@
     <style name="AppTheme.LsEditText" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/lsedittext_background</item>
         <item name="android:textColorHint">@color/lightBlack</item>
+        <item name="android:textColor">@color/lightBlack</item>
         <item name="android:drawableTint">@color/gray</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:paddingTop">@dimen/size_10</item>
+        <item name="android:paddingBottom">@dimen/size_10</item>
     </style>
 
     <style name="AppTheme.LsCardView">
@@ -40,9 +45,10 @@
     <style name="AppTheme.LsButton" parent="@android:style/Widget.Button">
         <item name="android:textSize">@dimen/text_size_15</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:minWidth">@dimen/size_160</item>
+        <item name="android:minWidth">@dimen/size_100</item>
         <item name="android:minHeight">@dimen/size_30</item>
         <item name="android:background">@drawable/lsbutton_background</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
