@@ -16,12 +16,15 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.processors.BehaviorProcessor
+import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Manager.
  * Created by cristi.paval on 3/22/18.
  */
+@Singleton
 class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
 
@@ -79,8 +82,10 @@ class UserUseCases
     fun provideMnemonic(): Single<String> {
 
         return Flowable.combineLatest(
-                passSubject,
-                userRepo.getUserData(),
+                passSubject
+                        .doOnNext { Timber.d("Pass: $it") }
+                        .filter { it.isNotBlank() },
+                userRepo.getUserData().doOnNext { Timber.d("UserData for: ${it.username}") },
                 BiFunction<String, UserSecurity, String> { pass, userSecurity ->
                     val helper = UserSecurityHelper(pass.toCharArray())
                     helper.decipherUserSecurity(userSecurity)
