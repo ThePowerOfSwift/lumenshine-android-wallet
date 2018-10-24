@@ -133,12 +133,12 @@ class UserRepository @Inject constructor(
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
+                    SgPrefs.username = username
                     SgPrefs.tfaSecret = it.tfaSecret
                     userDao.saveRegistrationStatus(it.toRegistrationStatus(username))
                     it.tfaConfirmed && it.emailConfirmed && it.mnemonicConfirmed
                 }, { it })
                 .flatMap {
-                    SgPrefs.username = username
                     return@flatMap if (it.isSuccessful && it.success()) {
                         refreshTfaSecret(publicKey188)
                     } else {

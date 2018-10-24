@@ -37,7 +37,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
     @Suppress("MemberVisibilityCanBePrivate")
     val liveCountries: LiveData<Resource<List<Country>, LsException>> = MutableLiveData()
 
-    val liveMnemonic: LiveData<Resource<String, LsException>> = MutableLiveData()
+    val liveMnemonic: LiveData<String> = MutableLiveData()
 
     val liveConfirmationMail: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
@@ -139,10 +139,10 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     fun fetchMnemonic() {
 
-        val d = userUseCases.provideMnemonicForCurrentUser()
+        val d = userUseCases.provideMnemonic()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe { it ->
                     liveMnemonic.putValue(it)
                 }
         compositeDisposable.add(d)
