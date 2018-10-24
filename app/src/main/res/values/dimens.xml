@@ -49,6 +49,7 @@
     <dimen name="size_175">175dp</dimen>
     <dimen name="size_200">200dp</dimen>
     <dimen name="size_220">220dp</dimen>
+    <dimen name="size_232">220dp</dimen>
     <dimen name="size_300">300dp</dimen>
     <dimen name="size_400">400dp</dimen>
     <dimen name="size_infinite">1000dp</dimen>
