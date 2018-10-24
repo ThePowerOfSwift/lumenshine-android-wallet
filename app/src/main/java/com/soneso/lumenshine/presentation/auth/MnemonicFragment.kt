@@ -54,6 +54,7 @@ class MnemonicFragment : AuthFragment() {
     private fun setupListeners() {
 
         nextButton.setOnClickListener {
+            authActivity.navigate(R.id.to_confirm_mnemonic_screen)
         }
         moreInfoLink.setOnClickListener {
             activity?.showInfoDialog()
