@@ -99,6 +99,7 @@ class UserRepository @Inject constructor(
         return userApi.loginStep1(email, tfaCode)
                 .doOnSuccess {
                     if (it.isSuccessful) {
+                        SgPrefs.username = email
                         SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
@@ -133,7 +134,6 @@ class UserRepository @Inject constructor(
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    SgPrefs.username = username
                     SgPrefs.tfaSecret = it.tfaSecret
                     userDao.saveRegistrationStatus(it.toRegistrationStatus(username))
                     it.tfaConfirmed && it.emailConfirmed && it.mnemonicConfirmed
@@ -147,7 +147,10 @@ class UserRepository @Inject constructor(
                 }
     }
 
-    fun getUserData(username: String = SgPrefs.username) = userDao.getUserDataById(username)
+    fun getUserData(username: String? = null): Flowable<UserSecurity> {
+        val usernameFlowable = if (username == null) SgPrefs.observeUsername() else Flowable.just(username)
+        return usernameFlowable.flatMap { userDao.getUserDataById(it) }
+    }
 
     fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
 
