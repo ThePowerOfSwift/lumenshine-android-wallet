@@ -11,9 +11,7 @@ import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.util.decodeBase32
 import com.soneso.lumenshine.util.Failure
-import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
-import com.soneso.lumenshine.util.Success
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -78,17 +76,17 @@ class UserUseCases
                 }
     }
 
-    fun provideMnemonicForCurrentUser(): Flowable<Resource<String, LsException>> {
+    fun provideMnemonic(): Single<String> {
 
         return Flowable.combineLatest(
                 passSubject,
                 userRepo.getUserData(),
-                BiFunction { pass, userSecurity ->
+                BiFunction<String, UserSecurity, String> { pass, userSecurity ->
                     val helper = UserSecurityHelper(pass.toCharArray())
                     helper.decipherUserSecurity(userSecurity)
-                    Success(String(helper.mnemonicChars))
+                    String(helper.mnemonicChars)
                 }
-        )
+        ).firstOrError()
     }
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()
