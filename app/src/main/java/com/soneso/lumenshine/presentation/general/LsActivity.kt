@@ -23,11 +23,13 @@ open class LsActivity : AppCompatActivity() {
     lateinit var viewModelFactory: LsViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        hideStatusBar()
         super.onCreate(savedInstanceState)
-
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        actionBar?.hide()
         viewModelFactory = LsViewModelFactory(lsApp.appComponent)
+    }
+
+    fun hideStatusBar() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 
     fun showSnackbar(text: CharSequence) {

@@ -4,7 +4,7 @@
     style="@style/AppTheme.LsCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/size_7"
+    android:layout_margin="@dimen/size_12"
     tools:context="com.soneso.lumenshine.presentation.auth.LoginFragment">
 
     <LinearLayout
