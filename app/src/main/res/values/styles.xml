@@ -29,8 +29,8 @@
         <item name="android:drawableTint">@color/gray</item>
         <item name="android:fontFamily">@font/encodesans_semibold</item>
         <item name="android:textSize">@dimen/text_size_14</item>
-        <item name="android:paddingTop">@dimen/size_10</item>
-        <item name="android:paddingBottom">@dimen/size_10</item>
+        <item name="android:paddingTop">@dimen/size_8</item>
+        <item name="android:paddingBottom">@dimen/size_8</item>
     </style>
 
     <style name="AppTheme.LsCardView">
