@@ -11,6 +11,8 @@ abstract class LsDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
+        activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         dialog.window?.apply {
             setBackgroundDrawableResource(R.drawable.bg_top_rounded3_inset)
             setLayout(WindowManager.LayoutParams.MATCH_PARENT, if (hasMaxHeight()) WindowManager.LayoutParams.MATCH_PARENT else WindowManager.LayoutParams.WRAP_CONTENT)
