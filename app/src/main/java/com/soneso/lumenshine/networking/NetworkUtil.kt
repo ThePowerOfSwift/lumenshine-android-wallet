@@ -2,11 +2,12 @@ package com.soneso.lumenshine.networking
 
 import android.text.TextUtils
 import android.util.Log
+import com.ihsanbal.logging.Level
+import com.ihsanbal.logging.LoggingInterceptor
 import com.soneso.lumenshine.BuildConfig
 import com.soneso.lumenshine.networking.api.SgApi
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import java.lang.Exception
+import okhttp3.internal.platform.Platform
 import java.util.concurrent.TimeUnit
 
 object NetworkUtil {
@@ -26,13 +27,19 @@ object NetworkUtil {
         return false
     }
 
-    fun sgHttpClient(): OkHttpClient {
+    fun lsHttpClient(): OkHttpClient {
 
         val okHttpBuilder = OkHttpClient.Builder()
 
         if (BuildConfig.DEBUG) {
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            val interceptor = LoggingInterceptor.Builder()
+                    .loggable(BuildConfig.DEBUG)
+                    .setLevel(Level.BASIC)
+                    .log(Platform.WARN)
+                    .request("Ls Request")
+                    .response("Ls Response")
+                    .enableAndroidStudio_v3_LogsHack(true) // enable fix for logCat logging issues with pretty format /
+                    .build()
             okHttpBuilder.addInterceptor(interceptor)
         }
 

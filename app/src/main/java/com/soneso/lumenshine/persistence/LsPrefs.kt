@@ -15,9 +15,9 @@ import java.util.*
  * Shared Prefs.
  * Created by cristi.paval on 3/12/18.
  */
-object SgPrefs {
+object LsPrefs {
 
-    const val TAG = "SgPrefs"
+    const val TAG = "LsPrefs"
     private const val PREF_NAME = "secured-app-prefs"
     private const val KEY_APP_PASS = "app-pass"
     private const val KEY_ENCRYPTION_IV = "encryption-iv"
@@ -33,6 +33,7 @@ object SgPrefs {
     private val derivedPass: ByteArray
 
     private val usernameProcessor = BehaviorProcessor.create<String>()
+    private val tfaSecretProcessor = BehaviorProcessor.create<String>()
 
     val appPass: String
 
@@ -47,6 +48,7 @@ object SgPrefs {
         encryptionIv = initializeEncryptionIv(keyHolder)
 
         usernameProcessor.onNext(username)
+        tfaSecretProcessor.onNext(tfaSecret)
     }
 
     private fun initializeAppPass(keyHolder: AppKeyHolder): String {
@@ -58,7 +60,6 @@ object SgPrefs {
             val encryptedUuid = keyHolder.encryptPass(uuid)
             saveString(KEY_APP_PASS, encryptedUuid)
             uuid
-
         } else {
 
             val encryptedPass = getString(KEY_APP_PASS)
@@ -113,7 +114,10 @@ object SgPrefs {
 
     var tfaSecret: String
         get() = decryptAndGetString(KEY_TFA_SECRET)
-        set(value) = encryptAndSaveString(KEY_TFA_SECRET, value)
+        set(value) {
+            encryptAndSaveString(KEY_TFA_SECRET, value)
+            tfaSecretProcessor.onNext(value)
+        }
 
     var isFingeprintEnabled: Boolean
         get() = prefs.getBoolean(KEY_FINGERPRINT_ENABLED, false)
@@ -182,4 +186,6 @@ object SgPrefs {
     }
 
     fun observeUsername(): Flowable<String> = usernameProcessor
+
+    fun observeTfaSecret(): Flowable<String> = tfaSecretProcessor
 }

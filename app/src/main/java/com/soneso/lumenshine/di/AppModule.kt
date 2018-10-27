@@ -7,7 +7,7 @@ import com.commonsware.cwac.saferoom.SafeHelperFactory
 import com.soneso.lumenshine.networking.NetworkUtil
 import com.soneso.lumenshine.networking.api.SgApi
 import com.soneso.lumenshine.networking.dto.Parse
-import com.soneso.lumenshine.persistence.SgPrefs
+import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.persistence.room.DbNames
 import com.soneso.lumenshine.persistence.room.LsDatabase
 import dagger.Module
@@ -37,15 +37,15 @@ class AppModule(private val context: Context) {
                 .baseUrl(SgApi.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(Parse.createMapper()))
-                .client(NetworkUtil.sgHttpClient())
-                .build()!!
+                .client(NetworkUtil.lsHttpClient())
+                .build()
     }
 
     @Provides
     @Singleton
     fun provideDatabase(): LsDatabase {
 
-        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(SgPrefs.appPass))
+        val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(LsPrefs.appPass))
 
         return Room.databaseBuilder(context, LsDatabase::class.java, DbNames.DB_NAME)
                 .openHelperFactory(factory)

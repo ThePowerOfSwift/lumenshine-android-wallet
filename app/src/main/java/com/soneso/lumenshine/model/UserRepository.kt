@@ -1,5 +1,6 @@
 package com.soneso.lumenshine.model
 
+import com.google.authenticator.OtpProvider
 import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.base64String
@@ -10,14 +11,18 @@ import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.SgApi
 import com.soneso.lumenshine.networking.api.UserApi
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.persistence.SgPrefs
+import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.persistence.room.LsDatabase
-import com.soneso.lumenshine.util.*
-import io.reactivex.BackpressureStrategy
+import com.soneso.lumenshine.presentation.util.decodeBase32
+import com.soneso.lumenshine.util.LsException
+import com.soneso.lumenshine.util.Resource
+import com.soneso.lumenshine.util.asHttpResourceLoader
+import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import retrofit2.Retrofit
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -52,12 +57,12 @@ class UserRepository @Inject constructor(
         )
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                        LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    SgPrefs.tfaSecret = it.token2fa
+                    LsPrefs.tfaSecret = it.token2fa
                     userDao.saveRegistrationStatus(RegistrationStatus(userProfile.email, false, false, false))
                     true
                 }, { it })
@@ -68,12 +73,12 @@ class UserRepository @Inject constructor(
         return userApi.confirmTfaRegistration(tfaCode)
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                        LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    userDao.saveRegistrationStatus(it.toRegistrationStatus(SgPrefs.username))
+                    userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
                     true
                 }, { it })
     }
@@ -99,7 +104,8 @@ class UserRepository @Inject constructor(
         return userApi.loginStep1(email, tfaCode)
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                        LsPrefs.username = email
+                        LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
                 .asHttpResourceLoader(networkStateObserver)
@@ -128,17 +134,15 @@ class UserRepository @Inject constructor(
         return userApi.loginStep2(publicKey188)
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        SgPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                        LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    SgPrefs.tfaSecret = it.tfaSecret
                     userDao.saveRegistrationStatus(it.toRegistrationStatus(username))
                     it.tfaConfirmed && it.emailConfirmed && it.mnemonicConfirmed
                 }, { it })
                 .flatMap {
-                    SgPrefs.username = username
                     return@flatMap if (it.isSuccessful && it.success()) {
                         refreshTfaSecret(publicKey188)
                     } else {
@@ -147,20 +151,23 @@ class UserRepository @Inject constructor(
                 }
     }
 
-    fun getUserData(username: String = SgPrefs.username) = userDao.getUserDataById(username)
+    fun getUserData(username: String? = null): Flowable<UserSecurity> {
+        val usernameFlowable = if (username == null) LsPrefs.observeUsername() else Flowable.just(username)
+        return usernameFlowable.flatMap { userDao.getUserDataById(it) }
+    }
 
     fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
 
         return userApi.confirmMnemonic()
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    userDao.saveRegistrationStatus(RegistrationStatus(SgPrefs.username, true, true, true))
+                    userDao.saveRegistrationStatus(RegistrationStatus(LsPrefs.username, true, true, true))
                     true
                 }, { it })
     }
 
     fun resendConfirmationMail(): Flowable<Resource<Boolean, ServerException>> =
-            SgPrefs.observeUsername()
+            LsPrefs.observeUsername()
                     .flatMap { username ->
                         userApi.resendConfirmationMail(username)
                                 .asHttpResourceLoader(networkStateObserver)
@@ -173,18 +180,12 @@ class UserRepository @Inject constructor(
         return userApi.getRegistrationStatus()
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    userDao.saveRegistrationStatus(it.toRegistrationStatus(SgPrefs.username))
+                    userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
                     true
                 }, { it })
     }
 
-    fun loadTfaSecret(): Flowable<Resource<String, ServerException>> {
-
-        return Flowable.create({ emitter ->
-            emitter.onNext(Success(SgPrefs.tfaSecret))
-            emitter.onComplete()
-        }, BackpressureStrategy.LATEST)
-    }
+    fun loadTfaSecret(): Single<String> = LsPrefs.observeTfaSecret().singleOrError()
 
     fun requestEmailForPasswordReset(email: String): Flowable<Resource<Boolean, LsException>> {
 
@@ -205,7 +206,8 @@ class UserRepository @Inject constructor(
         return userApi.getTfaSecret(publicKey188)
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    SgPrefs.tfaSecret = it.tfaSecret
+                    Timber.d("Tfa secret refreshed.")
+                    LsPrefs.tfaSecret = it.tfaSecret
                     true
                 }, { it })
     }
@@ -213,7 +215,7 @@ class UserRepository @Inject constructor(
     fun getLastUsername(): Single<String> {
 
         return Single.create<String> {
-            it.onSuccess(SgPrefs.username)
+            it.onSuccess(LsPrefs.username)
         }
     }
 
@@ -236,7 +238,7 @@ class UserRepository @Inject constructor(
         return userApi.changeTfaSecret(publicKey188)
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    SgPrefs.tfaSecret = it.tfaSecret
+                    LsPrefs.tfaSecret = it.tfaSecret
                     it.tfaSecret
                 }, { it })
     }
@@ -246,21 +248,28 @@ class UserRepository @Inject constructor(
         return userApi.confirmTfaSecretChange(tfaCode)
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
-                    userDao.saveRegistrationStatus(it.toRegistrationStatus(SgPrefs.username))
+                    userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
                     true
                 }, { it })
     }
 
+    fun loadTfaCode(): Single<String> =
+            Single.create<String> {
+                val tfaSecret = LsPrefs.tfaSecret
+                val tfaCode = OtpProvider.currentTotpCode(tfaSecret.decodeBase32()) ?: ""
+                it.onSuccess(tfaCode)
+            }
+
     fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        return SgPrefs.observeUsername().filter { it.isNotBlank() }
+        return LsPrefs.observeUsername().filter { it.isNotBlank() }
                 .flatMap { userDao.getRegistrationStatus(it) }
     }
 
     fun logout(): Completable {
         return Completable.create {
-            val username = SgPrefs.username
-            SgPrefs.username = ""
+            val username = LsPrefs.username
+            LsPrefs.username = ""
             userDao.removeRegistrationStatus(username)
             it.onComplete()
         }

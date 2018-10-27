@@ -1,29 +1,27 @@
 package com.soneso.lumenshine.domain.usecases
 
-import com.google.authenticator.OtpProvider
 import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
 import com.soneso.lumenshine.model.entities.UserSecurity
-import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.presentation.util.decodeBase32
 import com.soneso.lumenshine.util.Failure
-import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
-import com.soneso.lumenshine.util.Success
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.processors.BehaviorProcessor
+import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Manager.
  * Created by cristi.paval on 3/22/18.
  */
+@Singleton
 class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
 
@@ -53,42 +51,40 @@ class UserUseCases
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Flowable<Resource<Boolean, ServerException>> {
 
         passSubject.onNext(password.toString())
-
-        val tfa = tfaCode?.toString()
-                ?: OtpProvider.currentTotpCode(LsSessionProfile.tfaSecret.decodeBase32())
-
         val username = email.toString()
-
-        return userRepo.loginStep1(username, tfa)
-                .flatMap {
-                    if (it.isSuccessful) {
-                        userRepo.getUserData(username).flatMap { userData ->
-                            val helper = UserSecurityHelper(password.toCharArray())
-                            val publicKeyIndex188 = helper.decipherUserSecurity(userData)
-                            if (publicKeyIndex188 == null) {
-                                Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
-                            } else {
-                                userRepo.loginStep2(username, publicKeyIndex188)
-                            }
+        val tfaFlow = if (tfaCode != null) Flowable.just(tfaCode.toString()) else userRepo.loadTfaCode().toFlowable()
+        return tfaFlow.flatMap { tfa ->
+            userRepo.loginStep1(username, tfa).flatMap {
+                if (it.isSuccessful) {
+                    userRepo.getUserData(username).flatMap { userData ->
+                        val helper = UserSecurityHelper(password.toCharArray())
+                        val publicKeyIndex188 = helper.decipherUserSecurity(userData)
+                        if (publicKeyIndex188 == null) {
+                            Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
+                        } else {
+                            userRepo.loginStep2(username, publicKeyIndex188)
                         }
-
-                    } else {
-                        Flowable.just(it)
                     }
+                } else {
+                    Flowable.just(it)
                 }
+            }
+        }
     }
 
-    fun provideMnemonicForCurrentUser(): Flowable<Resource<String, LsException>> {
+    fun provideMnemonic(): Single<String> {
 
         return Flowable.combineLatest(
-                passSubject,
-                userRepo.getUserData(),
-                BiFunction { pass, userSecurity ->
+                passSubject
+                        .doOnNext { Timber.d("Pass: $it") }
+                        .filter { it.isNotBlank() },
+                userRepo.getUserData().doOnNext { Timber.d("UserData for: ${it.username}") },
+                BiFunction<String, UserSecurity, String> { pass, userSecurity ->
                     val helper = UserSecurityHelper(pass.toCharArray())
                     helper.decipherUserSecurity(userSecurity)
-                    Success(String(helper.mnemonicChars))
+                    String(helper.mnemonicChars)
                 }
-        )
+        ).firstOrError()
     }
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()

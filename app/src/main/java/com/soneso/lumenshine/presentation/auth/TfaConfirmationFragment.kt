@@ -36,7 +36,7 @@ class TfaConfirmationFragment : AuthFragment() {
     private fun subscribeForLiveData() {
 
         authViewModel.liveTfaSecret.observe(this, Observer {
-            renderTfaSecret(it ?: return@Observer)
+            setupToken(it ?: return@Observer)
         })
 
         authViewModel.liveTfaConfirmation.observe(this, Observer {
@@ -51,20 +51,6 @@ class TfaConfirmationFragment : AuthFragment() {
         nextButton.setOnClickListener {
             if (tfaInputView.hasValidInput()) {
                 authViewModel.confirmTfaRegistration(tfaInputView.trimmedText)
-            }
-        }
-    }
-
-    private fun renderTfaSecret(resource: Resource<String, ServerException>) {
-
-        when (resource.state) {
-            Resource.FAILURE -> {
-                handleError(resource.failure())
-            }
-            Resource.LOADING -> {
-            }
-            Resource.SUCCESS -> {
-                setupToken(resource.success())
             }
         }
     }

@@ -14,11 +14,6 @@ open class AuthFragment : LsFragment() {
     protected val authActivity: BaseAuthActivity
         get() = activity as BaseAuthActivity
 
-    fun replaceFragment(fragment: AuthFragment, tag: String) {
-
-//        authActivity.replaceFragment(fragment, tag)
-    }
-
     fun showLoadingView() {
         authActivity.showLoading(true)
     }

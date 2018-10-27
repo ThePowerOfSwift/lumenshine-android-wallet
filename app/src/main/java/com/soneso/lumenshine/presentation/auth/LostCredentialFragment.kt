@@ -74,12 +74,9 @@ class LostCredentialFragment : AuthFragment() {
             Resource.LOADING -> {
             }
             Resource.SUCCESS -> {
-
                 showSnackbar("Mail sent!")
-                replaceFragment(LoginFragment.newInstance(), LoginFragment.TAG)
             }
             Resource.FAILURE -> {
-
                 showErrorSnackbar(resource.failure())
             }
         }

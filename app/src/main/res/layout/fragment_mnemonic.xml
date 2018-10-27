@@ -1,67 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.auth.MnemonicFragment">
 
     <LinearLayout
-        android:id="@+id/mnemonic_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:paddingBottom="@dimen/size_50">
 
-        <include layout="@layout/view_mnemonic_words" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/mnemonic_confirmation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <include layout="@layout/view_mnemonic_confirm" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/mnemonic_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/cyan_800"
-        android:textSize="@dimen/text_size_16"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/question_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/mnemonic_question"
+        <androidx.cardview.widget.CardView
+            style="@style/AppTheme.LsCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/size_10"
-            android:text="@string/mnemonic_question" />
+            android:layout_margin="@dimen/size_12">
 
-        <EditText
-            android:id="@+id/mnemonic_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_10"
-            tools:ignore="LabelFor,TextFields" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_15"
+                    android:fontFamily="@font/encodesans_regular"
+                    android:text="@string/setup_step_2"
+                    android:textColor="@color/darkGray"
+                    android:textSize="@dimen/text_size_13" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_15"
+                    android:layout_marginTop="@dimen/size_5"
+                    android:layout_marginEnd="@dimen/size_15"
+                    android:text="@string/mnemonic_title"
+                    android:textColor="@color/red"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_05"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:background="@color/lightGray" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_15"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:layout_marginEnd="@dimen/size_15"
+                    android:text="@string/mnemonic_hint_title"
+                    android:textColor="@color/red"
+                    android:textStyle="bold" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/size_15"
+                    android:layout_marginTop="@dimen/size_15"
+                    android:layout_marginEnd="@dimen/size_15"
+                    android:fontFamily="@font/encodesans_regular"
+                    android:gravity="center"
+                    android:text="@string/mnemonic_hint_lbl"
+                    android:textColor="@color/lightBlack" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_15"
+                    android:layout_marginTop="@dimen/size_15"
+                    android:layout_marginEnd="@dimen/size_15"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.soneso.lumenshine.presentation.widgets.LsTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/encodesans_regular"
+                        android:gravity="center"
+                        android:text="@string/mnemonic_more_lbl"
+                        android:textColor="@color/lightBlack" />
+
+                    <com.soneso.lumenshine.presentation.widgets.LsTextView
+                        android:id="@+id/moreInfoLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/here"
+                        android:textColor="@color/blue" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_05"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:background="@color/lightGray" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/size_15"
+                    android:fontFamily="@font/encodesans_bold"
+                    android:text="@string/mnemonic_words_title"
+                    android:textColor="@color/lightBlack" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mnemonicRecyclerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/nextButton"
+                    style="@style/RedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_25"
+                    android:layout_marginBottom="@dimen/size_15"
+                    android:text="@string/mnemonic_words_button_lbl"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/mnemonic_button"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_45"
-        android:layout_gravity="bottom"
-        android:text="@string/mnemonic_next_button"
-        android:visibility="gone" />
-
-</FrameLayout>
+</ScrollView>
