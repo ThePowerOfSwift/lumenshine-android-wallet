@@ -26,7 +26,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
     @Suppress("MemberVisibilityCanBePrivate")
     val liveSalutations: LiveData<Resource<List<String>, LsException>> = MutableLiveData()
 
-    val liveTfaSecret: LiveData<Resource<String, ServerException>> = MutableLiveData()
+    val liveTfaSecret: LiveData<String> = MutableLiveData()
 
     val liveTfaConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 

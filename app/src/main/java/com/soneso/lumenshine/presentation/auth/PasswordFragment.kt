@@ -40,7 +40,7 @@ class PasswordFragment : AuthFragment() {
         unlockButton.setOnClickListener { attemptLogin() }
         lostPassButton.setOnClickListener {
             // TODO: cristi.paval, 8/25/18 - this anti pattern. Implement it accordingly.
-//            SgPrefs.removeUserCrendentials()
+//            LsPrefs.removeUserCrendentials()
 //            authViewModel.refreshLastUserCredentials()
 //            replaceFragment(LostCredentialFragment.newInstance(LostCredentialFragment.Credential.PASSWORD), LostCredentialFragment.TAG)
         }
@@ -57,23 +57,15 @@ class PasswordFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showLoading(true)
+                showLoadingView()
             }
             Resource.FAILURE -> {
-                showLoading(false)
+                hideLoadingView()
                 handleError(resource.failure())
             }
             else -> {
-                showLoading(false)
+                hideLoadingView()
             }
-        }
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-//            unlockButton.visibility = View.INVISIBLE
-        } else {
-//            unlockButton.visibility = View.VISIBLE
         }
     }
 
@@ -93,7 +85,6 @@ class PasswordFragment : AuthFragment() {
     }
 
     private fun attemptLogin() {
-
         val username = authViewModel.liveLastUsername.value ?: return
         authViewModel.login(username, passwordView.trimmedText)
     }

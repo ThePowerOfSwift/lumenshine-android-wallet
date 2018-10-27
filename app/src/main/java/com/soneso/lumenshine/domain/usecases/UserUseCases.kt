@@ -1,15 +1,12 @@
 package com.soneso.lumenshine.domain.usecases
 
-import com.google.authenticator.OtpProvider
 import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
 import com.soneso.lumenshine.model.entities.UserSecurity
-import com.soneso.lumenshine.networking.LsSessionProfile
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.presentation.util.decodeBase32
 import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.Resource
 import io.reactivex.Flowable
@@ -54,29 +51,25 @@ class UserUseCases
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Flowable<Resource<Boolean, ServerException>> {
 
         passSubject.onNext(password.toString())
-
-        val tfa = tfaCode?.toString()
-                ?: OtpProvider.currentTotpCode(LsSessionProfile.tfaSecret.decodeBase32())
-
         val username = email.toString()
-
-        return userRepo.loginStep1(username, tfa)
-                .flatMap {
-                    if (it.isSuccessful) {
-                        userRepo.getUserData(username).flatMap { userData ->
-                            val helper = UserSecurityHelper(password.toCharArray())
-                            val publicKeyIndex188 = helper.decipherUserSecurity(userData)
-                            if (publicKeyIndex188 == null) {
-                                Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
-                            } else {
-                                userRepo.loginStep2(username, publicKeyIndex188)
-                            }
+        val tfaFlow = if (tfaCode != null) Flowable.just(tfaCode.toString()) else userRepo.loadTfaCode()
+        return tfaFlow.flatMap { tfa ->
+            userRepo.loginStep1(username, tfa).flatMap {
+                if (it.isSuccessful) {
+                    userRepo.getUserData(username).flatMap { userData ->
+                        val helper = UserSecurityHelper(password.toCharArray())
+                        val publicKeyIndex188 = helper.decipherUserSecurity(userData)
+                        if (publicKeyIndex188 == null) {
+                            Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
+                        } else {
+                            userRepo.loginStep2(username, publicKeyIndex188)
                         }
-
-                    } else {
-                        Flowable.just(it)
                     }
+                } else {
+                    Flowable.just(it)
                 }
+            }
+        }
     }
 
     fun provideMnemonic(): Single<String> {
