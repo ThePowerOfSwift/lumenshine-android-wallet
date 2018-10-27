@@ -40,7 +40,7 @@ class SettingsFragment : LsFragment() {
             startActivity(Intent(context, ChangeTfaActivity::class.java))
         }
 
-        fingerpint_enabled_switch.setOnCheckedChangeListener { compoundButton, b ->
+        fingerpint_enabled_switch.setOnCheckedChangeListener { _, b ->
             LsPrefs.isFingeprintEnabled = b
         }
 

@@ -52,7 +52,7 @@ class UserUseCases
 
         passSubject.onNext(password.toString())
         val username = email.toString()
-        val tfaFlow = if (tfaCode != null) Flowable.just(tfaCode.toString()) else userRepo.loadTfaCode()
+        val tfaFlow = if (tfaCode != null) Flowable.just(tfaCode.toString()) else userRepo.loadTfaCode().toFlowable()
         return tfaFlow.flatMap { tfa ->
             userRepo.loginStep1(username, tfa).flatMap {
                 if (it.isSuccessful) {

@@ -186,7 +186,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         val d = userUseCases.provideTfaSecret()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe { it ->
                     liveTfaSecret.putValue(it)
                 }
         compositeDisposable.add(d)

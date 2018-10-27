@@ -16,6 +16,7 @@ object Base32 {
             0x17, 0x18, 0x19, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF  // 'x', 'y', 'z', '{', '|', '}', '~', 'DEL'
     )
 
+    @Suppress("unused")
     fun encode(data: ByteArray): ByteArray {
         val lower = encodeOriginal(data).toLowerCase()
         return lower.toByteArray(charset("US-ASCII"))
@@ -28,10 +29,10 @@ object Base32 {
      * @param bytes Bytes to encode.
      * @return Encoded byte array `bytes` as a String.
      */
-    fun encodeOriginal(bytes: ByteArray): String {
+    private fun encodeOriginal(bytes: ByteArray): String {
         var i = 0
         var index = 0
-        var digit = 0
+        var digit: Int
         var currByte: Int
         var nextByte: Int
         val base32 = StringBuffer((bytes.size + 7) * 8 / 5)

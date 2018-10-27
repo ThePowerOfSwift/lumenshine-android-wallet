@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
@@ -30,13 +28,6 @@ class PasswordFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        passwordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
-            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                attemptLogin()
-                return@OnEditorActionListener true
-            }
-            false
-        })
         unlockButton.setOnClickListener { attemptLogin() }
         lostPassButton.setOnClickListener {
             // TODO: cristi.paval, 8/25/18 - this anti pattern. Implement it accordingly.
@@ -65,6 +56,7 @@ class PasswordFragment : AuthFragment() {
             }
             else -> {
                 hideLoadingView()
+                authActivity.goToMain()
             }
         }
     }
@@ -86,7 +78,9 @@ class PasswordFragment : AuthFragment() {
 
     private fun attemptLogin() {
         val username = authViewModel.liveLastUsername.value ?: return
-        authViewModel.login(username, passwordView.trimmedText)
+        if (passwordView.isValidPassword()) {
+            authViewModel.login(username, passwordView.trimmedText)
+        }
     }
 
     companion object {

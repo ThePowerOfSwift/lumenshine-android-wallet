@@ -63,11 +63,6 @@ private fun Throwable.isWorthRetry(): Boolean {
     }
 }
 
-fun <SuccessType, FailureType> Flowable<SuccessType>.wrapInResource(): Flowable<Resource<SuccessType, FailureType>> {
-
-    return this.map { Success<SuccessType, FailureType>(it) }
-}
-
 fun <SuccessType, FailureType> Flowable<Resource<SuccessType, FailureType>>.refreshWith(
         refresher: Flowable<Resource<SuccessType, FailureType>>,
         cacheFunction: ((SuccessType) -> Unit)? = null

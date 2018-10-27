@@ -22,6 +22,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import retrofit2.Retrofit
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -184,7 +185,7 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun loadTfaSecret(): Flowable<String> = LsPrefs.observeTfaSecret()
+    fun loadTfaSecret(): Single<String> = LsPrefs.observeTfaSecret().singleOrError()
 
     fun requestEmailForPasswordReset(email: String): Flowable<Resource<Boolean, LsException>> {
 
@@ -205,6 +206,7 @@ class UserRepository @Inject constructor(
         return userApi.getTfaSecret(publicKey188)
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
+                    Timber.d("Tfa secret refreshed.")
                     LsPrefs.tfaSecret = it.tfaSecret
                     true
                 }, { it })
@@ -251,9 +253,12 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun loadTfaCode(): Flowable<String> =
-            LsPrefs.observeTfaSecret().filter { it.isNotBlank() }
-                    .map { OtpProvider.currentTotpCode(it.decodeBase32()) }
+    fun loadTfaCode(): Single<String> =
+            Single.create<String> {
+                val tfaSecret = LsPrefs.tfaSecret
+                val tfaCode = OtpProvider.currentTotpCode(tfaSecret.decodeBase32()) ?: ""
+                it.onSuccess(tfaCode)
+            }
 
     fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 

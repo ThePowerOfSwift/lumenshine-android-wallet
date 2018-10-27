@@ -37,8 +37,8 @@ class AppModule(private val context: Context) {
                 .baseUrl(SgApi.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(Parse.createMapper()))
-                .client(NetworkUtil.sgHttpClient())
-                .build()!!
+                .client(NetworkUtil.lsHttpClient())
+                .build()
     }
 
     @Provides
