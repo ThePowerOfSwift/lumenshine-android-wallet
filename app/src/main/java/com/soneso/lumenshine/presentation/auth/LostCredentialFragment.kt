@@ -45,17 +45,22 @@ class LostCredentialFragment : AuthFragment() {
     }
 
     private fun setupListeners() {
-
         nextButton.setOnClickListener {
+            sendRequest()
+        }
+    }
 
-            when (credential) {
+    private fun sendRequest() {
+        if (!isValidForm()) {
+            return
+        }
 
-                Credential.PASSWORD -> {
-                    authViewModel.requestPasswordResetEmail(emailView.trimmedText)
-                }
-                Credential.TFA -> {
-                    authViewModel.requestTfaResetEmail(emailView.trimmedText)
-                }
+        when (credential) {
+            Credential.PASSWORD -> {
+                authViewModel.requestPasswordResetEmail(emailView.trimmedText)
+            }
+            Credential.TFA -> {
+                authViewModel.requestTfaResetEmail(emailView.trimmedText)
             }
         }
     }
@@ -81,6 +86,8 @@ class LostCredentialFragment : AuthFragment() {
             }
         }
     }
+
+    private fun isValidForm() = emailView.hasValidInput()
 
     companion object {
 

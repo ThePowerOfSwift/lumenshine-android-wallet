@@ -40,7 +40,7 @@
     <string name="action_sign_in">Login</string>
     <string name="action_submit">Submit</string>
     <string name="action_register">Register</string>
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_email">Invalid email.</string>
     <string name="info_password_requirements">Password must contain at least one digit, one lower case and one upper case letter and has to be at least 9 characters long!</string>
     <string name="error_invalid_password_min_one_lower_case_char">Password must contain at least one lower case character</string>
     <string name="error_invalid_password_min_one_upper_case_char">Password must contain at least one upper case character</string>
