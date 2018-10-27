@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.persistence.SgPrefs
+import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.presentation.general.LsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -28,7 +28,7 @@ class SettingsFragment : LsFragment() {
     }
 
     private fun initView() {
-        fingerpint_enabled_switch.isChecked = SgPrefs.isFingeprintEnabled
+        fingerpint_enabled_switch.isChecked = LsPrefs.isFingeprintEnabled
     }
 
     private fun setupListeners() {
@@ -41,7 +41,7 @@ class SettingsFragment : LsFragment() {
         }
 
         fingerpint_enabled_switch.setOnCheckedChangeListener { compoundButton, b ->
-            SgPrefs.isFingeprintEnabled = b
+            LsPrefs.isFingeprintEnabled = b
         }
 
     }

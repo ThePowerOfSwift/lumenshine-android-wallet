@@ -33,7 +33,7 @@ class ConfirmMnemonicFragment : AuthFragment() {
     private fun setupListeners() {
         backButton.setOnClickListener { authActivity.navigate(R.id.to_mnemonic_screen) }
         nextButton.setOnClickListener {
-            if (helper.checkPositions(word1View.text, word2View.text, word3View.text, word4View.text)) {
+            if (helper.checkPositions(word1Input.text, word2Input.text, word3Input.text, word4Input.text)) {
                 errorView.visibility = View.INVISIBLE
                 authViewModel.confirmMnemonic()
             } else {

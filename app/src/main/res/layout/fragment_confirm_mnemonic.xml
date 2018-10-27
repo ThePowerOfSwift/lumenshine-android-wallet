@@ -77,83 +77,78 @@
 
                     <com.soneso.lumenshine.presentation.widgets.LsTextView
                         android:id="@+id/word1View"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/size_10"
                         android:fontFamily="@font/encodesans_regular"
                         app:layout_constraintBottom_toBottomOf="@id/word1Input"
-                        app:layout_constraintEnd_toStartOf="@id/word1Input"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/word1Input"
-                        app:layout_constraintWidth_percent="1" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <com.soneso.lumenshine.presentation.widgets.LsEditText
                         android:id="@+id/word1Input"
                         android:layout_width="@dimen/size_50"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_10"
                         android:inputType="number"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/barrier"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.soneso.lumenshine.presentation.widgets.LsTextView
                         android:id="@+id/word2View"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/size_10"
                         android:fontFamily="@font/encodesans_regular"
                         app:layout_constraintBottom_toBottomOf="@id/word2Input"
-                        app:layout_constraintEnd_toStartOf="@id/word2Input"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/word2Input"
-                        app:layout_constraintWidth_percent="1" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <com.soneso.lumenshine.presentation.widgets.LsEditText
                         android:id="@+id/word2Input"
                         android:layout_width="@dimen/size_50"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_10"
                         android:inputType="number"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/barrier"
                         app:layout_constraintTop_toBottomOf="@id/word1Input" />
 
                     <com.soneso.lumenshine.presentation.widgets.LsTextView
                         android:id="@+id/word3View"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/size_10"
                         android:fontFamily="@font/encodesans_regular"
                         app:layout_constraintBottom_toBottomOf="@id/word3Input"
-                        app:layout_constraintEnd_toStartOf="@id/word3Input"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/word3Input"
-                        app:layout_constraintWidth_percent="1" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <com.soneso.lumenshine.presentation.widgets.LsEditText
                         android:id="@+id/word3Input"
                         android:layout_width="@dimen/size_50"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_10"
                         android:inputType="number"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/barrier"
                         app:layout_constraintTop_toBottomOf="@id/word2Input" />
 
                     <com.soneso.lumenshine.presentation.widgets.LsTextView
                         android:id="@+id/word4View"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/size_10"
                         android:fontFamily="@font/encodesans_regular"
                         app:layout_constraintBottom_toBottomOf="@id/word4Input"
-                        app:layout_constraintEnd_toStartOf="@id/word4Input"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/word4Input"
-                        app:layout_constraintWidth_percent="1" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <com.soneso.lumenshine.presentation.widgets.LsEditText
                         android:id="@+id/word4Input"
                         android:layout_width="@dimen/size_50"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_10"
                         android:inputType="number"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/barrier"
                         app:layout_constraintTop_toBottomOf="@id/word3Input" />
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:barrierDirection="end"
+                        app:constraint_referenced_ids="word2View,word4View,word1View,word3View" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
