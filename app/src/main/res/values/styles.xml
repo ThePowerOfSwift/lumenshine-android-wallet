@@ -52,6 +52,7 @@
         <item name="android:background">@drawable/lsbutton_background</item>
         <item name="android:fontFamily">@font/encodesans_semibold</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:elevation">@dimen/size_1</item>
     </style>
 
     <style name="GreenButton">

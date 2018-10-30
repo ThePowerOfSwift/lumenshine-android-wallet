@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
@@ -18,9 +19,11 @@ import kotlinx.android.synthetic.main.fragment_lost_credential.*
 class LostCredentialFragment : AuthFragment() {
 
     private lateinit var credential: Credential
+    private lateinit var lostCredentialViewModel: LostCredentialViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lostCredentialViewModel = ViewModelProviders.of(this, viewModelFactory)[LostCredentialViewModel::class.java]
 
         credential = arguments?.getSerializable(ARG_CREDENTIAL) as? Credential ?: Credential.PASSWORD
     }
@@ -57,17 +60,16 @@ class LostCredentialFragment : AuthFragment() {
 
         when (credential) {
             Credential.PASSWORD -> {
-                authViewModel.requestPasswordResetEmail(emailView.trimmedText)
+                lostCredentialViewModel.requestPasswordResetEmail(emailView.trimmedText)
             }
             Credential.TFA -> {
-                authViewModel.requestTfaResetEmail(emailView.trimmedText)
+                lostCredentialViewModel.requestTfaResetEmail(emailView.trimmedText)
             }
         }
     }
 
     private fun subscribeForLiveData() {
-
-        authViewModel.liveCredentialResetEmail.observe(this, Observer {
+        lostCredentialViewModel.liveCredentialResetEmail.observe(this, Observer {
             renderCredentialReset(it ?: return@Observer)
         })
     }
@@ -86,6 +88,13 @@ class LostCredentialFragment : AuthFragment() {
                 hideLoadingView()
                 showSnackbar(getString(R.string.email_sent))
                 if (resource.success()) {
+                    when (credential) {
+
+                        Credential.PASSWORD -> authActivity.navigate(R.id.to_email_lost_credential_screen,
+                                EmailLostCredentialFragment.argForPassword(emailView.trimmedText.toString()))
+                        Credential.TFA -> authActivity.navigate(R.id.to_email_lost_credential_screen,
+                                EmailLostCredentialFragment.argForTfa(emailView.trimmedText.toString()))
+                    }
 
                 } else {
                     showErrorSnackbar(resource.failure())
@@ -108,9 +117,5 @@ class LostCredentialFragment : AuthFragment() {
         fun argForTfa() = Bundle().apply {
             putSerializable(ARG_CREDENTIAL, Credential.TFA)
         }
-    }
-
-    private enum class Credential {
-        PASSWORD, TFA
     }
 }

@@ -41,8 +41,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveConfirmationMail: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
-    val liveCredentialResetEmail: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
-
     val liveRegistrationStatus: LiveData<RegistrationStatus?> = MutableLiveData()
 
     val liveRegistrationRefresh: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
@@ -192,28 +190,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
-    fun requestPasswordResetEmail(email: CharSequence) {
-
-        val d = userUseCases.requestPasswordReset(email.toString())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveCredentialResetEmail.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    fun requestTfaResetEmail(email: CharSequence) {
-
-        val d = userUseCases.requestTfaReset(email.toString())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveCredentialResetEmail.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
     private fun initLastUsername() {
 
         val d = userUseCases.provideLastUsername()
@@ -246,7 +222,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
     }
 
     override fun onCleared() {
-
         compositeDisposable.dispose()
         super.onCleared()
     }
