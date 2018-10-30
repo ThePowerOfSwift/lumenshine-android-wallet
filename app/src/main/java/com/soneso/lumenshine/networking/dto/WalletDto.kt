@@ -7,8 +7,8 @@ data class WalletDto(
         @JsonProperty("id")
         var id: Long,
 
-        @JsonProperty("public_key_0")
-        var publicKey0: String,
+        @JsonProperty("public_key")
+        var publicKey: String,
 
         @JsonProperty("wallet_name")
         var name: String,
