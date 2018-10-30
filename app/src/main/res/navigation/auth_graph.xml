@@ -30,6 +30,9 @@
         android:id="@+id/lost_credential_screen"
         android:name="com.soneso.lumenshine.presentation.auth.LostCredentialFragment" />
 
+    <fragment
+        android:id="@+id/to_email_lost_credential_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.EmailLostCredentialFragment" />
 
     <action
         android:id="@+id/to_pass_screen"

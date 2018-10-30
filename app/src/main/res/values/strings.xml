@@ -40,7 +40,7 @@
     <string name="action_sign_in">Login</string>
     <string name="action_submit">Submit</string>
     <string name="action_register">Register</string>
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_email">Invalid email.</string>
     <string name="info_password_requirements">Password must contain at least one digit, one lower case and one upper case letter and has to be at least 9 characters long!</string>
     <string name="error_invalid_password_min_one_lower_case_char">Password must contain at least one lower case character</string>
     <string name="error_invalid_password_min_one_upper_case_char">Password must contain at least one upper case character</string>
@@ -623,5 +623,10 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="ico_detail">Learn how to participate in an ICO</string>
     <string name="enter_email_address_description">Enter the email address you used to signup.</string>
+    <string name="email_sent">Mail sent!</string>
+    <string name="enter_email_address_reset_password_description">For resetting your password, we sent a message to your email account. Click the link to reset your password.</string>
+    <string name="enter_email_address_reset_2fa_description">For resetting your 2FA Secret, we sent a message to your email account. Click the link to reset your 2FA Secret.</string>
+    <string name="reset_2fa_email_sent">Reset 2fa email sent</string>
+    <string name="reset_password_email_sent">Reset password email sent</string>
 
 </resources>
