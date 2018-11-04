@@ -628,5 +628,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="enter_email_address_reset_2fa_description">For resetting your 2FA Secret, we sent a message to your email account. Click the link to reset your 2FA Secret.</string>
     <string name="reset_2fa_email_sent">Reset 2fa email sent</string>
     <string name="reset_password_email_sent">Reset password email sent</string>
+    <string name="you_agree_to_abide">You agree to abide by Lumenshine\'s&#160;</string>
+    <string name="terms_of_service">terms of service</string>
 
 </resources>

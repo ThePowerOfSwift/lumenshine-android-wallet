@@ -162,4 +162,8 @@
         <item name="android:drawableTint">@android:color/black</item>
     </style>
 
+    <style name="DarkBlueCheckBox">
+        <item name="colorAccent">@color/darkBlue</item>
+    </style>
+
 </resources>

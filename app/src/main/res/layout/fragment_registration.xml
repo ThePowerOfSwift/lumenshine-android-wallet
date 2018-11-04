@@ -55,6 +55,31 @@
             android:inputType="textPassword"
             app:input_level="@integer/password_confirmation_input_level" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/size_15"
+            android:layout_marginBottom="@dimen/size_15">
+
+            <CheckBox
+                android:id="@+id/checkboxTermsOfService"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:padding="0dp"
+                android:theme="@style/DarkBlueCheckBox"/>
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                android:id="@+id/agreeToTermsOfService"
+                style="@style/LsCardTitleDetail"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/checkboxTermsOfService"
+                android:layout_height="wrap_content"
+                android:text="@string/you_agree_to_abide" />
+        </RelativeLayout>
+
         <com.soneso.lumenshine.presentation.widgets.LsButton
             android:id="@+id/registerButton"
             style="@style/GreenButton"

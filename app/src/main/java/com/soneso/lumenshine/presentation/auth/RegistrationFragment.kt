@@ -1,10 +1,19 @@
 package com.soneso.lumenshine.presentation.auth
 
 
+import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
@@ -25,9 +34,48 @@ class RegistrationFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initViews()
+
         subscribeForLiveData()
 
         setupListeners()
+    }
+
+    private fun initViews() {
+        val termsOfService = getString(R.string.terms_of_service)
+        val youAgreeToAbideTermsOfUse = getString(R.string.you_agree_to_abide) + termsOfService
+
+        val spannable = SpannableString(youAgreeToAbideTermsOfUse)
+
+        spannable.setSpan(object: ClickableSpan() {
+            override fun updateDrawState(ds: TextPaint) {
+                ds.isUnderlineText = false
+            }
+
+            override fun onClick(p0: View) {
+                Toast.makeText(context, "TERMS OF SERVICE SCREEN SHOULD OPEN", Toast.LENGTH_LONG).show()
+            }
+        }, youAgreeToAbideTermsOfUse.length - termsOfService.length, youAgreeToAbideTermsOfUse.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        spannable.setSpan(object: ClickableSpan() {
+            override fun updateDrawState(ds: TextPaint) {
+                ds.isUnderlineText = false
+            }
+
+            override fun onClick(p0: View) {
+                checkboxTermsOfService.isChecked = !checkboxTermsOfService.isChecked
+            }
+        }, 0, youAgreeToAbideTermsOfUse.length - termsOfService.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        val spanColor: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context!!.getColor(R.color.blue)
+        } else {
+            context!!.resources.getColor(R.color.blue)
+        }
+        spannable.setSpan(ForegroundColorSpan(spanColor), youAgreeToAbideTermsOfUse.length - termsOfService.length, youAgreeToAbideTermsOfUse.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        agreeToTermsOfService.setText(spannable, TextView.BufferType.SPANNABLE)
+        agreeToTermsOfService.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun subscribeForLiveData() {
