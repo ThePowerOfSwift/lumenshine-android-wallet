@@ -79,9 +79,7 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-
-        authViewModel.liveRegistration
-                .observe(this, Observer {
+        authViewModel.liveRegistration.observe(this, Observer {
                     renderRegistration(it ?: return@Observer)
                 })
     }
@@ -92,11 +90,10 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun renderRegistration(resource: Resource<Boolean, ServerException>) {
-
         when (resource.state) {
 
             Resource.LOADING -> {
-                showLoadingView()
+
             }
             Resource.FAILURE -> {
 
@@ -105,6 +102,7 @@ class RegistrationFragment : AuthFragment() {
             }
             else -> {
                 hideLoadingView()
+                authActivity.navigate(R.id.to_confirm_tfa_screen)
             }
         }
     }
@@ -129,6 +127,8 @@ class RegistrationFragment : AuthFragment() {
         if (!isValidForm()) {
             return
         }
+
+        showLoadingView()
 
         authViewModel.createAccount(
                 emailView.trimmedText,

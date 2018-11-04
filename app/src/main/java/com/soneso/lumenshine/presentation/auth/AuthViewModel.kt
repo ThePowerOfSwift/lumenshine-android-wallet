@@ -26,10 +26,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
     @Suppress("MemberVisibilityCanBePrivate")
     val liveSalutations: LiveData<Resource<List<String>, LsException>> = MutableLiveData()
 
-    val liveTfaSecret: LiveData<String> = MutableLiveData()
-
-    val liveTfaConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
-
     val liveTfaChangeConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
     val liveMnemonicConfirmation: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
@@ -85,17 +81,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     liveRegistration.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    fun confirmTfaRegistration(tfaCode: CharSequence) {
-
-        val d = userUseCases.confirmTfaRegistration(tfaCode.toString())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveTfaConfirmation.putValue(it)
                 }
         compositeDisposable.add(d)
     }
@@ -175,17 +160,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     liveRegistrationRefresh.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    fun fetchTfaSecret() {
-
-        val d = userUseCases.provideTfaSecret()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { it ->
-                    liveTfaSecret.putValue(it)
                 }
         compositeDisposable.add(d)
     }
