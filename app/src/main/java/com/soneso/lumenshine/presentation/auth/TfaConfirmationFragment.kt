@@ -35,14 +35,11 @@ class TfaConfirmationFragment : AuthFragment() {
         tfaConfirmationViewModel.fetchTfaSecret()
         subscribeForLiveData()
         setupListeners()
-        // TODO: TFA secreed need to get with live data
-        setupToken(LsPrefs.tfaSecret)
     }
 
     private fun subscribeForLiveData() {
 
         tfaConfirmationViewModel.liveTfaSecret.observe(this, Observer {
-
             setupToken(it ?: return@Observer)
         })
 
