@@ -19,14 +19,22 @@ import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
+import com.soneso.lumenshine.presentation.widgets.LsEditText
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_registration.*
+import kotlinx.android.synthetic.main.ls_input_view.view.*
 
 
 /**
  * A simple [Fragment] subclass.
  */
 class RegistrationFragment : AuthFragment() {
+
+    private var emailCompleted: Boolean = false
+    private var passwordCompleted: Boolean = false
+    private var repeatPasswordCompleted: Boolean = false
+    private var termsOfServiceAccepted: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_registration, container, false)
@@ -47,7 +55,7 @@ class RegistrationFragment : AuthFragment() {
 
         val spannable = SpannableString(youAgreeToAbideTermsOfUse)
 
-        spannable.setSpan(object: ClickableSpan() {
+        spannable.setSpan(object : ClickableSpan() {
             override fun updateDrawState(ds: TextPaint) {
                 ds.isUnderlineText = false
             }
@@ -57,7 +65,7 @@ class RegistrationFragment : AuthFragment() {
             }
         }, youAgreeToAbideTermsOfUse.length - termsOfService.length, youAgreeToAbideTermsOfUse.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        spannable.setSpan(object: ClickableSpan() {
+        spannable.setSpan(object : ClickableSpan() {
             override fun updateDrawState(ds: TextPaint) {
                 ds.isUnderlineText = false
             }
@@ -80,13 +88,38 @@ class RegistrationFragment : AuthFragment() {
 
     private fun subscribeForLiveData() {
         authViewModel.liveRegistration.observe(this, Observer {
-                    renderRegistration(it ?: return@Observer)
-                })
+            renderRegistration(it ?: return@Observer)
+        })
     }
 
     private fun setupListeners() {
-
         registerButton.setOnClickListener { attemptRegistration() }
+
+        emailView.editTextView.setOnTextChangeListener {
+            val editText = it as LsEditText
+            emailCompleted = editText.text.toString().isNotEmpty()
+            enableDisableRegisterButton()
+        }
+        password.editTextView.setOnTextChangeListener {
+            val editText = it as LsEditText
+            passwordCompleted = editText.text.toString().isNotEmpty()
+            enableDisableRegisterButton()
+        }
+        passConfirmationView.editTextView.setOnTextChangeListener {
+            val editText = it as LsEditText
+            repeatPasswordCompleted = editText.text.toString().isNotEmpty()
+            enableDisableRegisterButton()
+        }
+
+        checkboxTermsOfService.setOnCheckedChangeListener { _, b ->
+            termsOfServiceAccepted = b
+            enableDisableRegisterButton()
+        }
+    }
+
+    private fun enableDisableRegisterButton() {
+        registerButton.isEnabled = emailCompleted && passwordCompleted
+                && repeatPasswordCompleted && termsOfServiceAccepted
     }
 
     private fun renderRegistration(resource: Resource<Boolean, ServerException>) {

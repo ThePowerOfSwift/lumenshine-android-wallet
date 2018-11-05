@@ -630,5 +630,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="reset_password_email_sent">Reset password email sent</string>
     <string name="you_agree_to_abide">You agree to abide by Lumenshine\'s&#160;</string>
     <string name="terms_of_service">terms of service</string>
+    <string name="join_lumenshine">Join Lumenshine</string>
 
 </resources>

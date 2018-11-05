@@ -17,19 +17,13 @@
             style="@style/LsCardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/signup" />
-
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            style="@style/LsCardTitleDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_fill" />
+            android:text="@string/join_lumenshine" />
 
         <com.soneso.lumenshine.presentation.widgets.FormInputView
             android:id="@+id/emailView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_5"
+            android:layout_marginTop="@dimen/size_25"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             app:error_text="@string/error_invalid_email"
@@ -82,11 +76,13 @@
 
         <com.soneso.lumenshine.presentation.widgets.LsButton
             android:id="@+id/registerButton"
-            style="@style/GreenButton"
+            style="@style/GreenButtonWithStates"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/size_30"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/size_5"
-            android:text="@string/action_register" />
+            android:enabled="false"
+            android:layout_marginBottom="@dimen/size_8"
+            android:text="@string/sign_up" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
