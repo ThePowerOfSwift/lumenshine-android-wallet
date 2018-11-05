@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.util.GeneralUtils
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_tfa_registration.*
@@ -23,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 class TfaConfirmationFragment : AuthFragment() {
 
     private lateinit var tfaConfirmationViewModel: TFAConfirmationViewModel
+    private var tfaSecret: String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_tfa_registration, container, false)
@@ -60,10 +60,8 @@ class TfaConfirmationFragment : AuthFragment() {
         }
 
         copyButton.setOnClickListener {
-            tfaConfirmationViewModel.fetchTfaSecret()
-
-            //TODO: TFA secreed need to get with live data
-            context?.let { it1 -> GeneralUtils.copyToClipboard(it1, LsPrefs.tfaSecret) }
+            showSnackbar(R.string.copied_to_clipboard)
+            context?.let { it1 -> GeneralUtils.copyToClipboard(it1, tfaSecret) }
         }
     }
 
@@ -78,7 +76,7 @@ class TfaConfirmationFragment : AuthFragment() {
             }
             Resource.SUCCESS -> {
                 hideLoadingView()
-                authActivity.navigate(R.id.to_mnemonic_screen)
+                authActivity.navigate(R.id.to_confirm_mail_screen)
             }
         }
     }
@@ -99,6 +97,7 @@ class TfaConfirmationFragment : AuthFragment() {
     }
 
     private fun setupToken(tfaSecret: String) {
+        this.tfaSecret = tfaSecret
         tfaSecretView.text = getString(R.string.lbl_tfa_secret, tfaSecret)
     }
 
