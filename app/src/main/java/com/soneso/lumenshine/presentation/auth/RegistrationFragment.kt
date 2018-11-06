@@ -61,7 +61,7 @@ class RegistrationFragment : AuthFragment() {
             }
 
             override fun onClick(p0: View) {
-                Toast.makeText(context, "TERMS OF SERVICE SCREEN SHOULD OPEN", Toast.LENGTH_LONG).show()
+                TermsOfServiceDialog.showInstance(activity!!.supportFragmentManager)
             }
         }, youAgreeToAbideTermsOfUse.length - termsOfService.length, youAgreeToAbideTermsOfUse.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 

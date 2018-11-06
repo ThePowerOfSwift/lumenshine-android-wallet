@@ -170,4 +170,11 @@
         <item name="colorAccent">@color/darkBlue</item>
     </style>
 
+    <style name="DialogHeader">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">@color/cyan_400</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
+    </style>
+
 </resources>

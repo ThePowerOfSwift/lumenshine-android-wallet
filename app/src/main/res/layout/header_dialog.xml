@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogRootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_top_rounded25_inset"
+    android:orientation="vertical"
+    tools:ignore="ContentDescription">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/size_6"
+        android:background="@drawable/bg_top_rounded25_inset">
+
+        <ImageView
+            android:id="@+id/ivCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_12"
+            android:tint="@color/gray"
+            android:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/dialogHeaderTitle"
+            android:layout_width="match_parent"
+            style="@style/DialogHeader"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_12"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/ivCancel"
+            tools:text="@string/join_lumenshine" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

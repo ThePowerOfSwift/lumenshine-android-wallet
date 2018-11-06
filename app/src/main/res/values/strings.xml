@@ -643,4 +643,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
+    <string name="terms_of_service_should_come_here">Terms of Service should come here</string>
+
+    <string name="terms_of_service_title">Terms of Service</string>
+
 </resources>
