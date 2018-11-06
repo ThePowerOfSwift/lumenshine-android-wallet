@@ -23,7 +23,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveLastUsername: LiveData<String> = MutableLiveData()
 
-    @Suppress("MemberVisibilityCanBePrivate")
+    @Suppress("MembeAuthViewModelrVisibilityCanBePrivate")
     val liveSalutations: LiveData<Resource<List<String>, LsException>> = MutableLiveData()
 
     val liveTfaChangeConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
@@ -56,7 +56,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         initRegistrationStatus()
     }
 
-    private fun initRegistrationStatus() {
+    fun initRegistrationStatus() {
 
         val d = userUseCases.provideRegistrationStatus()
                 .subscribeOn(Schedulers.io())
@@ -164,7 +164,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
-    private fun initLastUsername() {
+    fun initLastUsername() {
 
         val d = userUseCases.provideLastUsername()
                 .subscribeOn(Schedulers.io())

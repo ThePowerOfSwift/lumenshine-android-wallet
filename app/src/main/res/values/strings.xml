@@ -656,4 +656,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
         <item>one number|It must contain at least one number</item>
     </string-array>
 
+    <string name="error_verify_email">Please verify your email address first</string>
+
 </resources>
