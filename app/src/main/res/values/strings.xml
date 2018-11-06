@@ -647,4 +647,13 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="terms_of_service_title">Terms of Service</string>
 
+    <string name="password_requirement_subtitle">*%s</string>
+
+    <string-array name="password_requirements">
+        <item>9 characters|The password must have at least 9 characters</item>
+        <item>one small letter|It must contain at least one small letter</item>
+        <item>one capital letter|It must contain at least one capital letter</item>
+        <item>one number|It must contain at least one number</item>
+    </string-array>
+
 </resources>

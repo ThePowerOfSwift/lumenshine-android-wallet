@@ -11,19 +11,15 @@ import com.soneso.lumenshine.presentation.general.DialogWithHeader
 import kotlinx.android.synthetic.main.password_requirements.*
 
 class PasswordRequirementsDialog : DialogWithHeader() {
-    override fun getTitle(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     private val requirementAdapter = PasswordRequirementAdapter()
 
-    override fun getContentLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.password_requirements, container, false).apply {
-                minimumHeight = resources.displayMetrics.heightPixels
+    companion object {
+        const val TAG = "PasswordRequirementsDialog"
 
-            }
-
-    private var listener: View.OnClickListener? = null
+        fun showInstance(fm: FragmentManager) {
+            PasswordRequirementsDialog().show(fm, TAG)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,21 +30,16 @@ class PasswordRequirementsDialog : DialogWithHeader() {
 
 
         val requirements = ArrayList<String>()
-        requirements.add("9 characters")
-        requirements.add("one small letter")
-        requirements.add("one capital letter")
+        requirements.addAll(resources.getStringArray(R.array.password_requirements))
         requirementAdapter.setPasswordRequirements(requirements)
     }
 
-    companion object {
-        const val TAG = "PasswordRequirementsDialog"
-
-        fun showInstance(fm: FragmentManager) {
-            PasswordRequirementsDialog().apply {
-                listener = View.OnClickListener {
-                    dismiss()
-                }
-            }.show(fm, TAG)
-        }
+    override fun getTitle(): String {
+        return context!!.getString(R.string.password_requirements)
     }
+
+    override fun getContentLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.password_requirements, container, false).apply {
+                minimumHeight = resources.displayMetrics.heightPixels
+            }
 }

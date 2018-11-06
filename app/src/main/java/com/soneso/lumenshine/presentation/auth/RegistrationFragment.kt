@@ -9,6 +9,7 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,6 +93,10 @@ class RegistrationFragment : AuthFragment() {
         })
     }
 
+    private fun showPasswordRequirements() {
+        PasswordRequirementsDialog.showInstance(activity!!.supportFragmentManager)
+    }
+
     private fun setupListeners() {
         registerButton.setOnClickListener { attemptRegistration() }
 
@@ -115,6 +120,8 @@ class RegistrationFragment : AuthFragment() {
             termsOfServiceAccepted = b
             enableDisableRegisterButton()
         }
+
+        password.onDrawableEndClickListener = ::showPasswordRequirements
     }
 
     private fun enableDisableRegisterButton() {

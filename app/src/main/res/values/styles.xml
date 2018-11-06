@@ -174,7 +174,19 @@
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textColor">@color/cyan_400</item>
         <item name="android:textSize">@dimen/text_size_16</item>
-        <item name="android:fontFamily">@font/encodesans_bold</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+    </style>
+
+    <style name="PasswordRequirementTitle">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+    </style>
+
+    <style name="PasswordRequirementSubtitle">
+        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
     </style>
 
 </resources>
