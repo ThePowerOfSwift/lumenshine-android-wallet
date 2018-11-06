@@ -23,6 +23,8 @@ import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
  */
 class MailConfirmationFragment : AuthFragment() {
 
+    private var isEmailConfirmed: Boolean = false
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_mail_confirmation, container, false)
 
@@ -75,7 +77,12 @@ class MailConfirmationFragment : AuthFragment() {
         }
         submitButton.setOnClickListener {
             errorView.text = ""
-            authViewModel.refreshRegistrationStatus()
+            if (!isEmailConfirmed) {
+                errorView.setText(R.string.error_verify_email)
+                authViewModel.refreshRegistrationStatus()
+            } else {
+                authActivity.navigate(R.id.to_mnemonic_screen)
+            }
         }
     }
 
@@ -113,11 +120,7 @@ class MailConfirmationFragment : AuthFragment() {
     }
 
     private fun renderRefreshStatus(registrationStatus: RegistrationStatus) {
-         if (!registrationStatus.mailConfirmed) {
-             errorView.setText(R.string.error_verify_email)
-         } else {
-             authActivity.navigate(R.id.to_mnemonic_screen)
-         }
+        isEmailConfirmed = registrationStatus.mailConfirmed
     }
 
     companion object {
