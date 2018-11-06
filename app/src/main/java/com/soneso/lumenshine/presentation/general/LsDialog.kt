@@ -15,7 +15,7 @@ abstract class LsDialog : DialogFragment() {
 
         dialog.window?.apply {
             val drawableResId: Int = if (isWithHeader()) {
-                R.drawable.bg_top_rounded25_inset
+                R.drawable.bg_top_rounded15_inset
             } else {
                 R.drawable.bg_top_rounded3_inset
             }
