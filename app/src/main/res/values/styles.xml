@@ -173,15 +173,15 @@
 
     <style name="DialogHeader">
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:textColor">@color/cyan_500</item>
-        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">@color/cyan</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
         <item name="android:fontFamily">@font/encodesans_semibold</item>
     </style>
 
     <style name="PasswordRequirementTitle">
-        <item name="android:textColor">@color/red</item>
-        <item name="android:textSize">@dimen/text_size_14</item>
-        <item name="android:fontFamily">@font/encodesans_semibold</item>
+        <item name="android:textColor">@color/darkRed</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
     </style>
 
     <style name="PasswordRequirementSubtitle">

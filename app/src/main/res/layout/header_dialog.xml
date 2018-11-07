@@ -4,35 +4,34 @@
     android:id="@+id/dialogRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_top_rounded15_inset"
+    android:background="@drawable/bg_header_rounded"
     android:orientation="vertical"
     tools:ignore="ContentDescription">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="@dimen/size_7"
-        android:background="@drawable/bg_top_rounded15_inset">
+        android:background="@drawable/bg_header_rounded"
+        android:elevation="@dimen/size_2">
+
+        <TextView
+            android:id="@+id/dialogHeaderTitle"
+            style="@style/DialogHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            tools:text="@string/join_lumenshine" />
 
         <ImageView
             android:id="@+id/ivCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/size_8"
-            android:paddingBottom="@dimen/size_8"
-            android:paddingStart="@dimen/size_15"
-            android:paddingEnd="@dimen/size_2"
-            android:tint="@color/gray"
-            android:src="@drawable/ic_close" />
+            android:paddingStart="@dimen/size_13"
+            android:paddingTop="@dimen/size_10"
+            android:paddingEnd="@dimen/size_10"
+            android:paddingBottom="@dimen/size_10"
+            android:src="@drawable/ic_close"
+            android:tint="@color/gray" />
 
-        <TextView
-            android:id="@+id/dialogHeaderTitle"
-            android:layout_width="match_parent"
-            style="@style/DialogHeader"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/size_12"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/ivCancel"
-            tools:text="@string/join_lumenshine" />
     </RelativeLayout>
 </LinearLayout>
