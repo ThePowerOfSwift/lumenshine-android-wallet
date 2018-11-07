@@ -109,7 +109,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="setup_step_1">step 1 of 3</string>
     <string name="tfa_authentication_title">2 Factor Authentication (2FA)</string>
     <string name="your_2fa_secret">Your 2FA Secret:</string>
-    <string name="tfa_reason">For security reasons, your wallet will be protected by 2 Factor Authentication (2FA).</string>
+    <string name="tfa_reason">For security reasons, your wallet will be protected by 2FA</string>
     <string name="tfa_setup_steps">
         To setup 2FA, please:\n
         \n

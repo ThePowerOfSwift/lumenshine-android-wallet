@@ -49,7 +49,7 @@ class AuthNewUserActivity : BaseAuthActivity() {
         tabClickListener = View.OnClickListener { view ->
             when (view.id) {
                 R.id.loginTab -> navigate(R.id.to_login)
-                R.id.signUpTab -> navigate(R.id.to_register)
+                R.id.signUpTab -> navigate(R.id.to_confirm_tfa_screen)
                 R.id.moreTab -> MoreDialog.showInstance(supportFragmentManager, tabClickListener)
                 R.id.lostPassTab -> {
                     navigate(R.id.to_lost_credential, LostCredentialFragment.argForPassword())
