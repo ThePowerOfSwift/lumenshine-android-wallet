@@ -30,6 +30,7 @@
     <dimen name="size_7">7dp</dimen>
     <dimen name="size_6">7dp</dimen>
     <dimen name="size_8">8dp</dimen>
+    <dimen name="size_9">9dp</dimen>
     <dimen name="size_10">10dp</dimen>
     <dimen name="size_11">11dp</dimen>
     <dimen name="size_12">12dp</dimen>

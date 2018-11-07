@@ -167,6 +167,7 @@
     </style>
 
     <style name="DarkBlueCheckBox">
+        <item name="colorControlNormal">@color/gray</item>
         <item name="colorAccent">@color/darkBlue</item>
     </style>
 
