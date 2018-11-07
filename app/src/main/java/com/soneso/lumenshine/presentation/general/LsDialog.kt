@@ -21,9 +21,13 @@ abstract class LsDialog : DialogFragment() {
             }
 
             setBackgroundDrawableResource(drawableResId)
-            if (isWithHeader()) requestFeature(Window.FEATURE_NO_TITLE)
+            if (isWithHeader()) {
+                requestFeature(Window.FEATURE_NO_TITLE)
+                attributes?.gravity = Gravity.FILL
+            } else{
+                attributes?.gravity = Gravity.BOTTOM
+            }
             setLayout(WindowManager.LayoutParams.MATCH_PARENT, if (hasMaxHeight()) WindowManager.LayoutParams.MATCH_PARENT else WindowManager.LayoutParams.WRAP_CONTENT)
-            attributes?.gravity = Gravity.BOTTOM
         }
         return dialog
     }
