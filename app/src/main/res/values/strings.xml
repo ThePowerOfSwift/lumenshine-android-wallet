@@ -121,7 +121,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     </string>
     <string name="email_confirm_title">Email confirmation required</string>
     <string name="mail_confirmation_alert">Please confirm your email address first.</string>
-    <string name="setup_step_2">Step 2 of 3</string>
+    <string name="setup_step_2">step 2 of 3</string>
     <string name="mnemonic_memorizing_title"><![CDATA[Note & confirm backup secret (mnemonic)]]></string>
     <string name="mnemonic_warning">This step is very important</string>
     <string name="mnemonic_instruction">Please write down your backup secret (mnemonic). You can use it if you lose your
@@ -131,7 +131,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="mnemonic_read_more">Read more about mnemonics</string>
     <string name="your_mnemonic">Your secret (24 word mnemonic):</string>
     <string name="mnemonic_confirm">Confirm noting your mnemonic</string>
-    <string name="setup_step_3">Step 3 of 3</string>
+    <string name="setup_step_3">step 3 of 3</string>
     <string name="mnemonic_confirm_title">Prove noting of menmonic</string>
     <string name="mnemonic_confirm_description">To prove the noting of your mnemonic, please complete following quiz.</string>
     <string name="mnemonic_confirm_instruction">Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</string>
