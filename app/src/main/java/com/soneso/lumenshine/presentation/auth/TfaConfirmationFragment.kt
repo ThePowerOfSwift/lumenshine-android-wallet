@@ -23,6 +23,7 @@ class TfaConfirmationFragment : AuthFragment() {
 
     private lateinit var tfaConfirmationViewModel: TFAConfirmationViewModel
     private var tfaSecret: String = ""
+    private var shouldAutoPaste: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_tfa_registration, container, false)
@@ -35,6 +36,22 @@ class TfaConfirmationFragment : AuthFragment() {
         tfaConfirmationViewModel.fetchTfaSecret()
         subscribeForLiveData()
         setupListeners()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        shouldAutoPaste = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (shouldAutoPaste) {
+            val textFromClipboard:String = GeneralUtils.pasteFromClipboard(context!!)
+            if (textFromClipboard != tfaSecret) {
+                tfaInputView.trimmedText = textFromClipboard
+                tfaInputView.setSelection(textFromClipboard.length)
+            }
+        }
     }
 
     private fun subscribeForLiveData() {
