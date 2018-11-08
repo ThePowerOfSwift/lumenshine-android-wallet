@@ -53,6 +53,7 @@
     <dimen name="size_85">85dp</dimen>
     <dimen name="size_90">90dp</dimen>
     <dimen name="size_100">100dp</dimen>
+    <dimen name="size_120">120dp</dimen>
     <dimen name="size_125">125dp</dimen>
     <dimen name="size_150">150dp</dimen>
     <dimen name="size_160">160dp</dimen>
@@ -60,6 +61,7 @@
     <dimen name="size_200">200dp</dimen>
     <dimen name="size_220">220dp</dimen>
     <dimen name="size_228">228dp</dimen>
+    <dimen name="size_260">260dp</dimen>
     <dimen name="size_300">300dp</dimen>
     <dimen name="size_400">400dp</dimen>
     <dimen name="size_infinite">1000dp</dimen>
