@@ -93,7 +93,6 @@ class TfaConfirmationFragment : AuthFragment() {
             }
             Resource.SUCCESS -> {
                 hideLoadingView()
-                authActivity.navigate(R.id.to_confirm_mail_screen)
             }
         }
     }

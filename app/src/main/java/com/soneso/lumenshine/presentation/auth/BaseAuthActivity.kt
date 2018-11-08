@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.layout_auth_activity.*
 abstract class BaseAuthActivity : LsActivity() {
 
     abstract val tabLayoutId: Int
-    private lateinit var navController: NavController
+    protected lateinit var navController: NavController
     lateinit var authViewModel: AuthViewModel
         private set
 

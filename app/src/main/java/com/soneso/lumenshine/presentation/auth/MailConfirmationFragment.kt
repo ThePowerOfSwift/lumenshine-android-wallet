@@ -25,6 +25,11 @@ class MailConfirmationFragment : AuthFragment() {
 
     private var isEmailConfirmed: Boolean = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isEmailConfirmed = arguments?.getBoolean(ARG_EMAIL_CONFIRMED)!!
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_mail_confirmation, container, false)
 
@@ -32,7 +37,6 @@ class MailConfirmationFragment : AuthFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         authViewModel.initLastUsername()
-        authViewModel.initRegistrationStatus()
         setupListeners()
         subscribeForLiveData()
     }
@@ -60,9 +64,6 @@ class MailConfirmationFragment : AuthFragment() {
         })
         authViewModel.liveRegistrationRefresh.observe(this, Observer {
             renderRegistrationRefresh(it ?: return@Observer)
-        })
-        authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRefreshStatus(it ?: return@Observer)
         })
         authViewModel.liveConfirmationMail.observe(this, Observer {
             renderConfirmationMail(it ?: return@Observer)
@@ -119,13 +120,14 @@ class MailConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun renderRefreshStatus(registrationStatus: RegistrationStatus) {
-        isEmailConfirmed = registrationStatus.mailConfirmed
-    }
-
     companion object {
 
         const val TAG = "MailConfirmationFragment"
+        private const val ARG_EMAIL_CONFIRMED = "$TAG.ARG_EMAIL_CONFIRMED"
+
+        fun argForEmailConfirmed(emailConfirmed: Boolean) = Bundle().apply {
+            putSerializable(ARG_EMAIL_CONFIRMED, emailConfirmed)
+        }
 
         fun newInstance() = MailConfirmationFragment()
     }
