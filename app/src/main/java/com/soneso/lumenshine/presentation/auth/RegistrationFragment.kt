@@ -140,7 +140,7 @@ class RegistrationFragment : AuthFragment() {
             }
             else -> {
                 hideLoadingView()
-                authActivity.navigate(R.id.to_confirm_tfa_screen)
+                authActivity.goToSetup()
             }
         }
     }

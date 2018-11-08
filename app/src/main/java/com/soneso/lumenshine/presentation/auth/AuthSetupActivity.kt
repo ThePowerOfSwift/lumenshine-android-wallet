@@ -21,6 +21,7 @@ class AuthSetupActivity : BaseAuthActivity() {
         super.onCreate(savedInstanceState)
 
         setupDrawer()
+        setupHeader()
         subscribeToLiveData()
         Timber.d("Auth setup activity created.")
     }
