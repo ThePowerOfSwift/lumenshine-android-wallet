@@ -28,7 +28,7 @@
             android:id="@+id/descriptionView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_16"
             android:fontFamily="@font/encodesans_regular"
             android:gravity="center"
             android:text="@string/email_confirmation_prehint"
@@ -39,7 +39,7 @@
             android:id="@+id/errorView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_40"
+            android:layout_marginTop="@dimen/size_20"
             android:fontFamily="@font/encodesans_regular"
             android:textColor="@color/red"
             android:textSize="@dimen/text_size_14" />
@@ -61,6 +61,6 @@
             android:layout_height="@dimen/size_38"
             android:layout_marginTop="@dimen/size_30"
             android:minWidth="@dimen/size_260"
-            android:text="@string/resend_mail" />
+            android:text="@string/email_resend_confirmation" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

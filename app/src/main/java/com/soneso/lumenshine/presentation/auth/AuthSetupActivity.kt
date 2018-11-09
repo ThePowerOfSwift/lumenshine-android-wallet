@@ -34,6 +34,11 @@ class AuthSetupActivity : BaseAuthActivity() {
 
     private fun renderRegistrationStatus(status: RegistrationStatus) {
 
+        if (status.tfaConfirmed && status.mailConfirmed && status.mnemonicConfirmed) {
+            goToMain()
+            return
+        }
+
         when {
             !status.tfaConfirmed -> {
                 navigate(R.id.to_confirm_tfa_screen)
