@@ -23,13 +23,6 @@ import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
  */
 class MailConfirmationFragment : AuthFragment() {
 
-    private var isEmailConfirmed: Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        isEmailConfirmed = arguments?.getBoolean(ARG_EMAIL_CONFIRMED)!!
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_mail_confirmation, container, false)
 
@@ -78,16 +71,12 @@ class MailConfirmationFragment : AuthFragment() {
         }
         submitButton.setOnClickListener {
             errorView.text = ""
-            if (!isEmailConfirmed) {
-                errorView.setText(R.string.error_verify_email)
-                authViewModel.refreshRegistrationStatus()
-            } else {
-                authActivity.navigate(R.id.to_mnemonic_screen)
-            }
+
+            authViewModel.refreshRegistrationStatus()
         }
     }
 
-    private fun renderRegistrationRefresh(resource: Resource<Boolean, ServerException>) {
+    private fun renderRegistrationRefresh(resource: Resource<RegistrationStatus?, ServerException>) {
 
         when (resource.state) {
             Resource.LOADING -> {
@@ -95,6 +84,9 @@ class MailConfirmationFragment : AuthFragment() {
             }
             Resource.SUCCESS -> {
                 hideLoadingView()
+                if (!resource.success()?.mailConfirmed!!) {
+                    errorView.setText(R.string.error_verify_email)
+                }
             }
             Resource.FAILURE -> {
                 hideLoadingView()
@@ -123,11 +115,6 @@ class MailConfirmationFragment : AuthFragment() {
     companion object {
 
         const val TAG = "MailConfirmationFragment"
-        private const val ARG_EMAIL_CONFIRMED = "$TAG.ARG_EMAIL_CONFIRMED"
-
-        fun argForEmailConfirmed(emailConfirmed: Boolean) = Bundle().apply {
-            putSerializable(ARG_EMAIL_CONFIRMED, emailConfirmed)
-        }
 
         fun newInstance() = MailConfirmationFragment()
     }

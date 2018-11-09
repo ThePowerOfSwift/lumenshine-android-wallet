@@ -178,13 +178,13 @@ class UserRepository @Inject constructor(
                     }
 
 
-    fun refreshRegistrationStatus(): Flowable<Resource<Boolean, ServerException>> {
+    fun refreshRegistrationStatus(): Flowable<Resource<RegistrationStatus?, ServerException>> {
 
         return userApi.getRegistrationStatus()
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
                     userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
-                    true
+                    it.toRegistrationStatus(LsPrefs.username)
                 }, { it })
     }
 

@@ -45,7 +45,7 @@ class AuthSetupActivity : BaseAuthActivity() {
             }
             !status.mailConfirmed -> {
                 if (navController.currentDestination?.id != R.id.confirm_mail_screen) {
-                    navigate(R.id.to_confirm_mail_screen, MailConfirmationFragment.argForEmailConfirmed(status.mailConfirmed))
+                    navigate(R.id.to_confirm_mail_screen)
                 }
             }
             !status.mnemonicConfirmed -> {

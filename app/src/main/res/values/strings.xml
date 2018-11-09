@@ -369,7 +369,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="email_already_confirmed">Already confirmed</string>
 
-    <string name="email_resend_confirmation">Resend confirmation link</string>
+    <string name="email_resend_confirmation">Resend verification link</string>
 
     <string name="resend_email">Resend email</string>
 

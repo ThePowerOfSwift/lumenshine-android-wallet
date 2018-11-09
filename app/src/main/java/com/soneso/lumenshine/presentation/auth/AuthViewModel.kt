@@ -39,7 +39,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveRegistrationStatus: LiveData<RegistrationStatus?> = MutableLiveData()
 
-    val liveRegistrationRefresh: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
+    val liveRegistrationRefresh: LiveData<Resource<RegistrationStatus?, ServerException>> = MutableLiveData()
 
     val liveRegistration: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
